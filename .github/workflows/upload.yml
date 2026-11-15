@@ -1,10 +1,8 @@
 name: Upload Shorts to YouTube
 
 on:
-  push:
-    branches: [queue]
   schedule:
-    - cron: "23 * * * *"   # hourly safety net
+    - cron: "23 * * * *"   # hourly: picks up whatever is on the queue branch
   workflow_dispatch: {}
 
 concurrency:
@@ -56,7 +54,13 @@ jobs:
           cd q
           git add -A
           if git diff --cached --quiet; then echo "queue unchanged"; exit 0; fi
+          lease="--force-with-lease=queue:${{ steps.q.outputs.sha }}"
+          if [ -z "$(git ls-files)" ]; then
+            # everything uploaded: delete the branch (an empty commit can't be pushed)
+            git push $lease origin :refs/heads/queue || echo "queue moved, will clean next run"
+            exit 0
+          fi
           tree=$(git write-tree)
           new=$(git commit-tree "$tree" -m "queue")
           # only overwrite if nobody pushed new videos meanwhile; otherwise the next run cleans up
-          git push --force-with-lease=queue:${{ steps.q.outputs.sha }} origin "$new:refs/heads/queue" || echo "queue moved, will clean next run"
+          git push $lease origin "$new:refs/heads/queue" || echo "queue moved, will clean next run"

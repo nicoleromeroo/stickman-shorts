@@ -75,15 +75,19 @@ bash engine/setup.sh
 
 ## Step 7 — queue for upload (the `queue` branch)
 Releases are not available to this session; videos are queued by pushing them to the
-`queue` branch. The GitHub Action uploads each folder, then removes it from that branch.
+`queue` branch. The GitHub Action (hourly, at :23) uploads each folder, then removes it from that branch.
 Tag = `video-<YYYYMMDD>-slot<N>` (date = publish day). Asset names MUST be `video.mp4` and `meta.json`.
 ```
 QD=/tmp/queue-wt
-git fetch --depth 1 origin queue && git worktree add -f $QD FETCH_HEAD
+rm -rf $QD; if git ls-remote --exit-code --heads origin queue >/dev/null; then
+  git fetch --depth 1 origin queue && git worktree add -f $QD FETCH_HEAD
+else   # branch is deleted when empty -> start a fresh one
+  mkdir -p $QD && git -C $QD init -q -b queue
+fi
 for each finished video:
   mkdir -p $QD/<tag> && cp work/<dir>/final.mp4 $QD/<tag>/video.mp4 && cp work/<dir>/meta.json $QD/<tag>/meta.json
 cd $QD && git add -A && git commit -m "queue <date>" && git push origin HEAD:queue
-cd - && git worktree remove --force $QD
+cd - && (git worktree remove --force $QD 2>/dev/null || rm -rf $QD)
 ```
 If the push is rejected (the Action just cleaned the branch), redo the fetch/worktree step and push again.
 Push all 3 videos in one commit. Never put mp4/wav files on `main`.
