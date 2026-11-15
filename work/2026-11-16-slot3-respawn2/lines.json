@@ -1,0 +1,11 @@
+["Last time, you woke up inside a video game. And lost a heart on the stairs.",
+ "Now you walk into school. Two hearts left.",
+ "Every classmate says the exact same thing. Nice shoes. Nice shoes. Nice shoes.",
+ "Your teacher doesn't even look up. Level two, unlocked.",
+ {"text":"Then a new quest box pops up. Find the exit.","gap":0.5},
+ "At lunch, you sneak out behind the gym.",
+ "And there's a door in the wall. A door that was never there before.",
+ "It's glowing. Humming. Like it's waiting for you.",
+ "You reach for the handle...",
+ {"text":"But someone is already standing in front of it.","gap":0.5},
+ {"text":"And above his head... red hearts.","gap":1.6}]

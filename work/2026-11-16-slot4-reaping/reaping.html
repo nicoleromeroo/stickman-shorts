@@ -1,0 +1,127 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { europe: wt(0, 'big parts'), yes: wt(1, 'said yes'), book: wt(1, 'before the book'), sold: at(2, 0), week: wt(2, 'in one week'), twice: at(3, 0), three: wt(3, 'three'), five: at(4, 0), bil: wt(4, 'three point'), month: at(5, 0), four: wt(5, 'four'), thisone: wt(5, 'just like'), where: at(6, 0), spain: wt(6, 'some outdoor'), berlin: at(7, 0), ber2: wt(7, 'yes, berlin'), temp: at(8, 0), icc: wt(8, 'the giant'), wrap: wt(8, 'filming even'), look: at(9, 0), spot: wt(9, 'you might') };
+function popIn(t, t0, x, y, fn, d = .25) { if (t < t0) return; const k = eob(inv(t0, t0 + d, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function foot(s) { txt(s, 540, 1860, 34, '#e5e7eb', { lw: 6 }); }
+function popcorn(hx, hy) { ctx.save(); ctx.translate(hx, hy); box(-40, -60, 80, 100, '#fff', 6, 6); ctx.fillStyle = '#ef4444'; for (let i = 0; i < 3; i++) ctx.fillRect(-30 + i * 24, -58, 12, 96); for (let i = 0; i < 5; i++) circ(-32 + i * 16, -66 - (i % 2) * 10, 16, '#fef3c7', INK, 4); ctx.restore(); }
+function clapper(x, y, s, open = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-100, -40, 200, 130, '#1f2937', 8, 7); ctx.save(); ctx.translate(-100, -40); ctx.rotate(-open); box(0, -36, 200, 36, '#f8fafc', 4, 7); for (let i = 0; i < 4; i++) { ctx.fillStyle = INK; ctx.beginPath(); ctx.moveTo(20 + i * 50, -36); ctx.lineTo(45 + i * 50, -36); ctx.lineTo(30 + i * 50, 0); ctx.lineTo(5 + i * 50, 0); ctx.fill(); } ctx.restore(); line(-80, 10, 80, 10, 5, '#94a3b8'); line(-80, 45, 80, 45, 5, '#94a3b8'); ctx.restore(); }
+function bookIcon(x, y, s, col = '#f59e0b') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-70, -95, 140, 190, col, 8, 7); box(-70, -95, 22, 190, 'rgba(0,0,0,.25)', 0, 0); line(-30, -50, 50, -50, 6, '#fff7'); line(-30, -25, 40, -25, 6, '#fff7'); ctx.restore(); }
+// ---------- cinema ----------
+function sCinema(lt, t) {
+  bgFill('#111827');
+  box(80, 230, 920, 560, '#f8fafc', 14, 10); spot(540, 510, 600, .25, '255,255,255');
+  txt('THE HUNGER GAMES', 540, 420, 82, '#b91c1c', { stroke: false });
+  txt('SUNRISE ON THE REAPING', 540, 520, 60, INK, { stroke: false });
+  popIn(t, .3, 540, 660, () => { box(-260, -48, 520, 96, '#dc2626', 20, 7); txt('OUT THIS WEEK', 0, 6, 62, '#fff', { lw: 10 }); });
+  for (let r = 0; r < 2; r++) for (let i = 0; i < 7; i++) box(-30 + i * 165, 1160 + r * 140, 140, 200, '#7f1d1d', 22, 7);
+  stick({ x: 330, y: 1460, s: 1.15, shirt: '#8b5cf6', pants: '#1f2937', hair: '#1f2937', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.2, re: -1.2 }, eyes: t > T.europe ? 'huge' : 'norm', mouth: t > T.europe ? 'o' : 'smile', look: 1, lookY: -1, hold: popcorn });
+  stick({ x: 760, y: 1460, s: 1.15, shirt: '#14b8a6', pants: '#334155', hair: '#92400e', flip: true, pose: STAND, eyes: t > T.europe ? 'huge' : 'norm', mouth: t > T.europe ? 'o' : 'grin', look: -1, lookY: -1 });
+  if (t > T.europe) { popIn(t, T.europe, 540, 960, () => { box(-370, -70, 740, 140, '#fde047', 30, 8); txt('FILMED IN EUROPE?!', 0, 6, 70, INK, { stroke: false }); }); }
+}
+// ---------- book facts ----------
+function sBook(lt, t) {
+  bgFill('#fef3c7');
+  if (t < T.sold) {
+    // timeline: movie announced June 2024, book out March 2025
+    line(120, 900, 960, 900, 14);
+    const a = eo(inv(T.yes, T.yes + .4, t)), b = eo(inv(T.book, T.book + .4, t));
+    popIn(t, T.yes, 300, 900, () => { circ(0, 0, 34, '#22c55e', INK, 7); clapper(0, -250, 1.4); txt('MOVIE: YES!', 0, 110, 58, '#15803d', { lw: 10 }); txt('JUNE 2024', 0, 180, 52, INK, { stroke: false }); });
+    popIn(t, T.book, 780, 900, () => { circ(0, 0, 34, '#f59e0b', INK, 7); bookIcon(0, -250, 1.3); txt('BOOK OUT', 0, 110, 58, '#b45309', { lw: 10 }); txt('MARCH 2025', 0, 180, 52, INK, { stroke: false }); });
+    txt('MOVIE BEFORE BOOK', 540, 300, 92, '#fff', { lw: 18 });
+    stick({ x: 540, y: 1500, s: .9, shirt: '#334155', pants: '#1f2937', hair: '#111827', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.6, re: -.2 }, eyes: 'norm', mouth: 'grin' });
+    foot('Sources: TheWrap (June 2024), Scholastic');
+    return;
+  }
+  if (t < T.twice) {
+    const k = eo(inv(T.sold, T.sold + 2.2, t)); const n = Math.round(lerp(0, 1.2, k) * 10) / 10;
+    for (let i = 0; i < 12; i++) { const show = k * 12 > i; if (!show) continue; bookIcon(240 + (i % 4) * 200, 1300 - Math.floor(i / 4) * 210, .9, ['#f59e0b', '#ef4444', '#eab308'][i % 3]); }
+    txt(n.toFixed(1) + ' MILLION', 540, 330, 120, '#fde047', { lw: 20 });
+    txt('BOOKS SOLD', 540, 460, 80, '#fff', { lw: 16 });
+    if (t > T.week) popIn(t, T.week, 540, 620, () => { box(-260, -55, 520, 110, '#dc2626', 24, 8); txt('IN 1 WEEK!', 0, 6, 72, '#fff', { lw: 10 }); });
+    foot('US, all formats (Scholastic / Publishers Weekly)');
+    return;
+  }
+  // bar comparison
+  const bars = [{ l: 'MOCKINGJAY', y: '(2010 BOOK)', v: 1, c: '#94a3b8', t0: T.three }, { l: 'BALLAD', y: '(2020 BOOK)', v: 1.5, c: '#60a5fa', t0: T.twice }, { l: 'SUNRISE', y: '(2025 BOOK)', v: 3, c: '#f59e0b', t0: T.twice }];
+  line(100, 1400, 980, 1400, 10);
+  bars.forEach((b, i) => { const x = 230 + i * 310, k = eo(inv(b.t0, b.t0 + .6, t)), h = 250 * b.v * k; box(x - 100, 1400 - h, 200, h, b.c, 12, 8); txt(b.l, x, 1460, 46, '#fff', { lw: 10 }); txt(b.y, x, 1510, 32, INK, { stroke: false, font: 'Nun' }); });
+  popIn(t, T.twice, 540, 520, () => txt('2X BALLAD', 0, 0, 110, '#3b82f6', { lw: 20 }));
+  popIn(t, T.three, 540, 330, () => txt('3X MOCKINGJAY', 0, 0, 110, '#f59e0b', { lw: 20 }));
+  foot('First-week US sales (Publishers Weekly)');
+}
+// ---------- money + November ----------
+function sMoney(lt, t) {
+  bgFill('#dcfce7');
+  if (t < T.month) {
+    for (let i = 0; i < 5; i++) popIn(t, T.five + i * .25, 160 + i * 190, 1300, () => { circ(0, 0, 80, '#1f2937', INK, 7); for (let k = 0; k < 6; k++) circ(Math.cos(k) * 48, Math.sin(k) * 48, 16, '#9ca3af', INK, 4); txt(String(i + 1), 0, 6, 50, '#fff', { stroke: false }); });
+    txt('5 MOVIES', 540, 330, 120, '#fff', { lw: 20 });
+    if (t > T.bil) { popIn(t, T.bil, 540, 620, () => { box(-430, -120, 860, 240, '#16a34a', 30, 9); txt('$3.2 BILLION+', 0, 10, 110, '#fff', { lw: 16 }); }); for (let i = 0; i < 7; i++) { const yy = 800 + ((t - T.bil) * 400 + i * 140) % 260; box(80 + i * 140, yy, 110, 60, '#4ade80', 8, 6); txt('$', 135 + i * 140, yy + 32, 40, '#14532d', { stroke: false }); } }
+    foot('Worldwide box office, 5 films (The Numbers)');
+    return;
+  }
+  // calendar
+  txt('NOVEMBER', 540, 300, 130, '#ef4444', { lw: 20 });
+  const yrs = [['2012', 'MARCH', false], ['2013', 'NOV', true], ['2014', 'NOV', true], ['2015', 'NOV', true], ['2023', 'NOV', true], ['2026', 'NOV', true]];
+  yrs.forEach((y, i) => { const x = 210 + (i % 3) * 330, yy = 640 + Math.floor(i / 3) * 420; const t0 = i < 5 ? T.four + i * .2 : T.thisone; popIn(t, t0, x, yy, () => { box(-130, -150, 260, 300, i === 5 ? '#fde047' : '#fff', 18, 8); box(-130, -150, 260, 80, y[2] ? '#ef4444' : '#64748b', 18, 8); txt(y[1], 0, -108, 50, '#fff', { stroke: false }); txt(y[0], 0, 40, 76, INK, { stroke: false }); if (y[2] && i < 5) { line(-50, 100, -15, 130, 14, '#16a34a'); line(-15, 130, 50, 70, 14, '#16a34a'); } if (i === 5) txt('NEW!', 0, 112, 46, '#dc2626', { stroke: false }); }); });
+  foot('US release months (The Numbers)');
+}
+// ---------- Spain ----------
+function sSpain(lt, t) {
+  bgFill('#bae6fd');
+  ctx.fillStyle = '#4d7c0f'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-300, 1250); ctx.lineTo(120, 640); ctx.lineTo(420, 1000); ctx.lineTo(700, 560); ctx.lineTo(1100, 1100); ctx.lineTo(1400, 1250); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#f8fafc'; ctx.beginPath(); ctx.moveTo(700, 560); ctx.lineTo(620, 680); ctx.lineTo(660, 660); ctx.lineTo(700, 700); ctx.lineTo(740, 660); ctx.lineTo(780, 680); ctx.closePath(); ctx.fill(); ctx.stroke();
+  floor('#65a30d', 1250);
+  // camera on tripod + crew
+  line(330, 1460, 400, 1250, 10); line(470, 1460, 400, 1250, 10); box(340, 1160, 160, 100, '#1f2937', 12, 7); circ(510, 1210, 34, '#64748b', INK, 6);
+  stick({ x: 220, y: 1480, s: 1.05, shirt: '#0ea5e9', pants: '#1f2937', hair: '#1f2937', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.3, re: -.3 }, eyes: 'norm', mouth: 'smile', look: 1 });
+  stick({ x: 800, y: 1480, s: 1.05, shirt: '#f43f5e', pants: '#334155', hair: '#a16207', flip: true, pose: STAND, eyes: 'norm', mouth: 'grin', look: -1, hold: (hx, hy) => clapper(hx, hy - 40, .45, Math.abs(Math.sin(t * 3)) * .5) });
+  txt('WHERE WAS', 540, 240, 110, '#fff', { lw: 18 }); txt('IT FILMED?', 540, 360, 110, '#fff', { lw: 18 });
+  popIn(t, T.spain, 540, 520, () => { box(-330, -60, 660, 120, '#dc2626', 24, 8); txt('NORTHERN SPAIN', 0, 6, 70, '#fde047', { lw: 10 }); });
+  foot('Asturias region (Wikipedia, WorldAtlas)');
+}
+// ---------- Berlin ----------
+function tvTower(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-22, -700, 44, 700, '#e5e7eb', 6, 7); circ(0, -560, 80, '#cbd5e1', INK, 8); box(-34, -650, 68, 40, '#e5e7eb', 6, 6); line(0, -700, 0, -900, 10); ctx.restore(); }
+function sBerlin(lt, t) {
+  bgFill('#c7d2fe');
+  const k2 = t > T.temp;
+  if (!k2) {
+    // skyline + TV tower
+    for (let i = 0; i < 8; i++) box(-40 + i * 145, 1000 - (rnd(i) * 300), 140, 400 + rnd(i) * 300, ['#94a3b8', '#a5b4fc', '#cbd5e1'][i % 3], 4, 7);
+    tvTower(760, 1380, 1);
+    floor('#64748b');
+    txt('BERLIN', 540, 300, 170, '#fde047', { lw: 24 });
+    if (t > T.ber2) popIn(t, T.ber2, 540, 460, () => { box(-220, -50, 440, 100, '#111827', 20, 6); ctx.fillStyle = '#111'; ctx.fillRect(-90, -24, 180, 16); ctx.fillStyle = '#dd0000'; ctx.fillRect(-90, -8, 180, 16); ctx.fillStyle = '#ffce00'; ctx.fillRect(-90, 8, 180, 16); });
+    if (t > T.ber2) txt('GERMANY', 540, 580, 80, '#fff', { lw: 14 });
+    stick({ x: 260, y: 1480, s: 1.15, shirt: '#8b5cf6', pants: '#1f2937', hair: '#1f2937', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.4, re: -.3 }, eyes: 'huge', mouth: 'grin', look: 1, lookY: -1 });
+    return;
+  }
+  if (t < T.look) {
+    floor('#94a3b8', 1250);
+    // Tempelhof: long curved terminal
+    popIn(t, T.temp, 540, 760, () => { box(-480, -120, 960, 200, '#e7e5e4', 10, 8); for (let i = 0; i < 10; i++) box(-450 + i * 92, -90, 60, 110, '#93c5fd', 4, 5); box(-500, -150, 1000, 40, '#78716c', 6, 7); txt('OLD TEMPELHOF AIRPORT', 0, 150, 56, '#fff', { lw: 12 }); });
+    popIn(t, T.icc, 540, 1150, () => { box(-360, -140, 720, 210, '#cbd5e1', 6, 8); for (let i = 0; i < 9; i++) line(-330 + i * 82, -140, -330 + i * 82, 70, 6, '#64748b'); line(-360, -60, 360, -60, 6, '#64748b'); txt('ICC BERLIN', 0, 0, 70, '#1e3a8a', { lw: 10, strokeCol: '#fff' }); });
+    if (t > T.wrap) { popIn(t, T.wrap, 540, 330, () => { clapper(-300, 0, .8, Math.max(0, .5 - (t - T.wrap) * 2)); box(-180, -70, 520, 140, '#dc2626', 24, 8); txt("THAT'S A WRAP!", 80, 6, 58, '#fff', { lw: 10 }); }); }
+    else txt('FILMED HERE', 540, 330, 110, '#fff', { lw: 18 });
+    stick({ x: 900, y: 1480, s: .95, shirt: '#14b8a6', pants: '#334155', hair: '#92400e', flip: true, pose: STAND, eyes: 'huge', mouth: 'o', look: -1 });
+    foot('Sources: The Berliner, Wikipedia (wrap Nov 2025)');
+    return;
+  }
+  // final: cinema + magnifier
+  bgFill('#111827'); box(80, 300, 920, 520, '#f8fafc', 14, 10);
+  for (let i = 0; i < 8; i++) box(140 + i * 100, 820 - 100 - rnd(i) * 200, 90, 100 + rnd(i) * 200, '#cbd5e1', 2, 5);
+  tvTower(780, 820, .55);
+  const mx = 540 + Math.sin(t * 2) * 160, my = 560;
+  ctx.save(); ctx.lineWidth = 16; ctx.strokeStyle = INK; ctx.beginPath(); ctx.arc(mx, my, 120, 0, 7); ctx.stroke(); line(mx + 85, my + 85, mx + 200, my + 200, 26); ctx.restore();
+  for (let r = 0; r < 2; r++) for (let i = 0; i < 7; i++) box(-30 + i * 165, 1160 + r * 140, 140, 200, '#7f1d1d', 22, 7);
+  stick({ x: 330, y: 1460, s: 1.15, shirt: '#8b5cf6', pants: '#1f2937', hair: '#1f2937', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.2, re: -1.2 }, eyes: 'huge', mouth: 'grin', look: 1, lookY: -1, hold: popcorn });
+  popIn(t, T.spot, 540, 200, () => { box(-330, -70, 660, 140, '#fde047', 30, 8); txt('SPOT BERLIN?', 0, 6, 76, INK, { stroke: false }); });
+}
+const SCENES = [{ t0: 0, fn: sCinema, push: .04 }, { t0: mid(0, 1), fn: sBook, push: .03, flash: 1 }, { t0: mid(3, 4), fn: sMoney, push: .03, flash: .8 }, { t0: mid(5, 6), fn: sSpain, push: .05, xfade: .25 }, { t0: mid(6, 7), fn: sBerlin, push: .03, flash: 1 }];
+const CAP = [["the new", "hunger games movie", "comes out this week.", "and big parts of it", "were filmed in europe."], ["but first.", "the studio said yes", "to it before the book", "was even out."], ["then the book sold", "1.2 million copies", "in the us.", "in one week."], ["twice the", "last prequel.", "three times", "mockingjay."], ["the first five movies", "made over", "3.2 billion dollars."], ["and four of", "those five", "came out in november.", "just like this one."], ["so where was", "it filmed?", "some outdoor scenes,", "in the mountains", "of northern spain."], ["and a lot", "of the rest?", "berlin.", "yes, berlin, germany."], ["the old", "tempelhof airport.", "the giant", "icc building.", "filming even", "wrapped in berlin."], ["so look closely.", "you might", "spot berlin."]];
+const HOT = new Set(["were filmed in europe.", "was even out.", "1.2 million copies", "in one week.", "three times", "3.2 billion dollars.", "came out in november.", "of northern spain.", "berlin.", "yes, berlin, germany.", "tempelhof airport.", "icc building.", "wrapped in berlin.", "spot berlin."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1660) });
+</script></body></html>

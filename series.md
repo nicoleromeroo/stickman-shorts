@@ -30,3 +30,4 @@ glitch effect = RGB-split offset copies of the frame for 0.2 s.
 
 ## Episodes
 - Part 1 · 2026-11-15 · You wake up with three hearts floating above your head; Mom loops "Breakfast is ready!" and the neighbour waters the same flower forever. A quest box appears: "Survive the school day." Cliffhanger: you trip on the stairs, lose a heart, and a voice whispers "Two lives left."
+- Part 2 · 2026-11-16 · At school every classmate loops "Nice shoes.", the teacher announces "Level 2 unlocked" without looking up, and a new quest appears: "Find the exit." Behind the gym you find a glowing, humming door that was never there before. Cliffhanger: someone is already standing in front of it, and above his head float red hearts (Kai).

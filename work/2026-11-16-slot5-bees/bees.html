@@ -1,0 +1,112 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { gone: wt(0, 'is gone'), sting: at(1, 0), nice: wt(1, 'nice'), snack: wt(1, 'but one snack'), market: at(2, 0), off: wt(2, "something"), three: at(3, 0), melon: at(4, 0), coffee: wt(4, 'coffee'), fewer: wt(4, 'way fewer'), surp: at(5, 0), starve: wt(5, "you wouldn't"), wheat: at(6, 0), wind: wt(6, 'wind'), sci: at(7, 0), pct: wt(7, 'five'), boring: at(8, 0), snack2: wt(8, 'and that'), choc: at(9, 0), cocoa: wt(9, 'cocoa'), tiny: wt(9, 'tiny flies'), noflies: wt(9, 'no flies') };
+function popIn(t, t0, x, y, fn, d = .25) { if (t < t0) return; const k = eob(inv(t0, t0 + d, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function poof(t, t0, x, y, fn) { if (t < t0) { fn(); return; } const k = inv(t0, t0 + .35, t); if (k < 1) { ctx.save(); ctx.globalAlpha = 1 - k; ctx.translate(x, y); ctx.scale(1 + k * .4, 1 + k * .4); ctx.translate(-x, -y); fn(); ctx.restore(); } if (k < 1) for (let i = 0; i < 6; i++) { const a = i * 1.05; circ(x + Math.cos(a) * 90 * eo(k), y + Math.sin(a) * 90 * eo(k), 30 * (1 - k * .7), `rgba(226,232,240,${1 - k * .6})`, INK, 4); } }
+function foot(s) { txt(s, 540, 1860, 34, '#f1f5f9', { lw: 6 }); }
+function bee(x, y, s, t = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); const fl = Math.sin(t * 50) * .3; ctx.save(); ctx.rotate(-.4 + fl); ctx.fillStyle = 'rgba(224,242,254,.9)'; ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(-10, -40, 22, 36, 0, 0, 7); ctx.fill(); ctx.stroke(); ctx.restore(); ctx.fillStyle = '#facc15'; ctx.lineWidth = 7; ctx.beginPath(); ctx.ellipse(0, 0, 60, 40, 0, 0, 7); ctx.fill(); ctx.stroke(); ctx.save(); ctx.beginPath(); ctx.ellipse(0, 0, 60, 40, 0, 0, 7); ctx.clip(); ctx.fillStyle = INK; ctx.fillRect(-20, -50, 16, 100); ctx.fillRect(14, -50, 16, 100); ctx.restore(); circ(50, -8, 7, INK); ctx.restore(); }
+function midge(x, y, s, t = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); const fl = Math.sin(t * 60) * .4; ctx.fillStyle = 'rgba(224,242,254,.9)'; ctx.strokeStyle = INK; ctx.lineWidth = 4; for (const sx of [-1, 1]) { ctx.save(); ctx.rotate(sx * (.6 + fl)); ctx.beginPath(); ctx.ellipse(0, -34, 14, 30, 0, 0, 7); ctx.fill(); ctx.stroke(); ctx.restore(); } ctx.fillStyle = '#44403c'; ctx.beginPath(); ctx.ellipse(0, 0, 18, 34, 0, 0, 7); ctx.fill(); ctx.stroke(); circ(0, -38, 13, '#44403c', INK, 4); ctx.restore(); }
+function flower(x, y, s, col = '#f472b6') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); line(0, 0, 0, -160, 10, '#15803d'); for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3; circ(Math.cos(a) * 34, -170 + Math.sin(a) * 34, 26, col, INK, 5); } circ(0, -170, 22, '#facc15', INK, 5); ctx.restore(); }
+function noSign(x, y, r) { ctx.save(); ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 22; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.stroke(); line(x - r * .7, y - r * .7, x + r * .7, y + r * .7, 22, '#dc2626'); ctx.restore(); }
+// food icons
+function melon(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#16a34a'; ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(0, 0, 80, 0, Math.PI); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.arc(0, 0, 64, 0, Math.PI); ctx.closePath(); ctx.fill(); for (let i = 0; i < 5; i++) circ(-40 + i * 20, 22 + (i % 2) * 14, 5, INK); ctx.restore(); }
+function kiwi(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); circ(0, 0, 66, '#a16207', INK, 7); circ(0, 0, 54, '#84cc16'); circ(0, 0, 18, '#fef9c3'); for (let i = 0; i < 10; i++) { const a = i * .63; circ(Math.cos(a) * 32, Math.sin(a) * 32, 4, INK); } ctx.restore(); }
+function coffee(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-55, -50, 110, 110, '#fff', 14, 7); ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.arc(62, 5, 24, -1.4, 1.4); ctx.stroke(); ctx.fillStyle = '#78350f'; ctx.fillRect(-47, -42, 94, 18); ctx.restore(); }
+function avocado(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#365314'; ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.ellipse(0, 10, 55, 75, 0, 0, 7); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#d9f99d'; ctx.beginPath(); ctx.ellipse(0, 12, 42, 60, 0, 0, 7); ctx.fill(); circ(0, 28, 24, '#92400e', INK, 5); ctx.restore(); }
+function grain(x, y, s, kind) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); line(0, 80, 0, -60, 8, '#a16207'); if (kind === 'corn') { ctx.fillStyle = '#facc15'; ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(0, -30, 34, 70, 0, 0, 7); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#4d7c0f'; ctx.beginPath(); ctx.moveTo(-10, 60); ctx.quadraticCurveTo(-70, 0, -40, -70); ctx.quadraticCurveTo(-30, 0, 0, 40); ctx.fill(); ctx.stroke(); } else { for (let i = 0; i < 6; i++) { circ(-14, -60 + i * 18, 11, kind === 'rice' ? '#fef9c3' : '#eab308', INK, 4); circ(14, -52 + i * 18, 11, kind === 'rice' ? '#fef9c3' : '#eab308', INK, 4); } } ctx.restore(); }
+function chocBar(x, y, s, crack = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-150, -90, 300, 180, '#5b3416', 14, 8); for (let r = 0; r < 2; r++) for (let c = 0; c < 4; c++) box(-135 + c * 70, -75 + r * 80, 60, 70, '#7c4a24', 8, 4); if (crack) { ctx.strokeStyle = '#fef3c7'; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-20, -90); ctx.lineTo(10, -20); ctx.lineTo(-15, 20); ctx.lineTo(20, 90); ctx.stroke(); } ctx.restore(); }
+function cocoaPod(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#d97706'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.ellipse(0, 0, 80, 140, 0, 0, 7); ctx.fill(); ctx.stroke(); for (const dx of [-40, 0, 40]) { ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(dx * .8, 0, 6, 120 - Math.abs(dx), 0, 0, 7); ctx.stroke(); } ctx.restore(); }
+// ---------- scene 1: garden, no bees ----------
+function sGarden(lt, t) {
+  bgFill('#bae6fd'); floor('#86efac', 1300);
+  for (let i = 0; i < 5; i++) flower(120 + i * 210, 1330 + (i % 2) * 40, 1, ['#f472b6', '#c084fc', '#fb923c', '#f472b6', '#facc15'][i]);
+  // ghost bees fading out
+  const fade = 1 - inv(.1, T.gone + .3, t);
+  if (fade > 0) { ctx.save(); ctx.globalAlpha = fade; bee(260 + Math.sin(t * 3) * 40, 900, 1, t); bee(760, 820 + Math.sin(t * 4) * 30, .9, t); ctx.restore(); }
+  popIn(t, 0, 540, 330, () => { box(-330, -110, 660, 220, '#fff', 30, 9); bee(-170, 0, 1.1, t); noSign(-170, 0, 90); txt('0 BEES', 90, 8, 104, INK, { stroke: false }); }, .2);
+  const x = 540, s = 1.2;
+  const happy = t > T.nice && t < T.snack;
+  hero({ x, y: 1500, s, pose: happy ? { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.6, re: -.4 } : STAND, eyes: t > T.snack ? 'huge' : 'norm', mouth: happy ? 'grin' : t > T.snack ? 'o' : 'o', look: 0 });
+  if (t > T.sting && t < T.snack) popIn(t, T.sting, 540, 560, () => { box(-300, -60, 600, 120, '#dcfce7', 26, 7); txt('NO STINGS!', 0, 6, 72, '#15803d', { stroke: false }); });
+  if (t > T.snack) popIn(t, T.snack, 540, 590, () => { box(-120, -120, 240, 240, '#fde68a', 30, 9); txt('?', 0, 14, 170, '#b45309', { lw: 20 }); txt('YOUR FAVORITE SNACK', 0, 170, 52, '#fff', { lw: 10 }); });
+}
+// ---------- scene 2: supermarket ----------
+function shelves() { bgFill('#f1f5f9'); for (let r = 0; r < 3; r++) box(-40, 520 + r * 260, W + 80, 24, '#94a3b8', 4, 6); floorTiles(1340, '#e2e8f0', '#cbd5e1'); }
+function sMarket(lt, t) {
+  shelves();
+  if (t < T.three) {
+    // full shelves
+    for (let i = 0; i < 4; i++) { melon(150 + i * 250, 520, .8); kiwi(150 + i * 250, 720, .8); avocado(150 + i * 250, 950, .7); }
+    const x = lerp(-150, 330, eo(inv(T.market, T.market + 1.2, t)));
+    hero({ x, y: 1520, s: 1.1, pose: walkPose(t * 6, t < T.market + 1.2 ? 1 : 0), eyes: t > T.off ? 'huge' : 'norm', mouth: t > T.off ? 'o' : 'flat', look: 1 });
+    box(x + 70, 1280, 240, 140, 'rgba(255,255,255,.6)', 10, 7); circ(x + 110, 1450, 22, INK); circ(x + 270, 1450, 22, INK);
+    if (t > T.off) { qmark(860, 1150, t, T.off); txt('SOMETHING’S OFF', 540, 300, 90, '#fff', { lw: 16 }); }
+    return;
+  }
+  if (t < T.melon) {
+    txt('3 OUT OF 4', 540, 280, 130, '#facc15', { lw: 20 }); txt('FOOD CROPS NEED THEM', 540, 400, 66, '#fff', { lw: 14 });
+    const icons = [(x, y) => melon(x, y + 30, 1), (x, y) => kiwi(x, y, 1), (x, y) => avocado(x, y, 1), (x, y) => grain(x, y, 1.1, 'wheat')];
+    icons.forEach((f, i) => popIn(t, T.three + .25 * i, 170 + i * 247, 900, () => { box(-110, -150, 220, 300, '#fff', 24, 8); f(0, 0); if (i < 3) bee(70, -120, .5, t); else txt('WIND', 0, 115, 44, '#64748b', { stroke: false }); }));
+    txt('AT LEAST A BIT', 540, 1200, 80, '#f59e0b', { lw: 14 });
+    foot('More than 75% of food crop types (FAO)');
+    return;
+  }
+  // melons/kiwis vanish, coffee/avocado shrink
+    for (let i = 0; i < 4; i++) { poof(t, T.melon + .3 + i * .08, 150 + i * 250, 520, () => melon(150 + i * 250, 520, .8)); poof(t, T.melon + .7 + i * .08, 150 + i * 250, 720, () => kiwi(150 + i * 250, 720, .8)); }
+  if (t > T.coffee) for (let i = 0; i < 4; i++) { const xx = 150 + i * 250; const keep = i % 2 === 0; if (keep) { coffee(xx, 980, 1.1); avocado(xx, 1200, 1.1); } else { poof(t, T.fewer + .1 * i, xx, 980, () => coffee(xx, 980, 1.1)); poof(t, T.fewer + .1 * i + .15, xx, 1200, () => avocado(xx, 1200, 1.1)); } }
+  txt(t < T.coffee ? 'MELONS + KIWIS' : 'COFFEE + AVOCADOS', 540, 280, 86, '#fff', { lw: 16 });
+  if (t > T.melon + .5 && t < T.coffee) popIn(t, T.melon + .5, 540, 400, () => txt('BASICALLY GONE', 0, 0, 80, '#ef4444', { lw: 14 }));
+  if (t > T.fewer) popIn(t, T.fewer, 540, 400, () => txt('WAY FEWER', 0, 0, 90, '#f59e0b', { lw: 14 }));
+  foot('Crop pollinator dependence (Our World in Data)');
+}
+// ---------- scene 3: fields ----------
+function sField(lt, t) {
+  bgFill('#bfdbfe'); floor('#a3e635', 1200);
+  for (let i = 0; i < 9; i++) { const sway = Math.sin(t * 3 + i) * .12; ctx.save(); ctx.translate(60 + i * 120, 1330); ctx.rotate(sway); grain(0, 0, 1.1, ['wheat', 'rice', 'corn'][i % 3]); ctx.restore(); }
+  if (t > T.wind) for (let i = 0; i < 5; i++) { const xx = ((t - T.wind) * 700 + i * 260) % (W + 400) - 200; ctx.save(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(xx, 700 + i * 80); ctx.quadraticCurveTo(xx + 80, 670 + i * 80, xx + 160, 700 + i * 80); ctx.stroke(); ctx.restore(); }
+  if (t < T.wheat) { txt('PLOT TWIST', 540, 300, 110, '#facc15', { lw: 18 }); popIn(t, T.starve, 540, 470, () => { box(-400, -70, 800, 140, '#16a34a', 30, 9); txt("YOU WOULDN'T STARVE", 0, 6, 70, '#fff', { lw: 10 }); }); }
+  else if (t < T.sci) { txt('WHEAT, RICE, CORN', 540, 300, 96, '#fff', { lw: 18 }); popIn(t, T.wheat + .8, 540, 440, () => { bee(-250, 0, .7, t); noSign(-250, 0, 70); txt('NOT NEEDED', 70, 6, 72, '#dc2626', { lw: 12 }); }); }
+  else {
+    txt('CROP PRODUCTION', 540, 280, 90, '#fff', { lw: 16 });
+    const k = eo(inv(T.pct, T.pct + .6, t));
+    box(140, 420, 800, 120, '#fff', 20, 8); ctx.fillStyle = '#22c55e'; rr(152, 432, 776 * (1 - .08 * k), 96, 14); ctx.fill(); if (k > 0) { ctx.fillStyle = '#ef4444'; rr(152 + 776 * .92, 432, 776 * .08 * k, 96, 10); ctx.fill(); }
+    if (t > T.pct) popIn(t, T.pct, 540, 650, () => txt('ONLY ABOUT -5% TO -8%', 0, 0, 74, '#ef4444', { lw: 14 }));
+    foot('Study estimate, by weight (Our World in Data)');
+  }
+  const x = 880, s = 1.2;
+  hero({ x, y: 1560, s, pose: STAND, eyes: 'huge', mouth: t > T.starve ? 'smile' : 'o', look: -1 });
+}
+// ---------- scene 4: chocolate ----------
+function sChoc(lt, t) {
+  bgFill('#fde7c7'); floor('#d6a26b', 1380);
+  if (t < T.choc) {
+    // boring plate
+    box(160, 1100, 760, 40, '#92400e', 8, 7);
+    circ(540, 1000, 190, '#fff', INK, 8); grain(470, 990, .7, 'rice'); grain(600, 990, .7, 'wheat');
+    txt('BORING...', 540, 300, 120, '#94a3b8', { lw: 18 });
+    hero({ x: 220, y: 1560, s: 1.0, pose: STAND, eyes: 'norm', mouth: 'flat', look: 1 });
+    if (t > T.snack2) popIn(t, T.snack2, 540, 560, () => { box(-120, -120, 240, 240, '#fde68a', 30, 9); txt('?', 0, 14, 170, '#b45309', { lw: 20 }); });
+    return;
+  }
+  if (t < T.cocoa) {
+    txt('CHOCOLATE', 540, 300, 150, '#7c2d12', { lw: 22, strokeCol: '#fff' });
+    popIn(t, T.choc, 540, 900, () => chocBar(0, 0, 2, 1));
+    hero({ x: 540, y: 1560, s: .9, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.3, re: -2.2 }, eyes: 'huge', mouth: 'scream', look: 0 });
+    return;
+  }
+  cocoaPod(330, 950, 1.5);
+  const mx = 760 + Math.sin(t * 4) * 40, my = 780 + Math.cos(t * 5) * 30;
+  if (t > T.tiny) { ctx.save(); ctx.strokeStyle = INK; ctx.lineWidth = 14; ctx.beginPath(); ctx.arc(mx, my, 150, 0, 7); ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.fill(); ctx.stroke(); line(mx + 105, my + 105, mx + 220, my + 220, 26); ctx.restore(); midge(mx, my, 2, t); txt('1-3 MM', 760, 1060, 64, '#fff', { lw: 12 }); }
+  if (t < T.noflies) txt('COCOA = TINY FLIES', 540, 300, 90, '#fff', { lw: 16 });
+  else { popIn(t, T.noflies, 540, 330, () => { box(-460, -110, 920, 220, '#dc2626', 30, 9); txt('NO FLIES =', 0, -40, 80, '#fff', { lw: 10 }); txt('NO CHOCOLATE', 0, 52, 86, '#fde047', { lw: 12 }); }); }
+  foot('Cocoa pollinated by midges (Natural History Museum)');
+}
+const SCENES = [{ t0: 0, fn: sGarden, push: .04 }, { t0: mid(1, 2), fn: sMarket, push: .03, flash: 1 }, { t0: mid(4, 5), fn: sField, push: .03, flash: 1 }, { t0: mid(7, 8), fn: sChoc, push: .04, flash: 1 }];
+const CAP = [["you wake up.", "and every bee,", "butterfly and", "flower bug on earth", "is gone."], ["no more stings.", "nice.", "but one snack", "you love is", "about to vanish."], ["at the supermarket,", "something's off."], ["three out of four", "kinds of food crops", "need these", "little guys,", "at least a bit."], ["melons and kiwis?", "basically gone.", "coffee and avocados?", "way fewer."], ["but here's", "the surprise.", "you wouldn't starve."], ["wheat, rice and corn", "don't need bugs.", "wind,", "or the plant itself,", "does the job."], ["scientists think", "crop production", "would drop only", "about five to", "eight percent."], ["food just gets", "way more boring.", "and that snack?"], ["chocolate.", "cocoa flowers", "are pollinated", "by tiny flies.", "no flies,", "no chocolate."]];
+const HOT = new Set(["is gone.", "about to vanish.", "something's off.", "three out of four", "basically gone.", "way fewer.", "you wouldn't starve.", "don't need bugs.", "eight percent.", "and that snack?", "chocolate.", "by tiny flies.", "no chocolate."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1680) });
+</script></body></html>

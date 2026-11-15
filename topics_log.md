@@ -31,4 +31,7 @@ Every video ever made. The daily run reads this to avoid repeats.
 - 2026-11-15 slot1 | FACTS why | Why you can't stop scrolling at 2 AM (variable rewards, no bottom) | sources: gulfnews.com infinite-scroll report (Psychology Today)
 - 2026-11-15 slot2 | FINANCE creator money | 1 million Shorts views = how much money? | sources: air.io Shorts RPM data (274 channels), support.google.com/youtube/answer/12504220
 - 2026-11-15 slot3 | SERIES | RESPAWN Part 1 | fiction
+- 2026-11-16 slot3 | SERIES | RESPAWN Part 2 (school NPCs, glowing door behind the gym, Kai appears) | fiction
+- 2026-11-16 slot4 | CELEBRITY/MOVIE | Hunger Games: Sunrise on the Reaping facts (movie greenlit before book, 1.2M first-week book sales, $3.28B franchise, November releases, filmed in Spain + Berlin Tempelhof/ICC) | sources: publishersweekly.com (Scholastic), thewrap.com, the-numbers.com franchise page, the-berliner.com, en.wikipedia.org, worldatlas.com
+- 2026-11-16 slot5 | WHAT IF | What if every bee (and bug pollinator) vanished? (75% of crop types, 5-8% production drop, wheat/rice/corn fine, no chocolate: cocoa pollinated by midges) | sources: fao.org, ourworldindata.org/pollinator-dependence, nhm.ac.uk
 - (drafted 2026-11-15, NOT uploaded, topics still free: why it gets dark early, inflation since 2020, Floor 13 story)
