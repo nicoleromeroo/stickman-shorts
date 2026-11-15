@@ -1,8 +1,8 @@
 name: Upload Shorts to YouTube
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [queue]
   schedule:
     - cron: "23 * * * *"   # hourly safety net
   workflow_dispatch: {}
@@ -19,21 +19,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Get queue branch
+        id: q
+        run: |
+          if git ls-remote --exit-code --heads origin queue >/dev/null; then
+            git fetch --depth 1 origin queue
+            git worktree add q FETCH_HEAD
+            echo "sha=$(git -C q rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          else
+            mkdir q; echo "sha=" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install -r uploader/requirements.txt
       - name: Upload queued videos
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          QUEUE_DIR: q
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
           REVIEW_COUNT: ${{ vars.REVIEW_COUNT || '10' }}
         run: python uploader/upload.py
-      - name: Save upload log
+      - name: Save upload log (main)
+        if: always()
         run: |
-          git config user.name "shorts-bot"
-          git config user.email "shorts-bot@users.noreply.github.com"
+          git config --global user.name "shorts-bot"
+          git config --global user.email "shorts-bot@users.noreply.github.com"
           git add state.json
-          git diff --cached --quiet || (git commit -m "upload log" && git pull --rebase && git push)
+          git diff --cached --quiet || (git commit -m "upload log" && git pull --rebase origin main && git push origin HEAD:main)
+      - name: Shrink queue branch (drop uploaded videos from history)
+        if: always() && steps.q.outputs.sha != ''
+        run: |
+          cd q
+          git add -A
+          if git diff --cached --quiet; then echo "queue unchanged"; exit 0; fi
+          tree=$(git write-tree)
+          new=$(git commit-tree "$tree" -m "queue")
+          # only overwrite if nobody pushed new videos meanwhile; otherwise the next run cleans up
+          git push --force-with-lease=queue:${{ steps.q.outputs.sha }} origin "$new:refs/heads/queue" || echo "queue moved, will clean next run"

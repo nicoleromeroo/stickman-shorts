@@ -1,36 +1,23 @@
-"""Uploads queued Shorts (GitHub Releases tagged 'video-*') to YouTube.
+"""Uploads queued Shorts to YouTube. Runs inside GitHub Actions.
 
-Runs inside GitHub Actions. Each queued release holds two assets:
-  video.mp4   the finished Short
-  meta.json   {"title", "description", "tags", "publish_at" (ISO 8601 with offset), "category_id"}
+Queue = the `queue` branch, checked out at $QUEUE_DIR. Each video is a folder:
+  <tag>/video.mp4   the finished Short           (tag = video-YYYYMMDD-slotN)
+  <tag>/meta.json   {"title", "description", "tags", "publish_at", "category_id", "made_for_kids"}
 
-Review phase: the first REVIEW_COUNT uploads go up as PRIVATE without a publish time,
-so the owner can watch them in YouTube Studio and publish by hand.
-After that, uploads are PRIVATE with publishAt = scheduled time (YouTube publishes automatically).
+Review phase: the first REVIEW_COUNT uploads go up PRIVATE without a publish time, so the owner
+can check them in YouTube Studio and publish by hand. After that: PRIVATE + publishAt (YouTube
+publishes automatically at that time), or PUBLIC if the time has already passed.
 
-Secrets (GitHub repo settings -> Secrets and variables -> Actions):
-  YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN
+Secrets: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN
 """
-import json, os, sys, datetime, tempfile
-import requests
+import json, os, sys, shutil, datetime
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
-REPO = os.environ["GITHUB_REPOSITORY"]
-GH = os.environ["GITHUB_TOKEN"]
+QUEUE = os.environ.get("QUEUE_DIR", "q")
 REVIEW_COUNT = int(os.environ.get("REVIEW_COUNT", "10"))
-STATE = os.path.join(os.path.dirname(__file__), "..", "state.json")
-
-
-def gh(method, path, accept="application/vnd.github+json", raw=False):
-    url = f"https://api.github.com{path}" if path.startswith("/") else path
-    r = requests.request(method, url, headers={"Authorization": f"Bearer {GH}", "Accept": accept,
-                                               "X-GitHub-Api-Version": "2022-11-28"}, timeout=300)
-    r.raise_for_status()
-    if raw:
-        return r.content
-    return r.json() if r.content else None
+STATE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "state.json")
 
 
 def load_state():
@@ -49,18 +36,18 @@ def youtube():
 
 def main():
     state = load_state()
-    releases = [r for r in gh("GET", f"/repos/{REPO}/releases?per_page=50") if r["tag_name"].startswith("video-")]
-    releases.sort(key=lambda r: r["tag_name"])
-    if not releases:
+    done = {u["tag"] for u in state["uploads"]}
+    items = sorted(d for d in os.listdir(QUEUE) if d.startswith("video-") and os.path.isdir(os.path.join(QUEUE, d))) if os.path.isdir(QUEUE) else []
+    if not items:
         print("queue empty"); return
-    yt = youtube(); now = datetime.datetime.now(datetime.timezone.utc)
-    for rel in releases:
-        assets = {a["name"]: a for a in rel["assets"]}
-        if "video.mp4" not in assets or "meta.json" not in assets:
-            print("skip incomplete", rel["tag_name"]); continue
-        meta = json.loads(gh("GET", assets["meta.json"]["url"], accept="application/octet-stream", raw=True))
-        tmp = tempfile.mkdtemp(); vid = os.path.join(tmp, "video.mp4")
-        open(vid, "wb").write(gh("GET", assets["video.mp4"]["url"], accept="application/octet-stream", raw=True))
+    yt = None; now = datetime.datetime.now(datetime.timezone.utc)
+    for tag in items:
+        d = os.path.join(QUEUE, tag); vid = os.path.join(d, "video.mp4"); mp = os.path.join(d, "meta.json")
+        if tag in done:
+            print("already uploaded, removing", tag); shutil.rmtree(d); continue
+        if not (os.path.isfile(vid) and os.path.isfile(mp)):
+            print("skip incomplete", tag); continue
+        meta = json.load(open(mp, encoding="utf-8"))
         review = state["uploaded_count"] < REVIEW_COUNT
         status = {"privacyStatus": "private", "selfDeclaredMadeForKids": bool(meta.get("made_for_kids", False)),
                   "containsSyntheticMedia": False}
@@ -70,28 +57,25 @@ def main():
             if when > now + datetime.timedelta(minutes=15):
                 status["publishAt"] = when.astimezone(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
             else:
-                status = {**status, "privacyStatus": "public"}
+                status["privacyStatus"] = "public"
         body = {"snippet": {"title": meta["title"][:100], "description": meta["description"][:4900],
                             "tags": meta.get("tags", [])[:15], "categoryId": str(meta.get("category_id", "27")),
                             "defaultLanguage": "en", "defaultAudioLanguage": "en"},
                 "status": status}
-        req = yt.videos().insert(part="snippet,status", body=body, media_body=MediaFileUpload(vid, mimetype="video/mp4", resumable=True, chunksize=8 * 1024 * 1024))
+        yt = yt or youtube()
+        req = yt.videos().insert(part="snippet,status", body=body,
+                                 media_body=MediaFileUpload(vid, mimetype="video/mp4", resumable=True, chunksize=8 * 1024 * 1024))
         resp = None
         while resp is None:
             _, resp = req.next_chunk()
         vid_id = resp["id"]
-        mode = "REVIEW (private)" if review else ("scheduled " + status.get("publishAt", "") if "publishAt" in status else status["privacyStatus"])
-        print(f"uploaded {rel['tag_name']} -> https://youtu.be/{vid_id} [{mode}]")
+        mode = "REVIEW (private)" if review else ("scheduled " + status["publishAt"] if "publishAt" in status else status["privacyStatus"])
+        print(f"uploaded {tag} -> https://youtu.be/{vid_id} [{mode}]")
         state["uploaded_count"] += 1
-        state["uploads"].append({"tag": rel["tag_name"], "video_id": vid_id, "title": meta["title"], "mode": mode,
-                                 "uploaded_at": now.isoformat(timespec="seconds")})
-        # remove the release + tag so the repo stays small
-        gh("DELETE", f"/repos/{REPO}/releases/{rel['id']}")
-        try:
-            gh("DELETE", f"/repos/{REPO}/git/refs/tags/{rel['tag_name']}")
-        except Exception as e:
-            print("tag delete failed", e)
-        json.dump(state, open(STATE, "w"), indent=1)
+        state["uploads"].append({"tag": tag, "video_id": vid_id, "title": meta["title"], "mode": mode,
+                                 "publish_at": pub, "uploaded_at": now.isoformat(timespec="seconds")})
+        json.dump(state, open(STATE, "w"), indent=1)   # save after every upload
+        shutil.rmtree(d)
 
 
 if __name__ == "__main__":
