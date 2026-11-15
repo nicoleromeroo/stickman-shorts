@@ -1,5 +1,5 @@
 {
- "uploaded_count": 7,
+ "uploaded_count": 10,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -57,6 +57,30 @@
    "mode": "scheduled 2026-11-15T19:00:00Z",
    "publish_at": "2026-11-15T20:00:00+01:00",
    "uploaded_at": "2026-11-15T12:57:32+00:00"
+  },
+  {
+   "tag": "video-20261116-slot3",
+   "video_id": "uhLrzRQU1y0",
+   "title": "RESPAWN (Part 2) #shorts",
+   "mode": "scheduled 2026-11-16T17:00:00Z",
+   "publish_at": "2026-11-16T18:00:00+01:00",
+   "uploaded_at": "2026-11-15T19:01:46+00:00"
+  },
+  {
+   "tag": "video-20261116-slot4",
+   "video_id": "ax4L-brNNNE",
+   "title": "The New Hunger Games Movie Was Filmed\u2026 in Berlin? \ud83c\udfac #shorts",
+   "mode": "scheduled 2026-11-16T09:30:00Z",
+   "publish_at": "2026-11-16T10:30:00+01:00",
+   "uploaded_at": "2026-11-15T19:01:46+00:00"
+  },
+  {
+   "tag": "video-20261116-slot5",
+   "video_id": "KqkeaTfKFCg",
+   "title": "What If Every Bee (and Bug) Vanished Tomorrow? \ud83d\udc1d #shorts",
+   "mode": "scheduled 2026-11-16T14:30:00Z",
+   "publish_at": "2026-11-16T15:30:00+01:00",
+   "uploaded_at": "2026-11-15T19:01:46+00:00"
   }
  ]
 }
