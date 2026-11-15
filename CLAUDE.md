@@ -74,12 +74,13 @@ bash engine/setup.sh
 - Finance videos: add "Not financial advice." to the description.
 
 ## Step 7 — queue for upload
-For each finished video:
+For each finished video (asset names MUST be exactly `video.mp4` and `meta.json`;
+gh's `file#label` syntax only sets a display label, so copy the files instead):
 ```
-gh release create video-<YYYYMMDD>-<slot> work/<dir>/final.mp4#video.mp4 work/<dir>/meta.json \
-  --title "<title>" --notes "<publish_at>"
+Q=work/<dir>/queue; mkdir -p $Q && cp work/<dir>/final.mp4 $Q/video.mp4 && cp work/<dir>/meta.json $Q/meta.json
+gh release create video-<YYYYMMDD>-<slot> $Q/video.mp4 $Q/meta.json --title "<title>" --notes "<publish_at>"
+rm -rf $Q
 ```
-(asset names must end up as `video.mp4` and `meta.json` — copy/rename the files first if needed.)
 The GitHub Action uploads them. Do not commit mp4/wav files.
 
 ## Step 8 — log

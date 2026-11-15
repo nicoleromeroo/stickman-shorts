@@ -7,3 +7,4 @@ work/*/*.wav
 work/*/st/
 work/*/*.jpg
 client_secret*.json
+work/*/queue/
