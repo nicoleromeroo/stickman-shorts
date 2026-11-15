@@ -1,18 +1,26 @@
 # Stickman Shorts — daily production playbook
 
-You are producing **3 animated stickman YouTube Shorts per day** for Nicole's channel.
-Each run makes the videos for **the next day** and queues them for upload. Work fully
+You are producing **5 animated stickman YouTube Shorts per day** for Nicole's channel.
+There are two runs per day (15:40 and 20:40 Berlin); each run fills **up to 3** still-missing slots
+of **the next day** (priority order below) and queues them for upload. Work fully
 autonomously; nobody is watching. Quality and truth beat speed: if a video is not good
 enough, queue fewer videos rather than a bad one.
 
 ## Schedule (Europe/Berlin) — one fixed format per slot
-- **Slot 1 · 08:00 — FACTS**: rotates day by day through 4 types (see Step 1, point 4):
-  celebrity / singer / movie facts → "what if…?" scenario → "why does this happen?" science → myth-buster.
-- **Slot 2 · 12:30 — FINANCE**: money explained with real numbers (prices, saving, investing basics,
-  what things really cost). Education only, description ends with "Not financial advice."
-- **Slot 3 · 18:00 — SERIES**: the next episode of the running story series (see `series.md`).
+| slot tag | time  | format | priority |
+|---|---|---|---|
+| slot1 | 08:00 | FACTS — "why does this happen?" science, alternating with myth-busters | 5 |
+| slot4 | 10:30 | CELEBRITY / SINGER / MOVIE facts (rules in Step 1, point 4) | 2 |
+| slot2 | 12:30 | FINANCE — money with real numbers, teen angle. Description ends with "Not financial advice." | 3 |
+| slot5 | 15:30 | WHAT IF…? scenario (rules in Step 1, point 4) | 4 |
+| slot3 | 18:00 | SERIES — next episode of the running series (`series.md`) | 1 |
+- Slot tags keep their numbers (slot4/slot5 were added later); the tag decides the time, not the order.
+- **Which slots to make:** a slot of tomorrow is filled if `video-<YYYYMMDD>-slot<N>` is on the `queue`
+  branch or in `state.json` (unless topics_log.md says it is held). Make the missing ones in priority order
+  (1 = first), **at most 3 per run**. If all 5 are filled, finish with a short "nothing to do" summary.
 - Always for the **next calendar day**. `publish_at` in meta.json is ISO 8601 with the Berlin offset,
   e.g. `2026-11-17T08:00:00+01:00` (use +02:00 during summer time).
+- Before pushing anything, `git pull --rebase` (the other run may have pushed in between).
 
 ## Step 0 — setup
 ```
@@ -28,8 +36,8 @@ bash engine/setup.sh
    Santa, Glühwein…) only from **1 December**; in November think autumn, darker days, cold/heating,
    Black Friday (only in the week before it), St. Martin, first snow. Evergreen topics are always fine.
    Never more than one seasonal video per day.
-4. FACTS slot: rotate day by day: **celebrity/movie** → **what if** → **why** → **myth-buster** → repeat
-   (check the last FACTS lines in topics_log.md to see which type is next).
+4. FACTS slot (slot1) alternates "why" science and myth-busters day by day. CELEBRITY (slot4) and
+   WHAT IF (slot5) have their own daily slots:
    - **Celebrity / singer / movie facts** (Nicole wants these): only globally famous people (A-list actors,
      top-charting singers) and big upcoming or current movies/series (e.g. a film releasing within ~3 weeks
      counts as "trending now"). Facts about their **public career only**: records, chart history, box office,
@@ -142,7 +150,7 @@ cd $QD && git add -A && git commit -m "queue <date>" && git push origin HEAD:que
 cd - && (git worktree remove --force $QD 2>/dev/null || rm -rf $QD)
 ```
 If the push is rejected (the Action just cleaned the branch), redo the fetch/worktree step and push again.
-Push all 3 videos in one commit. Never put mp4/wav files on `main`.
+Push all videos of this run in one commit. Never put mp4/wav files on `main`.
 
 ## Step 8 — log
 Append one line per video to `topics_log.md`:
