@@ -3,7 +3,7 @@
 # expects lines.json and audio.py in project dir; writes <project_dir>/final.mp4
 set -e
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-P="$(cd "$1" && pwd)"; HTML="$2"; VOICE="${3:-am_michael}"; SPEED="${4:-1.04}"
+P="$(cd "$1" && pwd)"; HTML="$2"; VOICE="${3:-am_michael}"; SPEED="${4:-1.08}"; export MIN_GAP="${MIN_GAP:-0.5}"
 cd "$P"
 if [ ! -f voice.json ] || [ lines.json -nt voice.json ]; then
   python3 -I "$ROOT/engine/gen_voice.py" "$ROOT/engine/models" "$VOICE" lines.json voice "$SPEED" | tail -1

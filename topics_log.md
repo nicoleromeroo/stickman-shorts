@@ -28,3 +28,7 @@ Every video ever made. The daily run reads this to avoid repeats.
 - 2026-11-16 slot1 | B why | Why static shocks happen more in winter | sources: pa.uky.edu sciworks static, valleynewslive.com (EPA 30-50% humidity)
 - 2026-11-16 slot2 | C myth-buster | Do you lose most heat through your head? | sources: livescience.com (BMJ 2008)
 - 2026-11-16 held (NOT slot3, tag video-20261116-held-tree) | numbers | What a real Christmas tree costs per day: made too early, kept private, publish in December | sources: fundresearch.de (Verband natürlicher Weihnachtsbaum, BV Weihnachtsbaumerzeuger 2026)
+- 2026-11-15 slot1 | FACTS why | Why you can't stop scrolling at 2 AM (variable rewards, no bottom) | sources: gulfnews.com infinite-scroll report (Psychology Today)
+- 2026-11-15 slot2 | FINANCE creator money | 1 million Shorts views = how much money? | sources: air.io Shorts RPM data (274 channels), support.google.com/youtube/answer/12504220
+- 2026-11-15 slot3 | SERIES | RESPAWN Part 1 | fiction
+- (drafted 2026-11-15, NOT uploaded, topics still free: why it gets dark early, inflation since 2020, Floor 13 story)

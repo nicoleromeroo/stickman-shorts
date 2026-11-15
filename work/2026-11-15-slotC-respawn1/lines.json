@@ -1,0 +1,10 @@
+["You wake up. And there's a health bar floating above your head.",
+ "Three hearts. Full.",
+ "You rub your eyes. It's still there. Your mom calls from the kitchen. Breakfast is ready!",
+ "You go downstairs. She says it again. Breakfast is ready! Same voice. Same smile.",
+ {"text":"And again. Breakfast is ready!","gap":0.5},
+ "Outside, your neighbor waters the same flower. Over. And over.",
+ "Then a box pops up right in front of your face.",
+ {"text":"Quest one. Survive the school day.","gap":0.6},
+ "You take one step, trip on the stairs, and one heart disappears.",
+ {"text":"And a voice whispers. Two lives left.","gap":0.9}]

@@ -1,0 +1,87 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { full: at(1, 0), rub: at(2, 0), mom1: wt(2, 'breakfast'), down: at(3, 0), mom2: wt(3, 'breakfast'), same: wt(3, 'same voice'), mom3: wt(4, 'breakfast'), out: at(5, 0), box: at(6, 0), quest: at(7, 0), step: at(8, 0), trip: wt(8, 'trip'), lose: wt(8, 'and one heart'), whisper: at(9, 0), two: wt(9, 'two lives') };
+function heart(x, y, s, full, crack = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = full ? '#ef4444' : '#334155'; ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(0, 30); ctx.bezierCurveTo(-70, -20, -40, -80, 0, -45); ctx.bezierCurveTo(40, -80, 70, -20, 0, 30); ctx.fill(); ctx.stroke(); if (full) { ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillRect(-28, -40, 12, 12); } if (crack > 0) { ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(0, -40); ctx.lineTo(-8, -15); ctx.lineTo(8, 0); ctx.lineTo(0, 25); ctx.stroke(); } ctx.restore(); }
+function hearts(x, y, n, s = 1, t = 0, lostT = null) { const bob = Math.sin(t * 3) * 6; for (let i = 0; i < 3; i++) { let full = i < n; let crack = 0; if (lostT !== null && i === 2) { if (t < lostT) full = true; else if (t < lostT + .5) { full = true; crack = 1; } } const sh = (lostT !== null && i === 2 && t > lostT && t < lostT + .5) ? Math.sin(t * 60) * 8 : 0; heart(x + (i - 1) * 70 * s + sh, y + bob, .7 * s, full, crack); } }
+function headY(y, s) { return y - 368 * s; }
+function uiPanel(x, y, w, h) { box(x - w / 2, y - h / 2, w, h, 'rgba(15,23,42,.94)', 18, 8); ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; rr(x - w / 2 + 12, y - h / 2 + 12, w - 24, h - 24, 12); ctx.stroke(); }
+function nameTag(x, y, s) { const w = 40 + s.length * 19; box(x - w / 2, y - 30, w, 60, 'rgba(15,23,42,.9)', 12, 5); txt(s, x, y + 4, 32, '#fde047', { stroke: false, font: 'Nun' }); }
+function bedroom() { bgFill('#fde7c7'); floor('#d6a26b'); windowFrame(700, 380, 260, 300, '#bae6fd'); circ(800, 470, 40, '#facc15', INK, 5); box(80, 1180, 620, 200, '#60a5fa', 30, 9); box(80, 1100, 160, 120, '#fff', 40, 7); }
+function sWake(lt, t) {
+  bedroom();
+  const sit = eo(inv(.2, 1.2, t));
+  const x = 380, y = 1300, s = 1.2;
+  hero({ x, y, s, pose: t > T.rub ? { lt: 1.5, ls: -.1, rt: 1.5, rs: -.1, la: .3, le: .2, ra: -2.3 + Math.sin(t * 14) * .2, re: -2.4 } : { lt: 1.5, ls: -.1, rt: 1.5, rs: -.1, la: .3, le: .2, ra: -.3, re: -.2 }, eyes: t < .6 ? 'closed' : 'huge', mouth: 'o', look: 0, shadow: false, lean: lerp(-.9, 0, sit) });
+  box(60, 1260, 700, 200, '#60a5fa', 30, 9);
+  const hy = headY(y, s) - 150;
+  if (t > .4) { const k = eob(inv(.4, .8, t)); ctx.save(); ctx.translate(x, hy); ctx.scale(k, k); hearts(0, 0, 3, 1.1, t); ctx.restore(); }
+  if (t > T.full) { const k = eob(inv(T.full, T.full + .3, t)); ctx.save(); ctx.translate(x, hy - 110); ctx.scale(k, k); uiPanel(0, 0, 260, 90); txt('HP 3/3', 0, 6, 46, '#4ade80', { stroke: false, font: 'Nun' }); ctx.restore(); }
+  if (t < T.full) txt('???', 820, 900, 100, '#ef4444', { lw: 16 });
+  if (t > T.mom1) { const k = eob(inv(T.mom1, T.mom1 + .25, t)); ctx.save(); ctx.translate(780, 1000); ctx.scale(k, k); box(-230, -70, 460, 140, '#fff', 40, 7); txt('BREAKFAST IS READY!', 0, 6, 40, INK, { stroke: false }); ctx.restore(); }
+}
+function kitchen() { bgFill('#fef9c3'); floor('#e5e7eb'); box(620, 860, 400, 520, '#e2e8f0', 10, 8); box(620, 860, 400, 60, '#94a3b8', 10, 8); circ(720, 1000, 30, '#334155', INK, 5); circ(900, 1000, 30, '#334155', INK, 5); box(60, 700, 300, 240, '#fde68a', 10, 8); }
+function sKitchen(lt, t) {
+  kitchen();
+  const loopK = t > T.mom2 ? 1 : 0;
+  const mx = 760, my = 1440;
+  stick({ x: mx, y: my, s: 1.25, shirt: '#f472b6', pants: '#1f2937', hair: '#7c2d12', flip: true, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.0, re: -.8 }, mouth: 'smile', eyes: 'norm', look: -1, apron: '#fff' });
+  nameTag(mx, headY(my, 1.25) - 110, 'MOM · NPC');
+  const said = [T.mom2, T.mom3].filter(x => t > x);
+  if (said.length) { const last = said[said.length - 1]; const k = eob(inv(last, last + .2, t)); ctx.save(); ctx.translate(560, 560); ctx.scale(k, k); box(-330, -80, 660, 160, '#fff', 40, 8); txt('BREAKFAST IS READY!', 0, 6, 56, INK, { stroke: false }); ctx.restore(); txt('x' + (said.length + 1), 900, 430, 90 * k, '#ef4444', { lw: 14 }); }
+  const x = 260, s = 1.2;
+  hero({ x, y: 1440, s, pose: STAND, eyes: 'huge', mouth: t > T.same ? 'wavy' : 'o', look: 1 });
+  hearts(x, headY(1440, s) - 140, 3, 1, t);
+  if (t > T.same && t < T.mom3) txt('SAME SMILE...', 540, 300, 80, '#b45309', { lw: 14 });
+  if (t > T.mom3) { const g = Math.sin(t * 40) > .3 ? 1 : 0; ctx.save(); ctx.globalAlpha = .18 * g; ctx.fillStyle = '#ff0040'; ctx.fillRect(-300, 640 + Math.sin(t * 13) * 200, W + 600, 70); ctx.fillStyle = '#00e5ff'; ctx.fillRect(-300, 1150 + Math.sin(t * 9) * 150, W + 600, 50); ctx.restore(); txt('GLITCH?', 540, 300, 100, '#7c3aed', { lw: 16 }); }
+}
+function flower(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); line(0, 0, 0, -120, 8, '#15803d'); for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3; circ(Math.cos(a) * 30, -130 + Math.sin(a) * 30, 22, '#f472b6', INK, 5); } circ(0, -130, 18, '#facc15', INK, 5); ctx.restore(); }
+function sOutside(lt, t) {
+  bgFill('#bae6fd'); floor('#86efac');
+  box(-20, 700, 380, 680, '#fca5a5', 6, 9); ctx.fillStyle = '#b91c1c'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-60, 700); ctx.lineTo(170, 520); ctx.lineTo(400, 700); ctx.closePath(); ctx.fill(); ctx.stroke(); box(120, 1150, 110, 230, '#7c2d12', 6, 7);
+  const loop = (t * .8) % 1; const tilt = loop < .6 ? -.5 : lerp(-.5, 0, (loop - .6) / .4);
+  const nx = 640;
+  stick({ x: nx, y: 1440, s: 1.15, shirt: '#16a34a', pants: '#1f2937', hair: '#9ca3af', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: 1.2, re: .5 }, mouth: 'smile', eyes: 'norm', look: 1,
+    hold: (hx, hy) => { ctx.save(); ctx.translate(hx, hy); ctx.rotate(tilt); box(-10, -30, 90, 60, '#94a3b8', 10, 6); line(80, -10, 130, -40, 8, '#94a3b8'); if (loop < .6) for (let i = 0; i < 4; i++) circ(135 + i * 6, -30 + ((t * 300 + i * 30) % 120), 6, '#38bdf8'); ctx.restore(); } });
+  flower(860, 1380, 1.2);
+  nameTag(nx, headY(1440, 1.15) - 60, 'NEIGHBOR · NPC');
+  // loop counter
+  txt('LOOP #' + (40 + Math.floor((t - T.out) * .8)), 540, 300, 90, '#0369a1', { lw: 16 });
+  hero({ x: 210, y: 1460, s: .8, pose: STAND, eyes: 'huge', mouth: 'o', look: 1 }); hearts(210, headY(1460, .8) - 100, 3, .7, t);
+}
+function sQuest(lt, t) {
+  bgFill('#bae6fd'); floor('#86efac');
+  const x = 540, s = 1.4;
+  hero({ x, y: 1440, s, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.2, re: -2.0 }, eyes: 'huge', mouth: 'o', look: 0, lean: -.05 });
+  hearts(x, headY(1440, s) - 150, 3, 1.1, t);
+  const k = eob(inv(T.box, T.box + .35, t));
+  ctx.save(); ctx.translate(540, 470); ctx.scale(k, k); uiPanel(0, 0, 860, 420);
+  circ(-330, -120, 46, '#facc15', INK, 6); txt('!', -330, -112, 70, INK, { stroke: false });
+  txt('NEW QUEST', 40, -120, 66, '#facc15', { stroke: false, font: 'Nun' });
+  if (t > T.quest) { txt('SURVIVE', 0, 20, 90, '#fff', { stroke: false }); txt('THE SCHOOL DAY', 0, 120, 70, '#fff', { stroke: false }); } else txt('...', 0, 60, 90, '#94a3b8', { stroke: false });
+  ctx.restore();
+}
+function sStairs(lt, t) {
+  bgFill('#fde7c7');
+  // staircase going down to the right
+  for (let i = 0; i < 6; i++) box(-40 + i * 190, 1000 + i * 90, 260, 1000, '#b45309', 4, 8);
+  const tripK = eo(inv(T.trip, T.trip + .5, t));
+  const x = lerp(220, 460, eo(inv(T.step, T.trip + .4, t))), y = lerp(1000, 1180, tripK), s = 1.1;
+  const fallen = t > T.trip;
+  hero({ x, y, s, pose: fallen ? { lt: -.6, ls: .5, rt: .9, rs: .2, la: -2.0, le: -.4, ra: 1.8, re: .4 } : walkPose(t * 6), eyes: fallen ? 'closed' : 'norm', mouth: fallen ? 'scream' : 'flat', look: 1, lean: .9 * tripK });
+  hearts(x - 40 * tripK, headY(y, s) - 110 - 0, 2, 1, t, T.lose);
+  if (t > T.lose && t < T.lose + .4) { ctx.save(); ctx.globalAlpha = .4 * (1 - inv(T.lose, T.lose + .4, t)); ctx.fillStyle = '#ef4444'; ctx.fillRect(-300, -300, W + 600, H + 600); ctx.restore(); }
+  if (t > T.lose) { const k = eob(inv(T.lose, T.lose + .3, t)); ctx.save(); ctx.translate(540, 330); ctx.scale(k, k); uiPanel(0, 0, 380, 120); txt('HP 2/3', 0, 8, 64, '#f87171', { stroke: false, font: 'Nun' }); ctx.restore(); }
+  if (t > T.whisper) { darkness(.55 * inv(T.whisper, T.whisper + .8, t), x, y - 300, 600); }
+  if (t > T.two) { const k = eob(inv(T.two, T.two + .4, t)); ctx.save(); ctx.globalAlpha = k; txt('TWO LIVES LEFT', 540, 500, 100, '#fecaca', { lw: 16 }); ctx.restore(); }
+  const endT = L[9].end + .25;
+  if (t > endT) { const k = eob(inv(endT, endT + .35, t)); ctx.save(); ctx.fillStyle = `rgba(0,0,0,${.6 * k})`; ctx.fillRect(-300, -300, W + 600, H + 600); ctx.translate(540, 900); ctx.scale(k, k); box(-380, -110, 760, 220, '#dc2626', 26, 10); txt('PART 2 TOMORROW', 0, 8, 84, '#fff', { lw: 12 }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sWake, push: .05 }, { t0: mid(2, 3), fn: sKitchen, push: .04, flash: .8 }, { t0: mid(4, 5), fn: sOutside, push: .04, xfade: .25 }, { t0: mid(5, 6), fn: sQuest, push: .05, flash: 1 }, { t0: mid(7, 8), fn: sStairs, push: .05, xfade: .2 }];
+const CAP = [["you wake up.", "and there's a health bar", "floating above your head."], ["3 hearts.", "full."], ["you rub your eyes.", "it's still there.", "your mom calls", "from the kitchen.", "breakfast is ready!"], ["you go downstairs.", "she says it again.", "breakfast is ready!", "same voice.", "same smile."], ["and again.", "breakfast is ready!"], ["outside,", "your neighbor waters", "the same flower.", "over.", "and over."], ["then a box pops up", "right in front", "of your face."], ["quest one.", "survive the school day."], ["you take one step,", "trip on the stairs,", "and one heart", "disappears."], ["and a voice whispers.", "two lives left."]];
+const HOT = new Set(["floating above your head.", "full.", "breakfast is ready!", "same smile.", "the same flower.", "and over.", "of your face.", "survive the school day.", "disappears.", "two lives left."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

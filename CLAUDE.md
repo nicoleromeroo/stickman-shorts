@@ -56,11 +56,21 @@ bash engine/setup.sh
 - Put assumptions in an on-screen footnote (see `examples/x_lights`, `examples/x_santa`).
 
 ## Step 3 — script (`work/<YYYY-MM-DD>-<slot>-<slug>/lines.json`)
-- Structure: hook stated as a fact (no intro) → setup → escalation → `Wait. …?` →
-  `You see, …` explanation with an everyday comparison → short twist/punchline.
-- 8–12 lines, 35–60 s total. Numbers written as words in lines.json so the voice says them right
-  ("two hundred and sixty-two euros"; spell acronyms "P O V").
-- Use `{"text": "...", "gap": 0.4}` after punchlines; the generator adds ≥1.2 s pause per line.
+**Retention rules (Nicole's feedback 15 Nov: earlier videos felt slow and "adult"):**
+- **Hook in the first second, mid-action.** Line 1 drops the viewer into a situation they recognise
+  ("It's 2 AM. You said one more video... 47 videos ago." / "Your Short just hit one million views.")
+  — never an intro, never a dry fact like "Today in Munich the sun sets at…". Frame 0 must already
+  show the situation plus a big on-screen text/number.
+- **Gen Z / Gen Alpha interests first:** phones, social media, gaming, school, sleep, creators/YouTube,
+  AI, money for things *they* buy (phones, sneakers, games, food), "what if" scenarios, gross/awe facts.
+  Adult topics (heating bills, pensions, taxes) only with a teen angle.
+- **Length 30–45 s** (stories up to 50 s). 8–10 short lines. Open a loop early, pay it off at the end.
+- Pacing: `MIN_GAP=0.5` (build.sh default) and voice speed 1.08; give `{"gap": 0.5–0.9}` only after
+  punchlines and cliffhangers.
+- Structure for facts/finance: situation hook → "why?" → explanation with one strong visual metaphor
+  (slot machine, giant pot, ice cube) → twist line.
+- Numbers written as words in lines.json so the voice says them right; spell acronyms "P O V".
+- Good references: `work/2026-11-15-slotA-scroll`, `work/2026-11-15-slotB-views`, `work/2026-11-15-slotC-respawn1`.
 
 ## Step 4 — animation (`<slug>.html`)
 - Copy the closest example from `examples/` and adapt. Shared helpers live in `engine/engine.js`
@@ -68,6 +78,8 @@ bash engine/setup.sh
 - Head of the page must load fonts from `../../engine/node_modules/@fontsource/...` and
   `<script src="../../engine/engine.js">` — same as the examples.
 - 3–6 scenes, each line illustrated literally, captions via `captions(t, CAP, HOT, 1640)`.
+- Keep characters big in frame (no tiny figures in empty rooms); main text at the top, captions at 1640.
+- Never use glyphs the fonts lack (▲ ≈ ÷ ▶ emoji): draw shapes instead. `€` is handled by txt().
 - **Render check is mandatory**: `node engine/render.js work/<dir>/<page>.html work/<dir>/voice.json stills <t1,t2,…> work/<dir>/st`
   then build a contact sheet with ffmpeg and look at it with Read. Fix: overlapping text,
   captions covering faces, cut-off labels, wrong timing, unreadable small text, `<` instead of `€`.
@@ -77,7 +89,7 @@ bash engine/setup.sh
 - `audio.py` uses `from shortaudio import Mix` (see examples). Music presets: `upbeat`, `lofi`,
   `mystery`, `tense`. Music stays quiet (mvol ≤ 0.09). Only synthesized audio — never download music.
 - `bash engine/build.sh work/<dir> <page>.html` → `work/<dir>/final.mp4`.
-- Check: duration 30–62 s, 1080×1920, audio present, a final contact sheet looks right.
+- Check: duration 28–50 s, 1080×1920, audio present, a final contact sheet looks right.
 
 ## Step 6 — metadata (`work/<dir>/meta.json`)
 ```json

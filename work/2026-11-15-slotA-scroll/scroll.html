@@ -1,0 +1,87 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { ago: wt(0, 'forty-seven'), eyes: at(1, 0), school: wt(1, 'you have school'), keep: wt(1, 'and you keep'), why: at(2, 0), slot: at(3, 0), boring: at(4, 0), good: wt(4, 'but every'), hit: wt(4, 'you hit'), never: at(5, 0), chase: wt(5, 'so your brain'), excite: at(6, 0), before: wt(6, 'right before'), after: wt(6, 'not after'), bottom: at(7, 0), stop: wt(7, 'no natural'), bug: at(8, 0), design: at(9, 0) };
+const ICONS = ['MEH', 'MEH', 'LOL', 'MEH', 'WOW', 'MEH', 'MEH', 'OMG'];
+function feedCard(x, y, w, h, i, t) { const c = ['#f472b6', '#60a5fa', '#facc15', '#34d399', '#a78bfa', '#fb923c'][i % 6]; box(x, y, w, h, c, 10, 0); txt(ICONS[i % ICONS.length], x + w / 2, y + h / 2 + 6, w * .28, '#fff', { lw: 6 }); }
+function bigPhone(x, y, s, t, scrollSpeed, opt = {}) { phoneDev(x, y, s, 'on', { c1: '#111827', c2: '#111827', draw: (sx, sy, sw, sh) => { ctx.save(); ctx.beginPath(); ctx.rect(sx, sy, sw, sh); ctx.clip(); const off = (t * scrollSpeed) % 1; for (let i = -1; i < 3; i++) { const idx = Math.floor(t * scrollSpeed) + i; feedCard(sx, sy + (i - off) * sh, sw, sh - 4, Math.abs(idx), t); } ctx.restore(); } }); }
+function counter(n, y = 300) { box(240, y - 90, 600, 180, '#111827', 30, 9); txt('VIDEO #' + n, 540, y + 10, 110, '#f87171', { stroke: false }); }
+function bedroom(t) { bgFill('#0b1026'); for (let i = 0; i < 20; i++) circ(rnd(i) * W, rnd(i + 5) * 600, 2 + rnd(i + 1) * 2, '#94a3b8');
+  windowFrame(90, 640, 240, 280, '#0f172a'); circ(160, 720, 34, '#f8fafc');
+  box(120, 900, 840, 520, '#475569', 40, 9); box(170, 950, 300, 150, '#e2e8f0', 50, 7); }
+function sBed(lt, t) {
+  bedroom(t);
+  const tired = t > T.eyes;
+  const s = 2.0, x = 560, y = 1760;
+  spot(x + 60, y - 760, 420, .45, '140,180,255');
+  hero({ x, y, s, pose: PHONE_POSE, eyes: tired ? 'huge' : 'norm', mouth: tired ? 'wavy' : 'flat', look: 1, shadow: false, hold: holdPhone('on', { c1: '#f472b6', c2: '#60a5fa' }) });
+  box(40, 1330, 1000, 700, '#60a5fa', 40, 9); for (let i = 0; i < 5; i++) line(120 + i * 200, 1350, 80 + i * 200, 1950, 5, '#3b82f6');
+  if (tired) { ctx.save(); ctx.globalAlpha = .55; circ(x + 20, y - s * 372 + 50, 12, '#ef4444'); circ(x + 70, y - s * 372 + 50, 12, '#ef4444'); ctx.restore(); sweat(x - 80, y - s * 420, .8); }
+  const n = t < T.ago ? Math.min(46, 3 + Math.floor(t * 14)) : 47 + Math.floor(Math.max(0, t - T.keep) * 2);
+  counter(n);
+  box(760, 470, 260, 110, '#111827', 20, 7); txt('2:00 AM', 890, 532, 64, '#38bdf8', { stroke: false, font: 'Nun' });
+  if (t > T.school) { const k = eob(inv(T.school, T.school + .25, t)); ctx.save(); ctx.translate(240, 520); ctx.rotate(-.06); ctx.scale(k, k); box(-170, -70, 340, 140, '#fde68a', 10, 7); txt('SCHOOL', 0, -18, 46, INK, { stroke: false }); txt('AT 8:00', 0, 34, 44, '#dc2626', { stroke: false }); ctx.restore(); }
+  if (t > T.why) { const k = eob(inv(T.why, T.why + .3, t)); ctx.save(); ctx.fillStyle = `rgba(0,0,0,${.45 * k})`; ctx.fillRect(-300, -300, W + 600, H + 600); ctx.translate(540, 820); ctx.scale(k, k); txt("WHY CAN'T", 0, -70, 130, '#fff', { lw: 20 }); txt('YOU STOP?', 0, 70, 130, '#facc15', { lw: 20 }); ctx.restore(); }
+}
+function slotMachine(x, y, s, t, reels, jackpot) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  box(-330, -300, 660, 600, '#dc2626', 40, 10); box(-290, -380, 580, 110, '#facc15', 30, 9); txt('YOUR FEED', 0, -318, 64, '#7c2d12', { stroke: false });
+  box(-280, -200, 560, 260, '#fff', 20, 8);
+  reels.forEach((r, i) => { const rx = -186 + i * 186; ctx.save(); ctx.beginPath(); ctx.rect(rx - 85, -195, 170, 250); ctx.clip(); txt(r, rx, -60, 64, r === 'WOW' ? '#16a34a' : '#64748b', { stroke: false }); ctx.restore(); if (i < 2) line(rx + 93, -200, rx + 93, 60, 6); });
+  box(-200, 120, 400, 110, '#7f1d1d', 20, 8); txt(jackpot ? 'JACKPOT!' : 'SWIPE', 0, 182, 64, jackpot ? '#facc15' : '#fecaca', { stroke: false });
+  line(360, -100, 420, -250, 18); circ(420, -260, 40, '#111827', INK, 6);
+  ctx.restore(); if (jackpot) for (let i = 0; i < 8; i++) sparkle(x + Math.cos(i + t * 2) * 420 * s, y + Math.sin(i * 1.7 + t * 2) * 380 * s, 50, .9); }
+function sSlot(lt, t) {
+  bgFill('#1e1b4b');
+  const spinning = t > T.boring && t < T.never;
+  const step = Math.floor((t - T.boring) * 3);
+  let reels = ['MEH', 'MEH', 'MEH'], jackpot = false;
+  if (t > T.boring) { reels = [0, 1, 2].map(i => ICONS[(step + i * 3) % ICONS.length]); }
+  if (t > T.hit && t < T.never) { reels = ['WOW', 'WOW', 'WOW']; jackpot = true; }
+  if (t > T.never) { const ph = Math.floor(t * 4) % 3; reels = ['???', '???', '???'].map((r, i) => i <= ph ? '???' : 'MEH'); }
+  slotMachine(520, 1000, 1.25, t, reels, jackpot);
+  txt(t < T.boring ? 'A SLOT MACHINE' : (jackpot ? 'JACKPOT!' : (t < T.never ? 'MOSTLY MEH...' : 'NEXT ONE?')), 540, 300, 100, '#facc15', { lw: 18 });
+  if (t > T.chase) { brainChar(200, 1400, .55, { eyes: 'huge', mouth: 'grin' }); txt('MORE!', 380, 1330, 60, '#f472b6', { lw: 10 }); }
+}
+function sBrain(lt, t) {
+  bgFill('#fdf2f8');
+  // excitement curve: rises before reward box, drops after
+  const x0 = 120, x1 = 960, yb = 1300;
+  line(x0, yb, x1, yb, 8); line(x0, yb, x0, 600, 8);
+  txt('EXCITEMENT', 300, 560, 50, '#db2777', { lw: 8 });
+  const k = clamp((t - T.excite) / 3.2);
+  const f = u => u < .6 ? 80 + 520 * Math.pow(u / .6, 1.6) : 600 - 420 * ((u - .6) / .4);
+  ctx.strokeStyle = '#db2777'; ctx.lineWidth = 14; ctx.lineJoin = 'round'; ctx.beginPath(); for (let i = 0; i <= 60 * k; i++) { const u = i / 60; const x = lerp(x0, x1, u), y = yb - f(u); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
+  // reward box at 60%
+  const rx = lerp(x0, x1, .6); box(rx - 70, yb + 30, 140, 110, '#facc15', 16, 7); txt('WOW', rx, yb + 90, 46, INK, { stroke: false });
+  if (t > T.before) { const kk = eob(inv(T.before, T.before + .3, t)); ctx.save(); ctx.translate(rx - 230, 640); ctx.scale(kk, kk); box(-170, -60, 340, 120, '#16a34a', 20, 7); txt('BEFORE: MAX', 0, 4, 48, '#fff', { stroke: false }); ctx.restore(); }
+  if (t > T.after) { const kk = eob(inv(T.after, T.after + .3, t)); ctx.save(); ctx.translate(x1 - 120, 900); ctx.scale(kk, kk); box(-140, -60, 280, 120, '#64748b', 20, 7); txt('AFTER: MEH', 0, 4, 44, '#fff', { stroke: false }); ctx.restore(); }
+  brainChar(880, 420, .6, { eyes: t > T.after ? 'bored' : 'huge', mouth: t > T.after ? 'flat' : 'grin' });
+}
+function sFeed(lt, t) {
+  bgFill('#0f172a');
+  bigPhone(540, 950, 3.2, t, 3.5);
+  ctx.save(); ctx.globalAlpha = .9; ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, 360); ctx.fillRect(0, 1520, W, 400); ctx.restore();
+  txt('NO BOTTOM', 540, 260, 120, '#f87171', { lw: 18 });
+  if (t > T.stop) { const k = eob(inv(T.stop, T.stop + .3, t)); ctx.save(); ctx.translate(540, 1500); ctx.scale(k, k); box(-330, -70, 660, 140, '#fff', 30, 8); txt('NO STOP BUTTON', 0, 4, 64, '#dc2626', { stroke: false }); ctx.restore(); }
+}
+function bugIcon(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); for (let i = -1; i <= 1; i++) { line(-60, i * 40, -120, i * 50, 8); line(60, i * 40, 120, i * 50, 8); } ctx.fillStyle = '#16a34a'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.ellipse(0, 0, 70, 100, 0, 0, 7); ctx.fill(); ctx.stroke(); circ(0, -110, 40, '#15803d', INK, 7); ctx.restore(); }
+function sEnd(lt, t) {
+  bgFill('#111827');
+  if (t < T.design - .1) {
+    bugIcon(540, 900, 1.6);
+    const k = eob(inv(T.bug + .6, T.bug + .9, t)); ctx.save(); ctx.globalAlpha = k; line(330, 640, 750, 1160, 24, '#ef4444'); line(750, 640, 330, 1160, 24, '#ef4444'); ctx.restore();
+    txt('NOT A BUG', 540, 330, 130, '#fff', { lw: 20 });
+  } else {
+    const k = eob(inv(T.design, T.design + .3, t));
+    bigPhone(540, 980, 2.2, t, 1.2);
+    ctx.save(); ctx.translate(540, 980); ctx.rotate(-.12); ctx.scale(k, k); box(-420, -120, 840, 240, 'rgba(255,255,255,.95)', 24, 12); ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 14; rr(-400, -100, 800, 200, 18); ctx.stroke(); txt("IT'S THE DESIGN", 0, 12, 100, '#dc2626', { stroke: false }); ctx.restore();
+  }
+}
+const SCENES = [{ t0: 0, fn: sBed, push: .05 }, { t0: mid(2, 3), fn: sSlot, push: .04, flash: 1 }, { t0: mid(5, 6), fn: sBrain, push: .04, xfade: .25 }, { t0: mid(6, 7), fn: sFeed, push: .05, xfade: .25 }, { t0: mid(7, 8), fn: sEnd, push: .07, flash: .8 }];
+const CAP = [["it's 2 AM.", "you said", "one more video...", "47 videos ago."], ["your eyes hurt.", "you have school", "tomorrow.", "and you keep scrolling."], ["why can't you", "just stop?"], ["because your feed", "works like", "a slot machine."], ["most videos", "are boring.", "but every few swipes,", "you hit", "a really good one."], ["you never know", "which swipe", "it will be.", "so your brain", "keeps chasing", "the next one."], ["your brain gets", "most excited", "right before", "the reward.", "not after."], ["and the feed", "has no bottom.", "no last page.", "no natural moment", "to stop."], ["so that", "one more video", "feeling", "isn't a bug."], ["it's the design."]];
+const HOT = new Set(["47 videos ago.", "and you keep scrolling.", "just stop?", "a slot machine.", "a really good one.", "the next one.", "right before", "not after.", "has no bottom.", "to stop.", "isn't a bug.", "it's the design."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

@@ -39,7 +39,7 @@ jobs:
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
-          REVIEW_COUNT: ${{ vars.REVIEW_COUNT || '10' }}
+          REVIEW_COUNT: ${{ vars.REVIEW_COUNT || '0' }}
         run: python uploader/upload.py
       - name: Save upload log (main)
         if: always()
