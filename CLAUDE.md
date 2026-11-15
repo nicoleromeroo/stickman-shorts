@@ -6,7 +6,8 @@ autonomously; nobody is watching. Quality and truth beat speed: if a video is no
 enough, queue fewer videos rather than a bad one.
 
 ## Schedule (Europe/Berlin) — one fixed format per slot
-- **Slot 1 · 08:00 — FACTS**: "why does this happen?" everyday science, or a myth-buster / history oddity.
+- **Slot 1 · 08:00 — FACTS**: rotates day by day through 4 types (see Step 1, point 4):
+  celebrity / singer / movie facts → "what if…?" scenario → "why does this happen?" science → myth-buster.
 - **Slot 2 · 12:30 — FINANCE**: money explained with real numbers (prices, saving, investing basics,
   what things really cost). Education only, description ends with "Not financial advice."
 - **Slot 3 · 18:00 — SERIES**: the next episode of the running story series (see `series.md`).
@@ -27,12 +28,32 @@ bash engine/setup.sh
    Santa, Glühwein…) only from **1 December**; in November think autumn, darker days, cold/heating,
    Black Friday (only in the week before it), St. Martin, first snow. Evergreen topics are always fine.
    Never more than one seasonal video per day.
-4. FACTS slot: alternate "why" science and myth-busters / history oddities day by day.
+4. FACTS slot: rotate day by day: **celebrity/movie** → **what if** → **why** → **myth-buster** → repeat
+   (check the last FACTS lines in topics_log.md to see which type is next).
+   - **Celebrity / singer / movie facts** (Nicole wants these): only globally famous people (A-list actors,
+     top-charting singers) and big upcoming or current movies/series (e.g. a film releasing within ~3 weeks
+     counts as "trending now"). Facts about their **public career only**: records, chart history, box office,
+     how a famous film/song was made, behind-the-scenes production facts, early-career stories they told
+     publicly. Every fact from a reputable source (official sites, Guinness, Billboard, Variety, BBC,
+     Rolling Stone, studio press releases). Hedge anything not 100 % confirmed ("reportedly").
+     NEVER: rumours, gossip, dating/relationships, family/children, health, body/looks, scandals, legal
+     trouble, politics, anything mocking or negative, made-up quotes, song lyrics.
+     **Drawing rules:** never draw the real person or a caricature of them; use generic stickmen
+     ("a famous singer"), the name only as on-screen text, and neutral symbols (microphone, stage,
+     clapperboard, trophy, ticket). Never draw movie posters, logos, album covers, or a character's
+     signature costume/symbol (e.g. no mockingjay pin, no wand, no mask). Movie and person names are fine
+     in text. Hook example: "This singer got rejected X times before…" / "The new X movie comes out
+     in 5 days. Here's what most fans don't know…".
+   - **What if…?** scenarios ("What if the internet went down for a week?", "What if all women
+     disappeared tomorrow?", "What if you never slept?"). Base the consequences on real numbers
+     (population shares, how many jobs/people depend on something) and keep it respectful: no violence,
+     no gore, nothing that mocks or blames any group; the payoff shows how much the world depends on X.
 5. FINANCE slot: rotate sub-themes (everyday costs, saving tricks, compound interest / investing basics,
    prices then vs now, salary/tax basics in Germany) so it never feels templated.
 6. SERIES slot: see Step 1b.
 7. Audience: Gen Z / Gen Alpha. Plain spoken English, no slang overload.
-8. Off-limits: real living people, brands/logos/trademarked characters, politics, tragedies,
+8. Off-limits: real living people *except* the celebrity rules above (public-career facts, never drawn),
+   brands/logos/trademarked characters (drawn), politics, tragedies,
    medical or legal advice, gambling, crypto shilling, anything sexual or gory, content aimed
    at under-13s specifically.
 
