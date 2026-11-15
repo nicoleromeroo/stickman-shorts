@@ -5,29 +5,48 @@ Each run makes the videos for **the next day** and queues them for upload. Work 
 autonomously; nobody is watching. Quality and truth beat speed: if a video is not good
 enough, queue fewer videos rather than a bad one.
 
-## Schedule (Europe/Berlin)
-- Slot 1: 08:00 · Slot 2: 12:30 · Slot 3: 18:00 — always for the **next calendar day**.
-- `publish_at` in meta.json is ISO 8601 with the Berlin offset, e.g. `2026-11-17T08:00:00+01:00`
-  (use +02:00 during summer time).
+## Schedule (Europe/Berlin) — one fixed format per slot
+- **Slot 1 · 08:00 — FACTS**: "why does this happen?" everyday science, or a myth-buster / history oddity.
+- **Slot 2 · 12:30 — FINANCE**: money explained with real numbers (prices, saving, investing basics,
+  what things really cost). Education only, description ends with "Not financial advice."
+- **Slot 3 · 18:00 — SERIES**: the next episode of the running story series (see `series.md`).
+- Always for the **next calendar day**. `publish_at` in meta.json is ISO 8601 with the Berlin offset,
+  e.g. `2026-11-17T08:00:00+01:00` (use +02:00 during summer time).
 
 ## Step 0 — setup
 ```
 bash engine/setup.sh
 ```
 
-## Step 1 — pick 3 topics
+## Step 1 — pick the topics
 1. Read `topics_log.md` (every topic ever made). Never repeat a topic or a near-duplicate.
 2. Research what is trending **right now** with WebSearch (TikTok / YouTube Shorts / Instagram
-   trend roundups of this week, Google-trending news that is safe and family-friendly) and what is
-   **seasonal** (upcoming holidays, events, school/payday cycles; Germany + international).
-3. Pick 3 topics with a **different format each**, rotating so the channel never feels templated:
-   - A) *Numbers explainer* — money/season with real figures (e.g. "what X really costs")
-   - B) *"Why does this happen?"* everyday science
-   - C) *Second-person mini story* ("you…") with a cliffhanger, or a myth-buster / history oddity
-   Audience: Gen Z / Gen Alpha. Plain spoken English, no slang overload.
-4. Off-limits: real living people, brands/logos/trademarked characters, politics, tragedies,
+   trend roundups of this week, Google-trending news that is safe and family-friendly).
+3. **Season rule — match the calendar.** A seasonal topic must fit what people are living through
+   *now*: something happening today or within the next ~10 days. Christmas topics (trees, gifts,
+   Santa, Glühwein…) only from **1 December**; in November think autumn, darker days, cold/heating,
+   Black Friday (only in the week before it), St. Martin, first snow. Evergreen topics are always fine.
+   Never more than one seasonal video per day.
+4. FACTS slot: alternate "why" science and myth-busters / history oddities day by day.
+5. FINANCE slot: rotate sub-themes (everyday costs, saving tricks, compound interest / investing basics,
+   prices then vs now, salary/tax basics in Germany) so it never feels templated.
+6. SERIES slot: see Step 1b.
+7. Audience: Gen Z / Gen Alpha. Plain spoken English, no slang overload.
+8. Off-limits: real living people, brands/logos/trademarked characters, politics, tragedies,
    medical or legal advice, gambling, crypto shilling, anything sexual or gory, content aimed
-   at under-13s specifically. Finance = education only, add "Not financial advice."
+   at under-13s specifically.
+
+## Step 1b — the SERIES slot (`series.md`)
+- One story series runs at a time, **5–7 episodes**, one episode per day, ~45–60 s each.
+- Read `series.md`. If no series is running (or the last one finished), invent a new one and write its
+  bible there first: title, premise (second-person "you" mystery/survival/adventure, PG, no gore),
+  main characters with fixed looks (shirt colours, hair etc. so drawings stay consistent),
+  setting, and a rough arc for all episodes, with a satisfying final episode.
+- Each episode: 2-second recap line at the start from Episode 2 on ("Last time, …"), one clear
+  event, and a cliffhanger at the end. Last on-screen card: "PART <N+1> TOMORROW" (final episode: "THE END").
+- Title format: `<Series title> (Part N) #shorts`. Same music preset for the whole series.
+- After building, append to `series.md`: episode number, date, a 2–3 sentence summary, the cliffhanger.
+- Facts in a story still have to be true if stated as facts; the story itself is fiction.
 
 ## Step 2 — research and fact-check
 - Every number or claim must come from a page you actually opened with WebFetch
@@ -75,7 +94,7 @@ bash engine/setup.sh
 
 ## Step 7 — queue for upload (the `queue` branch)
 Releases are not available to this session; videos are queued by pushing them to the
-`queue` branch. The GitHub Action (hourly, at :23) uploads each folder, then removes it from that branch.
+`queue` branch. The GitHub Action (every 3 hours, at :23) uploads each folder, then removes it from that branch.
 Tag = `video-<YYYYMMDD>-slot<N>` (date = publish day). Asset names MUST be `video.mp4` and `meta.json`.
 ```
 QD=/tmp/queue-wt

@@ -2,7 +2,7 @@ name: Upload Shorts to YouTube
 
 on:
   schedule:
-    - cron: "23 * * * *"   # hourly: picks up whatever is on the queue branch
+    - cron: "23 */3 * * *"   # every 3 hours (videos are scheduled ahead, so no rush; saves Actions minutes)
   workflow_dispatch: {}
 
 concurrency:

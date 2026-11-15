@@ -27,4 +27,4 @@ Every video ever made. The daily run reads this to avoid repeats.
 ## Automated
 - 2026-11-16 slot1 | B why | Why static shocks happen more in winter | sources: pa.uky.edu sciworks static, valleynewslive.com (EPA 30-50% humidity)
 - 2026-11-16 slot2 | C myth-buster | Do you lose most heat through your head? | sources: livescience.com (BMJ 2008)
-- 2026-11-16 slot3 | A numbers | What a real Christmas tree costs per day | sources: fundresearch.de (Verband natürlicher Weihnachtsbaum, BV Weihnachtsbaumerzeuger 2026)
+- 2026-11-16 slot3 | A numbers | What a real Christmas tree costs per day (made too early: keep private, publish in December) | sources: fundresearch.de (Verband natürlicher Weihnachtsbaum, BV Weihnachtsbaumerzeuger 2026)
