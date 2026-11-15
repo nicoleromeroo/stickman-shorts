@@ -1,0 +1,10 @@
+["Your neighbor's house looks like a spaceship. But how much does all that light actually cost?",
+ "Let's say twenty light chains, on for eight hours a day, from December first to January sixth.",
+ "With old-style bulbs, that's about one hundred and ten euros of electricity.",
+ {"text":"With LED lights? About eleven euros.","gap":0.4},
+ {"text":"Wait. Same lights, ten times cheaper?","gap":0.4},
+ "You see, old bulbs make light by heating a tiny wire until it glows. Most of the energy turns into heat, not light.",
+ "LEDs skip the heating part. So they need only about a tenth of the power.",
+ {"text":"But here's the twist. The most expensive Christmas lights aren't on the house.","gap":0.4},
+ "They're the battery candles on your tree. Battery power costs around three hundred times more than power from the socket.",
+ {"text":"So the cheapest glow this Christmas? LEDs, a plug, and a timer.","gap":0.5}]

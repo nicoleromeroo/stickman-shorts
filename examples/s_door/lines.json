@@ -1,0 +1,11 @@
+["There's a door in your hallway that wasn't there yesterday.",
+ "Same wall. Same pictures. But now, there's a door.",
+ {"text":"Your family walks right past it, like it's always been there.","gap":0.4},
+ "That night, you hear knocking. From the other side.",
+ {"text":"Three knocks. Then silence.","gap":0.5},
+ {"text":"Wait. If nobody is in there, who is knocking?","gap":0.4},
+ {"text":"You see, every time it knocks, the sound gets closer to the handle.","gap":0.4},
+ "So you open it. Just a little.",
+ "Inside is your hallway. Exactly the same.",
+ {"text":"And at the end of it... is you. Staring back.","gap":0.6},
+ "To be continued."]

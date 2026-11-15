@@ -1,0 +1,189 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}
+</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script>
+<script>
+const HERO = { shirt: '#3b82f6', pants: '#334155', hood: true, scarf: '#e8453c' };
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = {
+  step: wt(0, 'you step'), die: wt(0, 'and it dies') + .25,
+  p30: at(3, 0), p20: wt(3, 'twenty'), black: wt(3, 'black'),
+  warm: wt(4, 'warm'), again: wt(4, 'suddenly') + .3, ghost: wt(5, 'come back'),
+  cold: at(7, 0), bed: wt(7, 'like you'), still: at(8, 0), shut: wt(8, 'so it shuts'),
+  pocket: wt(10, 'inside'),
+};
+// ---------- props ----------
+function phoneDev(x, y, s, mode, opt = {}) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(opt.rot || 0);
+  box(-90, -170, 180, 340, '#111827', 30, 8);
+  const sx = -76, sy = -150, sw = 152, sh = 300;
+  if (mode === 'dead') { ctx.fillStyle = '#000'; ctx.fillRect(sx, sy, sw, sh); }
+  else if (mode === 'off') { ctx.fillStyle = '#000'; ctx.fillRect(sx, sy, sw, sh); const k = opt.k ?? 1; ctx.fillStyle = '#fff'; ctx.fillRect(sx + sw / 2 - sw / 2 * (1 - k), sy + sh / 2 - 3, sw * (1 - k), 6); }
+  else if (mode === 'boot') { ctx.fillStyle = '#000'; ctx.fillRect(sx, sy, sw, sh); circ(0, 0, 26, '#e5e7eb'); circ(0, 0, 13, '#000'); }
+  else {
+    const g = ctx.createLinearGradient(0, sy, 0, sy + sh); g.addColorStop(0, '#60a5fa'); g.addColorStop(1, '#a78bfa'); ctx.fillStyle = g; ctx.fillRect(sx, sy, sw, sh);
+    const p = opt.pct ?? 40; const col = p > 30 ? '#22c55e' : p > 20 ? '#f59e0b' : '#ef4444';
+    if (mode === 'train') { box(sx + 10, sy + 40, sw - 20, 120, '#fff', 12, 4); txt('RE 4', 0, sy + 75, 30, '#1d4ed8', { stroke: false }); txt('+8 min', 0, sy + 120, 34, '#ef4444', { stroke: false }); }
+    box(-34, sy + 190, 62, 30, '#fff', 6, 4); ctx.fillStyle = col; ctx.fillRect(-30, sy + 194, 54 * p / 100, 22); ctx.fillStyle = INK; ctx.fillRect(30, sy + 199, 6, 12);
+    txt(p + '%', 0, sy + 255, 48, '#fff', { lw: 8 });
+  }
+  ctx.restore();
+}
+function snow(t, n = 60, a = 1) { ctx.save(); ctx.globalAlpha = a; for (let i = 0; i < n; i++) { const sp = 60 + rnd(i) * 90; const x = (rnd(i + 3) * W * 1.2 + Math.sin(t * .8 + i) * 30) % (W + 100) - 50; const y = ((rnd(i + 7) * H + t * sp) % (H + 60)) - 30; circ(x, y, 6 + rnd(i + 11) * 8, '#ffffff'); } ctx.restore(); }
+function breath(x, y, t) { for (let i = 0; i < 2; i++) { const k = ((t * .7 + i / 2) % 1); ctx.save(); ctx.globalAlpha = (1 - k) * .7; circ(x + k * 90, y - k * 40, 18 + k * 30, '#ffffff'); ctx.restore(); } }
+function holdPhone(mode, opt) { return (hx, hy) => phoneDev(hx + 10, hy - 50, .42, mode, opt); }
+function battChar(x, y, s, o = {}) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  if (o.ghost) { ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(-110, -40); ctx.quadraticCurveTo(-110, -200, 0, -200); ctx.quadraticCurveTo(110, -200, 110, -40); for (let i = 0; i < 5; i++) ctx.quadraticCurveTo(110 - i * 44 - 22, 40 + (i % 2) * 30, 110 - (i + 1) * 44, 0); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  box(-70, -150, 140, 220, o.col || '#22c55e', 22, 8); box(-28, -176, 56, 30, '#9ca3af', 8, 6);
+  circ(-26, -70, 16, '#fff', INK, 5); circ(26, -70, 16, '#fff', INK, 5); circ(-24, -66, 7, INK); circ(28, -66, 7, INK);
+  ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(0, -36, 22, .15 * Math.PI, .85 * Math.PI); ctx.stroke();
+  if (o.halo) { ctx.strokeStyle = '#facc15'; ctx.lineWidth = 10; ctx.beginPath(); ctx.ellipse(0, -215, 60, 16, 0, 0, 7); ctx.stroke(); }
+  ctx.restore();
+}
+function ion(x, y, r, cold, sleepy) { circ(x, y, r, cold ? '#93c5fd' : '#fb923c', INK, 5); if (sleepy) { line(x - 12, y - 4, x - 4, y - 4, 4); line(x + 4, y - 4, x + 12, y - 4, 4); } else { circ(x - 8, y - 4, 4, INK); circ(x + 8, y - 4, 4, INK); } }
+function thermo(x, y, t) {
+  box(x - 40, y - 700, 80, 720, '#fff', 40, 8); circ(x, y + 40, 70, '#ef4444', INK, 8);
+  // scale -10 .. 45 => y .. y-650
+  const yy = v => y - (v + 10) / 55 * 650;
+  ctx.fillStyle = 'rgba(34,197,94,.35)'; ctx.fillRect(x - 36, yy(35), 72, yy(0) - yy(35));
+  ctx.fillStyle = '#ef4444'; ctx.fillRect(x - 16, yy(lerp(-5, 22, eio(clamp(t)))) , 32, y - yy(lerp(-5, 22, eio(clamp(t)))) + 20);
+  for (const v of [-10, 0, 10, 20, 30, 40]) { line(x + 40, yy(v), x + 70, yy(v), 5); txt(v + '°', x + 130, yy(v), 40, INK, { stroke: false }); }
+  return yy;
+}
+function bed(x, y, t, under) {
+  box(x - 300, y - 40, 600, 120, '#a16207', 16, 8); box(x - 300, y - 200, 50, 280, '#a16207', 14, 8);
+  box(x - 240, y - 100, 120, 70, '#fff', 30, 6);
+  if (!under) { circ(x - 180, y - 120, 50, '#fff', INK, 8); circ(x - 195, y - 128, 7, INK); circ(x - 165, y - 128, 7, INK); line(x - 195, y - 98, x - 165, y - 98, 6); }
+  box(x - 230 + (under ? -20 : 40), y - 140 + (under ? -10 : 40), under ? 520 : 470, under ? 120 : 80, '#60a5fa', 40, 8);
+  // alarm
+  const sh = Math.sin(t * 50) * 6; box(x + 200 + sh, y - 230, 120, 110, '#f97316', 30, 7); box(x + 220 + sh, y - 210, 80, 50, '#fff', 8, 5); txt('7:00', x + 260 + sh, y - 184, 30, INK, { stroke: false });
+  for (let i = 0; i < 3; i++) line(x + 330 + i * 12, y - 240 + i * 30, x + 360 + i * 12, y - 250 + i * 30, 6);
+}
+
+// ---------- scenes ----------
+function sHook(lt, t) {
+  ctx.fillStyle = '#c7d7ea'; ctx.fillRect(-200, -200, W + 400, H + 400);
+  // house wall + open door (warm inside)
+  box(-60, 300, 520, 1080, '#e7c8a0', 0, 8); box(80, 640, 260, 740, '#fcd34d', 10, 8); txt('HOME', 210, 560, 60, '#7c2d12', { stroke: false });
+  ctx.fillStyle = '#f1f5f9'; ctx.fillRect(-200, 1380, W + 400, 800); line(-200, 1380, W + 200, 1380, 8);
+  snow(t, 40, inv(T.step - .3, T.step + .2, t) * .9 + .1);
+  const walk = inv(T.step, T.step + .9, t); const x = lerp(210, 620, eio(walk)); const moving = walk > 0 && walk < 1;
+  const dead = t > T.die; const mode = dead ? (t < T.die + .25 ? 'off' : 'dead') : 'pct';
+  stick(Object.assign({ x, y: 1390, s: 1.35, look: dead ? 0 : .8, lookY: dead ? 0 : -.3, eyes: dead ? 'huge' : 'norm', mouth: dead ? 'o' : 'smile', mouthOpen: 14,
+    pose: moving ? Object.assign(walkPose(t * 9), { ra: -1.6, re: -1.5 }) : PHONE_POSE, bob: moving ? Math.abs(Math.sin(t * 9)) * 8 : 0,
+    hold: holdPhone(mode, { pct: 40, k: inv(T.die, T.die + .25, t) }) }, HERO));
+  // big phone close-up
+  phoneDev(830, 620, 1.35, mode, { pct: 40, k: inv(T.die, T.die + .25, t), rot: .08 });
+  if (dead) impact(830, 620, 330, 1 - inv(T.die, T.die + .4, t));
+}
+function sPlatform(lt, t) {
+  ctx.fillStyle = '#9fb3c8'; ctx.fillRect(-200, -200, W + 400, H + 400);
+  // station
+  box(-40, 260, 1160, 90, '#1e3a8a', 0, 8); txt('GLEIS 2', 300, 305, 60, '#fff', { stroke: false });
+  box(560, 380, 460, 180, '#111827', 14, 8); txt('RE 4  MÜNCHEN', 790, 435, 40, '#fde047', { stroke: false, font: 'Nun' }); txt('+8 min', 790, 505, 46, '#f87171', { stroke: false, font: 'Nun' });
+  // thermometer sign
+  box(80, 420, 300, 150, '#fff', 20, 8); txt('-5°C', 230, 500, 96, '#2563eb', { lw: 14 });
+  ctx.fillStyle = '#d1d5db'; ctx.fillRect(-200, 1380, W + 400, 800); ctx.fillStyle = '#facc15'; ctx.fillRect(-200, 1395, W + 400, 22); line(-200, 1380, W + 200, 1380, 8);
+  snow(t, 70);
+  const shiv = Math.sin(t * 40) * 5;
+  const mode = t > T.black ? 'dead' : (t > L[2].start - .2 && t < T.p30 ? 'train' : 'pct');
+  const pct = t > T.p20 ? 20 : t > T.p30 ? 30 : 34;
+  stick(Object.assign({ x: 300 + shiv, y: 1390, s: 1.35, eyes: t > T.black ? 'huge' : 'norm', mouth: t > T.black ? 'o' : 'wavy', look: .8, lookY: -.3, mouthOpen: 14,
+    pose: PHONE_POSE, hold: holdPhone(mode, { pct }) }, HERO));
+  breath(370, 790, t);
+  if (t > L[2].start - .3) { const k = eob(inv(L[2].start - .3, L[2].start, t)); phoneDev(760, 980, 1.35 * k, mode, { pct, rot: -.06 }); }
+}
+function sWarm(lt, t) {
+  ctx.fillStyle = '#fbbf77'; ctx.fillRect(-200, -200, W + 400, H + 400);
+  box(620, 300, 360, 380, '#bfdbfe', 10, 8); line(800, 300, 800, 680, 8); line(620, 490, 980, 490, 8); snow(t, 25, .6);
+  ctx.fillStyle = '#d97706'; ctx.fillRect(-200, 1380, W + 400, 800); line(-200, 1380, W + 200, 1380, 8);
+  // radiator
+  box(560, 1060, 420, 300, '#f8fafc', 16, 8); for (let i = 0; i < 6; i++) line(610 + i * 65, 1090, 610 + i * 65, 1330, 8);
+  for (let i = 0; i < 3; i++) { const k = ((t * .9 + i / 3) % 1); ctx.save(); ctx.globalAlpha = 1 - k; ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 7; ctx.beginPath(); const bx = 660 + i * 120; ctx.moveTo(bx, 1040 - k * 200); ctx.bezierCurveTo(bx + 30, 1000 - k * 200, bx - 30, 960 - k * 200, bx, 920 - k * 200); ctx.stroke(); ctx.restore(); }
+  const warmK = inv(T.warm - .2, T.warm + .4, t);
+  const mode = t > T.again ? 'pct' : (t > T.warm + .3 ? 'boot' : 'dead');
+  const wait = t > L[5].start - .1;
+  stick(Object.assign({ x: lerp(300, 380, warmK), y: 1390, s: 1.35, eyes: t > T.again ? 'huge' : 'norm', mouth: wait ? 'o' : (t > T.again ? 'grin' : 'flat'), mouthOpen: 12, look: .8,
+    pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: lerp(-1.6, -1.0, warmK), re: lerp(-1.5, -.6, warmK) }, hold: holdPhone(mode, { pct: 30 }) }, HERO));
+  if (wait) { const b = Math.abs(Math.sin((t - L[5].start) * 7)) * 20; txt('?', 260, 740 - b, 150, '#ffd23f', { lw: 26 }); }
+  if (t > T.ghost - .2) { const k = eo(inv(T.ghost - .2, T.ghost + 1.2, t)); battChar(760, 900 - k * 380, .95, { ghost: true, halo: true, col: '#f59e0b' }); }
+}
+function sScience(lt, t) {
+  const coldK = inv(T.cold - .2, T.cold + .8, t);
+  const bg1 = [255, 237, 213], bg2 = [219, 234, 254]; ctx.fillStyle = `rgb(${bg1.map((v, i) => Math.round(lerp(v, bg2[i], coldK))).join(',')})`; ctx.fillRect(-200, -200, W + 400, H + 400);
+  // battery cutaway
+  const bx = 160, by = 380, bw = 760, bh = 520; box(bx, by, bw, bh, coldK > .5 ? '#e0f2fe' : '#fff7ed', 50, 10); box(bx + bw, by + 180, 50, 160, '#9ca3af', 10, 8);
+  txt('−', bx + 70, by + 70, 90, INK, { stroke: false }); txt('+', bx + bw - 70, by + 70, 90, INK, { stroke: false });
+  const speed = lerp(1, .18, coldK);
+  if (window.__phase === undefined) window.__phase = 0;
+  for (let i = 0; i < 18; i++) {
+    const row = i % 3, ph = (rnd(i) + t * .35 * speed * (1 + rnd(i + 4) * .5)) % 1;
+    // when energy is "still there" but stuck: bunch up near the exit
+    const stuck = t > T.still ? .25 : 0;
+    const u = t > T.still ? lerp(ph, .55 + ph * .35, .8) : ph;
+    const x = bx + 80 + u * (bw - 160), y = by + 150 + row * 120 + Math.sin(t * 3 * speed + i) * 18;
+    ion(x, y, 34, coldK > .5, coldK > .5);
+  }
+  if (coldK > 0) { ctx.save(); ctx.globalAlpha = coldK; for (let i = 0; i < 6; i++) sparkle(bx + 40 + i * 140, by + 20 + (i % 2) * bh, 36, 1, '#e0f2fe'); ctx.restore(); }
+  // exit trickle
+  if (t > T.still) { const k = ((t * .8) % 1); ion(bx + bw + 30 + k * 160, by + 260, 26, true, true); txt('TOO SLOW', 540, 1000, 80, '#2563eb', { lw: 16 }); }
+  // bed gag
+  if (t > T.bed - .1 && t < T.still) { const k = eo(inv(T.bed - .1, T.bed + .2, t)); ctx.save(); ctx.translate(540, 1300); ctx.scale(k, k); ctx.translate(-540, -1300); bed(540, 1360, t, t > T.bed + 1.4); ctx.restore(); }
+  if (t > T.shut - .05) { const k = eob(inv(T.shut - .05, T.shut + .25, t)); ctx.save(); ctx.translate(540, 1290); ctx.scale(k, k);
+    phoneDev(0, 0, 1, 'dead'); ctx.fillStyle = '#22c55e'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(0, -120); ctx.lineTo(110, -80); ctx.quadraticCurveTo(110, 60, 0, 130); ctx.quadraticCurveTo(-110, 60, -110, -80); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 14; ctx.beginPath(); ctx.arc(0, 10, 45, -1.1, 4.25); ctx.stroke(); line(0, -50, 0, 10, 14, '#fff'); ctx.restore(); }
+}
+function sEnd(lt, t) {
+  const pocket = t > L[10].start - .15;
+  if (!pocket) {
+    ctx.fillStyle = '#ecfccb'; ctx.fillRect(-200, -200, W + 400, H + 400);
+    const yy = thermo(300, 1300, inv(L[9].start, L[9].start + 1.5, t));
+    txt('0 – 35°C', 300, 360, 90, '#16a34a', { lw: 16 });
+    ctx.fillStyle = '#d9f99d'; ctx.fillRect(-200, 1380, W + 400, 800); line(-200, 1380, W + 200, 1380, 8);
+    battChar(740, 1200, 1.2, { col: '#22c55e' }); txt('HAPPY ZONE', 740, 820, 64, '#16a34a', { lw: 12 });
+  } else {
+    ctx.fillStyle = '#9fb3c8'; ctx.fillRect(-200, -200, W + 400, H + 400);
+    ctx.fillStyle = '#f1f5f9'; ctx.fillRect(-200, 1380, W + 400, 800); line(-200, 1380, W + 200, 1380, 8);
+    snow(t, 70);
+    const k = eio(inv(T.pocket - .3, T.pocket + .5, t)); const fin = t > L[11].start; const shiv = fin ? Math.sin(t * 40) * 5 : 0;
+    const x = 540 + shiv, s = 1.6, shY = 1400 - s * 290;
+    stick(Object.assign({ x, y: 1400, s, mouth: fin ? 'wavy' : 'smile', eyes: 'norm', look: 0,
+      pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: lerp(-1.6, -.9, k), re: lerp(-1.5, -1.6, k) }, hold: k < .9 ? holdPhone('pct', { pct: 30 }) : null }, HERO));
+    if (k >= .9) { // phone peeking from inside pocket
+      const px = x - 10, py = shY + 150; phoneDev(px, py - 40, .6, 'dead');
+      circ(px - 18, py - 110, 13, '#fff', INK, 4); circ(px + 18, py - 110, 13, '#fff', INK, 4); circ(px - 16, py - 107, 5, INK); circ(px + 20, py - 107, 5, INK);
+      box(px - 75, py - 20, 150, 120, '#1d4ed8', 14, 7); line(px - 60, py - 8, px + 60, py - 8, 5, '#93c5fd');
+    }
+    if (fin) { breath(x + 80, shY - 140, t); sweat(x + 110, shY - 200, 0); }
+  }
+}
+const SCENES = [
+  { t0: 0, fn: sHook, push: .06 },
+  { t0: mid(0, 1), fn: sPlatform, push: .07, flash: 1 },
+  { t0: mid(3, 4), fn: sWarm, push: .06, xfade: .22 },
+  { t0: mid(5, 6), fn: sScience, push: .05, flash: .8 },
+  { t0: mid(8, 9), fn: sEnd, push: .06, xfade: .22 },
+];
+const CAP = [
+  ["your phone says", "40%", "you step outside...", "and it dies"],
+  ["winter in germany", "-5 degrees"],
+  ["you're checking", "when your train comes"],
+  ["30%", "20%", "black screen"],
+  ["you go back inside", "warm it up...", "and suddenly", "it says 30%", "again"],
+  ["wait.", "did your battery", "just come back", "from the dead?"],
+  ["you see,", "a battery", "makes power", "with tiny", "chemical reactions"],
+  ["in the cold,", "they slow down", "like you", "trying to get", "out of bed", "on a january morning"],
+  ["the energy", "is still there", "the phone", "just can't get it out", "fast enough", "so it shuts down", "to protect itself"],
+  ["apple says", "phones work best", "between", "0 and 35 degrees"],
+  ["so keep it", "in your", "inside pocket"],
+  ["your phone", "hates winter", "as much as you do"],
+];
+const HOT = new Set(["40%", "and it dies", "-5 degrees", "black screen", "it says 30%", "from the dead?", "chemical reactions", "they slow down", "is still there", "to protect itself", "0 and 35 degrees", "inside pocket", "as much as you do"]);
+function shake(t) { let k = 0; k = Math.max(k, .4 * (1 - inv(T.die, T.die + .25, t)) * (t > T.die)); k = Math.max(k, .3 * (1 - inv(T.black, T.black + .25, t)) * (t > T.black)); return k; }
+window.render = (t) => runScenes(t, SCENES, { shake, after: (t) => captions(t, CAP, HOT) });
+</script></body></html>

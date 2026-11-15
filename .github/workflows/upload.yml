@@ -1,0 +1,39 @@
+name: Upload Shorts to YouTube
+
+on:
+  release:
+    types: [published]
+  schedule:
+    - cron: "23 * * * *"   # hourly safety net
+  workflow_dispatch: {}
+
+concurrency:
+  group: youtube-upload
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r uploader/requirements.txt
+      - name: Upload queued videos
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          REVIEW_COUNT: ${{ vars.REVIEW_COUNT || '10' }}
+        run: python uploader/upload.py
+      - name: Save upload log
+        run: |
+          git config user.name "shorts-bot"
+          git config user.email "shorts-bot@users.noreply.github.com"
+          git add state.json
+          git diff --cached --quiet || (git commit -m "upload log" && git pull --rebase && git push)

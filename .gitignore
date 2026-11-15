@@ -1,0 +1,9 @@
+engine/node_modules/
+engine/models/
+engine/package-lock.json
+__pycache__/
+work/*/*.mp4
+work/*/*.wav
+work/*/st/
+work/*/*.jpg
+client_secret*.json

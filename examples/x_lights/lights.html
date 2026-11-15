@@ -1,0 +1,98 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { cost: wt(0, 'but how'), chains: wt(1, 'twenty'), hours: wt(1, 'eight hours'), dates: wt(1, 'from december'), old: at(2, 0), led: at(3, 0), heat: wt(5, 'most of the'), ledx: at(6, 0), tenth: wt(6, 'so they'), twist: at(7, 0), batt: at(8, 0), x300: wt(8, 'battery power'), end: at(9, 0), timer: wt(9, 'and a timer') };
+const BULB = ['#ef4444', '#facc15', '#22c55e', '#3b82f6', '#f472b6', '#f97316'];
+function bulbString(x1, y1, x2, y2, n, t, on = 1, sag = 40) { ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); for (let i = 0; i <= 30; i++) { const u = i / 30; const x = lerp(x1, x2, u), y = lerp(y1, y2, u) + Math.sin(u * Math.PI) * sag; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
+  for (let i = 0; i < n; i++) { const u = (i + .5) / n; const x = lerp(x1, x2, u), y = lerp(y1, y2, u) + Math.sin(u * Math.PI) * sag + 14; const blink = on * (.55 + .45 * Math.sin(t * 6 + i * 1.7)); const col = BULB[i % 6]; if (blink > .3) spot(x, y, 40, .35 * blink, '255,230,150'); ctx.save(); ctx.globalAlpha = .35 + .65 * blink; circ(x, y, 13, col, INK, 4); ctx.restore(); } }
+function house(x, y, s, t, on = 1) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  box(-320, -420, 640, 420, '#7c2d12', 6, 9); ctx.fillStyle = '#991b1b'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-380, -420); ctx.lineTo(0, -700); ctx.lineTo(380, -420); ctx.closePath(); ctx.fill(); ctx.stroke();
+  box(-80, -220, 160, 220, '#451a03', 6, 7); box(-260, -330, 140, 120, '#fde68a', 6, 7); box(120, -330, 140, 120, '#fde68a', 6, 7);
+  bulbString(-380, -420, 0, -700, 9, t, on, 0); bulbString(0, -700, 380, -420, 9, t + 1, on, 0); bulbString(-320, -420, 320, -420, 12, t + 2, on, 30); bulbString(-320, -10, 320, -10, 12, t + 3, on, 20);
+  for (let i = 0; i < 3; i++) bulbString(-310 + i * 10, -400 + i * 130, -310 + i * 10, -280 + i * 130, 3, t + i, on, 0);
+  ctx.restore(); }
+function night(t) { bgFill('#0f172a'); for (let i = 0; i < 40; i++) circ(rnd(i) * W, rnd(i + 7) * 700, 2 + rnd(i + 3) * 3, '#e2e8f0'); circ(880, 220, 70, '#f8fafc'); ctx.fillStyle = '#e2e8f0'; ctx.fillRect(-300, 1380, W + 600, 800); line(-300, 1380, W + 300, 1380, 8); snow(t, 40, .7); }
+function footnote() { txt('Example: 37 ct/kWh (BDEW 2026 average), 20 chains', 540, 1830, 32, '#cbd5e1', { stroke: false, font: 'Nun' }); txt('old chain ~50 W, LED ~5 W, 8 h a day, 1 Dec – 6 Jan', 540, 1875, 32, '#cbd5e1', { stroke: false, font: 'Nun' }); }
+function sHouse(lt, t) {
+  night(t); house(600, 1380, 1.05, t);
+  hero({ x: 200, y: 1440, s: 1.15, shirt: '#3b82f6', pants: '#334155', hood: true, scarf: '#e8453c', eyes: 'closed', mouth: 'o', mouthOpen: 10, look: 1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.4, re: -1.2 } });
+  if (t > T.cost) { const k = eob(inv(T.cost, T.cost + .3, t)); txt('€ ???', 600, 420, 130 * k, '#facc15', { lw: 22 }); }
+}
+function sSetup(lt, t) {
+  bgFill('#1e293b');
+  txt('THE SETUP', 540, 280, 90, '#facc15', { lw: 16 });
+  const items = [[T.chains, '20 LIGHT CHAINS'], [T.hours, '8 HOURS A DAY'], [T.dates, '1 DEC – 6 JAN']];
+  items.forEach(([t0, s], i) => { if (t < t0 - .1) return; const k = eob(inv(t0 - .1, t0 + .2, t)); ctx.save(); ctx.translate(540, 560 + i * 280); ctx.scale(k, k); box(-400, -100, 800, 200, '#fff', 30, 9); txt(s, 70, 4, 66, INK, { stroke: false });
+    ctx.translate(-290, 0); if (i === 0) bulbString(-70, -20, 70, -20, 4, t, 1, 30); else if (i === 1) { circ(0, 0, 62, '#fff', INK, 7); line(0, 0, 0, -45, 7); line(0, 0, 32, 10, 9); } else { box(-62, -62, 124, 124, '#fff', 12, 7); box(-62, -62, 124, 36, '#ef4444', 12, 7); txt('37', 0, 20, 50, INK, { stroke: false }); }
+    ctx.restore(); });
+}
+function meter(x, y, s, t, speed) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-180, -230, 360, 460, '#e5e7eb', 30, 9); box(-140, -180, 280, 90, '#111827', 10, 6);
+  const v = Math.floor(t * speed * 10) % 100000; txt(String(v).padStart(5, '0'), 0, -134, 56, '#4ade80', { stroke: false, font: 'Nun' }); txt('kWh', 0, -50, 40, INK, { stroke: false });
+  circ(0, 80, 90, '#fff', INK, 7); ctx.save(); ctx.translate(0, 80); ctx.rotate(t * speed); line(0, 0, 0, -80, 10, '#ef4444'); ctx.restore(); ctx.restore(); }
+function sCost(lt, t) {
+  bgFill('#0f172a');
+  const ledOn = t > T.led - .1;
+  meter(260, 760, 1.0, t, ledOn ? .6 : 6);
+  // two money bars
+  const kOld = eo(inv(T.old, T.old + 1.5, t)), kLed = eo(inv(T.led + .2, T.led + 1.0, t));
+  line(540, 1400, 1020, 1400, 8, '#e2e8f0');
+  const hOld = 820 * kOld, hLed = 82 * kLed;
+  box(580, 1400 - hOld, 180, Math.max(1, hOld), '#ef4444', 14, 8); txt('OLD', 670, 1450, 50, '#fff', { lw: 10 }); if (kOld > .1) txt('€' + Math.round(110 * kOld), 670, 1400 - hOld - 60, 76, '#fca5a5', { lw: 14 });
+  if (ledOn) { box(800, 1400 - hLed, 180, Math.max(1, hLed), '#22c55e', 14, 8); txt('LED', 890, 1450, 50, '#fff', { lw: 10 }); if (kLed > .1) txt('€' + Math.round(11 * kLed), 890, 1400 - hLed - 60, 76, '#86efac', { lw: 14 }); }
+  // flying money for old
+  if (!ledOn && t > T.old) for (let i = 0; i < 6; i++) { const k = ((t * .9 + i / 6) % 1); ctx.save(); ctx.globalAlpha = 1 - k; ctx.translate(260 + (rnd(i) - .5) * 300, 1100 - k * 500); ctx.rotate(k * 3); box(-60, -30, 120, 60, '#86efac', 8, 5); txt('€', 0, 2, 40, '#166534', { stroke: false }); ctx.restore(); }
+  footnote();
+}
+function sWait(lt, t) {
+  night(t); house(760, 1380, .7, t);
+  hero({ x: 280, y: 1440, s: 1.3, shirt: '#3b82f6', pants: '#334155', hood: true, scarf: '#e8453c', eyes: 'huge', mouth: 'o', mouthOpen: 12, look: 1, pose: STAND });
+  qmark(280, 780, t, at(4, .1), '#ffffff'); txt('10x CHEAPER?', 540, 360, 90 * eob(inv(at(4, .3), at(4, .5), t)), '#4ade80', { lw: 16 });
+}
+function bigBulb(x, y, s, t, kind) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  if (kind === 'old') { spot(0, -60, 260, .45, '255,170,60'); ctx.fillStyle = 'rgba(255,240,200,.85)'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.arc(0, -90, 150, Math.PI * .75, Math.PI * .25); ctx.lineTo(60, 80); ctx.lineTo(-60, 80); ctx.closePath(); ctx.fill(); ctx.stroke();
+    box(-62, 80, 124, 90, '#9ca3af', 10, 8); for (let i = 0; i < 3; i++) line(-62, 105 + i * 22, 62, 105 + i * 22, 5);
+    ctx.strokeStyle = '#f97316'; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-40, 60); ctx.lineTo(-30, -60); for (let i = 0; i < 6; i++) ctx.lineTo(-24 + i * 10, -60 + (i % 2 ? -14 : 14)); ctx.lineTo(30, -60); ctx.lineTo(40, 60); ctx.stroke();
+  } else { spot(0, -30, 200, .4, '200,230,255'); box(-90, -110, 180, 150, '#e0f2fe', 60, 9); box(-40, -60, 80, 50, '#fde047', 10, 6); box(-70, 40, 140, 60, '#94a3b8', 10, 8); line(-30, 100, -30, 180, 8); line(30, 100, 30, 180, 8); }
+  ctx.restore(); }
+function sScience(lt, t) {
+  bgFill('#1f2937');
+  if (t < T.ledx - .2) {
+    bigBulb(540, 900, 2.0, t, 'old'); txt('OLD BULB', 540, 280, 90, '#fdba74', { lw: 16 });
+    if (t > T.heat) { const k = eob(inv(T.heat, T.heat + .3, t)); for (let i = 0; i < 4; i++) { const kk = ((t * .8 + i / 4) % 1); ctx.save(); ctx.globalAlpha = 1 - kk; ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 9; ctx.beginPath(); const bx = 300 + i * 160; ctx.moveTo(bx, 560 - kk * 200); ctx.bezierCurveTo(bx + 40, 520 - kk * 200, bx - 40, 470 - kk * 200, bx, 430 - kk * 200); ctx.stroke(); ctx.restore(); }
+      ctx.save(); ctx.translate(540, 1300); ctx.scale(k, k); box(-330, -80, 660, 160, '#7f1d1d', 30, 8); txt('MOSTLY HEAT', 0, 4, 70, '#fecaca', { stroke: false }); ctx.restore(); }
+  } else {
+    bigBulb(300, 900, 1.4, t, 'old'); bigBulb(780, 900, 1.6, t, 'led');
+    txt('50 W', 300, 1260, 80, '#fca5a5', { lw: 14 }); txt('5 W', 780, 1260, 80, '#86efac', { lw: 14 });
+    if (t > T.tenth) { const k = eob(inv(T.tenth, T.tenth + .3, t)); ctx.save(); ctx.translate(540, 380); ctx.scale(k, k); box(-330, -80, 660, 160, '#166534', 30, 8); txt('1/10 THE POWER', 0, 4, 66, '#fff', { stroke: false }); ctx.restore(); }
+  }
+}
+function tree(x, y, s, t) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-40, -20, 80, 100, '#78350f', 6, 7);
+  for (let i = 0; i < 3; i++) { ctx.fillStyle = '#15803d'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); const w = 300 - i * 70, yy = -20 - i * 200; ctx.moveTo(-w, yy); ctx.lineTo(0, yy - 300); ctx.lineTo(w, yy); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  ctx.fillStyle = '#facc15'; ctx.beginPath(); for (let i = 0; i < 10; i++) { const r = i % 2 ? 22 : 54, a = -Math.PI / 2 + i * Math.PI / 5; ctx.lineTo(Math.cos(a) * r, -720 + Math.sin(a) * r); } ctx.closePath(); ctx.fill(); ctx.stroke();
+  for (let i = 0; i < 9; i++) { const yy = -120 - (i % 3) * 200 - Math.floor(i / 3) * 40; const xx = (i % 3 - 1) * (180 - (i % 3) * 30) + (Math.floor(i / 3) - 1) * 40; box(xx - 12, yy - 50, 24, 50, '#f8fafc', 6, 4); spot(xx, yy - 70, 34, .5 + .3 * Math.sin(t * 9 + i), '255,200,80'); ctx.fillStyle = '#fb923c'; ctx.beginPath(); ctx.ellipse(xx, yy - 64, 8, 14, 0, 0, 7); ctx.fill(); }
+  ctx.restore(); }
+function battery(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-26, -60, 52, 120, '#1f2937', 10, 5); box(-26, -60, 52, 34, '#f59e0b', 10, 5); box(-10, -72, 20, 14, '#9ca3af', 3, 4); ctx.restore(); }
+function sTree(lt, t) {
+  bgFill('#3f1d1d'); ctx.fillStyle = '#7c2d12'; ctx.fillRect(-300, 1380, W + 600, 800); line(-300, 1380, W + 300, 1380, 8);
+  windowFrame(720, 340, 280, 320, '#0f172a');
+  tree(400, 1360, 1.0, t);
+  if (t > T.batt) { const n = Math.floor(clamp((t - T.batt) / 3) * 28); for (let i = 0; i < n; i++) battery(720 + (i % 7) * 50, 1340 - Math.floor(i / 7) * 110, .85); }
+  if (t > T.x300) { const k = eob(inv(T.x300, T.x300 + .3, t)); ctx.save(); ctx.translate(780, 460 + 0); ctx.rotate(-.1); ctx.scale(k, k); box(-200, -90, 400, 180, '#dc2626', 20, 10); txt('x300', 0, 6, 120, '#fff', { lw: 16 }); ctx.restore(); txt('per kWh vs. socket', 780, 600, 36, '#fecaca', { stroke: false, font: 'Nun' }); }
+  if (t < T.batt) { const k = eob(inv(T.twist + .4, T.twist + .7, t)); txt('PLOT TWIST', 540, 300, 100 * k, '#facc15', { lw: 18 }); }
+}
+function sEnd(lt, t) {
+  night(t); house(560, 1380, .95, t);
+  // plug + timer
+  const k = eob(inv(T.timer - .1, T.timer + .2, t));
+  ctx.save(); ctx.translate(900, 1250); ctx.scale(k, k); box(-90, -90, 180, 180, '#f8fafc', 30, 8); circ(0, 0, 60, '#fff', INK, 6); line(0, 0, 0, -45, 7); line(0, 0, 32, 10, 9); txt('TIMER', 0, 130, 40, '#fff', { lw: 8 }); ctx.restore();
+  hero({ x: 180, y: 1440, s: 1.15, shirt: '#3b82f6', pants: '#334155', hood: true, scarf: '#e8453c', eyes: 'norm', mouth: 'grin', look: 1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.6, re: 0 } });
+  txt('LED + PLUG + TIMER', 540, 320, 76 * eob(inv(at(9, .3), at(9, .5), t)), '#4ade80', { lw: 14 });
+}
+const SCENES = [{ t0: 0, fn: sHouse, push: .06 }, { t0: mid(0, 1), fn: sSetup, push: .04, flash: 1 }, { t0: mid(1, 2), fn: sCost, push: .05, xfade: .25 }, { t0: mid(3, 4), fn: sWait, push: .06, xfade: .2 }, { t0: mid(4, 5), fn: sScience, push: .05, xfade: .25 }, { t0: mid(6, 7), fn: sTree, push: .07, flash: .9 }, { t0: mid(8, 9), fn: sEnd, push: .07, xfade: .3 }];
+const CAP = [["your neighbor's house", "looks like a spaceship.", "but how much", "does all that light", "actually cost?"], ["let's say", "20 light chains,", "on for 8 hours a day,", "from december 1st", "to january 6th."], ["with old-style bulbs,", "that's about", "€110", "of electricity."], ["with LED lights?", "about €11."], ["wait.", "same lights,", "10x cheaper?"], ["you see,", "old bulbs make light", "by heating a tiny wire", "until it glows.", "most of the energy", "turns into heat,", "not light."], ["LEDs skip", "the heating part.", "so they need only", "about a tenth", "of the power."], ["but here's the twist.", "the most expensive", "christmas lights", "aren't on the house."], ["they're the", "battery candles", "on your tree.", "battery power costs", "around 300x more", "than power", "from the socket."], ["so the cheapest glow", "this christmas?", "LEDs, a plug,", "and a timer."]];
+const HOT = new Set(["actually cost?", "€110", "about €11.", "10x cheaper?", "turns into heat,", "about a tenth", "aren't on the house.", "battery candles", "around 300x more", "and a timer."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

@@ -1,0 +1,10 @@
+["Santa has one night to bring presents to every child on Earth. Let's do the math.",
+ "There are about two point three billion children in the world.",
+ "If there are two kids per home, that's over a billion homes.",
+ "Thanks to time zones, Christmas night lasts about thirty-two hours around the globe.",
+ {"text":"So Santa has to visit about ten thousand homes. Every single second.","gap":0.4},
+ {"text":"Wait. How fast is that?","gap":0.4},
+ "You see, even if every home was just one kilometer apart, he'd need to fly ten thousand kilometers per second.",
+ "That's about fifty times faster than the fastest spacecraft ever built.",
+ "And if he eats one cookie at every home... that's over a billion cookies.",
+ {"text":"Enough calories to feed one person for about seventy-eight thousand years.","gap":0.5}]

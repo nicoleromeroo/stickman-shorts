@@ -1,0 +1,61 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const knocks = [at(4, .05), at(4, .2), at(4, .35)];
+const knocks2 = [at(6, .25), at(6, .5), at(6, .75)];
+const T = { appear: wt(0, "wasn't"), fam: at(2, 0), open: at(7, .3), inside: at(8, 0), you: wt(9, 'is you') };
+function picture(x, y, kind) { box(x - 90, y - 70, 180, 140, '#fef3c7', 6, 8); if (kind === 0) { circ(x, y, 34, '#fbbf24', INK, 5); } else { ctx.fillStyle = '#16a34a'; ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(x - 70, y + 50); ctx.lineTo(x - 10, y - 40); ctx.lineTo(x + 70, y + 50); ctx.closePath(); ctx.fill(); ctx.stroke(); } }
+function hallway(night, doorK = 1, openK = 0) {
+  bgFill(night ? '#2a2f4a' : '#e9d5b7'); for (let x = -300; x < W + 300; x += 80) { ctx.fillStyle = night ? 'rgba(255,255,255,.03)' : 'rgba(150,100,50,.12)'; ctx.fillRect(x, 0, 30, 1380); }
+  floor(night ? '#3a3350' : '#a16207');
+  picture(170, 560, 0); picture(910, 560, 1);
+  ctx.save(); ctx.globalAlpha = doorK; doorway(390, 760, 300, 620, openK, '#fff7d6', '#6d28d9'); ctx.restore();
+  if (doorK > 0 && doorK < 1) { for (let i = 0; i < 5; i++) sparkle(390 + rnd(i) * 300, 760 + rnd(i + 3) * 620, 30, doorK); }
+}
+function sDay(lt, t) {
+  const dk = inv(T.appear - .2, T.appear + .6, t);
+  hallway(false, dk);
+  if (t > at(1, .7)) { const k = eo(inv(at(1, .7), at(1, .9), t)); ctx.save(); ctx.globalAlpha = k; ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 10; ctx.beginPath(); ctx.ellipse(540, 1070, 210, 360, 0, 0, 7); ctx.stroke(); ctx.restore(); }
+  const fam = [{ c: '#f472b6', hair: '#7c2d12', d: 0 }, { c: '#16a34a', d: .5 }, { c: '#f59e0b', hair: '#1f2937', d: 1.0, s: .85 }];
+  for (const f of fam) { const k = t - T.fam - f.d; if (k < 0) continue; const x = -150 + k * 380; if (x > W + 200) continue; stick({ x, y: 1430, s: f.s || 1.05, shirt: f.c, hair: f.hair, pose: walkPose(t * 7), bob: Math.abs(Math.sin(t * 7)) * 6, look: 1, mouth: 'smile' }); }
+  hero({ x: 880, y: 1460, s: 1.15, look: -1, eyes: t > at(1, 0) ? 'huge' : 'norm', mouth: t > T.fam ? 'o' : 'flat', pose: t > T.fam ? { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: 1.9, re: 0 } : STAND, flip: false });
+  if (t > T.fam) qmark(880, 840, t, T.fam + .4);
+}
+function sNight(lt, t) {
+  hallway(true, 1, 0);
+  let k1 = 0; const all = knocks.concat(knocks2);
+  all.forEach((kt, i) => { if (t > kt) { const a = 1 - inv(kt, kt + .6, t); const px = i < 3 ? 470 + i * 25 : 520 + (i - 3) * 50, py = i < 3 ? 900 : 960 + (i - 3) * 40; if (a > 0) { impact(px, py, 90, a); txt('KNOCK', px, py - 110, 54, '#fde047', { lw: 10 }); } k1 = Math.max(k1, a); } });
+  // handle glow when knocks approach
+  if (t > knocks2[0]) spot(660, 1070, 160, .4 * inv(knocks2[0], knocks2[2], t), '255,200,80');
+  hero({ x: 250, y: 1460, s: 1.15, look: 1, eyes: 'huge', mouth: 'wavy', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.3, re: -.2 }, lean: k1 * -.04,
+    hold: (hx, hy) => { box(hx - 10, hy - 20, 70, 40, '#475569', 8, 5); } });
+  // flashlight beam
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = 'rgba(255,240,170,.10)'; ctx.beginPath(); ctx.moveTo(340, 1080); ctx.lineTo(700, 780); ctx.lineTo(700, 1250); ctx.closePath(); ctx.fill(); ctx.restore();
+  if (t > at(5, 0) && t < at(6, 0)) qmark(250, 840, t, at(5, 0));
+  darkness(.6, 540, 1000, 800);
+}
+function sOpen(lt, t) {
+  const openK = .2 * eo(inv(T.open, T.open + 1.2, t));
+  const zoom = eio(inv(T.inside - .5, T.inside + .8, t));
+  ctx.save(); ctx.translate(540, 1070); ctx.scale(1 + zoom * 2.1, 1 + zoom * 2.1); ctx.translate(-540, -1070);
+  hallway(true, 1, 0);
+  // door slightly open: inside view through gap
+  ctx.save(); const gapW = 300 * Math.max(openK, zoom); ctx.beginPath(); ctx.rect(390, 760, Math.max(10, gapW), 620); ctx.clip();
+  ctx.save(); ctx.translate(390, 760); ctx.scale(300 / W, 620 / 1380 * .78); ctx.translate(0, 190);
+  hallway(false, 1, 0);
+  if (t > T.you - .6) { const k = inv(T.you - .6, T.you, t); ctx.save(); ctx.globalAlpha = k; hero({ x: 540, y: 1380, s: 1.4, eyes: 'huge', mouth: 'flat', look: 0, pose: STAND }); ctx.restore(); }
+  ctx.restore(); ctx.restore();
+  ctx.save(); ctx.translate(390 + 300 * Math.max(openK, zoom), 760); ctx.scale(Math.max(.05, 1 - Math.max(openK, zoom)), 1); box(0, 0, 300, 620, '#6d28d9', 6, 8); ctx.restore();
+  ctx.restore();
+  if (zoom < .5) { hero({ x: 300, y: 1460, s: 1.15, look: 1, eyes: 'huge', mouth: 'wavy', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.6, re: -.2 } }); darkness(.55, 540, 1000, 800); }
+  else { darkness(.35 + .3 * inv(T.you, T.you + 1.5, t), 540, 1000, 900); }
+}
+function sEnd(lt, t) { sOpen(0, L[10].start - .05); sepia(); tbc(lt); }
+const SCENES = [{ t0: 0, fn: sDay, push: .06 }, { t0: mid(2, 3), fn: sNight, push: .08, flash: .9 }, { t0: mid(6, 7), fn: sOpen, push: .03, xfade: .3 }, { t0: L[10].start - .05, fn: sEnd, push: 0, flash: 0 }];
+const CAP = [["there's a door", "in your hallway", "that wasn't there", "yesterday"], ["same wall.", "same pictures.", "but now,", "there's a door."], ["your family", "walks right past it", "like it's always", "been there"], ["that night,", "you hear knocking.", "from the", "other side."], ["three knocks.", "then silence."], ["wait.", "if nobody is in there", "who is knocking?"], ["you see,", "every time it knocks", "the sound gets closer", "to the handle"], ["so you open it.", "just a little."], ["inside", "is your hallway.", "exactly the same."], ["and at the end of it...", "is you.", "staring back."], []];
+const HOT = new Set(["yesterday", "there's a door.", "other side.", "then silence.", "who is knocking?", "to the handle", "just a little.", "exactly the same.", "is you.", "staring back."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT) });
+</script></body></html>

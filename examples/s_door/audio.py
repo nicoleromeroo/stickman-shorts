@@ -1,0 +1,10 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 13)
+m.music("mystery", quiet=[(m.at(3, 0), m.at(9, 1))])
+m.add("chime", m.wt(0, "wasn't") - .1, .3); m.steps(m.at(2, 0), n=10, dt=.33, g=.25)
+m.add("whoosh", m.mid(2, 3) - .12, .4)
+for f in (.05, .2, .35): m.add("thump", m.at(4, f), .8)
+for f in (.25, .5, .75): m.add("thump", m.at(6, f), .9)
+m.add("creak", m.at(7, .3), .7); m.add("sting", m.wt(9, "is you"), .7); m.add("tbc", m.at(10, 0) - .05, .5)
+tense = Mix(sys.argv[1], 14)
+m.write(mvol=.09, svol=.32)

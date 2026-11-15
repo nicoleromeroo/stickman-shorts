@@ -1,0 +1,74 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { movie: at(5, 0), jump: wt(5, 'jump scare'), down: at(6, 0), robot: at(7, 0), delay: wt(7, 'when it added'), laugh: wt(7, 'suddenly'), spoil: at(8, 0) };
+function tickleArms(t, fast) { const w = Math.sin(t * (fast ? 30 : 14)) * .25; return { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -.6 + w, re: -2.2 + w }; }
+function sSelf(lt, t) {
+  bgFill('#fef3c7'); floor('#fcd34d');
+  const other = t > at(2, 0) - .2;
+  if (!other) {
+    hero({ x: 540, y: 1420, s: 1.6, pose: tickleArms(t, true), eyes: 'norm', mouth: 'flat', look: .4 });
+    meter(880, 1100, 'TICKLE', .03, '#22c55e');
+    if (t > at(1, 0)) txt('...', 540, 560, 120, '#fff', { lw: 20 });
+  } else {
+    const shake = Math.sin(t * 40) * 6;
+    hero({ x: 420 + shake, y: 1420, s: 1.5, pose: { lt: .3, ls: .2, rt: -.3, rs: .2, la: -2.6, le: -.4, ra: 2.6, re: .4 }, eyes: 'closed', mouth: 'grin', lean: Math.sin(t * 20) * .08 });
+    stick({ x: 760, y: 1420, s: 1.4, shirt: '#16a34a', pants: '#1f2937', hair: '#7c2d12', flip: true, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.2 + Math.sin(t * 30) * .2, re: -.6 }, mouth: 'smirk', look: 1 });
+    for (let i = 0; i < 4; i++) { const k = ((t * 1.2 + i / 4) % 1); ctx.save(); ctx.globalAlpha = 1 - k; txt('HA', 200 + i * 200, 700 - k * 200, 80, '#fff', { lw: 14 }); ctx.restore(); }
+    meter(960, 1100, 'TICKLE', .97, '#ef4444');
+  }
+}
+function sSplit(lt, t) {
+  bgFill('#fde68a'); ctx.fillStyle = '#fca5a5'; ctx.fillRect(540, -300, 900, H + 600); line(540, 0, 540, H, 10); floor('#fbbf24');
+  hero({ x: 270, y: 1420, s: 1.05, pose: tickleArms(t, true), mouth: 'flat' }); meter(270, 760, 'YOU', .03);
+  hero({ x: 700, y: 1420, s: 1.05, pose: { lt: .3, ls: .2, rt: -.3, rs: .2, la: -2.6, le: -.4, ra: 2.6, re: .4 }, eyes: 'closed', mouth: 'grin' });
+  stick({ x: 920, y: 1420, s: 1.0, shirt: '#16a34a', flip: true, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.2 + Math.sin(t * 30) * .2, re: -.6 }, mouth: 'smirk' }); meter(810, 760, 'FRIEND', .97, '#ef4444');
+  qmark(540, 300, t, at(3, 0));
+}
+function sBrain(lt, t) {
+  bgFill('#ede9fe');
+  if (t < T.movie - .2) {
+    brainChar(540, 800, 1.6, { eyes: 'norm', mouth: 'smile', armR: [80, -120] });
+    // prediction card
+    const k = eob(inv(at(4, .3), at(4, .5), t)); ctx.save(); ctx.translate(540, 1240); ctx.scale(k, k); box(-330, -90, 660, 180, '#fff', 20, 8); txt('PREDICTED: HAND', 0, -20, 50, INK, { stroke: false }); txt('IN 0.1 SEC', 0, 40, 44, '#6d28d9', { stroke: false }); ctx.restore();
+  } else if (t < T.down - .2) {
+    // movie: TV with ghost, brain bored
+    box(140, 300, 800, 560, '#111827', 30, 10); ctx.fillStyle = '#1e293b'; ctx.fillRect(170, 330, 740, 500);
+    if (t > T.jump - .1) { const k = eob(inv(T.jump - .1, T.jump + .2, t)); ctx.save(); ctx.translate(540, 620); ctx.scale(k, k); ctx.fillStyle = '#f8fafc'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(0, -40, 150, Math.PI, 0); ctx.lineTo(150, 160); for (let i = 0; i < 5; i++) ctx.lineTo(150 - (i + .5) * 60, 160 - (i % 2 ? 0 : 40)); ctx.lineTo(-150, 160); ctx.closePath(); ctx.fill(); ctx.stroke(); circ(-50, -40, 22, INK); circ(50, -40, 22, INK); circ(0, 40, 30, INK); ctx.restore(); txt('BOO!', 760, 380, 80, '#ef4444', { lw: 14 }); }
+    brainChar(540, 1220, 1.2, { eyes: 'bored', mouth: t > T.jump ? 'smirk' : 'flat', look: 0 });
+    box(780, 1060, 260, 90, '#fff', 30, 6); txt('SEEN IT', 910, 1106, 44, INK, { stroke: false });
+  } else {
+    // volume knob turning down
+    brainChar(360, 900, 1.2, { eyes: 'norm', mouth: 'smirk', armR: [190, 40] });
+    const ang = lerp(1.2, -1.2, eio(inv(T.down, T.down + 1.2, t)));
+    circ(790, 960, 150, '#e5e7eb', INK, 10); ctx.save(); ctx.translate(790, 960); ctx.rotate(ang); line(0, 0, 0, -120, 16, '#ef4444'); ctx.restore();
+    txt('FEELING', 790, 740, 64, '#7c3aed', { lw: 12 }); txt('MAX', 940, 860, 36, INK, { stroke: false }); txt('MIN', 640, 860, 36, INK, { stroke: false });
+  }
+}
+function sRobot(lt, t) {
+  bgFill('#e0f2fe'); floor('#bae6fd');
+  // robot arm
+  box(760, 1080, 220, 300, '#94a3b8', 20, 8); circ(820, 1150, 20, '#22d3ee', INK, 5); circ(920, 1150, 20, '#22d3ee', INK, 5);
+  const wig = Math.sin(t * 25) * 20;
+  line(800, 1080, 700, 880, 30, INK); line(800, 1080, 700, 880, 18, '#cbd5e1'); line(700, 880, 560 + wig, 960, 30, INK); line(700, 880, 560 + wig, 960, 18, '#cbd5e1');
+  // feather
+  ctx.save(); ctx.translate(560 + wig, 960); ctx.rotate(-.6); ctx.fillStyle = '#fde68a'; ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(-60, 0, 70, 22, 0, 0, 7); ctx.fill(); ctx.stroke(); line(-130, 0, 10, 0, 5); ctx.restore();
+  const laugh = t > T.laugh;
+  hero({ x: 360, y: 1420, s: 1.4, pose: laugh ? { lt: .3, ls: .2, rt: -.3, rs: .2, la: -2.6, le: -.4, ra: 1.0, re: -1.2 } : { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: 1.0, re: -1.2 }, eyes: laugh ? 'closed' : 'norm', mouth: laugh ? 'grin' : 'flat', look: 1, lean: laugh ? Math.sin(t * 20) * .06 : 0 });
+  if (t > T.delay) { const k = eob(inv(T.delay, T.delay + .25, t)); ctx.save(); ctx.translate(820, 560); ctx.scale(k, k); box(-180, -80, 360, 160, '#fff', 30, 8); txt('DELAY', 0, -24, 46, INK, { stroke: false }); txt('+0.2 SEC', 0, 36, 56, '#2563eb', { stroke: false }); ctx.restore(); }
+  if (laugh) for (let i = 0; i < 3; i++) { const k = ((t * 1.2 + i / 3) % 1); ctx.save(); ctx.globalAlpha = 1 - k; txt('HA', 200 + i * 160, 760 - k * 200, 70, '#fff', { lw: 12 }); ctx.restore(); }
+  txt('TICKLE ROBOT', 540, 300, 80, '#0ea5e9', { lw: 16 });
+}
+function sSpoil(lt, t) {
+  bgFill('#fae8ff');
+  brainChar(540, 900, 1.5, { eyes: 'norm', mouth: 'smirk', armL: [-60, -160], armR: [60, -160] });
+  const k = eob(inv(T.spoil + .3, T.spoil + .6, t)); ctx.save(); ctx.translate(540, 470); ctx.scale(k, k); ctx.rotate(-.05); box(-360, -90, 720, 180, '#ef4444', 20, 10); txt('SPOILER ALERT', 0, 6, 80, '#fff', { lw: 14 }); ctx.restore();
+}
+const SCENES = [{ t0: 0, fn: sSelf, push: .06 }, { t0: mid(2, 3), fn: sSplit, push: .05, flash: 1 }, { t0: mid(3, 4), fn: sBrain, push: .05, xfade: .25 }, { t0: mid(6, 7), fn: sRobot, push: .06, xfade: .25 }, { t0: mid(7, 8), fn: sSpoil, push: .08, flash: .8 }];
+const CAP = [["try to tickle yourself", "right now.", "go on."], ["nothing.", "not even", "a little."], ["but when", "someone else does it", "you can't stop", "laughing."], ["wait.", "same fingers,", "same spot.", "so what's different?"], ["you see,", "your brain predicts", "every move you make", "before you make it."], ["it's like watching", "a horror movie", "you've already seen.", "you know exactly", "when the jump scare", "is coming."], ["so your brain", "just turns", "the feeling down."], ["scientists even built", "a tickle robot.", "when it added", "a tiny delay,", "people's own tickles", "suddenly felt", "more ticklish."], ["your brain", "is basically", "a spoiler", "for your own fingers."]];
+const HOT = new Set(["right now.", "nothing.", "laughing.", "so what's different?", "before you make it.", "is coming.", "the feeling down.", "a tickle robot.", "more ticklish.", "a spoiler"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT) });
+</script></body></html>
