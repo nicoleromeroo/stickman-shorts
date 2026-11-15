@@ -1,5 +1,5 @@
 {
- "uploaded_count": 1,
+ "uploaded_count": 4,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -8,6 +8,30 @@
    "mode": "REVIEW (private)",
    "publish_at": "2026-11-16T12:30:00+01:00",
    "uploaded_at": "2026-11-15T12:00:15+00:00"
+  },
+  {
+   "tag": "video-20261116-slot1",
+   "video_id": "cIVtyuxtJUQ",
+   "title": "Why You Get Zapped More in Winter \u26a1 #shorts",
+   "mode": "REVIEW (private)",
+   "publish_at": "2026-11-16T08:00:00+01:00",
+   "uploaded_at": "2026-11-15T12:17:12+00:00"
+  },
+  {
+   "tag": "video-20261116-slot2",
+   "video_id": "EfQZeBG_PY8",
+   "title": "Do You Really Lose Most Heat Through Your Head? \ud83e\udde2 #shorts",
+   "mode": "REVIEW (private)",
+   "publish_at": "2026-11-16T12:30:00+01:00",
+   "uploaded_at": "2026-11-15T12:17:12+00:00"
+  },
+  {
+   "tag": "video-20261116-slot3",
+   "video_id": "yLeZO8TaABE",
+   "title": "What Your Christmas Tree Really Costs Per Day \ud83c\udf84 #shorts",
+   "mode": "REVIEW (private)",
+   "publish_at": "2026-11-16T18:00:00+01:00",
+   "uploaded_at": "2026-11-15T12:17:12+00:00"
   }
  ]
 }
