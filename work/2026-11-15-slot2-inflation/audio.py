@@ -1,0 +1,13 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 79)
+m.music("upbeat")
+m.add("pop", m.at(0, .1), .3); m.add("pdown", m.wt(0, "you lost"), .45)
+m.add("whoosh", m.mid(0, 1) - .12, .3); m.add("ding", m.at(1, .3), .35)
+m.add("whoosh", m.mid(1, 2) - .12, .3); m.add("slide", m.at(2, .1), .3); m.add("thump", m.wt(2, "twenty-six"), .45)
+m.add("pdown", m.wt(3, "seventy-nine"), .4); m.add("boing", m.at(4, .1), .35)
+m.add("whoosh", m.mid(4, 5) - .12, .3); m.add("sting", m.wt(5, "that's inflation"), .35)
+m.add("drip", m.wt(6, "slowly melts"), .4); m.add("drip", m.wt(6, "slowly melts") + .6, .35)
+m.add("whoosh", m.mid(6, 7) - .12, .3); m.add("pop", m.wt(7, "two point"), .4)
+for i in range(4): m.add("drip", m.at(8, 0) + i * .7, .3)
+m.add("whoosh", m.mid(8, 9) - .12, .3); m.add("chime", m.wt(9, "grow"), .4); m.add("ding", m.wt(9, "not financial"), .3)
+m.write(mvol=.08, svol=.3)

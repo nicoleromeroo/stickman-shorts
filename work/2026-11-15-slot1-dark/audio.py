@@ -1,0 +1,12 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 21)
+m.music("lofi")
+m.add("chime", m.wt(0, "four"), .35); m.add("bonk", m.wt(0, "in the afternoon"), .4)
+m.add("whoosh", m.mid(0, 1) - .12, .3)
+m.add("slide", m.wt(1, "in june"), .3); m.add("slide", m.wt(1, "today"), .3); m.add("slide", m.at(2, 0), .3)
+m.add("whoosh", m.mid(2, 3) - .12, .3); m.add("yawn", m.at(3, .2), .35)
+m.add("whoosh", m.mid(3, 4) - .12, .3); m.add("pop", m.wt(4, "it's tilted"), .4)
+m.add("pop", m.at(5, .3), .35); m.add("whoosh", m.mid(5, 6) - .12, .3); m.add("ding", m.wt(6, "like a lamp"), .35)
+m.add("whoosh", m.mid(6, 7) - .12, .3); m.add("pop", m.at(7, .3), .35)
+m.add("whoosh", m.mid(7, 8) - .12, .3); m.add("chime", m.wt(8, "every day"), .4); m.add("chime", m.at(9, .5), .45)
+m.write(mvol=.08, svol=.3)

@@ -1,0 +1,10 @@
+["You've lived on floor twelve your whole life. There is no floor thirteen.",
+ "Tonight, you step into the elevator. And there's a new button. Thirteen.",
+ "It's glowing. Nobody else is around.",
+ {"text":"You tell yourself it's just a glitch. Then you press it.","gap":0.4},
+ "The elevator goes up. Slowly. Way longer than one floor should take.",
+ {"text":"Ding. The doors open.","gap":0.3},
+ "It's a hallway. Exactly like yours. Same plant, same carpet, same doors.",
+ "But every number on every door is backwards.",
+ {"text":"And then, from the end of the hallway, someone calls your name.","gap":0.6},
+ {"text":"In your own voice.","gap":0.8}]

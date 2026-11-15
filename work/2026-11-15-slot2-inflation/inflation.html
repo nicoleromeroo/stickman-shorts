@@ -1,0 +1,93 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { lost: wt(0, 'you lost'), cent: wt(0, 'without'), still: at(1, 0), prices: at(2, 0), pct: wt(2, 'twenty-six'), buys: at(3, 0), s79: wt(3, 'seventy-nine'), wait: at(4, 0), infl: wt(5, "that's inflation"), more: wt(5, 'every year'), ice: at(6, 0), melt: wt(6, 'slowly melts'), rate: at(7, 0), r28: wt(7, 'two point'), zero: at(8, 0), end: at(9, 0), grow: wt(9, 'grow'), nfa: wt(9, 'not financial') };
+function note(x, y, s, val, a = 0, col = '#86efac') { ctx.save(); ctx.translate(x, y); ctx.rotate(a); ctx.scale(s, s); box(-220, -110, 440, 220, col, 18, 8); box(-190, -80, 380, 160, 'rgba(255,255,255,.25)', 14, 5); circ(-120, 0, 52, 'rgba(255,255,255,.5)', INK, 5); txt('€', -120, 4, 64, '#166534', { stroke: false, font: 'Nun' }); txt(String(val), 70, 6, 110, '#166534', { stroke: false }); ctx.restore(); }
+function room(col = '#e0e7ff') { bgFill(col); floor('#a5b4fc'); }
+function foot() { txt('Source: Destatis CPI, Oct 2026: 126.4 (2020 = 100), inflation 2.8%', 540, 1880, 28, '#475569', { stroke: false, font: 'Nun' }); }
+function iceCube(x, y, s, k, t) { // k = 0 full, 1 melted
+  const h = 260 * (1 - k * .8), w = 260 * (1 - k * .25);
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = 'rgba(125,211,252,.55)'; ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(0, 10, w * .9 + k * 160, 26 + k * 20, 0, 0, 7); ctx.fill(); ctx.stroke();
+  box(-w / 2, -h, w, h, 'rgba(186,230,253,.95)', 30, 8); line(-w / 2 + 30, -h + 30, -w / 2 + 70, -h + 30, 8, '#fff');
+  if (h > 80) txt('€', 0, -h / 2 + 8, Math.min(120, h * .6), '#0369a1', { stroke: false, font: 'Nun' });
+  for (let i = 0; i < 3; i++) { const kk = ((t * .8 + i / 3) % 1); ctx.save(); ctx.globalAlpha = (1 - kk) * Math.min(1, k * 5); ctx.fillStyle = '#7dd3fc'; ctx.beginPath(); ctx.arc(-w / 2 + 10 + i * w / 2.2, -h * .4 + kk * h * .4, 12, 0, 7); ctx.fill(); ctx.restore(); }
+  ctx.restore(); }
+function sMattress(lt, t) {
+  room();
+  box(160, 1180, 760, 200, '#f8fafc', 40, 9); box(160, 1280, 760, 100, '#93c5fd', 30, 9); box(200, 1110, 220, 90, '#fff', 30, 7);
+  if (t < T.lost) note(620, 1150, .55 * eob(inv(.2, .6, t)), 100, -.1);
+  hero({ x: 950, y: 1440, s: 1.1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: 1.7, re: .2 }, eyes: 'norm', mouth: 'smirk', flip: true, look: -1, hood: false });
+  txt('2020', 540, 330, 120, '#4338ca', { lw: 18 });
+  if (t > T.lost) { const k = eob(inv(T.lost, T.lost + .3, t)); ctx.save(); ctx.translate(540, 640); ctx.scale(k, k); box(-230, -100, 460, 200, '#dc2626', 24, 10); txt('–€21', 0, 10, 130, '#fff', { lw: 12 }); ctx.restore(); }
+  if (t > T.cent) txt('WITHOUT SPENDING', 540, 860, 66, '#dc2626', { lw: 12 });
+}
+function sNote(lt, t) {
+  bgFill('#dcfce7');
+  note(540, 900, 1.6, 100, -.04);
+  txt('STILL SAYS 100', 540, 380, 96, '#166534', { lw: 16 });
+  hero({ x: 220, y: 1500, s: .9, pose: STAND, eyes: 'norm', mouth: 'smile', look: 1, hood: false });
+}
+function tagP(x, y, a, s, p) { ctx.save(); ctx.translate(x, y); ctx.rotate(a); box(-110, -50, 220, 100, '#fff', 14, 6); txt(s, 0, -10, 34, INK, { stroke: false }); txt(p, 0, 30, 34, '#dc2626', { stroke: false }); ctx.restore(); }
+function sPrices(lt, t) {
+  bgFill('#fef3c7'); floor('#fcd34d');
+  const shrink = t > T.buys - .1;
+  if (!shrink) {
+    txt('PRICES SINCE 2020', 540, 300, 80, '#b45309', { lw: 14 });
+    // arrow going up
+    const k = eo(inv(T.prices, T.pct + .5, t)); ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 26; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(160, 1250); ctx.lineTo(lerp(160, 860, k), lerp(1250, 600, k)); ctx.stroke(); ctx.lineCap = 'butt';
+    if (k > .95) { ctx.fillStyle = '#dc2626'; ctx.beginPath(); ctx.moveTo(910, 550); ctx.lineTo(790, 590); ctx.lineTo(880, 680); ctx.closePath(); ctx.fill(); }
+    if (t > T.pct) { const kk = eob(inv(T.pct, T.pct + .3, t)); ctx.save(); ctx.translate(380, 620); ctx.scale(kk, kk); box(-200, -100, 400, 200, '#dc2626', 24, 10); txt('+26%', 0, 10, 120, '#fff', { lw: 12 }); ctx.restore(); }
+  } else {
+    txt('WHAT €100 BUYS NOW', 540, 300, 76, '#b45309', { lw: 14 });
+    const k = eo(inv(T.buys, T.s79, t));
+    note(540, 760, 1.2 * lerp(1, .79, k), 100, -.03);
+    if (t > T.s79) { const kk = eob(inv(T.s79, T.s79 + .3, t)); ctx.save(); ctx.translate(540, 1160); ctx.scale(kk, kk); box(-330, -90, 660, 180, '#fff', 30, 9); txt('= €79 IN 2020', 0, 8, 90, '#dc2626', { stroke: false }); ctx.restore(); }
+  }
+  foot();
+}
+function sWait(lt, t) {
+  room('#ede9fe');
+  hero({ x: 540, y: 1440, s: 1.45, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.2, re: -2.0 }, eyes: 'huge', mouth: 'o', mouthOpen: 10, hood: false });
+  note(820, 820, .5, 100, .3);
+  qmark(540, 560, t, at(4, .2), '#6d28d9', 190);
+}
+function sIce(lt, t) {
+  bgFill('#e0f2fe'); floor('#cbd5e1');
+  if (t > T.infl) { const k = eob(inv(T.infl, T.infl + .3, t)); txt('INFLATION', 540, 330, 130 * k, '#0369a1', { lw: 20 }); }
+  if (t < T.ice - .1) {
+    const items = [['BREAD', '+'], ['RENT', '+'], ['PIZZA', '+']];
+    if (t > T.more) items.forEach(([s], i) => { const kk = eob(inv(T.more + i * .3, T.more + i * .3 + .3, t)); ctx.save(); ctx.translate(220 + i * 320, 800); ctx.scale(kk, kk); box(-130, -100, 260, 200, '#fff', 20, 8); txt(s, 0, -24, 50, INK, { stroke: false }); txt('PRICE UP', 0, 40, 38, '#dc2626', { stroke: false }); ctx.restore(); });
+  } else {
+    const k = clamp((t - T.melt) / 4);
+    iceCube(540, 1300, 1.6, k, t);
+    hero({ x: 180, y: 1440, s: 1.0, pose: STAND, eyes: t > T.melt ? 'huge' : 'norm', mouth: t > T.melt ? 'o' : 'smile', look: 1, hood: false });
+  }
+}
+function sRate(lt, t) {
+  bgFill('#e0f2fe'); floor('#cbd5e1');
+  if (t > T.r28) { const k = eob(inv(T.r28, T.r28 + .3, t)); ctx.save(); ctx.translate(540, 360); ctx.scale(k, k); box(-330, -100, 660, 200, '#0369a1', 26, 10); txt('2.8% A YEAR', 0, 10, 100, '#fff', { lw: 12 }); ctx.restore(); }
+  else txt('RIGHT NOW IN GERMANY', 540, 360, 70, '#0369a1', { lw: 12 });
+  const years = ['2026', '2027', '2028', '2029'];
+  years.forEach((y, i) => { iceCube(180 + i * 240, 1300, .75, i * .22 + (t > T.zero ? clamp((t - T.zero) / 3) * .1 : 0), t); txt(y, 180 + i * 240, 1460, 46, '#334155', { stroke: false }); });
+  if (t > T.zero) { const k = eob(inv(T.zero, T.zero + .3, t)); ctx.save(); ctx.translate(540, 740); ctx.scale(k, k); box(-260, -80, 520, 160, '#fff', 30, 8); txt('0% INTEREST', 0, 6, 76, '#dc2626', { stroke: false }); ctx.restore(); }
+  foot();
+}
+function plant(x, y, s, k) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-90, -120, 180, 120, '#b45309', 16, 8); const h = 60 + 260 * k; line(0, -120, 0, -120 - h, 12, '#15803d'); for (let i = 0; i < Math.floor(k * 4) + 1; i++) { const yy = -150 - i * 70; ctx.save(); ctx.translate(0, yy); ctx.rotate(i % 2 ? .6 : -.6); ctx.fillStyle = '#22c55e'; ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(i % 2 ? 50 : -50, 0, 50, 24, 0, 0, 7); ctx.fill(); ctx.stroke(); ctx.restore(); } if (k > .6) { circ(0, -140 - h, 46, '#facc15', INK, 6); txt('€', 0, -136 - h, 52, '#92400e', { stroke: false, font: 'Nun' }); } ctx.restore(); }
+function sEnd(lt, t) {
+  bgFill('#dcfce7'); floor('#86efac');
+  const k = eo(inv(T.grow - .2, T.grow + 2.2, t));
+  plant(740, 1380, 1.2, k);
+  iceCube(300, 1380, .7, .5, t);
+  hero({ x: 520, y: 1440, s: 1.0, pose: STAND, eyes: 'norm', mouth: 'grin', look: 1, hood: false });
+  if (t > T.grow - .1) { txt('GROW AT LEAST', 540, 300, 84 * eob(inv(T.grow - .1, T.grow + .2, t)), '#15803d', { lw: 14 }); txt('AS FAST AS PRICES', 540, 400, 66 * eob(inv(T.grow, T.grow + .3, t)), '#15803d', { lw: 12 }); }
+  if (t > T.nfa) { const kk = eob(inv(T.nfa, T.nfa + .3, t)); ctx.save(); ctx.translate(540, 620); ctx.rotate(-.04); ctx.scale(kk, kk); box(-300, -60, 600, 120, '#1e293b', 20, 7); txt('NOT FINANCIAL ADVICE', 0, 4, 52, '#facc15', { stroke: false }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sMattress, push: .05 }, { t0: mid(0, 1), fn: sNote, push: .05, flash: .9 }, { t0: mid(1, 2), fn: sPrices, push: .04, xfade: .25 }, { t0: mid(3, 4), fn: sWait, push: .06, xfade: .2 }, { t0: mid(4, 5), fn: sIce, push: .04, xfade: .25 }, { t0: mid(6, 7), fn: sRate, push: .04, xfade: .25 }, { t0: mid(8, 9), fn: sEnd, push: .05, xfade: .3 }];
+const CAP = [["if you hid €100", "under your mattress", "in 2020,", "you lost about €21.", "without spending", "a cent."], ["the note still says", "100."], ["but prices in germany", "have gone up", "about 26%", "since then."], ["so your €100", "now buys what €79", "bought back then."], ["wait.", "how can money shrink", "if nobody touches it?"], ["you see,", "that's inflation.", "every year,", "most things cost", "a little more."], ["think of cash", "like an ice cube.", "leave it out,", "and it slowly melts."], ["right now,", "prices in germany", "are rising about", "2.8% a year."], ["so money that", "earns 0%", "melts a little", "every single year."], ["that's why people try", "to make their money grow", "at least as fast", "as prices.", "not financial advice.", "just maths."]];
+const HOT = new Set(["you lost about €21.", "a cent.", "100.", "about 26%", "now buys what €79", "if nobody touches it?", "that's inflation.", "and it slowly melts.", "2.8% a year.", "earns 0%", "every single year.", "at least as fast", "just maths."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

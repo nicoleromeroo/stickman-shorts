@@ -1,0 +1,97 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { no13: wt(0, 'there is no'), step: at(1, 0), btn: wt(1, 'thirteen'), glow: at(2, 0), glitch: at(3, 0), press: wt(3, 'then you press'), up: at(4, 0), ding: at(5, 0), open: wt(5, 'the doors'), hall: at(6, 0), back: at(7, 0), name: wt(8, 'someone calls'), own: at(9, 0) };
+function mtxt(s, x, y, size, col, opt) { ctx.save(); ctx.translate(x, y); ctx.scale(-1, 1); txt(s, 0, 0, size, col, opt); ctx.restore(); }
+function building(t) {
+  bgFill('#0f172a'); for (let i = 0; i < 40; i++) circ(rnd(i) * W, rnd(i + 5) * 600, 2 + rnd(i + 2) * 3, '#e2e8f0'); circ(860, 230, 70, '#f8fafc');
+  box(240, 420, 600, 1000, '#475569', 6, 10);
+  for (let f = 0; f < 6; f++) { const y = 1320 - f * 150; for (let w = 0; w < 3; w++) box(300 + w * 180, y - 70, 120, 90, (f === 5 && w === 1) ? '#fde68a' : (rnd(f * 3 + w) > .5 ? '#fef3c7' : '#1e293b'), 6, 6); txt(String(7 + f), 180, y - 24, 54, '#cbd5e1', { lw: 8 }); }
+  ctx.fillStyle = '#0f172a'; ctx.fillRect(-300, 1420, W + 600, 600); line(-300, 1420, W + 300, 1420, 8, '#334155');
+}
+function sBuilding(lt, t) {
+  building(t);
+  // floor 13 slot above 12 (roof)
+  const k = eob(inv(T.no13, T.no13 + .3, t));
+  ctx.save(); ctx.setLineDash([24, 18]); ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 8; rr(240, 250, 600, 150, 10); ctx.stroke(); ctx.restore();
+  txt('13?', 540, 330, 80, '#94a3b8', { lw: 10 });
+  if (t > T.no13) { ctx.save(); ctx.globalAlpha = k; line(300, 270, 780, 380, 16, '#ef4444'); line(780, 270, 300, 380, 16, '#ef4444'); ctx.restore(); }
+  // little arrow to your window (floor 12)
+  const y12 = 1320 - 5 * 150; txt('YOU', 540, y12 - 120, 50, '#facc15', { lw: 10 }); line(540, y12 - 95, 540, y12 - 75, 8, '#facc15');
+}
+function panel(x, y, s, t, show13, lit, pressK = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-110, -330, 220, 660, '#cbd5e1', 20, 8);
+  const nums = [12, 11, 10, 9, 8, 7]; nums.forEach((n, i) => { circ(-45 + (i % 2) * 90, -150 + Math.floor(i / 2) * 130, 42, '#f1f5f9', INK, 6); txt(String(n), -45 + (i % 2) * 90, -146 + Math.floor(i / 2) * 130, 40, INK, { stroke: false }); });
+  if (show13) { const g = lit ? .6 + .4 * Math.sin(t * 6) : 0; if (lit) spot(0, -260, 160, .6 * g, '255,80,80'); circ(0, -260, 50 * (1 - pressK * .1), lit ? '#fecaca' : '#f1f5f9', INK, 7); txt('13', 0, -256, 46, lit ? '#b91c1c' : INK, { stroke: false }); }
+  ctx.restore(); }
+function elevatorBg(openK = 0, beyond = null) {
+  bgFill('#64748b'); box(80, 180, 920, 1240, '#94a3b8', 10, 10); for (let i = 0; i < 6; i++) line(80 + i * 184, 180, 80 + i * 184, 1420, 4, '#7c8ea3');
+  ctx.fillStyle = '#475569'; ctx.fillRect(-300, 1380, W + 600, 800); line(-300, 1380, W + 300, 1380, 8);
+}
+function sElevator(lt, t) {
+  elevatorBg();
+  const show13 = t > T.btn - .1, lit = show13;
+  const pressing = t > T.press - .5;
+  const pk = eo(inv(T.press - .5, T.press, t));
+  panel(820, 1060, 1.0, t, show13, lit, t > T.press ? 1 : 0);
+  if (show13) { const k = eob(inv(T.btn - .1, T.btn + .2, t)); if (t < T.btn + .8) sparkle(820, 800, 120, 1 - inv(T.btn, T.btn + .8, t)); }
+  const reach = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: lerp(-.3, 2.55, pk), re: lerp(-.2, 0, pk) };
+  hero({ x: lerp(440, 650, pk), y: 1440, s: 1.55, pose: pressing ? reach : STAND, eyes: t > T.btn ? 'huge' : 'norm', mouth: t > T.glitch ? 'wavy' : 'flat', look: 1 });
+  if (t > T.press) impact(820, 800, 90, 1 - inv(T.press, T.press + .5, t));
+  if (t > T.glow && t < T.glitch) txt('NOBODY AROUND...', 540, 300, 70, '#e2e8f0', { lw: 12 });
+  if (t > T.glitch && t < T.press) txt('JUST A GLITCH?', 540, 300, 80, '#fde047', { lw: 14 });
+  darkness(.35, 600, 900, 900);
+}
+function sRide(lt, t) {
+  const openK = eo(inv(T.open, T.open + 1.0, t));
+  elevatorBg();
+  // floor display
+  box(340, 230, 400, 170, '#111827', 16, 8);
+  txt(t < T.ding ? '12' : '13', 500, 318, 100, t < T.ding ? '#4ade80' : '#f87171', { stroke: false, font: 'Nun' }); if (t < T.ding && Math.floor(t * 2) % 2) { ctx.fillStyle = '#4ade80'; ctx.beginPath(); ctx.moveTo(640, 270); ctx.lineTo(680, 340); ctx.lineTo(600, 340); ctx.closePath(); ctx.fill(); }
+  // doors
+  const dw = 360 * (1 - openK);
+  if (openK > 0) { ctx.save(); ctx.beginPath(); ctx.rect(180, 480, 720, 900); ctx.clip(); bgFill('#fde68a'); spot(540, 900, 600, .7, '255,250,220'); ctx.restore(); }
+  box(180, 480, dw, 900, '#cbd5e1', 4, 8); box(900 - dw, 480, dw, 900, '#cbd5e1', 4, 8);
+  hero({ x: 540, y: 1440, s: 1.25, pose: STAND, eyes: 'huge', mouth: t > T.ding ? 'o' : 'wavy', look: 0, bob: Math.sin(t * 20) * 2 });
+  if (t < T.ding) sweat(600, 1440 - 1.25 * 400, .8);
+  if (t > T.ding) { const k = eob(inv(T.ding, T.ding + .25, t)); txt('DING', 540, 640, 140 * k, '#facc15', { lw: 20 }); }
+}
+function plant(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-50, -90, 100, 90, '#b45309', 10, 7); for (let i = 0; i < 5; i++) { ctx.save(); ctx.rotate(-.8 + i * .4); ctx.fillStyle = '#16a34a'; ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(0, -170, 28, 80, 0, 0, 7); ctx.fill(); ctx.stroke(); ctx.restore(); } ctx.restore(); }
+function hall(t, flick = 0, dark = 0) {
+  bgFill('#e9d5b7'); for (let x = -300; x < W + 300; x += 80) { ctx.fillStyle = 'rgba(150,100,50,.12)'; ctx.fillRect(x, 0, 30, 1380); }
+  ctx.fillStyle = '#b91c1c'; ctx.fillRect(-300, 1380, W + 600, 800); line(-300, 1380, W + 300, 1380, 8);
+  const doors = [[60, 'B11'], [420, 'B21'], [780, 'C21']];
+  doors.forEach(([x, n]) => { box(x, 700, 240, 680, '#7c2d12', 6, 8); circ(x + 205, 1050, 14, '#fbbf24', INK, 5); box(x + 60, 760, 120, 70, '#fbbf24', 8, 6); mtxt(n, x + 120, 800, 50, INK, { stroke: false }); });
+  plant(330, 1380, .9);
+  if (flick) { const f = rnd(Math.floor(t * 8)) > .85 ? .35 : 0; ctx.fillStyle = `rgba(0,0,0,${f})`; ctx.fillRect(-300, -300, W + 600, H + 600); }
+  if (dark) darkness(dark, 540, 1000, 900);
+}
+function sHall(lt, t) {
+  const zoom = eio(inv(T.back, T.back + 1.2, t)) * (t < T.name - .4 ? 1 : 0);
+  ctx.save(); ctx.translate(540, 795); ctx.scale(1 + zoom * 1.6, 1 + zoom * 1.6); ctx.translate(-540, -795);
+  hall(t, 1, .25);
+  ctx.restore();
+  if (zoom < .3) hero({ x: 220, y: 1460, s: 1.15, pose: walkPose(t * 4, .5), eyes: 'huge', mouth: 'o', look: 1 });
+  if (t > T.hall && t < T.back) { txt('SAME PLANT.', 540, 260, 70, '#7c2d12', { lw: 12 }); }
+  if (t > T.back) { const k = eob(inv(T.back + .6, T.back + .9, t)); txt('BACKWARDS?!', 540, 300, 100 * k, '#dc2626', { lw: 18 }); }
+}
+function sVoice(lt, t) {
+  hall(t, 1, .62);
+  // you, turned towards the end of the hallway
+  hero({ x: 260, y: 1460, s: 1.15, pose: STAND, eyes: 'huge', mouth: t > T.own ? 'scream' : 'o', look: 1, lean: t > T.own ? -.08 : 0 });
+  // voice from the dark end
+  if (t > T.name) { const k = eob(inv(T.name, T.name + .3, t)); ctx.save(); ctx.translate(820, 620); ctx.scale(k, k); box(-180, -80, 360, 160, 'rgba(255,255,255,.92)', 40, 7); txt('...HEY?', 0, 6, 70, INK, { stroke: false }); ctx.restore(); }
+  // Echo silhouette appears on "in your own voice"
+  if (t > T.own - .2) { const a = inv(T.own - .2, T.own + 1.2, t); ctx.save(); ctx.globalAlpha = a * .9; hero({ x: 850, y: 1440, s: .95, flip: true, shirt: '#9ca3af', pose: STAND, eyes: 'norm', mouth: 'smirk', look: -1 }); ctx.restore(); spot(850, 1100, 260, .25 * a, '200,200,255'); }
+  if (t > T.own) { const k = eob(inv(T.own + .1, T.own + .4, t)); txt('YOUR VOICE.', 540, 300, 110 * k, '#f8fafc', { lw: 18 }); }
+  // end card
+  const endT = L[9].end + .3;
+  if (t > endT) { const k = eob(inv(endT, endT + .35, t)); ctx.save(); ctx.fillStyle = `rgba(0,0,0,${.6 * k})`; ctx.fillRect(-300, -300, W + 600, H + 600); ctx.translate(540, 860); ctx.scale(k, k); box(-380, -110, 760, 220, '#dc2626', 26, 10); txt('PART 2 TOMORROW', 0, 8, 84, '#fff', { lw: 12 }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sBuilding, push: .05 }, { t0: mid(0, 1), fn: sElevator, push: .05, flash: .8 }, { t0: mid(3, 4), fn: sRide, push: .04, xfade: .25 }, { t0: mid(5, 6), fn: sHall, push: .03, flash: 1 }, { t0: mid(7, 8), fn: sVoice, push: .07, xfade: .3 }];
+const CAP = [["you've lived on floor 12", "your whole life.", "there is no", "floor 13."], ["tonight,", "you step into the elevator.", "and there's a new button.", "13."], ["it's glowing.", "nobody else", "is around."], ["you tell yourself", "it's just a glitch.", "then you press it."], ["the elevator goes up.", "slowly.", "way longer than", "one floor should take."], ["ding.", "the doors open."], ["it's a hallway.", "exactly like yours.", "same plant,", "same carpet,", "same doors."], ["but every number", "on every door", "is backwards."], ["and then,", "from the end", "of the hallway,", "someone calls", "your name."], ["in your", "own voice."]];
+const HOT = new Set(["floor 13.", "13.", "it's glowing.", "then you press it.", "one floor should take.", "ding.", "exactly like yours.", "is backwards.", "your name.", "own voice."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>
