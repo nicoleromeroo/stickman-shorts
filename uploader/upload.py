@@ -39,7 +39,11 @@ def main():
     done = {u["tag"] for u in state["uploads"]}
     items = sorted(d for d in os.listdir(QUEUE) if d.startswith("video-") and os.path.isdir(os.path.join(QUEUE, d))) if os.path.isdir(QUEUE) else []
     if not items:
-        print("queue empty"); return
+        # still prove the YouTube connection works, so an expired token shows up as a failed run
+        from google.auth.transport.requests import Request
+        c = youtube()._http.credentials
+        c.refresh(Request())
+        print("queue empty; YouTube token OK"); return
     yt = None; now = datetime.datetime.now(datetime.timezone.utc)
     for tag in items:
         d = os.path.join(QUEUE, tag); vid = os.path.join(d, "video.mp4"); mp = os.path.join(d, "meta.json")
