@@ -1,0 +1,10 @@
+["You touch a door handle and zap! Why does that mostly happen in winter?",
+ "Every time you walk across a carpet or pull off a sweater, tiny electrons jump from one material to another.",
+ "Without noticing, you slowly fill up with electric charge.",
+ {"text":"Sometimes thousands of volts.","gap":0.4},
+ {"text":"Wait. Thousands of volts? Then why doesn't it zap you in summer?","gap":0.4},
+ "You see, in summer the air is humid. An invisible thin layer of water sits on everything and quietly drains your charge away.",
+ "But cold winter air holds much less water. And heating it up inside doesn't add any.",
+ "So the charge has nowhere to go. Until you touch metal.",
+ {"text":"Zap. All of it at once.","gap":0.4},
+ {"text":"Want fewer zaps? Keep your room between thirty and fifty percent humidity.","gap":0.5}]

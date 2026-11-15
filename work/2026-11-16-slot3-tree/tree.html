@@ -1,0 +1,93 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { day: wt(0, 'over two'), stand: wt(0, 'just for'), mil: wt(1, 'sixteen'), fav: at(2, 0), price: wt(2, 'twenty-five'), per: at(3, 0), tall: wt(4, 'one point'), f52: wt(4, 'fifty-two'), weeks: at(5, 0), wait: at(6, 0), days: wt(7, 'twenty-three'), perday: wt(7, 'about two'), hour: at(8, 0), sleep: wt(8, 'even while'), spruce: at(9, 0), cheap: wt(9, 'one fifty'), poke: wt(9, "but it's"), pain: wt(9, 'or in pain') };
+const ORN = ['#ef4444', '#facc15', '#3b82f6', '#f472b6', '#a855f7'];
+function tree(x, y, s, t, col = '#15803d', spiky = false) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-40, -20, 80, 100, '#78350f', 6, 7);
+  for (let i = 0; i < 3; i++) { ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); const w = 300 - i * 70, yy = -20 - i * 200; ctx.moveTo(-w, yy);
+    if (spiky) for (let j = 1; j < 8; j++) { const u = j / 8; ctx.lineTo(lerp(-w, 0, u) - 30, lerp(yy, yy - 300, u)); ctx.lineTo(lerp(-w, 0, u), lerp(yy, yy - 300, u)); }
+    ctx.lineTo(0, yy - 300); if (spiky) for (let j = 1; j < 8; j++) { const u = j / 8; ctx.lineTo(lerp(0, w, u) + 30, lerp(yy - 300, yy, u)); ctx.lineTo(lerp(0, w, u), lerp(yy - 300, yy, u)); } ctx.lineTo(w, yy); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  ctx.fillStyle = '#facc15'; ctx.beginPath(); for (let i = 0; i < 10; i++) { const r = i % 2 ? 22 : 54, a = -Math.PI / 2 + i * Math.PI / 5; ctx.lineTo(Math.cos(a) * r, -720 + Math.sin(a) * r); } ctx.closePath(); ctx.fill(); ctx.stroke();
+  for (let i = 0; i < 9; i++) { const row = Math.floor(i / 3), c = i % 3; const yy = -80 - row * 200, xx = (c - 1) * (200 - row * 60); circ(xx, yy, 24, ORN[(i + row) % 5], INK, 6); }
+  ctx.restore(); }
+function room() { bgFill('#fde7c7'); ctx.fillStyle = '#92400e'; ctx.fillRect(-300, 1380, W + 600, 800); line(-300, 1380, W + 300, 1380, 8); windowFrame(80, 380, 260, 300, '#1e3a8a'); }
+function tag(x, y, s, a, txt1, txt2, col = '#fff') { ctx.save(); ctx.translate(x, y); ctx.rotate(a); ctx.scale(s, s); ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-230, -90); ctx.lineTo(170, -90); ctx.lineTo(250, 0); ctx.lineTo(170, 90); ctx.lineTo(-230, 90); ctx.closePath(); ctx.fill(); ctx.stroke(); circ(180, 0, 16, '#fde7c7', INK, 6);
+  txt(txt1, -30, txt2 ? -22 : 6, 74, INK, { stroke: false }); if (txt2) txt(txt2, -30, 50, 42, '#b91c1c', { stroke: false }); ctx.restore(); }
+function coin(x, y, s) { circ(x, y, 36 * s, '#facc15', INK, 6 * s); txt('€', x, y + 4 * s, 44 * s, '#92400e', { stroke: false, font: 'Nun' }); }
+function foot() { txt('1.8 m Nordmann fir at €29/m (middle of €25–33), up 15 Dec – 6 Jan', 540, 1830, 30, '#cbd5e1', { stroke: false, font: 'Nun' }); txt('Prices 2026: Verband natürl. Weihnachtsbaum + BV Weihnachtsbaumerzeuger', 540, 1872, 26, '#cbd5e1', { stroke: false, font: 'Nun' }); }
+function sIntro(lt, t) {
+  room(); tree(680, 1360, 1.0, t);
+  hero({ x: 220, y: 1440, s: 1.2, pose: STAND, eyes: t > T.day ? 'huge' : 'norm', mouth: t > T.day ? 'o' : 'smile', look: 1, hood: false, scarf: '#e8453c' });
+  if (t > T.day) { const k = eob(inv(T.day, T.day + .3, t)); tag(560, 330, k, -.06, '€2+ / DAY'); }
+  if (t > T.stand) for (let i = 0; i < 5; i++) { const kk = ((t * .7 + i / 5) % 1); ctx.save(); ctx.globalAlpha = 1 - kk * .6; coin(560 + (i - 2) * 90, 560 + kk * 760, 1); ctx.restore(); }
+}
+function sMillion(lt, t) {
+  bgFill('#dcfce7'); floor('#f8fafc');
+  const n = Math.floor(clamp((t - mid(0, 1)) / 2) * 24);
+  for (let i = 0; i < n; i++) { const r = Math.floor(i / 6), c = i % 6; tree(110 + c * 172, 760 + r * 210, .22, t); }
+  if (t > T.mil) { const k = eob(inv(T.mil, T.mil + .3, t)); ctx.save(); ctx.translate(540, 1240); ctx.scale(k, k); box(-380, -110, 760, 220, '#166534', 30, 10); txt('16 MILLION', 0, -14, 100, '#fff', { lw: 12 }); txt('REAL TREES / YEAR', 0, 64, 44, '#bbf7d0', { stroke: false }); ctx.restore(); }
+  txt('GERMANY', 540, 300, 100, '#166534', { lw: 16 });
+}
+function sPrice(lt, t) {
+  bgFill('#ecfccb'); floor('#a3a3a3');
+  tree(380, 1360, 1.0, t);
+  txt('NORDMANN FIR', 540, 280, 96, '#15803d', { lw: 16 });
+  if (t > T.price) { const k = eob(inv(T.price, T.price + .3, t)); tag(760, 620, k * .95, .08, '€25–33', null, '#fef08a'); }
+  if (t > T.per) { const k = eob(inv(T.per, T.per + .25, t)); ctx.save(); ctx.translate(790, 900); ctx.rotate(-.1); ctx.scale(k, k); box(-230, -80, 460, 160, '#dc2626', 20, 10); txt('PER METER!', 0, 6, 76, '#fff', { lw: 10 }); ctx.restore();
+    hero({ x: 850, y: 1440, s: .9, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: -2.4, le: -.6, ra: 2.4, re: .6 }, eyes: 'huge', mouth: 'scream', hood: false }); }
+}
+function ruler(x, y0, y1, labels) { box(x - 30, y1, 60, y0 - y1, '#facc15', 8, 7); const n = 18; for (let i = 0; i <= n; i++) { const yy = lerp(y0, y1, i / n); line(x - 30, yy, x + (i % 5 ? -5 : 10), yy, 4); } labels.forEach(([u, s]) => txt(s, x + 110, lerp(y0, y1, u), 46, INK, { stroke: false })); }
+function sSize(lt, t) {
+  room();
+  const weeks = t > T.weeks - .1;
+  tree(480, 1360, 1.0, t);
+  if (!weeks) { ruler(860, 1440, 600, [[0, '0 m'], [.5, '0.9'], [1, '1.8 m']]); if (t > T.f52) { const k = eob(inv(T.f52, T.f52 + .3, t)); tag(560, 330, k, -.05, 'ABOUT €52'); } }
+  else { const k = eob(inv(T.weeks, T.weeks + .3, t)); ctx.save(); ctx.translate(850, 560); ctx.scale(k, k); box(-160, -170, 320, 340, '#fff', 20, 9); box(-160, -170, 320, 90, '#dc2626', 20, 9); txt('DEC', 0, -122, 54, '#fff', { stroke: false }); txt('3', 0, 40, 130, INK, { stroke: false }); txt('WEEKS', 0, 130, 46, INK, { stroke: false }); ctx.restore();
+    hero({ x: 860, y: 1440, s: .95, pose: STAND, eyes: 'norm', mouth: 'smile', hood: false, scarf: '#e8453c', look: -1 }); }
+}
+function sWait(lt, t) {
+  room(); tree(760, 1360, .75, t);
+  hero({ x: 330, y: 1440, s: 1.4, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.2, re: -2.0 }, eyes: 'huge', mouth: 'o', mouthOpen: 10, hood: false, scarf: '#e8453c', look: 1 });
+  qmark(330, 640, t, at(6, .2), '#7c2d12', 180);
+  txt('€52 FOR 3 WEEKS?', 540, 320, 84 * eob(inv(at(6, .3), at(6, .5), t)), '#dc2626', { lw: 14 });
+}
+function sMath(lt, t) {
+  bgFill('#1e293b');
+  const hourMode = t > T.hour - .1;
+  if (!hourMode) {
+    box(110, 420, 860, 760, '#f8fafc', 30, 10); txt('THE MATH', 540, 330, 90, '#facc15', { lw: 16 });
+    txt('€52.20', 540, 560, 110, INK, { stroke: false });
+    if (t > T.days) { txt('/ 23 DAYS', 540, 740, 96, '#2563eb', { stroke: false }); }
+    if (t > T.perday) { const k = eob(inv(T.perday, T.perday + .3, t)); line(220, 830, 860, 830, 10); ctx.save(); ctx.translate(540, 980); ctx.scale(k, k); txt('€2.27 / DAY', 0, 0, 110, '#16a34a', { stroke: false }); ctx.restore(); }
+  } else {
+    // night bedroom: hero sleeping, clock ticking coins
+    bgFill('#1e1b4b'); ctx.fillStyle = '#312e81'; ctx.fillRect(-300, 1380, W + 600, 800); line(-300, 1380, W + 300, 1380, 8);
+    box(120, 1220, 520, 120, '#f8fafc', 20, 8); box(120, 1180, 120, 80, '#fff', 20, 7);
+    ctx.save(); ctx.translate(380, 1215); ctx.rotate(-Math.PI / 2); hero({ x: 0, y: 0, s: .75, pose: STAND, eyes: 'closed', mouth: 'flat', hood: false, shadow: false }); ctx.restore();
+    box(110, 1260, 540, 90, '#60a5fa', 20, 8);
+    if (t > T.sleep) for (let i = 0; i < 3; i++) { const kk = ((t * .6 + i / 3) % 1); ctx.save(); ctx.globalAlpha = 1 - kk; txt('Z', 260 + kk * 120, 1100 - kk * 260 - i * 10, 60 + i * 14, '#fff', { lw: 10 }); ctx.restore(); }
+    tree(860, 1360, .5, t);
+    circ(540, 640, 170, '#fff', INK, 10); ctx.save(); ctx.translate(540, 640); ctx.rotate(t * 2); line(0, 0, 0, -130, 12, '#ef4444'); ctx.restore(); ctx.save(); ctx.translate(540, 640); ctx.rotate(t * .2); line(0, 0, 0, -90, 14); ctx.restore(); circ(540, 640, 14, INK);
+    const k = eob(inv(T.hour, T.hour + .3, t)); txt('9 CENTS / HOUR', 540, 320, 96 * k, '#facc15', { lw: 16 });
+    for (let i = 0; i < 3; i++) { const kk = ((t * .5 + i / 3) % 1); ctx.save(); ctx.globalAlpha = 1 - kk; coin(760 + kk * 120, 760 + kk * 400, .9); ctx.restore(); }
+  }
+  foot();
+}
+function sSpruce(lt, t) {
+  bgFill('#e0f2fe'); ctx.fillStyle = '#92400e'; ctx.fillRect(-300, 1380, W + 600, 800); line(-300, 1380, W + 300, 1380, 8);
+  tree(420, 1360, 1.0, t, '#5b8fa8', true);
+  if (t < T.pain) txt('BLUE SPRUCE', 540, 280, 96, '#0e7490', { lw: 16 });
+  if (t > T.cheap) { const k = eob(inv(T.cheap, T.cheap + .3, t)); tag(780, 520, k * .9, .06, '€1.50 / DAY', null, '#bbf7d0'); }
+  const ouch = t > T.poke;
+  hero({ x: 840, y: 1440, s: 1.05, pose: ouch ? { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.2, re: -1.6 } : STAND, eyes: ouch ? 'closed' : 'norm', mouth: ouch ? 'scream' : 'smile', look: -1, hood: false, flip: false });
+  if (ouch) { const k = eob(inv(T.poke, T.poke + .25, t)); txt('OUCH!', 820, 820, 110 * k, '#dc2626', { lw: 16 }); impact(720, 1030, 70, .8); }
+  if (t > T.pain) { const k = eob(inv(T.pain, T.pain + .3, t)); ctx.save(); ctx.translate(540, 290); ctx.rotate(-.05); ctx.scale(k, k); box(-330, -80, 660, 160, '#1e293b', 24, 9); txt('EUROS OR PAIN?', 0, 6, 74, '#facc15', { lw: 10 }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sIntro, push: .06 }, { t0: mid(0, 1), fn: sMillion, push: .04, flash: 1 }, { t0: mid(1, 2), fn: sPrice, push: .05, xfade: .25 }, { t0: mid(3, 4), fn: sSize, push: .05, xfade: .25 }, { t0: mid(5, 6), fn: sWait, push: .06, xfade: .2 }, { t0: mid(6, 7), fn: sMath, push: .04, flash: .8 }, { t0: mid(8, 9), fn: sSpruce, push: .06, xfade: .3 }];
+const CAP = [["your christmas tree", "costs you over", "€2 a day.", "just for", "standing there."], ["germans buy around", "16 million", "real christmas trees", "every year."], ["the favorite is", "the nordmann fir.", "this year it costs", "€25 to €33."], ["per meter!"], ["so a normal", "1.8 meter tree", "comes out at", "about €52."], ["and it stands", "in your living room", "for around 3 weeks."], ["wait.", "€52", "for 3 weeks?"], ["you see,", "from december 15th", "to january 6th,", "that's 23 days.", "about €2.27 a day."], ["or 9 cents", "every hour.", "even while you sleep."], ["a blue spruce", "is cheaper,", "about €1.50 a day.", "but it's way pokier.", "so you pay in euros,", "or in pain."]];
+const HOT = new Set(["€2 a day.", "16 million", "€25 to €33.", "per meter!", "about €52.", "for around 3 weeks.", "for 3 weeks?", "about €2.27 a day.", "every hour.", "about €1.50 a day.", "or in pain."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

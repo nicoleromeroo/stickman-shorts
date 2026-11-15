@@ -1,0 +1,84 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { half: wt(0, 'you lose'), except: wt(0, 'except'), fifties: wt(1, 'nineteen'), bundled: at(2, 0), heads: wt(2, 'but their'), course: at(3, 0), only: wt(3, 'it was the'), manual: at(4, 0), pct: wt(4, 'forty'), wait: at(5, 0), skin: at(6, 0), seven: wt(6, 'seven'), bmj: at(7, 0), heat: wt(7, 'seven to ten'), fair: wt(7, 'pretty much'), shorts: at(8, 0), legs: wt(8, 'your legs'), end: at(9, 0), pants: wt(9, 'also wear') };
+const headOf = (x, y, s) => [x, y - 368 * s];
+function beanie(x, y, s, col = '#e8453c') { const [hx, hy] = headOf(x, y, s); ctx.save(); ctx.translate(hx, hy); ctx.scale(s, s); ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(0, -34, 64, Math.PI, 0); ctx.closePath(); ctx.fill(); ctx.stroke(); box(-72, -46, 144, 28, '#fff', 12, 7); circ(0, -108, 18, '#fff', INK, 6); ctx.restore(); }
+function waves(x, y, n, t, s = 1, col = '#ef4444', spread = 60) { for (let i = 0; i < n; i++) { const k = ((t * .8 + i / n) % 1); ctx.save(); ctx.globalAlpha = (1 - k) * .9; ctx.strokeStyle = col; ctx.lineWidth = 9 * s; ctx.lineCap = 'round'; ctx.beginPath(); const bx = x + (i - (n - 1) / 2) * spread * s, by = y - k * 160 * s; ctx.moveTo(bx, by); ctx.bezierCurveTo(bx + 25 * s, by - 30 * s, bx - 25 * s, by - 60 * s, bx, by - 90 * s); ctx.stroke(); ctx.restore(); } }
+function sideWaves(x, y, n, t, s = 1) { for (let i = 0; i < n; i++) { const k = ((t * .8 + i / n) % 1); ctx.save(); ctx.globalAlpha = (1 - k) * .9; ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 9 * s; ctx.lineCap = 'round'; ctx.beginPath(); const bx = x + k * 140 * s * (i % 2 ? 1 : -1), by = y + (i - n / 2) * 50 * s; const d = i % 2 ? 1 : -1; ctx.moveTo(bx, by); ctx.bezierCurveTo(bx + d * 30 * s, by - 25 * s, bx + d * 60 * s, by + 25 * s, bx + d * 90 * s, by); ctx.stroke(); ctx.restore(); } }
+function cold(t) { bgFill('#bfdbfe'); floor('#f1f5f9'); snow(t, 45); }
+function credit() { txt('Source: British Medical Journal (2008), via Live Science', 540, 1880, 30, '#475569', { stroke: false, font: 'Nun' }); }
+function sIntro(lt, t) {
+  cold(t);
+  stick({ x: 800, y: 1440, s: 1.25, shirt: '#a855f7', pants: '#334155', hair: '#7c2d12', flip: true, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.6, re: -.5 }, mouth: 'o', mouthOpen: 14, look: 1, scarf: '#22c55e' });
+  beanie(800, 1440, 1.25, '#facc15');
+  hero({ x: 300, y: 1440, s: 1.25, pose: STAND, eyes: 'norm', mouth: 'flat', hood: false, look: 1 });
+  if (t < T.except - .1) bubble(640, 520, 'PUT ON A HAT!', 70);
+  if (t > T.half && t < T.except - .1) { const k = eob(inv(T.half, T.half + .3, t)); ctx.save(); ctx.translate(540, 760); ctx.scale(k, k); box(-330, -80, 660, 160, '#fff', 30, 8); txt('50% OF HEAT?!', 0, 6, 72, '#ef4444', { stroke: false }); ctx.restore(); }
+  if (t > T.except) { const k = eob(inv(T.except, T.except + .25, t)); ctx.save(); ctx.translate(540, 600); ctx.rotate(-.12); ctx.scale(k, k); box(-300, -110, 600, 220, 'rgba(255,255,255,.9)', 24, 12); ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 14; rr(-280, -90, 560, 180, 18); ctx.stroke(); txt('MYTH', 0, 14, 150, '#dc2626', { stroke: false }); ctx.restore(); }
+}
+function sExperiment(lt, t) {
+  cold(t);
+  const x = 540, y = 1440, s = 1.35;
+  hero({ x, y, s, pose: STAND, eyes: t > T.course ? 'norm' : 'closed', mouth: 'wavy', hood: false, look: 0 });
+  // bulky arctic suit covers everything except the head
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-150, -330, 300, 330, '#65a30d', 70, 9); box(-150, -60, 300, 60, '#3f6212', 20, 9); line(0, -320, 0, -70, 6, '#3f6212'); for (let i = 0; i < 4; i++) circ(0, -280 + i * 60, 9, '#facc15', INK, 4); ctx.restore();
+  if (t > T.heads) { const [hx, hy] = headOf(x, y, s); waves(hx, hy - 90, 4, t, 1.1); }
+  if (t > T.only) { const k = eob(inv(T.only, T.only + .3, t)); const [hx, hy] = headOf(x, y, s); ctx.save(); ctx.translate(hx + 260, hy - 40); ctx.scale(k, k); line(-60, 30, -170, 60, 12, '#facc15'); txt('ONLY THIS', 70, 0, 66, '#facc15', { lw: 14 }); txt('IS OUT!', 70, 70, 66, '#facc15', { lw: 14 }); ctx.restore(); }
+  sepia();
+  if (t > T.fifties) { const k = eob(inv(T.fifties, T.fifties + .3, t)); ctx.save(); ctx.translate(540, 300); ctx.scale(k, k); box(-260, -80, 520, 160, '#78350f', 20, 9); txt('1950s TEST', 0, 6, 80, '#fef3c7', { lw: 10 }); ctx.restore(); }
+}
+function sManual(lt, t) {
+  bgFill('#fef3c7');
+  ctx.save(); ctx.translate(540, 900); ctx.rotate(-.06);
+  box(-330, -420, 660, 840, '#3f6212', 24, 10); box(-290, -380, 580, 760, '#fefce8', 14, 7);
+  txt('ARMY', 0, -290, 70, INK, { stroke: false }); txt('FIELD MANUAL', 0, -210, 56, INK, { stroke: false }); line(-220, -150, 220, -150, 6);
+  for (let i = 0; i < 4; i++) line(-220, -90 + i * 50, 220 - (i % 2) * 80, -90 + i * 50, 8, '#cbd5e1');
+  if (t > T.pct) { const k = eob(inv(T.pct, T.pct + .3, t)); ctx.save(); ctx.translate(0, 210); ctx.scale(k, k); txt('40–45%', 0, 0, 150, '#dc2626', { lw: 16 }); txt('OF HEAT VIA HEAD', 0, 110, 48, INK, { stroke: false }); ctx.restore(); }
+  ctx.restore();
+}
+function sWait(lt, t) {
+  cold(t);
+  hero({ x: 540, y: 1440, s: 1.5, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.2, re: -2.0 }, eyes: 'huge', mouth: 'o', mouthOpen: 10, hood: false });
+  qmark(540, 560, t, at(5, .2), '#1e3a8a', 200);
+}
+function sBody(lt, t) {
+  bgFill('#ecfeff');
+  const x = 360, y = 1500, s = 1.45;
+  hero({ x, y, s, pose: STAND, eyes: 'norm', mouth: 'smile', hood: false, look: 1 });
+  const [hx, hy] = headOf(x, y, s);
+  ctx.save(); ctx.globalAlpha = .5 + .3 * Math.sin(t * 5); ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 14; ctx.beginPath(); ctx.arc(hx, hy, 115, 0, 7); ctx.stroke(); ctx.restore();
+  if (t > T.seven) { const k = eob(inv(T.seven, T.seven + .3, t)); ctx.save(); ctx.translate(780, 520); ctx.scale(k, k); box(-230, -110, 460, 220, '#f59e0b', 30, 9); txt('~7%', 0, -16, 100, '#fff', { lw: 12 }); txt('OF YOUR SKIN', 0, 66, 44, '#fff', { stroke: false }); ctx.restore(); }
+  if (t > T.heat) { const k = eob(inv(T.heat, T.heat + .3, t)); ctx.save(); ctx.translate(780, 900); ctx.scale(k, k); box(-230, -110, 460, 220, '#ef4444', 30, 9); txt('7–10%', 0, -16, 96, '#fff', { lw: 12 }); txt('OF YOUR HEAT', 0, 66, 44, '#fff', { stroke: false }); ctx.restore(); }
+  if (t > T.fair) { const k = eob(inv(T.fair, T.fair + .3, t)); ctx.save(); ctx.translate(780, 1200); ctx.rotate(-.06); ctx.scale(k, k); box(-210, -70, 420, 140, '#16a34a', 20, 8); txt('FAIR SHARE', 0, 6, 64, '#fff', { stroke: false }); ctx.restore(); }
+  if (t > T.bmj) txt('BRITISH MEDICAL JOURNAL', 540, 260, 56, '#0e7490', { lw: 10 });
+  credit();
+}
+function sShorts(lt, t) {
+  cold(t);
+  const x = 540, y = 1440, s = 1.45;
+  hero({ x, y, s, pose: { lt: .12, ls: 0, rt: -.12, rs: 0, la: .5, le: .4, ra: -.5, re: -.4 }, eyes: 'huge', mouth: 'wavy', hood: false, pants: '#fcd5b4', lean: Math.sin(t * 30) * .02 });
+  beanie(x, y, s);
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-58, -170, 116, 80, '#2563eb', 14, 8); ctx.restore();
+  const [hx, hy] = headOf(x, y, s);
+  waves(hx, hy - 90, 1, t, .9);
+  if (t > T.legs) { sideWaves(x - 120, y - 100, 6, t, 1.2); sideWaves(x + 120, y - 100, 6, t, 1.2); txt('LEGS: WAY MORE', 540, 360, 80, '#dc2626', { lw: 14 }); }
+}
+function sEnd(lt, t) {
+  cold(t);
+  const x = 540, y = 1440, s = 1.5;
+  const pantsOn = t > T.pants;
+  hero({ x, y, s, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.6, re: 0 }, eyes: 'norm', mouth: 'grin', hood: false, pants: pantsOn ? '#334155' : '#fcd5b4', scarf: '#e8453c' });
+  beanie(x, y, s);
+  if (!pantsOn) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-58, -170, 116, 80, '#2563eb', 14, 8); ctx.restore(); }
+  const k = eob(inv(at(9, .1), at(9, .3), t)); txt('HAT', 300, 380, 110 * k, '#e8453c', { lw: 16 });
+  if (pantsOn) { const k2 = eob(inv(T.pants, T.pants + .3, t)); txt('+ PANTS', 680, 380, 110 * k2, '#334155', { lw: 16 }); }
+}
+const SCENES = [{ t0: 0, fn: sIntro, push: .06 }, { t0: mid(0, 1), fn: sExperiment, push: .05, flash: 1 }, { t0: mid(3, 4), fn: sManual, push: .05, xfade: .25 }, { t0: mid(4, 5), fn: sWait, push: .06, xfade: .2 }, { t0: mid(5, 6), fn: sBody, push: .04, xfade: .25 }, { t0: mid(7, 8), fn: sShorts, push: .06, flash: .8 }, { t0: mid(8, 9), fn: sEnd, push: .07, xfade: .3 }];
+const CAP = [["put on a hat!", "you lose half", "your body heat", "through your head.", "except,", "you don't."], ["this idea comes from", "old military experiments", "in the 1950s."], ["people were bundled up", "in warm clothes,", "but their heads", "were left uncovered."], ["of course most heat", "escaped through the head.", "it was the only part", "sticking out!"], ["an army field manual", "even claimed", "40 to 45%."], ["wait.", "so how much", "is it really?"], ["you see,", "your head is only", "about 7%", "of your skin."], ["and according to the", "british medical journal,", "it loses about", "7 to 10%", "of your heat.", "pretty much", "its fair share."], ["go outside in shorts,", "and your legs", "would lose way more."], ["so yes,", "wear the hat.", "but maybe", "also wear pants."]];
+const HOT = new Set(["through your head.", "you don't.", "in the 1950s.", "were left uncovered.", "sticking out!", "40 to 45%.", "is it really?", "about 7%", "7 to 10%", "its fair share.", "would lose way more.", "also wear pants."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

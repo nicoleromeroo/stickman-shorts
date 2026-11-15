@@ -1,0 +1,104 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { zap0: wt(0, 'zap'), why: wt(0, 'why'), carpet: wt(1, 'carpet'), sweater: wt(1, 'sweater'), elec: wt(1, 'tiny electrons'), fill: at(2, 0), volts: at(3, 0), wait: at(4, 0), summer: at(5, 0), drain: wt(5, 'quietly drains'), winter: at(6, 0), heat: wt(6, 'and heating'), nowhere: at(7, 0), metal: wt(7, 'until you'), zap: at(8, 0), tip: at(9, 0), pct: wt(9, 'between') };
+const POSE_REACH = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.45, re: -.1 };
+function bolt(x1, y1, x2, y2, t, w = 14, col = '#facc15') { const n = 7; ctx.save(); ctx.lineJoin = 'round'; ctx.beginPath(); for (let i = 0; i <= n; i++) { const u = i / n; const j = (i && i < n) ? (rnd(i + Math.floor(t * 20)) - .5) * 70 : 0; const x = lerp(x1, x2, u) + j, y = lerp(y1, y2, u) + j * .6; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+  ctx.strokeStyle = INK; ctx.lineWidth = w + 10; ctx.stroke(); ctx.strokeStyle = col; ctx.lineWidth = w; ctx.stroke(); ctx.restore(); }
+function door(x, y) { box(x, y - 760, 360, 760, '#92400e', 8, 9); box(x + 40, y - 700, 280, 260, '#a16207', 8, 6); box(x + 40, y - 400, 280, 330, '#a16207', 8, 6); box(x + 20, y - 450, 90, 26, '#cbd5e1', 12, 6); circ(x + 40, y - 437, 20, '#e5e7eb', INK, 6); }
+function room(col = '#e0e7ff') { bgFill(col); floor('#a5b4fc'); }
+function charge(x, y, s, neg = true) { circ(x, y, 26 * s, neg ? '#38bdf8' : '#f87171', INK, 5 * s); txt(neg ? '–' : '+', x, y + 4 * s, 44 * s, '#fff', { stroke: false, font: 'Nun' }); }
+function credit() { txt('Sources: Univ. of Kentucky physics, EPA', 540, 1880, 30, '#64748b', { stroke: false, font: 'Nun' }); }
+function sDoor(lt, t) {
+  room();
+  door(640, 1380);
+  const k = eo(inv(0, T.zap0, t));
+  const zapped = t > T.zap0 - .05;
+  hero({ x: lerp(220, 430, k), y: 1440, s: 1.35, pose: zapped ? { lt: .05, ls: 0, rt: -.05, rs: 0, la: -2.4, le: -.6, ra: 2.2, re: .4 } : POSE_REACH, eyes: zapped ? 'huge' : 'norm', mouth: zapped ? 'scream' : 'flat', look: 1, lean: zapped ? -.12 : 0 });
+  if (zapped && t < T.zap0 + .9) { const a = 1 - inv(T.zap0, T.zap0 + .9, t); ctx.save(); ctx.globalAlpha = a; bolt(560, 920, 680, 940, t, 16); impact(660, 940, 140, a); ctx.restore(); txt('ZAP!', 760, 620, 150 * eob(inv(T.zap0, T.zap0 + .25, t)), '#facc15', { lw: 22 }); }
+  if (t > T.why) { const kk = eob(inv(T.why, T.why + .3, t)); ctx.save(); ctx.translate(540, 330); ctx.scale(kk, kk); box(-370, -90, 740, 180, '#0ea5e9', 30, 9); txt('WHY IN WINTER?', 0, 6, 80, '#fff', { lw: 12 }); ctx.restore(); snow(t, 30, .8); }
+}
+function sCharge(lt, t) {
+  bgFill('#fef9c3'); ctx.fillStyle = '#b91c1c'; ctx.fillRect(-300, 1380, W + 600, 800); line(-300, 1380, W + 300, 1380, 8);
+  for (let i = 0; i < 12; i++) line(i * 100 - 40, 1420, i * 100 + 20, 1500, 5, '#7f1d1d');
+  const sw = t > T.sweater - .1 && t < T.fill;
+  const walk = t < T.sweater - .1 || t > T.fill;
+  const x = 300 + Math.sin(t * 1.3) * 120;
+  const p = walk ? walkPose(t * 7) : { lt: .05, ls: 0, rt: -.05, rs: 0, la: -2.7, le: -.3, ra: 2.7, re: .3 };
+  const q = clamp((t - T.elec) / (at(3, 0) - T.elec));
+  hero({ x, y: 1440, s: 1.25, pose: p, eyes: t > T.volts ? 'huge' : 'norm', mouth: t > T.volts ? 'o' : 'smile', look: 1, hood: !sw });
+  if (sw) { box(x - 110, 1440 - 1.25 * 470, 220, 90, '#f97316', 30, 7); txt('SWEATER', x, 1440 - 1.25 * 470 + 46, 34, '#fff', { stroke: false }); }
+  // electrons hopping on
+  if (t > T.elec) for (let i = 0; i < 8; i++) { const kk = ((t * .9 + i / 8) % 1); const sx = 100 + rnd(i) * 880, sy = 1470; charge(lerp(sx, x, eo(kk)), lerp(sy, 1100, eo(kk)) - Math.sin(kk * Math.PI) * 200, .9); }
+  // charge meter
+  meter(930, 1150, 'CHARGE', .05 + .95 * q, q > .8 ? '#ef4444' : '#38bdf8');
+  if (t > T.carpet) txt(t < T.sweater ? 'CARPET' : (t < T.fill ? 'SWEATER' : 'FILLING UP...'), 540, 300, 90, '#7c3aed', { lw: 16 });
+  if (t > T.volts) { const kk = eob(inv(T.volts, T.volts + .3, t)); ctx.save(); ctx.translate(540, 520); ctx.rotate(-.06); ctx.scale(kk, kk); box(-400, -100, 800, 200, '#facc15', 26, 10); txt('1000s OF VOLTS', 0, 8, 86, INK, { stroke: false }); ctx.restore(); }
+}
+function sWait(lt, t) {
+  bgFill('#1e293b');
+  ctx.fillStyle = '#fde68a'; ctx.fillRect(0, 0, 540, H); ctx.fillStyle = '#bfdbfe'; ctx.fillRect(540, 0, 540, H); line(540, 0, 540, H, 10);
+  circ(270, 420, 110, '#facc15', INK, 8); for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4 + t; line(270 + Math.cos(a) * 140, 420 + Math.sin(a) * 140, 270 + Math.cos(a) * 190, 420 + Math.sin(a) * 190, 10, '#f59e0b'); }
+  ctx.save(); ctx.beginPath(); ctx.rect(540, 0, 540, H); ctx.clip(); snow(t, 30); ctx.restore();
+  txt('SUMMER', 270, 660, 80, '#fff', { lw: 14 }); txt('WINTER', 810, 660, 80, '#fff', { lw: 14 });
+  hero({ x: 270, y: 1440, s: 1.0, pose: STAND, mouth: 'smile', eyes: 'norm', hood: false });
+  hero({ x: 810, y: 1440, s: 1.0, pose: STAND, mouth: 'o', eyes: 'huge', scarf: '#e8453c', look: -1 });
+  bolt(700, 900, 760, 1020, t, 10);
+  qmark(540, 1640 - 520, t, at(4, .3), '#ffffff', 170);
+}
+function droplet(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#7dd3fc'; ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(0, -28); ctx.quadraticCurveTo(24, 0, 0, 20); ctx.quadraticCurveTo(-24, 0, 0, -28); ctx.fill(); ctx.stroke(); ctx.restore(); }
+function sScience(lt, t) {
+  const summer = t < T.winter - .15;
+  bgFill(summer ? '#fef3c7' : '#e0f2fe'); floor(summer ? '#fcd34d' : '#94a3b8');
+  txt(summer ? 'HUMID AIR' : 'DRY AIR', 540, 280, 100, summer ? '#f59e0b' : '#0ea5e9', { lw: 18 });
+  const x = 380;
+  hero({ x, y: 1440, s: 1.3, pose: STAND, mouth: summer ? 'smile' : 'o', eyes: summer ? 'norm' : 'huge', look: 1, scarf: summer ? null : '#e8453c' });
+  if (summer) {
+    // water film around body
+    ctx.save(); ctx.globalAlpha = .35 + .15 * Math.sin(t * 4); ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 26; ctx.beginPath(); ctx.ellipse(x, 1120, 210, 380, 0, 0, 7); ctx.stroke(); ctx.restore();
+    for (let i = 0; i < 10; i++) droplet(x + Math.cos(i * .63 + t) * 210, 1120 + Math.sin(i * .63 + t) * 380, .9);
+    if (t > T.drain) for (let i = 0; i < 5; i++) { const kk = ((t * .7 + i / 5) % 1); ctx.save(); ctx.globalAlpha = 1 - kk; charge(x + 120 + kk * 420, 1000 + i * 70 + kk * 300, .9); ctx.restore(); }
+    if (t > T.drain) txt('CHARGE DRAINS AWAY', 760, 760, 46, '#0369a1', { lw: 8 });
+  } else {
+    // charges piling up on body
+    const n = Math.floor(4 + 18 * clamp((t - T.winter) / 4));
+    for (let i = 0; i < n; i++) charge(x + Math.cos(i * 2.4) * (60 + (i % 4) * 30), 980 + Math.sin(i * 2.4) * 200 + (i % 3) * 40, .85);
+    // thermometer and empty glass
+    box(780, 820, 70, 420, '#fff', 35, 7); box(792, 1000, 46, 230, '#ef4444', 23, 0); circ(815, 1250, 55, '#ef4444', INK, 7);
+    if (t > T.heat) { txt('HEATING', 815, 760, 50, '#ef4444', { lw: 10 }); bubble(815, 620, '+0 WATER', 44); }
+  }
+}
+function sZap(lt, t) {
+  room('#ede9fe');
+  door(660, 1380);
+  const zapT = T.zap;
+  const k = eo(inv(T.nowhere, T.metal + .3, t));
+  const zapped = t > zapT;
+  const n = 14; if (!zapped) for (let i = 0; i < n; i++) charge(lerp(240, 430, k) + Math.cos(i * 2.4 + t) * 90, 1040 + Math.sin(i * 2.4 + t) * 220, .8);
+  hero({ x: lerp(240, 450, k), y: 1440, s: 1.35, pose: zapped ? { lt: .3, ls: .2, rt: -.3, rs: .2, la: -2.6, le: -.4, ra: 2.6, re: .4 } : POSE_REACH, eyes: zapped ? 'huge' : 'norm', mouth: zapped ? 'scream' : 'flat', look: 1, lean: zapped ? -.15 : 0 });
+  if (t > T.metal && !zapped) txt('METAL...', 860, 560, 70, '#64748b', { lw: 12 });
+  if (zapped) { const a = clamp(1 - (t - zapT) / 1.6); bolt(560, 920, 700, 940, t, 20); bolt(600, 900, 680, 700, t + 1, 12); bolt(600, 930, 520, 1150, t + 2, 12); impact(690, 940, 200, a); txt('ZAP!', 540, 400, 200 * eob(inv(zapT, zapT + .25, t)), '#facc15', { lw: 26 }); }
+}
+function hygro(x, y, s, v) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); circ(0, 0, 170, '#fff', INK, 10);
+  ctx.lineWidth = 34; ctx.strokeStyle = '#22c55e'; ctx.beginPath(); ctx.arc(0, 0, 125, Math.PI * (1 + .3), Math.PI * (1 + .5)); ctx.stroke();
+  ctx.save(); ctx.rotate((v - .5) * Math.PI); line(0, 0, 0, -130, 12, '#ef4444'); ctx.restore(); circ(0, 0, 16, INK);
+  txt('HUMIDITY', 0, 80, 34, INK, { stroke: false }); ctx.restore(); }
+function sTip(lt, t) {
+  bgFill('#dcfce7'); floor('#86efac');
+  // humidifier
+  box(700, 1100, 220, 280, '#f8fafc', 40, 9); circ(810, 1200, 40, '#7dd3fc', INK, 6);
+  for (let i = 0; i < 4; i++) { const kk = ((t * .6 + i / 4) % 1); ctx.save(); ctx.globalAlpha = (1 - kk) * .7; circ(810 + Math.sin(kk * 6 + i) * 30, 1080 - kk * 360, 30 + kk * 40, '#e2e8f0'); ctx.restore(); }
+  hero({ x: 330, y: 1440, s: 1.3, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.6, re: 0 }, eyes: 'norm', mouth: 'grin', look: 1 });
+  const v = lerp(.15, .4, eo(inv(T.pct, T.pct + 1.5, t)));
+  hygro(540, 620, 1.1, v);
+  if (t > T.pct) { const kk = eob(inv(T.pct, T.pct + .3, t)); ctx.save(); ctx.translate(540, 300); ctx.scale(kk, kk); box(-300, -80, 600, 160, '#16a34a', 30, 9); txt('30 – 50 %', 0, 6, 90, '#fff', { lw: 12 }); ctx.restore(); }
+  credit();
+}
+const SCENES = [{ t0: 0, fn: sDoor, push: .06 }, { t0: mid(0, 1), fn: sCharge, push: .04, flash: 1 }, { t0: mid(3, 4), fn: sWait, push: .05, xfade: .25 }, { t0: mid(4, 5), fn: sScience, push: .04, xfade: .25 }, { t0: mid(6, 7), fn: sZap, push: .06, xfade: .2 }, { t0: mid(8, 9), fn: sTip, push: .05, xfade: .3 }];
+const CAP = [["you touch a door handle", "and ZAP!", "why does that", "mostly happen", "in winter?"], ["every time you walk", "across a carpet", "or pull off a sweater,", "tiny electrons jump", "from one material", "to another."], ["without noticing,", "you slowly fill up", "with electric charge."], ["sometimes", "thousands of volts."], ["wait.", "thousands of volts?", "then why doesn't it", "zap you in summer?"], ["you see,", "in summer", "the air is humid.", "an invisible thin layer", "of water sits on everything", "and quietly drains", "your charge away."], ["but cold winter air", "holds much less water.", "and heating it up inside", "doesn't add any."], ["so the charge", "has nowhere to go.", "until you", "touch metal."], ["ZAP.", "all of it at once."], ["want fewer zaps?", "keep your room between", "30 and 50%", "humidity."]];
+const HOT = new Set(["and ZAP!", "in winter?", "tiny electrons jump", "with electric charge.", "thousands of volts.", "zap you in summer?", "the air is humid.", "your charge away.", "doesn't add any.", "touch metal.", "ZAP.", "30 and 50%"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>
