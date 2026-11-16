@@ -9,17 +9,19 @@ enough, queue fewer videos rather than a bad one.
 ## Schedule (Europe/Berlin) — one fixed format per slot
 | slot tag | time  | format | priority |
 |---|---|---|---|
-| slot1 | 08:00 | FACTS — "why does this happen?" science, alternating with myth-busters | 5 |
-| slot4 | 10:30 | POP CULTURE: CELEBRITY / SINGER / MOVIE / GAMING facts (rules in Step 1, point 4) | 2 |
-| slot2 | 12:30 | FINANCE — money with real numbers, teen angle. Description ends with "Not financial advice." | 3 |
-| slot5 | 15:30 | WHAT IF…? scenario (rules in Step 1, point 4) | 4 |
-| slot3 | 18:00 | SERIES — next episode of the running series (`series.md`) | 1 |
+| slot1 | 06:00 | FACTS — "why does this happen?" science, alternating with myth-busters | 5 |
+| slot4 | 11:30 | POP CULTURE: CELEBRITY / SINGER / MOVIE / GAMING facts (rules in Step 1, point 4) | 2 |
+| slot2 | 16:00 | FINANCE — money with real numbers, teen angle. Description ends with "Not financial advice." | 3 |
+| slot5 | 18:30 | WHAT IF…? scenario (rules in Step 1, point 4) | 4 |
+| slot3 | 20:00 | SERIES — next episode of the running series (`series.md`) | 1 |
 - Slot tags keep their numbers (slot4/slot5 were added later); the tag decides the time, not the order.
+- Publish times changed on 16 Nov (Nicole): 06:00 / 11:30 / 16:00 / 18:30 / 20:00, valid from 17 Nov. Series
+  descriptions say "Part N tomorrow at 20:00".
 - **Which slots to make:** a slot of tomorrow is filled if `video-<YYYYMMDD>-slot<N>` is on the `queue`
   branch or in `state.json` (unless topics_log.md says it is held). Make the missing ones in priority order
   (1 = first), **at most 3 per run**. If all 5 are filled, finish with a short "nothing to do" summary.
 - Always for the **next calendar day**. `publish_at` in meta.json is ISO 8601 with the Berlin offset,
-  e.g. `2026-11-17T08:00:00+01:00` (use +02:00 during summer time).
+  e.g. `2026-11-17T06:00:00+01:00` (use +02:00 during summer time).
 - Before pushing anything, `git pull --rebase` (the other run may have pushed in between).
 
 ## Step 0 — setup
@@ -170,7 +172,7 @@ bash engine/setup.sh
 {"title": "Why You Can't Tickle Yourself 🤔 #shorts",
  "description": "<1–2 sentence hook caption>\n\nSources: <short source names>\n\n#shorts #science #funfacts",
  "tags": ["shorts", "science", "fun facts"],
- "publish_at": "2026-11-17T08:00:00+01:00",
+ "publish_at": "2026-11-17T06:00:00+01:00",
  "category_id": "27",
  "made_for_kids": false}
 ```

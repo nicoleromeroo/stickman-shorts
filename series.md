@@ -1,5 +1,5 @@
 # Series bible + episode log
-The SERIES slot (18:00) continues the series below. When it is finished, start a new one (see CLAUDE.md Step 1b).
+The SERIES slot (20:00) continues the series below. When it is finished, start a new one (see CLAUDE.md Step 1b).
 (Floor 13 was drafted on 2026-11-15 but dropped before upload; Nicole wanted more Gen Z / Gen Alpha hooks.)
 
 ## Current series: RESPAWN (6 parts) — music preset: `tense` for action, `mystery` allowed for quiet parts
