@@ -171,6 +171,9 @@ cd $QD && git add -A && git commit -m "queue <date>" && git push origin HEAD:que
 cd - && (git worktree remove --force $QD 2>/dev/null || rm -rf $QD)
 ```
 If the push is rejected (the Action just cleaned the branch), redo the fetch/worktree step and push again.
+After pushing, **start the upload right away**: trigger the `upload.yml` workflow (workflow_dispatch on `main`,
+GitHub MCP `actions_run_trigger` → `run_workflow`). GitHub's scheduled :23 runs are often skipped or delayed by hours,
+so don't rely on them. A minute later, check `state.json` on main to confirm each tag shows up with mode "scheduled".
 Push all videos of this run in one commit. Never put mp4/wav files on `main`.
 
 ## Step 8 — log
