@@ -5,6 +5,12 @@ news changed (e.g. a launch got moved). Cross a topic off by moving it to "Done"
 Every video gets a **comment prompt** (rules in CLAUDE.md Step 3). The planned question is a suggestion; keep it
 honest and answerable in one word.
 
+## Channel baseline (Studio, 16 Nov)
+- Most Shorts stall at ~1,100–1,500 views within ~10 h (stuck in the first test audience).
+- RESPAWN Part 1 (0:37): 1,505 views, 59.8 % viewed vs 40.2 % swiped away, avg view 0:29 (~78 %), 20 likes, +4 subs.
+- Channel: 17 subscribers. Goal: per-video 5k → 10k → 100k; monetization needs 1,000 subs + 10M Shorts views / 90 days.
+- Lever: lower the swipe-away rate (hook in frame 0), more likes/comments (comment prompt).
+
 ## Daily plan
 | day | 06:00 FACTS | 11:30 POP CULTURE / GAMING | 16:00 FINANCE | 18:30 WHAT IF | 20:00 SERIES |
 |---|---|---|---|---|---|

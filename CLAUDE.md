@@ -120,7 +120,7 @@ bash engine/setup.sh
   bible there first: title, premise (second-person "you" mystery/survival/adventure, PG, no gore),
   main characters with fixed looks (shirt colours, hair etc. so drawings stay consistent),
   setting, and a rough arc for all episodes, with a satisfying final episode.
-- Each episode: 2-second recap line at the start from Episode 2 on ("Last time, …"), one clear
+- Each episode: from Episode 2 on, a 1-line cold open (this episode's big moment), then a 2-second recap line ("Last time, …"), one clear
   event, and a cliffhanger at the end. Last on-screen card: "PART <N+1> TOMORROW" (final episode: "THE END").
 - Title format: `<Series title> (Part N) #shorts`. Same music preset for the whole series.
 - After building, append to `series.md`: episode number, date, a 2–3 sentence summary, the cliffhanger.
@@ -139,6 +139,11 @@ bash engine/setup.sh
   ("It's 2 AM. You said one more video... 47 videos ago." / "Your Short just hit one million views.")
   — never an intro, never a dry fact like "Today in Munich the sun sets at…". Frame 0 must already
   show the situation plus a big on-screen text/number.
+- **Win the first second (Nicole's stats 16 Nov: ~40 % swipe away, but those who stay watch ~78 %):** the swipe
+  is the bottleneck, not the middle. Frame 0 = a character already moving + ≤5 big words (a number or a question),
+  first spoken words are the most surprising thing in the video. Never open on a recap, intro, sepia still or
+  title card. **Series:** cold open with the most dramatic moment of THIS episode (1 line), then "Last time…" recap
+  in one short line, then the episode.
 - **Gen Z / Gen Alpha interests first:** phones, social media, gaming, school, sleep, creators/YouTube,
   AI, money for things *they* buy (phones, sneakers, games, food), "what if" scenarios, gross/awe facts.
   Adult topics (heating bills, pensions, taxes) only with a teen angle.
