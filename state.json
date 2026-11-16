@@ -1,5 +1,5 @@
 {
- "uploaded_count": 16,
+ "uploaded_count": 18,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -129,6 +129,22 @@
    "mode": "scheduled 2026-11-18T15:00:00Z",
    "publish_at": "2026-11-18T16:00:00+01:00",
    "uploaded_at": "2026-11-16T15:41:00+00:00"
+  },
+  {
+   "tag": "video-20261117-slot1",
+   "video_id": "salge6VrZfI",
+   "title": "Do Goldfish Really Have a 3-Second Memory? \ud83d\udc20 #shorts",
+   "mode": "scheduled 2026-11-17T05:00:00Z",
+   "publish_at": "2026-11-17T06:00:00+01:00",
+   "uploaded_at": "2026-11-16T19:52:18+00:00"
+  },
+  {
+   "tag": "video-20261117-slot5",
+   "video_id": "pVQnuhG03Rw",
+   "title": "What If School Started at 10 AM? \u23f0 #shorts",
+   "mode": "scheduled 2026-11-17T17:30:00Z",
+   "publish_at": "2026-11-17T18:30:00+01:00",
+   "uploaded_at": "2026-11-16T19:52:18+00:00"
   }
  ]
 }
