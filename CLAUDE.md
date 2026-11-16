@@ -144,6 +144,11 @@ bash engine/setup.sh
   first spoken words are the most surprising thing in the video. Never open on a recap, intro, sepia still or
   title card. **Series:** cold open with the most dramatic moment of THIS episode (1 line), then "Last time…" recap
   in one short line, then the episode.
+- **Hook patterns that worked (stay rate ~70 %):** a challenge the viewer can do right now ("Try to tickle yourself
+  right now. Go on.") or a belief everyone knows, flipped in the same breath ("Put on a hat! You lose half your heat
+  through your head. Except, you don't."). **Weak (46–53 %):** news statements ("The new X movie comes out this
+  week…"), situations that aren't the viewer's real life ("Your Short hit one million views"), abstract what-ifs.
+  Pop culture / gaming / what-if hooks must still start with YOU + a challenge, guess or surprise, not the news.
 - **Gen Z / Gen Alpha interests first:** phones, social media, gaming, school, sleep, creators/YouTube,
   AI, money for things *they* buy (phones, sneakers, games, food), "what if" scenarios, gross/awe facts.
   Adult topics (heating bills, pensions, taxes) only with a teen angle.

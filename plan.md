@@ -10,6 +10,14 @@ honest and answerable in one word.
 - RESPAWN Part 1 (0:37): 1,505 views, 59.8 % viewed vs 40.2 % swiped away, avg view 0:29 (~78 %), 20 likes, +4 subs.
 - Channel: 17 subscribers. Goal: per-video 5k → 10k → 100k; monetization needs 1,000 subs + 10M Shorts views / 90 days.
 - Lever: lower the swipe-away rate (hook in frame 0), more likes/comments (comment prompt).
+- Stay rate ("viewed vs swiped away") per video, 16 Nov evening:
+  70 % head-heat myth ("Put on a hat! You lose half your heat through your head. Except, you don't.") ·
+  69 % tickle ("Try to tickle yourself right now. Go on.") · 64 % first job · 63 % static zap · 63 % 2 AM scrolling ·
+  60 % RESPAWN 1 · 59 % brain 10 % · 57 % Christmas tree (too early in season) · 53 % 1M views money ·
+  52 % bees what-if · **46 % Hunger Games** (news-statement hook).
+- Lesson: best hooks = a challenge the viewer can do right now, or a belief everyone knows flipped in the same
+  sentence. Worst = news statements about a movie/topic, and "imagine you are X" situations that aren't the viewer's
+  real life (creator with 1M views). Even 70 % didn't break past ~1.5k yet, so aim higher (75 %+) and add comment prompts.
 
 ## Daily plan
 | day | 06:00 FACTS | 11:30 POP CULTURE / GAMING | 16:00 FINANCE | 18:30 WHAT IF | 20:00 SERIES |
