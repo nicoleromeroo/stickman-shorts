@@ -23,8 +23,8 @@ honest and answerable in one word.
 | day | 06:00 FACTS | 11:30 POP CULTURE / GAMING | 16:00 FINANCE | 18:30 WHAT IF | 20:00 SERIES |
 |---|---|---|---|---|---|
 | Tue 17 Nov | myth: Goldfish only remember 3 seconds? (Q: "True or false? Comment before the end.") | done: GTA 6 countdown | done: start at 16 vs 26 | What if school started at 10 AM? (teen sleep research; Q: "Better grades or chaos?") | done: RESPAWN Part 3 |
-| Wed 18 Nov | why: Why do some songs give you goosebumps? (Q: "Do you get them? Yes or no") | GTA 6 out tomorrow: how long it took to make / team size, confirmed info only (Q: "Guess how many years it was in development") | is it worth it: Is a 200 € raise really 200 €? (Q: "Guess what's left, comment a number") | What if phones stopped working for 24 hours? (Q: "Would you survive? Yes or no") | RESPAWN Part 4: the Hall Monitor (Q: "Would you trust Kai? Yes or no") |
-| Thu 19 Nov | myth: Does cracking your knuckles ruin your joints? (Q: "Do you crack yours?") | GTA 6 launch day: the records it is chasing (biggest launch ever, GTA 5's $815.7M day) (Q: "Will it beat 1 billion in 3 days? Yes or no") | 1 million € today or 1 cent doubled for 30 days? (Q: "Pick 1 or 2 before the reveal") | Would you rather lose music or video games forever? (Q: "Music or games?") | RESPAWN Part 5: the notebook in your handwriting (Q: "Did you see the twist coming?") |
+| Wed 18 Nov | why: Why do some songs give you goosebumps? (Q: "Do you get them? Yes or no") | GTA 6 out tomorrow: how long it took to make / team size, confirmed info only (Q: "Guess how many years it was in development") | **4 SIBLINGS PARABLE (Nicole, 16 Nov)**: "4 siblings get 100 € each. Only one ends up rich. Which one are you?" (see "OUR VERSION" below; Q: "Which sibling are you? 1, 2, 3 or 4") | What if phones stopped working for 24 hours? (Q: "Would you survive? Yes or no") | RESPAWN Part 4: the Hall Monitor (Q: "Would you trust Kai? Yes or no") |
+| Thu 19 Nov | myth: Does cracking your knuckles ruin your joints? (Q: "Do you crack yours?") | GTA 6 launch day: the records it is chasing (biggest launch ever, GTA 5's $815.7M day) (Q: "Will it beat 1 billion in 3 days? Yes or no") | is it worth it: Is a 200 € raise really 200 €? (Q: "Guess what's left, comment a number") | Would you rather lose music or video games forever? (Q: "Music or games?") | RESPAWN Part 5: the notebook in your handwriting (Q: "Did you see the twist coming?") |
 | Fri 20 Nov | why: Why does it get dark so early in November? (seasonal) | Minecraft: guess how many copies it has sold (Q: "Closest guess wins bragging rights") | Is a 70 € game worth it? Cost per hour vs a cinema ticket (Q: "Which wins for you?") | What if everyone worked a 4-day week? (real trial data; Q: "Agree or disagree?") | RESPAWN Part 6 FINALE (Q: "NEW GAME+: YES or NO?") |
 | Sat 21 Nov | myth: Do carrots help you see in the dark? (Q: "Did you believe it? Yes or no") | GTA 6 first numbers, if Take-Two/Rockstar published official sales; otherwise "Which game took the longest to make?" (Q: "Guess before the answer") | Black Friday week (seasonal, NEW angle, the "are deals real" video exists): "Buy now, pay later": what a 300 € phone really costs (Q: "Would you use it? Yes or no") | What if the Moon disappeared? (Q: "Good or bad for us? Guess") | NEW SERIES Part 1 (write bible first; ask "Comment which door you'd pick" style choices) |
 | Sun 22 Nov | why: Why does your phone battery die faster in the cold? (seasonal-evergreen) | Old vs new: which Pokémon/Mario/Zelda generation sold more? (Q: "Old or new?") | First salary: spend, save or invest? (real net numbers; Q: "Comment 1, 2 or 3") | What if everyone on Earth jumped at the same time? (Q: "Guess: earthquake or nothing?") | NEW SERIES Part 2 |
@@ -69,6 +69,15 @@ Notes
   Each step gets a concept stamp (INFLATION, COMPOUND INTEREST, ORGANIC GROWTH) and a formula that pops in.
   Comment prompt: "Which sibling are you? 1, 2, 3 or 4". No borrowing/leverage advice for teens.
 - Note: the 59 s video shows length is fine if a story keeps pulling; stay with 30–45 s unless the story needs more.
+
+- "The Difference Between Rich And Poor" (KnoxClips7000, ~124k likes, 1.6k comments, 0:38): hook = a universal
+  question ("Why do the rich get richer and the poor poorer?") over a huge pile of gold, then a THOUGHT EXPERIMENT
+  reset: a giant hand takes away all wealth, everyone sits in an empty barrel, each gets ONE chicken. Person 1 eats it
+  that night, 2 keeps a hen for eggs, 3 breeds… = consume vs. keep an asset. Craft: characters fill the frame
+  (close-ups), detailed backgrounds, camera moves, a chalkboard chart "RICH up / POOR down", 1–2 caption words.
+  Lesson: the viral money formula is "same start, different choices" + one reset/what-if. Use it for the 4 siblings
+  video and later (e.g. "Everyone gets 1,000 € tomorrow. Where is it after 10 years?").
+- 1 cent doubled for 30 days: moved to the backlog (good "pick 1 or 2" finance video for later).
 
 ## Done
 - 17 Nov 11:30 GTA 6 countdown · 16:00 start at 16 vs 26 · 20:00 RESPAWN Part 3
