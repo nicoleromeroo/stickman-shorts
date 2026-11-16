@@ -1,5 +1,5 @@
 {
- "uploaded_count": 12,
+ "uploaded_count": 15,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -97,6 +97,30 @@
    "mode": "scheduled 2026-11-16T13:00:00Z",
    "publish_at": "2026-11-16T14:00:00+01:00",
    "uploaded_at": "2026-11-16T10:10:07+00:00"
+  },
+  {
+   "tag": "video-20261117-slot2",
+   "video_id": "HtbgHI7iPBk",
+   "title": "Start Investing at 16 vs 26: Who Ends Up Richer? \ud83d\udcb8 #shorts",
+   "mode": "scheduled 2026-11-17T15:00:00Z",
+   "publish_at": "2026-11-17T16:00:00+01:00",
+   "uploaded_at": "2026-11-16T14:55:28+00:00"
+  },
+  {
+   "tag": "video-20261117-slot3",
+   "video_id": "axMWj88sPKY",
+   "title": "RESPAWN (Part 3) #shorts",
+   "mode": "scheduled 2026-11-17T19:00:00Z",
+   "publish_at": "2026-11-17T20:00:00+01:00",
+   "uploaded_at": "2026-11-16T14:55:28+00:00"
+  },
+  {
+   "tag": "video-20261117-slot4",
+   "video_id": "uC-CTpEplvE",
+   "title": "GTA 6 Is 2 Days Away. The Numbers Are Insane \ud83c\udfae #shorts",
+   "mode": "scheduled 2026-11-17T10:30:00Z",
+   "publish_at": "2026-11-17T11:30:00+01:00",
+   "uploaded_at": "2026-11-16T14:55:28+00:00"
   }
  ]
 }
