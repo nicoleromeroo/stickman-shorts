@@ -1,0 +1,105 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { lazy: wt(0, 'everyone'), except: wt(0, 'except'), mel: wt(1, 'melatonin'), late: wt(1, 'later'), ten30: wt(2, 'ten thirty'), need: wt(2, 'eight'), what: at(3, 0), ten: wt(3, 'ten'), eng: at(4, 0), teens: wt(4, 'two thousand'), ill: at(5, 0), half: wt(5, 'more than'), prog: wt(6, 'twelve'), back: at(7, 0), up: wt(7, 'and illness'), catch: at(8, 0), later: wt(8, 'later'), end: at(9, 0), q: wt(9, 'better') };
+function pop(t0, t) { return eob(inv(t0, t0 + .28, t)); }
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function clock(x, y, r, hh, mm, shake = 0, face = '#fff') {
+  ctx.save(); ctx.translate(x + shake * Math.sin(performance.now ? 0 : 0), y); ctx.rotate(shake);
+  // bells
+  if (shake !== 0) { circ(-r * .62, -r * .92, r * .32, '#facc15', INK, 8); circ(r * .62, -r * .92, r * .32, '#facc15', INK, 8); }
+  circ(0, 0, r, face, INK, 12); circ(0, 0, r * .86, null, '#e5e7eb', 4);
+  for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; line(Math.sin(a) * r * .72, -Math.cos(a) * r * .72, Math.sin(a) * r * .82, -Math.cos(a) * r * .82, i % 3 ? 5 : 10); }
+  const ha = ((hh % 12) + mm / 60) * Math.PI / 6, ma = mm * Math.PI / 30;
+  line(0, 0, Math.sin(ha) * r * .45, -Math.cos(ha) * r * .45, 14); line(0, 0, Math.sin(ma) * r * .68, -Math.cos(ma) * r * .68, 9, '#ef4444'); circ(0, 0, 12, INK);
+  ctx.restore();
+}
+function credit() { txt('Study: Kelley et al. 2017, Frontiers in Human Neuroscience', 540, 1790, 30, '#334155', { stroke: false, font: 'Nun', weight: '900 ' }); txt('(one UK school, 2,049 students aged 13–16, start 8:50 vs 10:00)', 540, 1830, 28, '#334155', { stroke: false, font: 'Nun', weight: '900 ' }); }
+function room(dark = 0) { bgFill('#c7d2fe'); windowFrame(110, 330, 300, 300, dark ? '#1e1b4b' : '#fde68a'); floor('#a78bfa', 1400); }
+function sAlarm(lt, t) {
+  room(1);
+  const sh = Math.sin(t * 40) * .09;
+  clock(800, 1000, 150, 6, 30, sh);
+  for (let i = 0; i < 3; i++) { const k = (t * 2 + i / 3) % 1; ctx.save(); ctx.globalAlpha = 1 - k; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(800, 1000, 170 + k * 120, -2.3, -.9); ctx.stroke(); ctx.restore(); }
+  const sway = Math.sin(t * 2.2) * .07;
+  hero({ x: 360, y: 1480, s: 1.45, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .2, le: .1, ra: -.2, re: -.1 }, eyes: 'closed', mouth: t < T.except ? 'wavy' : 'o', lean: sway, hood: true, shirt: '#3b82f6' });
+  txt('Z', 520 + Math.sin(t * 3) * 10, 700 - (t * 60 % 120), 90, '#fff', { lw: 14 });
+  txt('6:30', 800, 1220, 80, '#fff', { lw: 14 });
+  if (t < T.except - .05) { const k = eob(inv(0, .2, t)); txt('LAZY?', 540, 260, 190 * Math.max(.6, k), '#facc15', { lw: 26 }); }
+  else { const k = pop(T.except, t); ctx.save(); ctx.translate(540, 270); ctx.rotate(-.08); ctx.scale(k, k); box(-430, -105, 860, 210, '#22c55e', 30, 12); txt('BODY CLOCK', 0, 10, 130, '#fff', { lw: 16 }); ctx.restore(); }
+}
+function sNight(lt, t) {
+  bgFill('#1e1b4b');
+  for (let i = 0; i < 40; i++) circ(rnd(i) * W, rnd(i + 9) * 900, 3 + rnd(i + 4) * 4, '#fff');
+  circ(860, 360, 90, '#fef3c7', INK, 8); circ(820, 340, 90, '#1e1b4b');
+  floor('#4c1d95', 1400);
+  hero({ x: 320, y: 1480, s: 1.45, pose: PHONE_POSE, eyes: 'huge', mouth: 'flat', hood: true, hold: holdPhone('on') });
+  clock(780, 860, 130, 10, 30);
+  txt('10:30 PM', 780, 1060, 80, '#fff', { lw: 14 });
+  badge(540, 250, 760, 170, '#8b5cf6', ['MELATONIN', 'ARRIVES LATE'], [84, 56], T.mel, t, -.04);
+  if (t > T.ten30 && t < T.need) txt('STILL AWAKE', 760, 1250, 70, '#facc15', { lw: 12 });
+  badge(760, 1240, 520, 150, '#ef4444', ['NEED 8–10 H', 'OF SLEEP'], [64, 44], T.need, t, .05);
+}
+function sTen(lt, t) {
+  bgFill('#fde68a'); circ(540, 1000, 520, '#fcd34d'); floor('#fbbf24', 1400);
+  clock(540, 820, 230, 10, 0);
+  const st = Math.sin(t * 3) * .5 + .5;
+  hero({ x: 540, y: 1520, s: 1.3, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: 2.6 + st * .3, le: .2, ra: -2.6 - st * .3, re: -.2 }, eyes: 'norm', mouth: 'grin', hood: true });
+  const k = pop(T.what, t); txt('SCHOOL AT', 540, 240, 110 * k, '#fff', { lw: 18 });
+  const k2 = pop(T.ten, t); txt('10 AM?', 540, 380, 170 * k2, '#ef4444', { lw: 24 });
+}
+function school(x, y) { box(x - 380, y - 420, 760, 420, '#fca5a5', 8, 9); ctx.fillStyle = '#b91c1c'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(x - 420, y - 420); ctx.lineTo(x, y - 600); ctx.lineTo(x + 420, y - 420); ctx.closePath(); ctx.fill(); ctx.stroke(); clock(x, y - 470, 60, 10, 0); for (const wx of [-260, -110, 110, 260]) windowFrame(x + wx - 55, y - 330, 110, 110); box(x - 70, y - 180, 140, 180, '#7c2d12', 6, 8); }
+function sStudy(lt, t) {
+  bgFill('#bae6fd'); floor('#86efac', 1400);
+  school(540, 1400);
+  for (let i = 0; i < 5; i++) { const p = t * 6 + i; stick({ x: 140 + i * 200, y: 1560, s: .7, pose: walkPose(p, .6), shirt: ['#3b82f6', '#22c55e', '#f97316', '#a855f7', '#ef4444'][i], hair: i % 2 ? '#7c2d12' : null, shadow: false }); }
+  badge(540, 240, 800, 170, '#0ea5e9', ['ENGLAND: REAL TEST'], [84], T.eng, t, -.03);
+  badge(540, 440, 700, 150, '#fff', ['2,000 TEENS'], [100], T.teens, t, .03, INK);
+  credit();
+}
+function bars(lt, t) {
+  bgFill('#f1f5f9');
+  const base = 1340, H0 = 700;
+  // illness absences bar: starts high, drops by more than half, then rises again
+  let v = 1; if (t > T.half) v = lerp(1, .45, eio(inv(T.half, T.half + .6, t))); if (t > T.up) v = lerp(.45, .45 * 1.3, eio(inv(T.up, T.up + .6, t)));
+  box(170, base - H0 * v, 300, H0 * v, '#ef4444', 18, 9);
+  txt('ILLNESS', 320, base + 60, 56, INK, { stroke: false }); txt('ABSENCES', 320, base + 120, 56, INK, { stroke: false });
+  // progress bar
+  let p = .55; if (t > T.prog) p = lerp(.55, .55 + .12 * 2.2, eio(inv(T.prog, T.prog + .6, t)));
+  box(610, base - H0 * p, 300, H0 * p, '#22c55e', 18, 9);
+  txt('GOOD', 760, base + 60, 56, INK, { stroke: false }); txt('PROGRESS', 760, base + 120, 56, INK, { stroke: false });
+  line(100, base, 980, base, 10);
+  if (t > T.half) { const k = pop(T.half, t); txt('-50%+', 320, base - H0 * v - 80, 100 * k, '#ef4444', { lw: 16 }); }
+  if (t > T.prog) { const k = pop(T.prog, t); txt('+12%', 760, base - H0 * p - 80, 100 * k, '#16a34a', { lw: 16 }); }
+  if (t > T.back) { badge(540, 300, 820, 150, '#334155', ['BACK TO 8:50 AM'], [80], T.back, t, -.03); }
+  else { const k = pop(T.ill, t); txt('AT 10 AM:', 540, 300, 120 * k, '#0ea5e9', { lw: 18 }); }
+  if (t > T.up) { const k = pop(T.up, t); txt('ILLNESS UP AGAIN', 540, 470, 84 * k, '#ef4444', { lw: 14 }); }
+  credit();
+}
+function sCatch(lt, t) {
+  const g = ctx.createLinearGradient(0, 0, 0, 1400); g.addColorStop(0, '#7c3aed'); g.addColorStop(1, '#fb923c'); ctx.fillStyle = g; ctx.fillRect(-300, -300, W + 600, 1700);
+  circ(540, 1300, 200, '#fde047', INK, 8); floor('#1e293b', 1400);
+  hero({ x: 540, y: 1560, s: 1.7, pose: walkPose(t * 6, .7), eyes: 'norm', mouth: 'frown', hood: true });
+  badge(540, 300, 760, 170, '#fff', ['THE CATCH:'], [110], T.catch, t, -.03, '#ef4444');
+  badge(540, 520, 860, 150, '#1e293b', ['SCHOOL ENDS LATER'], [80], T.later, t, .03);
+}
+function sEnd(lt, t) {
+  bgFill('#fef3c7');
+  box(60, 520, 450, 900, '#22c55e', 30, 10); box(570, 520, 450, 900, '#ef4444', 30, 10);
+  txt('BETTER', 285, 640, 80, '#fff', { lw: 12 }); txt('GRADES', 285, 730, 80, '#fff', { lw: 12 });
+  txt('TOTAL', 795, 640, 80, '#fff', { lw: 12 }); txt('CHAOS', 795, 730, 80, '#fff', { lw: 12 });
+  stick({ x: 285, y: 1360, s: 1.0, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: 2.5, le: .3, ra: -2.5, re: -.3 }, mouth: 'grin', shirt: '#3b82f6', hood: true });
+  const j = Math.sin(t * 9) * .25;
+  stick({ x: 795, y: 1360, s: 1.0, pose: { lt: .3 + j, ls: .3, rt: -.3 - j, rs: .3, la: 2.2 + j, le: .8, ra: -2.2 - j, re: -.8 }, eyes: 'huge', mouth: 'scream', shirt: '#f97316', hair: '#7c2d12', tilt: j * .3 });
+  txt('10 AM SCHOOL?', 540, 260, 120, '#fff', { lw: 20 });
+  const k = pop(T.q, t); txt('OR', 540, 1000, 120 * k, '#fff', { lw: 18 });
+  if (t > T.q + .6) { const k2 = pop(T.q + .6, t); ctx.save(); ctx.translate(540, 1500); ctx.scale(k2, k2); box(-400, -60, 800, 120, '#fff', 30, 8); txt('COMMENT ONE WORD', 0, 6, 64, INK, { stroke: false }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sAlarm, push: .06 }, { t0: mid(0, 1), fn: sNight, push: .05, flash: 1 }, { t0: mid(2, 3), fn: sTen, push: .06, flash: 1 }, { t0: mid(3, 4), fn: sStudy, push: .05, xfade: .25 }, { t0: mid(4, 5), fn: bars, push: .03, xfade: .25 }, { t0: mid(7, 8), fn: sCatch, push: .06, flash: .8 }, { t0: mid(8, 9), fn: sEnd, push: .05, xfade: .3 }];
+const CAP = [["can't get up", "for school?", "everyone says", "you're lazy.", "except,", "it's your body clock."], ["in teens,", "the sleep hormone", "melatonin", "kicks in later", "at night."], ["so most teens", "aren't sleepy", "until after 10:30,", "but you still need", "8 to 10 hours."], ["so what if", "school started", "at 10 am?"], ["a school in england", "tried it,", "with 2,000 teens."], ["absences from illness", "dropped by", "more than half."], ["and 12% more", "students made", "good progress."], ["then the school", "switched back.", "and illness absences", "went up again."], ["the catch?", "you'd finish", "school later too."], ["10 am school.", "better grades", "or total chaos?", "comment one word."]];
+const HOT = new Set(["you're lazy.", "it's your body clock.", "melatonin", "until after 10:30,", "8 to 10 hours.", "at 10 am?", "with 2,000 teens.", "more than half.", "and 12% more", "went up again.", "school later too.", "or total chaos?", "comment one word."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

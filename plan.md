@@ -22,7 +22,7 @@ honest and answerable in one word.
 ## Daily plan
 | day | 06:00 FACTS | 11:30 POP CULTURE / GAMING | 16:00 FINANCE | 18:30 WHAT IF | 20:00 SERIES |
 |---|---|---|---|---|---|
-| Tue 17 Nov | myth: Goldfish only remember 3 seconds? (Q: "True or false? Comment before the end.") | done: GTA 6 countdown | done: start at 16 vs 26 | What if school started at 10 AM? (teen sleep research; Q: "Better grades or chaos?") | done: RESPAWN Part 3 |
+| Tue 17 Nov | done: goldfish 3-second myth | done: GTA 6 countdown | done: start at 16 vs 26 | done: school at 10 AM | done: RESPAWN Part 3 |
 | Wed 18 Nov | why: Why do some songs give you goosebumps? (Q: "Do you get them? Yes or no") | GTA 6 out tomorrow: how long it took to make / team size, confirmed info only (Q: "Guess how many years it was in development") | **4 SIBLINGS PARABLE (Nicole, 16 Nov)**: "4 siblings get 100 € each. Only one ends up rich. Which one are you?" (see "OUR VERSION" below; Q: "Which sibling are you? 1, 2, 3 or 4") | What if phones stopped working for 24 hours? (Q: "Would you survive? Yes or no") | RESPAWN Part 4: the Hall Monitor (Q: "Would you trust Kai? Yes or no") |
 | Thu 19 Nov | myth: Does cracking your knuckles ruin your joints? (Q: "Do you crack yours?") | GTA 6 launch day: the records it is chasing (biggest launch ever, GTA 5's $815.7M day) (Q: "Will it beat 1 billion in 3 days? Yes or no") | is it worth it: Is a 200 € raise really 200 €? (Q: "Guess what's left, comment a number") | Would you rather lose music or video games forever? (Q: "Music or games?") | RESPAWN Part 5: the notebook in your handwriting (Q: "Did you see the twist coming?") |
 | Fri 20 Nov | why: Why does it get dark so early in November? (seasonal) | Minecraft: guess how many copies it has sold (Q: "Closest guess wins bragging rights") | Is a 70 € game worth it? Cost per hour vs a cinema ticket (Q: "Which wins for you?") | What if everyone worked a 4-day week? (real trial data; Q: "Agree or disagree?") | RESPAWN Part 6 FINALE (Q: "NEW GAME+: YES or NO?") |
@@ -82,3 +82,5 @@ Notes
 ## Done
 - 17 Nov 11:30 GTA 6 countdown · 16:00 start at 16 vs 26 · 20:00 RESPAWN Part 3
 - 18 Nov 16:00 4 siblings parable (made 16 Nov on Nicole's request)
+- 2026-11-17 slot1: Goldfish 3-second memory myth (made 16 Nov)
+- 2026-11-17 slot5: What if school started at 10 AM? (made 16 Nov)

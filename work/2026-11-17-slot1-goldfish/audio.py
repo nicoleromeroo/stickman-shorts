@@ -1,0 +1,12 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 43)
+m.music("lofi")
+m.add("pop", 0.05, .3); m.add("boing", m.wt(0, "true"), .35); m.add("ding", m.wt(0, "comment"), .3)
+m.add("whoosh", m.mid(0, 1) - .12, .3); m.add("pop", m.wt(1, "fifteen"), .35)
+m.add("pop", m.wt(2, "red"), .35); m.add("whoosh", m.mid(2, 3) - .12, .3)
+m.add("thump", m.wt(3, "over"), .35); m.add("ding", m.wt(4, "under"), .4)
+m.add("whoosh", m.mid(4, 5) - .12, .3); m.add("pop", m.wt(5, "six"), .3)
+m.add("whoosh", m.at(6, .1), .35); m.add("chime", m.wt(6, "four point"), .45)
+m.add("whoosh", m.mid(6, 7) - .12, .3); m.add("pop", m.wt(7, "one hour"), .35); m.add("ding", m.wt(8, "ignored"), .3)
+m.add("whoosh", m.mid(8, 9) - .12, .3); m.add("bonk", m.at(9, .02), .45); m.add("chime", m.wt(9, "months"), .4); m.add("boing", m.wt(9, "don't blame"), .35)
+m.write(mvol=.08, svol=.3)

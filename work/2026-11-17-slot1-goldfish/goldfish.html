@@ -1,0 +1,123 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { tf: wt(0, 'true'), com: wt(0, 'comment'), aus: at(1, 0), age: wt(1, 'fifteen'), feed: at(2, 0), red: wt(2, 'red'), first: at(3, 0), min: wt(3, 'over a'), weeks: at(4, 0), five: wt(4, 'under'), hid: at(5, 0), six: wt(5, 'six'), back: at(6, 0), f44: wt(6, 'four point'), eng: at(7, 0), hour: wt(7, 'one hour'), learn: at(8, 0), ign: wt(8, 'ignored'), fals: at(9, 0), months: wt(9, 'months'), next: wt(9, 'next') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function fish(x, y, s, dir, t, o = {}) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s * dir, s);
+  const w = Math.sin(t * 12) * .35;
+  ctx.save(); ctx.translate(-70, 0); ctx.rotate(w); ctx.fillStyle = '#fb923c'; ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(-60, -45); ctx.quadraticCurveTo(-40, 0, -60, 45); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+  ctx.fillStyle = '#f97316'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.ellipse(0, 0, 85, 55, 0, 0, 7); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#fdba74'; ctx.beginPath(); ctx.moveTo(-10, -50); ctx.quadraticCurveTo(10, -85, 35, -48); ctx.closePath(); ctx.fill(); ctx.stroke();
+  circ(40, -12, 20, '#fff', INK, 5); circ(44 + (o.look || 0) * 4, -10, 9, INK);
+  if (o.smirk) { ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(52, 22); ctx.quadraticCurveTo(66, 30, 78, 14); ctx.stroke(); } else circ(76, 16, 8, '#7a1f1f', INK, 4);
+  ctx.restore();
+}
+function tank(x, y, w, h, t) {
+  box(x, y, w, h, '#7dd3fc', 24, 12);
+  ctx.save(); rr(x + 6, y + 6, w - 12, h - 12, 20); ctx.clip();
+  ctx.fillStyle = 'rgba(255,255,255,.25)'; ctx.fillRect(x, y, w, 30);
+  for (let i = 0; i < 22; i++) circ(x + 30 + rnd(i) * (w - 60), y + h - 30 + rnd(i + 3) * 20, 18, ['#a8a29e', '#d6d3d1', '#78716c'][i % 3], INK, 4);
+  for (let i = 0; i < 6; i++) { const k = (t * .4 + rnd(i)) % 1; circ(x + 60 + rnd(i + 5) * (w - 120), y + h - k * h, 10, null, '#fff', 4); }
+  ctx.restore();
+}
+function block(x, y, s = 1) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-60, -40, 120, 80, '#ef4444', 8, 7); for (const bx of [-30, 30]) box(bx - 18, -60, 36, 22, '#ef4444', 6, 6); ctx.restore(); }
+function stopwatch(x, y, r, label, col, top) { circ(x, y, r, '#fff', INK, 12); box(x - 25, y - r - 40, 50, 36, INK, 6, 0); txt(label, x, y + (top ? 30 : 8), r * .55, col, { lw: 10 }); if (top) txt(top, x, y - 55, r * .3, INK, { stroke: false }); }
+function credit(s) { txt(s, 540, 1800, 30, '#334155', { stroke: false, font: 'Nun', weight: '900 ' }); }
+function sHook(lt, t) {
+  bgFill('#fef3c7'); floor('#d6a26b', 1420);
+  tank(90, 640, 900, 700, t);
+  const p = (t * .35) % 2, fx = p < 1 ? lerp(250, 830, eio(p)) : lerp(830, 250, eio(p - 1));
+  fish(fx, 980 + Math.sin(t * 2) * 40, 1.5, p < 1 ? 1 : -1, t, { look: 1 });
+  if (t < T.tf) { const k = eob(inv(0, .2, t)); txt('3 SECONDS?', 540, 300, 170 * Math.max(.7, k), '#facc15', { lw: 26 }); }
+  else { txt('3 SECONDS?', 540, 250, 120, '#facc15', { lw: 20 }); badge(540, 440, 800, 160, '#1e3a8a', ['TRUE OR FALSE?'], [96], T.tf, t, -.03); }
+  if (t > T.com) { const k = pop(T.com, t); ctx.save(); ctx.translate(540, 1500); ctx.scale(k, k); box(-380, -55, 760, 110, '#fff', 30, 8); txt('COMMENT BEFORE THE END', 0, 6, 54, INK, { stroke: false }); ctx.restore(); }
+}
+function sStudent(lt, t) {
+  bgFill('#dcfce7'); floor('#a3a3a3', 1420);
+  tank(470, 820, 560, 520, t);
+  fish(750 + Math.sin(t * 1.5) * 120, 1040, 1.1, Math.cos(t * 1.5) > 0 ? 1 : -1, t);
+  const drop = t > T.red;
+  stick({ x: 250, y: 1500, s: 1.35, shirt: '#16a34a', pants: '#1e3a8a', hair: '#facc15', pose: drop ? { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.0, re: .3 } : STAND, mouth: 'smile', look: 1 });
+  if (drop) { const k = eo(inv(T.red, T.red + .8, t)); block(640, lerp(780, 1220, k), .9); }
+  badge(540, 260, 700, 150, '#16a34a', ['AUSTRALIA'], [100], T.aus, t, -.04);
+  badge(540, 450, 560, 130, '#fff', ['STUDENT, 15'], [80], T.age, t, .04, INK);
+  if (t > T.feed) badge(780, 640, 520, 110, '#ef4444', ['RED BLOCK = FOOD'], [52], T.red, t, -.03);
+}
+function sTimer(lt, t) {
+  bgFill('#e0f2fe');
+  tank(60, 820, 960, 560, t);
+  block(860, 1270, .9);
+  const fast = t > T.weeks;
+  const sp = fast ? .9 : .12;
+  const k = fast ? eio(inv(T.weeks + .2, T.weeks + .9, t)) : clamp((t - T.first) * sp);
+  fish(lerp(200, 720, k), lerp(980, 1180, k), 1.1, 1, t);
+  if (!fast) { stopwatch(540, 460, 170, '1 MIN', '#ef4444', 'OVER'); txt('AT FIRST', 540, 220, 90, '#fff', { lw: 16 }); }
+  else { stopwatch(540, 460, 170, '5 S', '#16a34a', 'UNDER'); badge(540, 210, 760, 140, '#0ea5e9', ['3 WEEKS LATER'], [90], T.weeks, t, -.03); }
+  credit('Source: Mental Floss (Rory Stokes experiment)');
+}
+function sSix(lt, t) {
+  bgFill('#fae8ff');
+  tank(60, 820, 960, 560, t);
+  const back = t > T.back;
+  if (!back) {
+    fish(540 + Math.sin(t * 1.2) * 250, 1060, 1.1, Math.cos(t * 1.2) > 0 ? 1 : -1, t);
+    // calendar
+    ctx.save(); ctx.translate(540, 470); box(-210, -200, 420, 400, '#fff', 20, 10); box(-210, -200, 420, 100, '#a855f7', 20, 10);
+    txt('BLOCK GONE', 0, -148, 50, '#fff', { stroke: false });
+    const d = Math.min(6, 1 + Math.floor(inv(T.six - .4, T.six + .6, t) * 5.99));
+    txt(d + ' DAYS', 0, 50, 110, INK, { stroke: false }); ctx.restore();
+  } else {
+    block(860, 1270, .9);
+    const k = eio(inv(T.back + .1, T.back + .7, t));
+    fish(lerp(200, 720, k), lerp(980, 1180, k), 1.1, 1, t);
+    if (k > 0 && k < 1) for (let i = 0; i < 4; i++) line(lerp(200, 720, k) - 140 - i * 40, 960 + i * 50, lerp(200, 720, k) - 260 - i * 40, 960 + i * 50, 8, '#fff');
+    stopwatch(540, 470, 190, '4.4 S', '#16a34a');
+    badge(540, 210, 760, 140, '#a855f7', ['STILL REMEMBERED!'], [80], T.f44, t, -.03);
+  }
+  credit('Source: Mental Floss (Rory Stokes experiment)');
+}
+function sLever(lt, t) {
+  bgFill('#ecfccb');
+  tank(60, 820, 960, 560, t);
+  // lever on the right inside tank
+  const pushing = t > T.learn && (t % 1.4) < .5;
+  ctx.save(); ctx.translate(880, 1300); box(-50, -20, 100, 40, '#334155', 8, 7); ctx.rotate(pushing ? .5 : -.2); line(0, 0, 0, -200, 16); circ(0, -200, 28, '#ef4444', INK, 7); ctx.restore();
+  const fx = pushing ? 720 : 520 + Math.sin(t * 1.3) * 150;
+  fish(fx, 1120, 1.05, 1, t);
+  // clock with 1-hour green wedge
+  ctx.save(); ctx.translate(780, 470); circ(0, 0, 160, '#fff', INK, 12);
+  if (t > T.hour) { ctx.fillStyle = '#22c55e'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, 148, -Math.PI / 2, -Math.PI / 2 + Math.PI / 6); ctx.closePath(); ctx.fill(); }
+  for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; line(Math.sin(a) * 115, -Math.cos(a) * 115, Math.sin(a) * 135, -Math.cos(a) * 135, i % 3 ? 5 : 10); }
+  const ma = t * 2; line(0, 0, Math.sin(ma) * 110, -Math.cos(ma) * 110, 9, '#ef4444'); circ(0, 0, 12, INK); ctx.restore();
+  badge(300, 300, 440, 130, '#2563eb', ['ENGLAND'], [80], T.eng, t, -.04);
+  badge(300, 520, 480, 170, '#22c55e', ['FOOD ONLY', '1 HOUR A DAY'], [56, 56], T.hour, t, .03);
+  if (t > T.ign) badge(540, 700, 760, 110, '#fff', ['THEY LEARNED THE TIME'], [56], T.ign, t, -.02, INK);
+  credit('Source: University of Plymouth (2003), via Mental Floss');
+}
+function sEnd(lt, t) {
+  bgFill('#fef3c7'); floor('#d6a26b', 1420);
+  if (t < T.next) {
+    tank(90, 760, 900, 600, t);
+    fish(540 + Math.sin(t * 1.5) * 200, 1060, 1.5, Math.cos(t * 1.5) > 0 ? 1 : -1, t, { smirk: true });
+    const k = pop(T.fals, t); ctx.save(); ctx.translate(540, 300); ctx.rotate(-.1); ctx.scale(k, k); box(-330, -110, 660, 220, 'rgba(255,255,255,.92)', 24, 12); ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 14; rr(-310, -90, 620, 180, 18); ctx.stroke(); txt('FALSE', 0, 14, 150, '#dc2626', { stroke: false }); ctx.restore();
+    badge(540, 560, 700, 130, '#16a34a', ['MEMORY: MONTHS'], [80], T.months, t, .03);
+  } else {
+    tank(560, 980, 460, 380, t);
+    fish(790 + Math.sin(t * 2) * 60, 1160, .9, -1, t, { smirk: true });
+    hero({ x: 300, y: 1500, s: 1.4, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.4, re: -1.9 }, eyes: 'huge', mouth: 'wavy', hood: true });
+    qmark(300, 700, t, T.next, '#2563eb', 170);
+    const k = pop(T.next, t); txt("DON'T BLAME", 540, 260, 110 * k, '#fff', { lw: 18 }); txt('THE GOLDFISH', 540, 400, 110 * k, '#f97316', { lw: 18 });
+  }
+  credit('Months: in an Israeli study, fish came back to a');
+  txt('feeding sound 5 months later (Mental Floss, Practical Fishkeeping)', 540, 1840, 30, '#334155', { stroke: false, font: 'Nun', weight: '900 ' });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(0, 1), fn: sStudent, push: .05, flash: 1 }, { t0: mid(2, 3), fn: sTimer, push: .04, xfade: .25 }, { t0: mid(4, 5), fn: sSix, push: .05, flash: .8 }, { t0: mid(6, 7), fn: sLever, push: .04, xfade: .25 }, { t0: mid(8, 9), fn: sEnd, push: .06, flash: 1 }];
+const CAP = [["goldfish only remember", "3 seconds.", "true or false?", "comment", "before the end."], ["a 15-year-old", "student in australia", "tested it."], ["at feeding time,", "he dropped a", "red toy block", "into the tank."], ["at first,", "the fish took", "over a minute", "to swim to it."], ["3 weeks later?", "under 5 seconds."], ["then he hid", "the block", "for 6 days."], ["when it came back?", "4.4 seconds."], ["in england,", "fish even learned", "to push a lever", "that only gave food", "for 1 hour a day."], ["they learned", "the right time,", "and ignored it", "the rest of the day."], ["so, false.", "some fish remember", "for months.", "next time you", "forget something,", "don't blame", "the goldfish."]];
+const HOT = new Set(["3 seconds.", "true or false?", "red toy block", "over a minute", "under 5 seconds.", "for 6 days.", "4.4 seconds.", "for 1 hour a day.", "the right time,", "so, false.", "for months.", "the goldfish."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

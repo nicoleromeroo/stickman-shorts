@@ -1,0 +1,13 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 41)
+m.music("upbeat")
+m.add("buzz", 0.05, .25); m.add("bonk", m.wt(0, "except"), .5)
+m.add("whoosh", m.mid(0, 1) - .12, .3); m.add("pop", m.wt(1, "melatonin"), .35)
+m.add("ding", m.wt(2, "eight"), .35)
+m.add("whoosh", m.mid(2, 3) - .12, .3); m.add("sting", m.wt(3, "ten"), .4)
+m.add("whoosh", m.mid(3, 4) - .12, .3); m.add("pop", m.wt(4, "two thousand"), .35)
+m.add("whoosh", m.mid(4, 5) - .12, .3); m.add("thump", m.wt(5, "more than"), .45)
+m.add("chime", m.wt(6, "twelve"), .4); m.add("boing", m.wt(7, "and illness"), .35)
+m.add("whoosh", m.mid(7, 8) - .12, .3); m.add("thump", m.wt(8, "later"), .35)
+m.add("whoosh", m.mid(8, 9) - .12, .3); m.add("pop", m.wt(9, "better"), .35); m.add("chime", m.wt(9, "comment"), .4)
+m.write(mvol=.08, svol=.3)

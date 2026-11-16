@@ -1,0 +1,10 @@
+["Goldfish only remember three seconds. True or false? Comment before the end.",
+ "A fifteen-year-old student in Australia tested it.",
+ "At feeding time, he dropped a red toy block into the tank.",
+ "At first, the fish took over a minute to swim to it.",
+ {"text":"Three weeks later? Under five seconds.","gap":0.4},
+ "Then he hid the block for six days.",
+ {"text":"When it came back? Four point four seconds.","gap":0.5},
+ "In England, fish even learned to push a lever that only gave food for one hour a day.",
+ "They learned the right time, and ignored it the rest of the day.",
+ {"text":"So, false. Some fish remember for months. Next time you forget something, don't blame the goldfish.","gap":0.6}]
