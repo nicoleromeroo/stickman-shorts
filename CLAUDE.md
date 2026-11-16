@@ -30,6 +30,8 @@ bash engine/setup.sh
 ```
 
 ## Step 1 — pick the topics
+0. **Check `plan.md` first** (Nicole's topic plan): use the planned topic for that day and slot unless it can't be
+   verified, became a near-duplicate, or the news changed; then pick one the normal way. Move made topics to "Done".
 1. Read `topics_log.md` (every topic ever made). Never repeat a topic or a near-duplicate.
 2. Research what is trending **right now** with WebSearch (TikTok / YouTube Shorts / Instagram
    trend roundups of this week, Google-trending news that is safe and family-friendly).
@@ -147,6 +149,11 @@ bash engine/setup.sh
   (slot machine, giant pot, ice cube) → twist line.
 - Numbers written as words in lines.json so the voice says them right; spell acronyms "P O V".
 - Good references: `work/2026-11-15-slotA-scroll`, `work/2026-11-15-slotB-views`, `work/2026-11-15-slotC-respawn1`.
+- **Comment prompt (Nicole, 16 Nov), every video:** one honest question answerable in one word: A or B, a number
+  guess, yes/no, "comment 1, 2 or 3". Guess-type questions go early, before the reveal ("Guess before the end"); opinion
+  questions ("Agree or disagree?", "Would you?") go in the last line. Show it as on-screen text too, and make it the
+  first line of the description. Mild controversy only if it is true ("most people get this wrong" must be a fact);
+  never about politics, people or groups. Comments can't be pinned via the API, so the question lives in the video.
 
 ## Step 4 — animation (`<slug>.html`)
 - Copy the closest example from `examples/` and adapt. Shared helpers live in `engine/engine.js`
