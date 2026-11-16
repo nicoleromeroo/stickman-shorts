@@ -1,0 +1,80 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { unlock: at(1, 0), genius: wt(1, 'genius'), wrong: at(2, 0), myth: wt(2, "it's a myth"), scan: at(3, 0), all: wt(3, 'pretty much'), sleep: at(4, 0), busy: wt(4, 'busy'), hungry: at(5, 0), three: wt(5, 'three'), burn: at(6, 0), twenty: wt(6, 'twenty'), why: at(7, 0), notm: at(8, 0), full: at(9, 0), now: wt(9, 'even right now') };
+function popIn(t, t0, x, y, fn, d = .25) { if (t < t0) return; const k = eob(inv(t0, t0 + d, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function foot(s) { txt(s, 540, 1860, 34, '#f1f5f9', { lw: 6 }); }
+function battery(x, y, s, v, col) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-150, -60, 300, 120, '#fff', 18, 8); box(150, -25, 24, 50, INK, 6, 0); ctx.fillStyle = col; rr(-138, -48, 276 * clamp(v), 96, 10); ctx.fill(); txt(Math.round(v * 100) + '%', 0, 6, 64, INK, { stroke: false }); ctx.restore(); }
+// ---------- myth ----------
+function sMyth(lt, t) {
+  bgFill('#ede9fe');
+  const geni = t > T.genius && t < T.wrong;
+  brainChar(540, 980, 1.6, { eyes: t < T.unlock ? 'bored' : geni ? 'huge' : 'norm', mouth: geni ? 'smile' : t > T.wrong ? 'o' : 'flat', armL: [-60, 120], armR: geni ? [80, -160] : [60, 120] });
+  const v = t < T.unlock ? .1 : t < T.wrong ? lerp(.1, 1, eo(inv(T.unlock, T.unlock + 1.5, t))) : .1;
+  battery(540, 560, 1.4, v, v < .3 ? '#ef4444' : '#22c55e');
+  txt(t < T.unlock ? 'ONLY 10%?' : t < T.wrong ? 'UNLOCK 100%?' : 'NOPE.', 540, 280, 140, t < T.wrong ? '#fde047' : '#ef4444', { lw: 22 });
+  if (geni) for (let i = 0; i < 5; i++) sparkle(540 + Math.cos(i * 1.3 + t * 2) * 330, 950 + Math.sin(i * 1.3 + t * 2) * 260, 40, 1);
+  if (t > T.myth) popIn(t, T.myth, 540, 1000, () => { ctx.rotate(-.2); box(-330, -110, 660, 220, 'rgba(220,38,38,.92)', 24, 10); txt('MYTH', 0, 12, 170, '#fff', { lw: 16 }); });
+}
+// ---------- scans + sleep ----------
+function sScan(lt, t) {
+  bgFill('#0f172a');
+  if (t < T.sleep) {
+    txt('BRAIN SCANS', 540, 260, 120, '#67e8f9', { lw: 18 });
+    // grid of brain regions lighting up through the day
+    const k = inv(T.scan + .3, T.scan + 3.2, t);
+    for (let r = 0; r < 4; r++) for (let c = 0; c < 5; c++) { const i = r * 5 + c; const on = rnd(i) < k * 1.05; box(140 + c * 165, 520 + r * 165, 140, 140, on ? ['#f472b6', '#facc15', '#22d3ee', '#a3e635'][i % 4] : '#334155', 20, 7); }
+    const hr = Math.floor(lerp(0, 24, k)); txt(String(hr).padStart(2, '0') + ':00', 540, 1300, 90, '#fff', { lw: 14 });
+    if (t > T.all) popIn(t, T.all, 540, 420, () => txt('= ALMOST ALL OF IT', 0, 0, 70, '#fde047', { lw: 12 }));
+    foot('Mayo Clinic neurologist via Scientific American');
+    return;
+  }
+  bgFill('#1e1b4b');
+  for (let i = 0; i < 30; i++) circ(rnd(i) * W, rnd(i + 9) * 900 + 200, 4, '#e0e7ff');
+  hero({ x: 540, y: 1460, s: 1.1, pose: STAND, eyes: 'closed', mouth: 'flat', lean: 0, shadow: false });
+  brainChar(540, 780, 1.1, { eyes: 'norm', mouth: 'smile', armL: [-90, -100 + Math.sin(t * 8) * 30], armR: [90, -100 - Math.sin(t * 8) * 30], legs: false });
+  for (let i = 0; i < 3; i++) { const z = (t * .8 + i / 3) % 1; ctx.save(); ctx.globalAlpha = 1 - z; txt('Z', 360 - z * 120, 1000 - z * 260, 60 + z * 40, '#c7d2fe', { lw: 8 }); ctx.restore(); }
+  txt('ASLEEP...', 540, 260, 120, '#c7d2fe', { lw: 18 });
+  if (t > T.busy) popIn(t, T.busy, 540, 400, () => txt('...BRAIN STILL BUSY', 0, 0, 74, '#fde047', { lw: 12 }));
+  foot('UW Neuroscience for Kids');
+}
+// ---------- energy ----------
+function sEnergy(lt, t) {
+  bgFill('#fef3c7');
+  if (t < T.why) {
+    txt('HUNGRY BRAIN', 540, 250, 120, '#ea580c', { lw: 20 });
+    // two bars
+    const a = eo(inv(T.three, T.three + .6, t)), b = eo(inv(T.twenty, T.twenty + .6, t));
+    line(140, 1300, 940, 1300, 10);
+    box(220, 1300 - 900 * .03 * a * 3, 220, 900 * .03 * a * 3, '#f472b6', 10, 8);
+    box(640, 1300 - 900 * .2 * b * 3, 220, 900 * .2 * b * 3, '#f97316', 10, 8);
+    txt('BODY WEIGHT', 330, 1360, 46, INK, { stroke: false }); txt('ENERGY USE', 750, 1360, 46, INK, { stroke: false });
+    if (t > T.three) txt('~3%', 330, 1300 - 81 * a - 60, 90, '#be185d', { lw: 14, strokeCol: '#fff' });
+    if (t > T.twenty) txt('~20%', 750, 1300 - 540 * b - 60, 100, '#c2410c', { lw: 14, strokeCol: '#fff' });
+    brainChar(330, 600, .7, { eyes: 'huge', mouth: t > T.twenty ? 'o' : 'smile', legs: false });
+    foot('Johns Hopkins neurologist via Scientific American');
+    return;
+  }
+  txt('WHY FEED IT', 540, 260, 110, '#fff', { lw: 18 }); txt('IF IT SLEEPS?', 540, 390, 110, '#fde047', { lw: 18 });
+  brainChar(540, 1050, 1.4, { eyes: 'closed', mouth: 'flat', armL: [-60, 120], armR: [60, 120] });
+  for (let i = 0; i < 4; i++) { const k = (t * .9 + i / 4) % 1; ctx.save(); ctx.globalAlpha = 1 - k; circ(lerp(120, 360, k) + i * 20, lerp(1500, 1150, k), 30, '#facc15', INK, 5); ctx.restore(); }
+  qmark(900, 820, t, T.why + .4);
+}
+// ---------- full power ----------
+function sFull(lt, t) {
+  bgFill('#dcfce7');
+  const x = 540, s = 1.25;
+  hero({ x: 330, y: 1500, s, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.0, re: -1.1 }, eyes: 'norm', mouth: 'smile', look: 1, hold: holdPhone('on', {}) });
+  brainChar(760, 900, .9, { eyes: 'huge', mouth: 'smile', armR: [80, -150], armL: [-60, 110] });
+  battery(540, 520, 1.4, t > T.full ? eo(inv(T.full, T.full + 1, t)) * .9 + .1 : .1, t > T.full ? '#22c55e' : '#ef4444');
+  txt(t < T.full ? 'NO SECRET 90%' : 'RUNNING AT FULL', 540, 270, 110, '#15803d', { lw: 18, strokeCol: '#fff' });
+  if (t > T.now) popIn(t, T.now, 760, 1260, () => { box(-200, -55, 400, 110, '#fff', 26, 7); txt('RIGHT NOW!', 0, 6, 62, '#16a34a', { stroke: false }); });
+}
+const SCENES = [{ t0: 0, fn: sMyth, push: .04 }, { t0: mid(2, 3), fn: sScan, push: .03, flash: 1 }, { t0: mid(4, 5), fn: sEnergy, push: .03, flash: 1 }, { t0: mid(7, 8), fn: sFull, push: .05, xfade: .25 }];
+const CAP = [["you've heard it", "a hundred times.", "you only use", "10 percent", "of your brain."], ["unlock the other 90,", "and you'd be", "a genius.", "right?"], ["wrong.", "it's a myth."], ["brain scans show", "that over a whole day,", "you use pretty much", "all of it."], ["even when you sleep,", "your brain stays busy.", "just in a", "different mode."], ["and it's hungry.", "your brain is only", "about 3 percent", "of your body weight."], ["but it burns", "around 20 percent", "of your energy."], ["why would your body", "feed a brain", "that's 90 percent", "asleep?"], ["so you're not missing", "any secret", "brain power."], ["you're already", "running at full.", "even right now,", "watching this."]];
+const HOT = new Set(["10 percent", "a genius.", "it's a myth.", "all of it.", "your brain stays busy.", "about 3 percent", "around 20 percent", "asleep?", "brain power.", "running at full.", "watching this."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1680) });
+</script></body></html>
