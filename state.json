@@ -1,5 +1,5 @@
 {
- "uploaded_count": 15,
+ "uploaded_count": 16,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -121,6 +121,14 @@
    "mode": "scheduled 2026-11-17T10:30:00Z",
    "publish_at": "2026-11-17T11:30:00+01:00",
    "uploaded_at": "2026-11-16T14:55:28+00:00"
+  },
+  {
+   "tag": "video-20261118-slot2",
+   "video_id": "pTeyqmJdduA",
+   "title": "4 Siblings, Same 100 \u20ac a Month. Who Ends Up Richest? \ud83d\udcb8 #shorts",
+   "mode": "scheduled 2026-11-18T15:00:00Z",
+   "publish_at": "2026-11-18T16:00:00+01:00",
+   "uploaded_at": "2026-11-16T15:41:00+00:00"
   }
  ]
 }
