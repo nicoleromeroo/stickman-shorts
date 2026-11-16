@@ -1,0 +1,98 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function wtn(i, w, n) { const s = L[i].text.toLowerCase(); let p = -1; for (let k = 0; k <= n; k++) p = s.indexOf(w, p + 1); return at(i, Math.max(p, 0) / s.length); }
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const T = { two: wt(0, 'two days'), y13: wt(0, 'thirteen'), sep: wt(1, 'september'), money: wt(2, 'eight hundred'), rec: wt(2, 'a world record'), del: wt(3, 'delayed'), d1: wt(3, 'first'), d2: wt(3, 'may'), d3: wt(3, 'november'), views: wt(4, 'four hundred'), day: wt(4, 'in one day'), g: at(5, 0), six: wt(5, 'six percent'), pub: at(6, 0), bil: wt(6, 'three and a half'), three: wt(6, 'three months'), end: at(7, 0), left: wt(7, 'two days'), can: wt(7, 'can it') };
+function controller(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); ctx.fillStyle = '#1f2937'; ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.ellipse(-55, 10, 45, 40, 0, 0, 7); ctx.ellipse(55, 10, 45, 40, 0, 0, 7); ctx.fill(); ctx.stroke(); box(-70, -30, 140, 60, '#1f2937', 24, 7); box(-62, -8, 30, 10, '#e5e7eb', 3, 0); box(-52, -18, 10, 30, '#e5e7eb', 3, 0); circ(45, -10, 7, '#ef4444', INK, 3); circ(62, 4, 7, '#22c55e', INK, 3); ctx.restore(); }
+const GAMER = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .9, le: -1.9, ra: -.9, re: 1.9 };
+function gamer(x, y, s, o = {}) { hero(Object.assign({ x, y, s, pose: GAMER, hold: (hx, hy) => controller(hx - 32, hy + 4, .9) }, o)); }
+function calendar(x, y, s, top, big, col = '#ef4444') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-190, -200, 380, 400, '#fff', 24, 9); box(-190, -200, 380, 110, col, 24, 9); txt(top, 0, -140, 60, '#fff', { lw: 8 }); txt(big, 0, 60, 150, INK, { stroke: false }); for (const rx of [-110, 110]) box(rx - 12, -230, 24, 60, '#9ca3af', 10, 6); ctx.restore(); }
+function cash(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); for (let i = 0; i < 6; i++) { box(-120, -i * 34, 240, 40, '#4ade80', 6, 6); circ(0, -i * 34 + 20, 13, '#16a34a', INK, 3); } ctx.restore(); }
+function trophy(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#facc15'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-110, -160); ctx.lineTo(110, -160); ctx.quadraticCurveTo(110, 30, 0, 50); ctx.quadraticCurveTo(-110, 30, -110, -160); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.arc(-120, -90, 50, Math.PI * .5, Math.PI * 1.5); ctx.stroke(); ctx.beginPath(); ctx.arc(120, -90, 50, -Math.PI * .5, Math.PI * .5); ctx.stroke(); box(-25, 45, 50, 60, '#facc15', 4, 8); box(-90, 100, 180, 50, '#92400e', 8, 8); ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillRect(-70, -140, 20, 110); ctx.restore(); }
+function tv(x, y, w, h, fn) { box(x - w / 2, y - h / 2, w, h, '#111827', 20, 9); ctx.save(); rr(x - w / 2 + 20, y - h / 2 + 20, w - 40, h - 40, 8); ctx.clip(); fn(x - w / 2 + 20, y - h / 2 + 20, w - 40, h - 40); ctx.restore(); box(x - 80, y + h / 2, 160, 30, '#374151', 6, 7); }
+function loadBar(x, y, w, k, col = '#22c55e') { box(x - w / 2, y - 40, w, 80, '#0f172a', 40, 8); ctx.fillStyle = col; rr(x - w / 2 + 12, y - 28, (w - 24) * clamp(k), 56, 28); ctx.fill(); }
+function room() { bgFill('#312e81'); floor('#4c1d95', 1380); spot(540, 900, 800, .25, '147,197,253'); }
+function couch(x, y) { box(x - 330, y - 200, 660, 150, '#7c3aed', 30, 9); box(x - 380, y - 90, 760, 130, '#8b5cf6', 30, 9); box(x - 380, y - 170, 90, 210, '#6d28d9', 26, 9); box(x + 290, y - 170, 90, 210, '#6d28d9', 26, 9); }
+const SIT = { lt: -1.45, ls: 1.45, rt: -1.35, rs: 1.4, la: .9, le: -1.9, ra: -.9, re: 1.9 };
+function footnote(a, b) { txt(a, 540, 1830, 28, '#e2e8f0', { stroke: false, font: 'Nun' }); if (b) txt(b, 540, 1868, 28, '#e2e8f0', { stroke: false, font: 'Nun' }); }
+// ---------- countdown ----------
+function sWait(lt, t) {
+  room();
+  tv(540, 640, 760, 420, (x, y, w, h) => { ctx.fillStyle = '#0b1020'; ctx.fillRect(x, y, w, h); txt('GTA 6', x + w / 2, y + 120, 110, '#fff', { lw: 14 }); txt('COMING IN', x + w / 2, y + 220, 56, '#fde047', { stroke: false, font: 'Nun' }); const n = t < T.two ? '...' : '2 DAYS'; txt(n, x + w / 2, y + 320, 90, '#fde047', { stroke: false }); });
+  gamer(540, 1500, 1.2, { eyes: 'huge', mouth: t > T.y13 ? 'wavy' : 'grin' });
+  if (t > T.y13) { const k = eob(inv(T.y13, T.y13 + .3, t)); ctx.save(); ctx.translate(540, 260); ctx.rotate(-.06); ctx.scale(k, k); box(-380, -90, 760, 180, '#ef4444', 24, 10); txt('13 YEARS', 0, 10, 130, '#fff', { lw: 14 }); ctx.restore(); }
+}
+function s2013(lt, t) {
+  room();
+  calendar(540, 720, 1.4, '2013', 'SEP');
+  gamer(260, 1460, 1.05, { eyes: 'norm', mouth: 'smile', look: 1 });
+  txt('LAST NEW GTA', 540, 230, 100, '#fff', { lw: 16 });
+  if (t > T.sep + .3) { txt('GTA 5', 830, 1200, 110, '#fde047', { lw: 14 }); }
+}
+function sRecord(lt, t) {
+  bgFill('#064e3b'); spot(540, 800, 700, .35, '250,204,21');
+  for (let i = 0; i < 14; i++) { const fy = ((t * 260 + i * 160) % 2100) - 100; ctx.save(); ctx.translate((i * 197) % W, fy); ctx.rotate(i + t); box(-50, -22, 100, 44, '#4ade80', 6, 5); ctx.restore(); }
+  cash(270, 1350, 1.2); cash(810, 1350, 1.2);
+  txt('DAY ONE', 540, 230, 110, '#fff', { lw: 16 });
+  if (t > T.money) { const v = lerp(0, 815.7, eo(inv(T.money, T.money + 1.4, t))); box(80, 330, 920, 220, '#0f172a', 30, 9); txt('$' + v.toFixed(1) + ' MILLION', 540, 450, 104, '#4ade80', { stroke: false }); }
+  if (t > T.rec) { const k = eob(inv(T.rec, T.rec + .35, t)); ctx.save(); ctx.translate(540, 1000); ctx.scale(k, k); trophy(0, 0, 1.6); ctx.restore(); txt('WORLD RECORD', 540, 1460, 96 * k, '#facc15', { lw: 16 }); }
+  footnote('Guinness World Records: highest-grossing video game in 24 hours', '$815.7 million, Grand Theft Auto V, 2013');
+}
+// ---------- delays ----------
+function sDelay(lt, t) {
+  room();
+  const dates = [['2025', T.d1], ['MAY 2026', T.d2], ['NOV 19 2026', T.d3]];
+  txt('DELAYED', 540, 240, 140, '#f87171', { lw: 18 });
+  const k = t < T.d1 ? .9 : t < T.d3 ? .9 + Math.sin(t * 30) * .01 : 1;
+  loadBar(540, 420, 860, t < T.d3 ? .93 : .99, t < T.d3 ? '#f59e0b' : '#22c55e');
+  txt(t < T.d3 ? '99%... STILL LOADING' : 'READY SOON', 540, 530, 54, '#fff', { stroke: false, font: 'Nun' });
+  dates.forEach(([s, t0], i) => { if (t < t0) return; const y = 640 + i * 150; const kk = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(540, y); ctx.scale(kk, kk); box(-340, -70, 680, 140, i === 2 ? '#22c55e' : '#fff', 24, 9); txt(s, 0, 8, 90, INK, { stroke: false }); ctx.restore();
+    if (i < 2 && t > (i === 0 ? T.d2 : T.d3) - .2) { line(160, y + 40, 920, y - 40, 18, '#ef4444'); } });
+  gamer(170, 1500, 1.0, { eyes: t > T.d3 ? 'huge' : 'closed', mouth: t > T.d3 ? 'grin' : 'frown', look: 1 });
+}
+// ---------- trailer views ----------
+function sViews(lt, t) {
+  bgFill('#0f172a'); spot(540, 800, 700, .3, '96,165,250');
+  phoneDev(540, 820, 2.1, 'on', { c1: '#1e293b', c2: '#334155', draw: (x, y, w, h) => { box(x + 10, y + 20, w - 20, 80, '#111827', 8, 3); circ(x + w / 2, y + 60, 16, '#fff', INK, 2); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(x + w / 2 - 6, y + 50); ctx.lineTo(x + w / 2 + 9, y + 60); ctx.lineTo(x + w / 2 - 6, y + 70); ctx.closePath(); ctx.fill(); txt('TRAILER', x + w / 2, y + 140, 22, '#fff', { stroke: false }); txt('VIEWS', x + w / 2, y + 190, 16, '#94a3b8', { stroke: false, font: 'Nun' }); } });
+  const v = t < T.views ? 0 : Math.round(lerp(0, 475, eo(inv(T.views, T.views + 1.6, t))));
+  box(70, 1120, 940, 200, '#facc15', 30, 9); txt(v + ' MILLION', 540, 1235, 110, INK, { stroke: false });
+  if (t > T.day) { const k = eob(inv(T.day, T.day + .3, t)); ctx.save(); ctx.translate(540, 260); ctx.rotate(-.05); ctx.scale(k, k); box(-330, -85, 660, 170, '#ef4444', 24, 10); txt('IN 24 HOURS', 0, 10, 100, '#fff', { lw: 12 }); ctx.restore(); }
+  else txt('ONE TRAILER', 540, 260, 110, '#fff', { lw: 16 });
+}
+function sEarth(lt, t) {
+  bgFill('#0b1020'); for (let i = 0; i < 40; i++) circ((i * 263) % W, (i * 419) % 1500, 3, '#fff', '#fff', 0);
+  const cx = 540, cy = 860, r = 380;
+  circ(cx, cy, r, '#2563eb', INK, 10); ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r - 5, 0, 7); ctx.clip(); ctx.fillStyle = '#22c55e'; for (const [a, b, c, d] of [[-200, -150, 160, 120], [60, -40, 200, 170], [-150, 120, 120, 90], [120, 230, 110, 70]]) { ctx.beginPath(); ctx.ellipse(cx + a, cy + b, c, d, .4, 0, 7); ctx.fill(); ctx.stroke(); } ctx.restore();
+  if (t > T.six) { const k = eo(inv(T.six, T.six + .7, t)); ctx.fillStyle = 'rgba(250,204,21,.85)'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * .058 * k); ctx.closePath(); ctx.fill(); ctx.stroke();
+    const kk = eob(inv(T.six, T.six + .3, t)); ctx.save(); ctx.translate(820, 1300); ctx.scale(kk, kk); box(-170, -90, 340, 180, '#facc15', 30, 9); txt('~6%', 0, 14, 120, INK, { stroke: false }); ctx.restore(); }
+  txt('OF EVERYONE', 540, 230, 110, '#fff', { lw: 16 }); txt('ON EARTH', 540, 350, 110, '#fde047', { lw: 16 });
+  footnote('475 million views in 24 h: Guinness World Records Gamer\'s Edition', '2027 (via TechRadar). World population ~8.2 billion.');
+}
+// ---------- money forecast ----------
+function sForecast(lt, t) {
+  bgFill('#064e3b'); spot(540, 900, 700, .3, '250,204,21');
+  txt('THE PUBLISHER', 540, 230, 100, '#fff', { lw: 16 }); txt('EXPECTS UP TO', 540, 340, 80, '#a7f3d0', { lw: 12 });
+  const v = t < T.bil ? 0 : lerp(0, 3.5, eo(inv(T.bil, T.bil + 1.2, t)));
+  box(110, 440, 860, 220, '#0f172a', 30, 9); txt('$' + v.toFixed(1) + ' BILLION', 540, 560, 110, '#4ade80', { stroke: false });
+  const n = Math.min(4, Math.floor(inv(T.bil, T.bil + 1.2, t) * 4 + (t > T.bil ? 1 : 0)));
+  for (let i = 0; i < n; i++) cash(180 + i * 180, 1380, .7);
+  if (t > T.three) { const k = eob(inv(T.three, T.three + .3, t)); ctx.save(); ctx.translate(540, 830); ctx.scale(k, k); box(-330, -80, 660, 160, '#facc15', 24, 9); txt('IN 3 MONTHS', 0, 10, 90, INK, { stroke: false }); ctx.restore(); }
+  gamer(900, 1460, .85, { eyes: 'huge', mouth: 'o', look: -1, flip: true });
+  footnote('Take-Two forecast, Oct-Dec 2026: $3.35-3.5 billion net bookings', '(whole company, not only GTA 6). Out 19 Nov 2026 on PS5 / Xbox Series');
+}
+function sEnd(lt, t) {
+  room();
+  tv(540, 640, 760, 420, (x, y, w, h) => { ctx.fillStyle = '#0b1020'; ctx.fillRect(x, y, w, h); txt('GTA 6', x + w / 2, y + 120, 110, '#fff', { lw: 14 }); loadBar(x + w / 2, y + 220, w - 120, .98); txt('2 DAYS LEFT', x + w / 2, y + 320, 70, '#fde047', { stroke: false }); });
+  gamer(540, 1500, 1.2, { eyes: 'huge', mouth: 'grin' });
+  if (t > T.can) { const k = eob(inv(T.can, T.can + .3, t)); ctx.save(); ctx.translate(540, 230); ctx.scale(k, k); box(-400, -90, 800, 180, '#facc15', 24, 10); txt('NEW RECORD?', 0, 10, 110, INK, { stroke: false }); ctx.restore(); }
+  else txt('13 YEARS', 540, 230, 120, '#fff', { lw: 16 });
+}
+const SCENES = [{ t0: 0, fn: sWait, push: .04 }, { t0: mid(0, 1), fn: s2013, push: .04, flash: .8 }, { t0: mid(1, 2), fn: sRecord, push: .05, flash: 1 }, { t0: mid(2, 3), fn: sDelay, push: .04, xfade: .25 }, { t0: mid(3, 4), fn: sViews, push: .05, flash: .8 }, { t0: mid(4, 5), fn: sEarth, push: .05, xfade: .25 }, { t0: mid(5, 6), fn: sForecast, push: .05, flash: .8 }, { t0: mid(6, 7), fn: sEnd, push: .05, xfade: .25 }];
+const CAP = [["gta 6 comes out", "in two days.", "fans waited", "thirteen years", "for this."], ["the last new gta", "came out in september,", "twenty thirteen."], ["on day one,", "it made", "815 million dollars.", "a world record."], ["then the new one", "got delayed.", "first 2025.", "then may 2026.", "now,", "november 19th."], ["but fans kept watching.", "one trailer got", "475 million views", "in one day."], ["guinness world records", "says that's about", "six percent", "of everyone on earth."], ["and the publisher expects", "up to", "3.5 billion dollars", "in sales,", "in just three months."], ["thirteen years.", "two days left.", "can it beat", "its own record?"]];
+const HOT = new Set(["in two days.", "thirteen years", "twenty thirteen.", "815 million dollars.", "a world record.", "got delayed.", "november 19th.", "475 million views", "six percent", "3.5 billion dollars", "in just three months.", "its own record?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

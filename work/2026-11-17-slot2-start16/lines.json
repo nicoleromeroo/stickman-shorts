@@ -1,0 +1,10 @@
+["Fifty euros a month. That's less than two euros a day.",
+ "Alex starts investing it at sixteen. Ben waits until twenty six.",
+ "Both keep going until sixty seven. Same fifty euros, in a broad index fund.",
+ "Alex pays in six thousand euros more than Ben. So who ends up richer?",
+ {"text":"It's not even close.","gap":0.6},
+ "Assuming about six percent a year, Ben ends up with around one hundred seven thousand euros.",
+ {"text":"Alex? Around two hundred three thousand. Almost double.","gap":0.6},
+ "Six thousand euros more paid in. Ninety six thousand more at the end.",
+ "Returns aren't guaranteed. Markets go up and down.",
+ {"text":"But time beats amount. The best day to start is early.","gap":1.0}]

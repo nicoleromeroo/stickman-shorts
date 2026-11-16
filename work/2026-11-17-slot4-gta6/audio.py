@@ -1,0 +1,13 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 7)
+m.music("upbeat")
+m.add("tick", .15, .4); m.add("tick", .55, .4); m.add("sting", m.wt(0, "thirteen"), .45)
+m.add("whoosh", m.mid(0, 1) - .12, .3); m.add("slide", m.wt(1, "september"), .35)
+m.add("whoosh", m.mid(1, 2) - .12, .3); m.add("cash", m.wt(2, "eight hundred"), .45); m.add("shing", m.wt(2, "world record"), .45)
+m.add("whoosh", m.mid(2, 3) - .12, .3); m.add("pdown", m.wt(3, "delayed"), .4)
+m.add("bonk", m.wt(3, "first"), .35); m.add("bonk", m.wt(3, "may"), .35); m.add("ding", m.wt(3, "november"), .4)
+m.add("whoosh", m.mid(3, 4) - .12, .3); m.add("notify", m.wt(4, "four hundred"), .4)
+m.add("pop", m.wt(5, "six percent"), .45)
+m.add("whoosh", m.mid(5, 6) - .12, .3); m.add("cash", m.wt(6, "three and a half"), .45)
+m.add("whoosh", m.mid(6, 7) - .12, .3); m.add("tick", m.wt(7, "two days"), .45); m.add("sting", m.wt(7, "can it"), .45)
+m.write(mvol=.08, svol=.3)

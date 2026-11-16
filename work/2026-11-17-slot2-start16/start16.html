@@ -1,0 +1,84 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function wtn(i, w, n) { const s = L[i].text.toLowerCase(); let p = -1; for (let k = 0; k <= n; k++) p = s.indexOf(w, p + 1); return at(i, Math.max(p, 0) / s.length); }
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const T = { less: wt(0, 'less than'), alex: at(1, 0), a16: wt(1, 'sixteen'), ben: wt(1, 'ben'), b26: wt(1, 'twenty six'), both: at(2, 0), s67: wt(2, 'sixty seven'), paid: at(3, 0), who: wt(3, 'so who'), close: at(4, 0), assume: at(5, 0), benv: wt(5, 'one hundred'), alexv: at(6, 0), alexn: wt(6, 'two hundred'), dbl: wt(6, 'almost'), more: at(7, 0), ninety: wt(7, 'ninety'), risk: at(8, 0), down: wt(8, 'markets'), time: at(9, 0), early: wt(9, 'the best') };
+const ALEX = { shirt: '#22c55e', pants: '#334155', hair: '#7c2d12' }, BEN = { shirt: '#a855f7', pants: '#1f2937', hair: '#facc15' };
+function note(x, y, s, label = '50 €', rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); box(-150, -75, 300, 150, '#fbbf24', 12, 8); circ(0, 0, 50, '#fde68a', INK, 5); txt(label, 0, 6, 64, INK, { stroke: false }); ctx.restore(); }
+function ageTag(x, y, s, col) { box(x - 110, y - 50, 220, 100, col, 24, 8); txt(s, x, y + 6, 66, '#fff', { lw: 10 }); }
+function eur(n) { return Math.round(n).toLocaleString('en-US') + ' €'; }
+function foot() { txt('Assumed ~6 % a year (Finanztip planning value, world-stock ETFs),', 540, 1830, 28, '#e2e8f0', { stroke: false, font: 'Nun' }); txt('monthly compounding, before tax and inflation. Not guaranteed.', 540, 1868, 28, '#e2e8f0', { stroke: false, font: 'Nun' }); }
+function bar(x, base, w, hPaid, hTot, k, col, label, val, paidLbl) { const ht = hTot * k, hp = Math.min(hPaid, ht);
+  box(x - w / 2, base - ht, w, ht, col, 14, 8); if (hp > 0) { ctx.fillStyle = 'rgba(15,23,42,.45)'; rr(x - w / 2 + 8, base - hp, w - 16, hp - 8, 8); ctx.fill(); }
+  txt(label, x, base + 60, 64, '#fff', { lw: 10 }); if (k > .02) txt(val, x, base - ht - 50, 64, '#fff', { lw: 12 }); if (paidLbl && k > .95) txt(paidLbl, x, base - hp / 2 - 6 + Math.min(0, hp / 2 - 40), 30, '#fff', { stroke: false, font: 'Nun' }); }
+function bg() { bgFill('#0f766e'); spot(540, 800, 800, .25, '250,204,21'); }
+// ---------- hook ----------
+function sHook(lt, t) {
+  bg();
+  txt('50 € A MONTH', 540, 260, 130, '#fde047', { lw: 18 });
+  for (let i = 0; i < 3; i++) note(540 + (i - 1) * 40, 560 - i * 30 + Math.sin(t * 3 + i) * 8, 1.2, '50 €', (i - 1) * .12);
+  hero({ x: 540, y: 1480, s: 1.0, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: 2.4, le: .3, ra: -2.4, re: -.3 }, eyes: 'huge', mouth: 'grin' });
+  if (t > T.less) { const k = eob(inv(T.less, T.less + .3, t)); ctx.save(); ctx.translate(540, 830); ctx.rotate(-.05); ctx.scale(k, k); box(-380, -80, 760, 160, '#fff', 30, 9); txt('UNDER 2 € A DAY', 0, 10, 82, INK, { stroke: false }); ctx.restore(); }
+}
+// ---------- Alex vs Ben ----------
+function sTwo(lt, t) {
+  bg();
+  txt('SAME 50 €', 540, 230, 110, '#fff', { lw: 16 });
+  const ka = eo(inv(T.alex, T.alex + .5, t)), kb = eo(inv(T.ben, T.ben + .5, t));
+  if (ka > 0) { ctx.save(); ctx.globalAlpha = ka; stick(Object.assign({ x: 290, y: 1440, s: 1.15, pose: STAND, mouth: 'grin', eyes: 'norm', look: 1 }, ALEX)); txt('ALEX', 290, 1520, 64, '#86efac', { lw: 10 }); if (t > T.a16) ageTag(290, 860, 'AGE 16', '#16a34a'); ctx.restore(); }
+  if (kb > 0) { ctx.save(); ctx.globalAlpha = kb; stick(Object.assign({ x: 790, y: 1440, s: 1.15, flip: true, pose: t < T.both ? { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: 2.2, ra: -.3, re: -2.2 } : STAND, mouth: t < T.both ? 'flat' : 'smile', eyes: t < T.both ? 'closed' : 'norm', look: -1 }, BEN)); txt('BEN', 790, 1520, 64, '#d8b4fe', { lw: 10 }); if (t > T.b26) ageTag(790, 860, 'AGE 26', '#7e22ce'); ctx.restore(); }
+  if (t > T.s67) { const k = eob(inv(T.s67, T.s67 + .3, t)); ctx.save(); ctx.translate(540, 450); ctx.scale(k, k); box(-360, -110, 720, 220, '#0f172a', 26, 9); txt('BOTH UNTIL 67', 0, -20, 74, '#fde047', { stroke: false }); txt('broad index fund', 0, 60, 46, '#fff', { stroke: false, font: 'Nun' }); ctx.restore(); }
+}
+// ---------- paid in ----------
+function coins(x, base, n, k) { const m = Math.round(n * k); for (let i = 0; i < m; i++) { ctx.fillStyle = '#facc15'; ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(x, base - i * 26, 90, 22, 0, 0, 7); ctx.fill(); ctx.stroke(); } }
+function sPaid(lt, t) {
+  bg();
+  txt('PAID IN', 540, 230, 120, '#fff', { lw: 16 });
+  const k = eo(inv(T.paid, T.paid + 1.2, t));
+  coins(290, 1300, 20, k); coins(790, 1300, 16, k);
+  txt(eur(30600 * k), 290, 1300 - 20 * 26 * k - 90, 64, '#fff', { lw: 12 }); txt(eur(24600 * k), 790, 1300 - 16 * 26 * k - 90, 64, '#fff', { lw: 12 });
+  txt('ALEX', 290, 1440, 70, '#86efac', { lw: 10 }); txt('BEN', 790, 1440, 70, '#d8b4fe', { lw: 10 });
+  if (t > T.paid + 1.3) txt('+6,000 €', 290, 420, 90, '#fde047', { lw: 14 });
+  if (t > T.who) { const kk = eob(inv(T.who, T.who + .3, t)); ctx.save(); ctx.translate(790, 470); ctx.scale(kk, kk); box(-220, -80, 440, 160, '#fff', 30, 9); txt('RICHER?', 0, 10, 80, INK, { stroke: false }); ctx.restore(); }
+  if (t > T.close) { const kk = eob(inv(T.close, T.close + .25, t)); ctx.save(); ctx.fillStyle = `rgba(0,0,0,${.5 * kk})`; ctx.fillRect(-300, -300, W + 600, H + 600); ctx.translate(540, 860); ctx.rotate(-.06); ctx.scale(kk, kk); box(-420, -100, 840, 200, '#ef4444', 26, 10); txt('NOT EVEN CLOSE', 0, 12, 96, '#fff', { lw: 12 }); ctx.restore(); }
+}
+// ---------- the result ----------
+function sResult(lt, t) {
+  bg();
+  txt('AT 67', 540, 220, 120, '#fde047', { lw: 16 });
+  const base = 1400, sc = 900 / 202664;
+  const kb = eo(inv(T.benv - .2, T.benv + 1.4, t)), ka = eo(inv(T.alexn - .2, T.alexn + 1.4, t));
+  bar(300, base, 300, 30600 * sc, 202664 * sc, ka, '#22c55e', 'ALEX', '~' + Math.round(202664 * ka / 1000) + 'k €', 'paid in');
+  bar(780, base, 300, 24600 * sc, 106865 * sc, kb, '#a855f7', 'BEN', '~' + Math.round(106865 * kb / 1000) + 'k €', 'paid in');
+  if (t < T.alexv) txt('assumed ~6 % a year', 540, 340, 54, '#fff', { stroke: false, font: 'Nun' });
+  if (t > T.dbl) { const k = eob(inv(T.dbl, T.dbl + .3, t)); ctx.save(); ctx.translate(540, 360); ctx.rotate(-.05); ctx.scale(k, k); box(-330, -75, 660, 150, '#facc15', 26, 9); txt('ALMOST 2x', 0, 10, 96, INK, { stroke: false }); ctx.restore(); }
+  foot();
+}
+// ---------- twist ----------
+function sTwist(lt, t) {
+  bg();
+  const rows = [['+10 YEARS', 'earlier start', '#fff', T.more - .1], ['+6,000 €', 'paid in', '#fde047', T.more + .3], ['+96,000 €', 'at the end', '#4ade80', T.ninety]];
+  rows.forEach(([a, b, c, t0], i) => { if (t < t0) return; const k = eob(inv(t0, t0 + .3, t)); ctx.save(); ctx.translate(540, 330 + i * 230); ctx.scale(k, k); box(-430, -95, 860, 190, '#0f172a', 26, 9); txt(a, -110, 12, 96, c, { stroke: false }); txt(b, 290, 12, 44, '#cbd5e1', { stroke: false, font: 'Nun' }); ctx.restore(); });
+  stick(Object.assign({ x: 540, y: 1480, s: 1.0, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: 2.4, le: .3, ra: -2.4, re: -.3 }, eyes: 'huge', mouth: 'grin' }, ALEX));
+  foot();
+}
+function sRisk(lt, t) {
+  bg();
+  // wavy market line
+  ctx.save(); ctx.strokeStyle = '#fde047'; ctx.lineWidth = 16; ctx.lineJoin = 'round'; ctx.beginPath(); const n = Math.floor(lerp(2, 40, inv(T.risk, T.risk + 2.5, t)));
+  for (let i = 0; i <= n; i++) { const x = 100 + i * 22, y = 1050 - i * 12 + Math.sin(i * 1.3) * 70 + Math.sin(i * .5) * 50; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke(); ctx.restore();
+  txt('NOT GUARANTEED', 540, 250, 110, '#f87171', { lw: 16 });
+  if (t > T.down) txt('UP & DOWN', 540, 380, 90, '#fff', { lw: 14 });
+  if (t > T.time) { const k = eob(inv(T.time, T.time + .3, t)); ctx.save(); ctx.fillStyle = `rgba(0,0,0,${.45 * k})`; ctx.fillRect(-300, -300, W + 600, H + 600); ctx.translate(540, 760); ctx.scale(k, k); box(-430, -130, 860, 260, '#facc15', 30, 10); txt('TIME', 0, -30, 110, INK, { stroke: false }); txt('BEATS AMOUNT', 0, 70, 80, INK, { stroke: false }); ctx.restore(); }
+  stick(Object.assign({ x: 300, y: 1480, s: 1.0, pose: STAND, mouth: 'smile', look: 1 }, ALEX)); stick(Object.assign({ x: 800, y: 1480, s: 1.0, flip: true, pose: STAND, mouth: 'smile', look: -1 }, BEN));
+  txt('Not financial advice. Past returns are no promise for the future.', 540, 1850, 30, '#e2e8f0', { stroke: false, font: 'Nun' });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .04 }, { t0: mid(0, 1), fn: sTwo, push: .04, flash: .8 }, { t0: mid(2, 3), fn: sPaid, push: .04, xfade: .25 }, { t0: mid(4, 5), fn: sResult, push: .04, flash: .8 }, { t0: mid(6, 7), fn: sTwist, push: .05, xfade: .25 }, { t0: mid(7, 8), fn: sRisk, push: .04, xfade: .25 }];
+const CAP = [["fifty euros a month.", "that's less than", "two euros a day."], ["alex starts", "investing it at sixteen.", "ben waits", "until twenty six."], ["both keep going", "until sixty seven.", "same fifty euros,", "in a broad index fund."], ["alex pays in", "6,000 euros more", "than ben.", "so who ends up richer?"], ["it's not even close."], ["assuming about", "six percent a year,", "ben ends up with", "around 107,000 euros."], ["alex?", "around 203,000.", "almost double."], ["6,000 euros", "more paid in.", "96,000 more", "at the end."], ["returns aren't guaranteed.", "markets go", "up and down."], ["but time", "beats amount.", "the best day", "to start is early."]];
+const HOT = new Set(["two euros a day.", "investing it at sixteen.", "until twenty six.", "6,000 euros more", "so who ends up richer?", "it's not even close.", "around 107,000 euros.", "around 203,000.", "almost double.", "96,000 more", "beats amount."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

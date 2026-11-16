@@ -1,0 +1,12 @@
+["Last time, you found a glowing door behind the gym. And another player.",
+ "His name is Kai. Orange hoodie. Red hearts. Not even surprised.",
+ "Rule one, he says. Lose all your hearts, and you respawn. Back in bed, next morning.",
+ "Rule two. The door only opens when you finish the quest.",
+ {"text":"Rule three. Every time you respawn... the game deletes something.","gap":0.6},
+ "You laugh. Deletes what?",
+ "I had a bike, Kai says. Respawn number twelve. Gone. Like it never existed.",
+ {"text":"I've respawned three hundred times.","gap":0.5},
+ "You run to the window and look down your street.",
+ "The neighbour is still watering his flower. But next to him...",
+ {"text":"Your house is gone.","gap":0.6},
+ {"text":"Kai goes quiet. So... you've respawned before too?","gap":1.6}]
