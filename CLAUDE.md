@@ -10,7 +10,7 @@ enough, queue fewer videos rather than a bad one.
 | slot tag | time  | format | priority |
 |---|---|---|---|
 | slot1 | 08:00 | FACTS — "why does this happen?" science, alternating with myth-busters | 5 |
-| slot4 | 10:30 | CELEBRITY / SINGER / MOVIE facts (rules in Step 1, point 4) | 2 |
+| slot4 | 10:30 | POP CULTURE: CELEBRITY / SINGER / MOVIE / GAMING facts (rules in Step 1, point 4) | 2 |
 | slot2 | 12:30 | FINANCE — money with real numbers, teen angle. Description ends with "Not financial advice." | 3 |
 | slot5 | 15:30 | WHAT IF…? scenario (rules in Step 1, point 4) | 4 |
 | slot3 | 18:00 | SERIES — next episode of the running series (`series.md`) | 1 |
@@ -52,6 +52,26 @@ bash engine/setup.sh
      signature costume/symbol (e.g. no mockingjay pin, no wand, no mask). Movie and person names are fine
      in text. Hook example: "This singer got rejected X times before…" / "The new X movie comes out
      in 5 days. Here's what most fans don't know…".
+   - **Gaming facts** (Nicole wants these; they share slot4 with celebrity/movie): viral and trending video
+     games: big releases (e.g. GTA 6, launching 19 Nov 2026), record-breaking trailers, launches and updates of
+     games Gen Z / Gen Alpha actually play (Minecraft, Fortnite, Roblox, Pokémon, EA FC, Mario, Zelda…), and
+     esports records. **Rotation:** a huge launch within ~2 weeks takes priority over celebrity/movie topics
+     (GTA 6 launch week = gaming every day it is the clear top trend, but never the same angle twice);
+     otherwise aim for about 2–3 gaming videos per week in slot4, and never two gaming videos in a row in other
+     slots. Good angles: sales/viewing records, development time and team size, budget, map size, price then vs
+     now, how a famous game was made, surprising design facts, "this game took X years…".
+     Sources: official publisher/developer sites and press releases, Guinness World Records, The Game
+     Awards, Circana/GfK charts, reputable gaming press (IGN, Eurogamer, The Verge, GamesIndustry.biz,
+     Polygon, BBC). Leaks, insider claims and rumours are NOT facts: only use them clearly labelled as
+     "rumoured" and never as the main hook; prefer confirmed info only.
+     **Age-rated games (USK 18 / PEGI 18 / ESRB M, e.g. GTA):** talk only about records, money, production and
+     the world/map; never show, describe or joke about crime, weapons, violence, drugs or sexual content, and
+     don't encourage under-age players to buy them. No loot-box/skins-gambling content, no cheats/exploits,
+     no piracy.
+     **Drawing rules:** never draw game characters, logos, box art, maps, HUDs or signature items/vehicles from
+     the game; use generic stickmen with a controller, a generic console/PC, a loading bar, a trophy, a
+     calendar/countdown, money stacks. Game names only as on-screen text. Hook example: "GTA 6 comes out in
+     3 days. It took longer to make than you've been in school…".
    - **What if…?** scenarios ("What if the internet went down for a week?", "What if all women
      disappeared tomorrow?", "What if you never slept?"). Base the consequences on real numbers
      (population shares, how many jobs/people depend on something) and keep it respectful: no violence,
@@ -61,6 +81,7 @@ bash engine/setup.sh
 6. SERIES slot: see Step 1b.
 7. Audience: Gen Z / Gen Alpha. Plain spoken English, no slang overload.
 8. Off-limits: real living people *except* the celebrity rules above (public-career facts, never drawn),
+   game content beyond the gaming rules above,
    brands/logos/trademarked characters (drawn), politics, tragedies,
    medical or legal advice, gambling, crypto shilling, anything sexual or gory, content aimed
    at under-13s specifically.
