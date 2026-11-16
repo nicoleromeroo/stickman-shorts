@@ -78,6 +78,30 @@ bash engine/setup.sh
      no gore, nothing that mocks or blames any group; the payoff shows how much the world depends on X.
 5. FINANCE slot: rotate sub-themes (everyday costs, saving tricks, compound interest / investing basics,
    prices then vs now, salary/tax basics in Germany) so it never feels templated.
+   **Nicole's favourite style (16 Nov):** "aha" money videos that change how a young viewer thinks. Two main
+   formats; use them most days, alternating, and only fill in the other sub-themes in between:
+   - **"Small money, big result" (investing starts small):** "What if you invest 50 € a month?", "Start at 16
+     vs 26: who ends up richer?", "Your daily 3 € snack invested instead", "Skip one delivery order a week…",
+     "What 25 € a month becomes by the time you retire". The message: you don't need a lot of money to start,
+     time matters more than amount. Always show **money paid in vs final value** side by side (the gap is
+     the payoff). Use a **sourced, conservative return assumption** (e.g. long-run average of a broad world
+     stock index, after costs, from a reputable source; show it as "assumed ~X % a year" in an on-screen
+     footnote) and say clearly that returns are not guaranteed, values go up and down, and the past is no
+     promise. Do the maths in Python (monthly compounding). Never recommend a specific product, fund, broker
+     or app, and never crypto; "a broad index fund / ETF" as a concept is fine. Don't repeat an amount + time
+     combination that's already in topics_log (the 100 € / 30 years video exists): change the amount,
+     starting age, duration or comparison.
+   - **"Is it worth it?" (work and pay in Germany, real net numbers):** "Is full-time in Germany worth it?"
+     (net pay per hour, full-time vs part-time vs minijob), "Your first apprenticeship salary: what's left?",
+     "Gross 3,000 € → what actually lands in your account?", "Is a raise of 200 € really 200 €?", "Working
+     Sundays/nights: how much extra?", "Student job vs minijob vs Werkstudent". Use **current-year**
+     official numbers (tax brackets, Grundfreibetrag, social contribution rates from BMF, Deutsche
+     Rentenversicherung, Krankenkassen, Destatis, Mindestlohn; the BMF tax calculator or a reputable
+     Brutto-Netto calculator for net figures) and state the assumptions on screen (tax class I, no
+     children, no church tax, average health insurance add-on…). Keep the twist honest, e.g. "you work 2.5×
+     the hours but only take home 2× the money".
+   Hooks for both: start mid-situation with a big number on screen ("50 € a month. That's one pizza a
+   week.", "You just signed a full-time contract: 40 hours.").
 6. SERIES slot: see Step 1b.
 7. Audience: Gen Z / Gen Alpha. Plain spoken English, no slang overload.
 8. Off-limits: real living people *except* the celebrity rules above (public-career facts, never drawn),
