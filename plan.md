@@ -55,6 +55,11 @@ Notes
 - "The Instinct That Makes You Crash" (Ricks Clips, 0:59): **a hidden instinct in YOUR brain/body** → FACTS slot.
   Ideas: why you jerk awake when falling asleep (hypnic jerk), phantom phone vibrations, why you can't stop
   looking at a crash, why you forget why you walked into a room (doorway effect), why music gets stuck in your head.
+- WARNING (checked the video 16 Nov): that "egg selling" Short opens with "Why are all Jews so rich?" and "Jewish
+  finance principles". Its reach comes from an ethnic stereotype. NEVER use group stereotypes as a hook (against our
+  rules and YouTube's hate-speech / ad-friendly rules). Only its craft is usable: a question that stays at the top
+  the whole video, a small topic badge, word-by-word captions with one yellow word, a warm cream background,
+  numbered characters with name tags, and a new label popping in every ~1 s ("4 SONS", "$100 x 4", "STARTUP CAPITAL").
 - "How $100 Became $204,984: The Egg Selling Mindset" (The Curious Plot): **money told as a story** with one
   character and an oddly specific final number → FINANCE slot. Our version stays true: real maths, sourced
   assumptions, no get-rich promises (e.g. "How 3 € a day became X €", X = the exact Python result).
