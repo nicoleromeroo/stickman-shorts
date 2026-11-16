@@ -1,0 +1,10 @@
+["You just got your first job. Ten hours a week. Payday hits. How much is it?",
+ "In Germany, that's often a minijob. And the max is six hundred and three euros a month.",
+ "Why such a weird number? It's ten hours a week at minimum wage.",
+ "Minimum wage this year: thirteen euros ninety an hour.",
+ "But by default, three point six percent goes into your pension. About twenty-two euros.",
+ "You can opt out in writing. But then you give up part of your pension benefits.",
+ {"text":"Now the twist.","gap":0.5},
+ "If you're under eighteen and haven't finished an apprenticeship, minimum wage doesn't apply to you.",
+ "So your boss can legally pay you less than thirteen ninety.",
+ {"text":"Check the hourly pay before you sign.","gap":0.8}]

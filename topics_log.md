@@ -34,4 +34,8 @@ Every video ever made. The daily run reads this to avoid repeats.
 - 2026-11-16 slot3 | SERIES | RESPAWN Part 2 (school NPCs, glowing door behind the gym, Kai appears) | fiction
 - 2026-11-16 slot4 | CELEBRITY/MOVIE | Hunger Games: Sunrise on the Reaping facts (movie greenlit before book, 1.2M first-week book sales, $3.28B franchise, November releases, filmed in Spain + Berlin Tempelhof/ICC) | sources: publishersweekly.com (Scholastic), thewrap.com, the-numbers.com franchise page, the-berliner.com, en.wikipedia.org, worldatlas.com
 - 2026-11-16 slot5 | WHAT IF | What if every bee (and bug pollinator) vanished? (75% of crop types, 5-8% production drop, wheat/rice/corn fine, no chocolate: cocoa pollinated by midges) | sources: fao.org, ourworldindata.org/pollinator-dependence, nhm.ac.uk
+- 2026-11-16 slot2 (extra, tag video-20261116-slot2fin, 12:30) | FINANCE salary basics DE | First job / minijob: 603 € limit = 10 h/week at 13.90 € minimum wage, 3.6 % pension share + opt-out, no minimum wage under 18 without finished training | sources: deutsche-rentenversicherung.de (Minijob 2026 press release, Befreiung 2026), magazin.minijob-zentrale.de, gesetze-im-internet.de/milog/__22, tk.de
 - (drafted 2026-11-15, NOT uploaded, topics still free: why it gets dark early, inflation since 2020, Floor 13 story)
+
+## Problems
+- 2026-11-16: the original slot2 for 16 Nov (head-heat myth-buster) was not a finance video and, like slot1 and the test, was uploaded as a private review copy. Added a finance video for 12:30 under tag video-20261116-slot2fin on Nicole's request.

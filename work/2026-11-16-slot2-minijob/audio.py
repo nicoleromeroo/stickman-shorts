@@ -1,0 +1,13 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 7)
+m.music("upbeat")
+m.add("chime", .2, .4); m.add("notify", m.wt(0, "payday"), .45); m.add("cash", m.wt(0, "payday") + .3, .35)
+m.add("whoosh", m.mid(0, 1) - .12, .3); m.add("cash", m.wt(1, "and the max"), .45)
+m.add("pop", m.wt(2, "it's ten"), .4); m.add("pop", m.wt(3, "thirteen"), .4); m.add("ding", m.at(3, .8), .4)
+m.add("whoosh", m.mid(3, 4) - .12, .3); m.add("pdown", m.wt(4, "three point"), .4); m.add("clink", m.wt(4, "about"), .4)
+m.add("zipper", m.at(5, .1), .3); m.add("bonk", m.wt(5, "but then"), .35)
+m.add("whoosh", m.mid(5, 6) - .12, .3); m.add("sting", m.at(6, 0), .5)
+m.add("pop", m.at(7, 0), .4); m.add("buzz", m.wt(7, "minimum wage"), .35)
+m.add("thump", m.wt(8, "less than"), .45)
+m.add("whoosh", m.mid(8, 9) - .12, .3); m.add("ding", m.at(9, .6), .4)
+m.write(mvol=.08, svol=.3)
