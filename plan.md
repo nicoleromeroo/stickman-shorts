@@ -48,5 +48,17 @@ Notes
   "What if everyone spoke the same language?".
 - Series: end every episode with a yes/no question about what YOU would do.
 
+## Formats from viral references (Nicole, 16 Nov) — take the format, never copy the content
+- "An Unstoppable Spear vs an Unbreakable Shield" (Ricks Clips): **paradox / impossible matchup** → WHAT IF slot.
+  Ideas: unstoppable force vs immovable object, "What if you fell into a tunnel through the Earth?", "Can you
+  ever reach the horizon?", "Is there a biggest number?". Comment prompt: "Which one wins?"
+- "The Instinct That Makes You Crash" (Ricks Clips, 0:59): **a hidden instinct in YOUR brain/body** → FACTS slot.
+  Ideas: why you jerk awake when falling asleep (hypnic jerk), phantom phone vibrations, why you can't stop
+  looking at a crash, why you forget why you walked into a room (doorway effect), why music gets stuck in your head.
+- "How $100 Became $204,984: The Egg Selling Mindset" (The Curious Plot): **money told as a story** with one
+  character and an oddly specific final number → FINANCE slot. Our version stays true: real maths, sourced
+  assumptions, no get-rich promises (e.g. "How 3 € a day became 41,736 €" with the exact Python result).
+- Note: the 59 s video shows length is fine if a story keeps pulling; stay with 30–45 s unless the story needs more.
+
 ## Done
 - 17 Nov 11:30 GTA 6 countdown · 16:00 start at 16 vs 26 · 20:00 RESPAWN Part 3
