@@ -63,6 +63,11 @@ Notes
 - "How $100 Became $204,984: The Egg Selling Mindset" (The Curious Plot): **money told as a story** with one
   character and an oddly specific final number → FINANCE slot. Our version stays true: real maths, sourced
   assumptions, no get-rich promises (e.g. "How 3 € a day became X €", X = the exact Python result).
+- OUR VERSION of the egg parable (finance slot, honest): "4 siblings get 100 € each. Only one ends up rich. Which one
+  are you?" Sibling 1 hides it (loses value to inflation, real Destatis/ECB rate), 2 spends it, 3 invests it (sourced
+  ~6 %, Python maths, paid-in vs final), 4 grows it with a small business story (clearly labelled "example numbers").
+  Each step gets a concept stamp (INFLATION, COMPOUND INTEREST, ORGANIC GROWTH) and a formula that pops in.
+  Comment prompt: "Which sibling are you? 1, 2, 3 or 4". No borrowing/leverage advice for teens.
 - Note: the 59 s video shows length is fine if a story keeps pulling; stay with 30–45 s unless the story needs more.
 
 ## Done
