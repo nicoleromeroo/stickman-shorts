@@ -57,7 +57,7 @@ Notes
   looking at a crash, why you forget why you walked into a room (doorway effect), why music gets stuck in your head.
 - "How $100 Became $204,984: The Egg Selling Mindset" (The Curious Plot): **money told as a story** with one
   character and an oddly specific final number → FINANCE slot. Our version stays true: real maths, sourced
-  assumptions, no get-rich promises (e.g. "How 3 € a day became 41,736 €" with the exact Python result).
+  assumptions, no get-rich promises (e.g. "How 3 € a day became X €", X = the exact Python result).
 - Note: the 59 s video shows length is fine if a story keeps pulling; stay with 30–45 s unless the story needs more.
 
 ## Done
