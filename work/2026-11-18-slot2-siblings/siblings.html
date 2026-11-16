@@ -1,0 +1,88 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function wtn(i, w, n) { const s = L[i].text.toLowerCase(); let p = -1; for (let k = 0; k <= n; k++) p = s.indexOf(w, p + 1); return at(i, Math.max(p, 0) / s.length); }
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const T = { ahead: wt(0, 'twenty'), way: wt(0, 'way ahead'), guess: at(1, 0), one: wt(1, 'number one'), bed: wt(1, 'under'), two: at(2, 0), pizza: wt(2, 'pizza'), games: wt(2, 'games'), snk: wt(2, 'sneakers'), three: at(3, 0), sav: wt(3, 'savings'), pct2: wt(3, 'about'), four: at(4, 0), fund: wt(4, 'index'), pct6: wt(4, 'assumed'), later: at(5, 0), zero: wt(5, 'zero'), n1: at(6, 0), infl: wt(6, 'after'), today: wt(6, 'sixteen'), n3: wt(7, 'twenty'), n4: wt(8, 'forty'), dbl: wt(8, 'almost'), risk: at(9, 0), time: wt(9, 'but time'), q: at(10, 0), opts: wt(10, 'one,') };
+const SIB = [{ shirt: '#ef4444', hair: '#7c2d12' }, { shirt: '#f59e0b', hair: '#1f2937' }, { shirt: '#0ea5e9', hair: '#a16207' }, { shirt: '#22c55e', hair: '#111827' }];
+function sib(i, x, y, s, o = {}) { stick(Object.assign({ x, y, s, pants: '#334155', pose: STAND, look: 0 }, SIB[i], o)); const cx = x, cy = y - 228 * s; circ(cx, cy, 24 * s, '#fff', INK, 5); txt(String(i + 1), cx, cy + 9 * s, 32 * s, INK, { stroke: false }); }
+function note(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); box(-110, -55, 220, 110, '#86efac', 10, 7); circ(0, 0, 34, '#bbf7d0', INK, 4); txt('100 €', 0, 6, 40, INK, { stroke: false }); ctx.restore(); }
+function stamp(t, t0, x, y, s, col, size = 80, rot = -.06, tc = '#fff') { if (t < t0) return; const k = eob(inv(t0, t0 + .3, t)); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); ctx.font = `${size}px Lucky`; const w = ctx.measureText(s).width + 70; ctx.restore(); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -size * .85, w, size * 1.7, col, 22, 9); txt(s, 0, size * .1, size, tc, { stroke: false }); ctx.restore(); }
+function land() { bgFill('#fdf3dc'); ctx.fillStyle = '#86c06c'; ctx.strokeStyle = INK; ctx.lineWidth = 0; ctx.beginPath(); ctx.moveTo(-300, 1330); ctx.quadraticCurveTo(300, 1250, 700, 1320); ctx.quadraticCurveTo(1000, 1370, 1400, 1300); ctx.lineTo(1400, 2200); ctx.lineTo(-300, 2200); ctx.closePath(); ctx.fill(); box(-300, 1500, W + 600, 900, '#3f2a1d', 0, 0); }
+function topBand() { box(110, 50, 860, 150, '#0f172a', 30, 8); txt('WHO ENDS UP', 540, 112, 60, '#fff', { stroke: false }); txt('RICHEST?', 540, 170, 60, '#facc15', { stroke: false }); }
+function foot() { txt('100 € a month, 20 years. Inflation 2 % (ECB target), savings ~2 %', 540, 1830, 26, '#e2e8f0', { stroke: false, font: 'Nun' }); txt('(avg. Tagesgeld 11/2026), fund ~6 % (Finanztip). Before tax. Not guaranteed.', 540, 1866, 26, '#e2e8f0', { stroke: false, font: 'Nun' }); }
+// ---------- hook ----------
+function sHook(lt, t) {
+  land();
+  const xs = [150, 390, 690, 930];
+  xs.forEach((x, i) => { sib(i, x, 1460, 1.15, { mouth: 'smile', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.3, re: -.4 } }); note(x + 40, 790 + Math.sin(t * 3 + i) * 10, .55, (i - 1.5) * .1); });
+  if (t > .25) { const k = eob(inv(.25, .55, t)); ctx.save(); ctx.translate(540, 400); ctx.rotate(-.04); ctx.scale(k, k); box(-330, -60, 660, 120, '#16a34a', 22, 9); txt('100 € / MONTH', 0, 10, 70, '#fff', { stroke: false }); ctx.restore(); } if (t > T.ahead) { const k = eob(inv(T.ahead, T.ahead + .3, t)); ctx.save(); ctx.translate(540, 560); ctx.rotate(.04); ctx.scale(k, k); box(-210, -55, 420, 110, '#fff', 22, 9); txt('20 YEARS', 0, 10, 66, INK, { stroke: false }); ctx.restore(); }
+  if (t > T.way) xs.forEach((x, i) => qmark(x, 700, t, T.way + i * .08, '#ffd23f', 90));
+  if (t > T.guess) { const k = eob(inv(T.guess, T.guess + .3, t)); ctx.save(); ctx.fillStyle = `rgba(0,0,0,${.35 * k})`; ctx.fillRect(-300, -300, W + 600, H + 600); ctx.translate(540, 900); ctx.rotate(-.05); ctx.scale(k, k); box(-300, -100, 600, 200, '#facc15', 26, 10); txt('GUESS!', 0, 14, 120, INK, { stroke: false }); ctx.restore(); }
+}
+// ---------- the four choices ----------
+function sOne(lt, t) {
+  land();
+  box(420, 1080, 600, 160, '#c084fc', 26, 9); box(420, 960, 70, 300, '#7e22ce', 12, 9); box(500, 1030, 180, 70, '#fff', 24, 7); box(440, 1240, 40, 70, '#7e22ce', 6, 7); box(960, 1240, 40, 70, '#7e22ce', 6, 7);
+  const k = eo(inv(T.bed, T.bed + .6, t)); box(600, 1260 + (1 - k) * 0, 300, 80, '#78350f', 10, 7); for (let i = 0; i < 4; i++) note(650 + i * 60, 1255 - i * 6, .35 * k + .001, .1 * i);
+  sib(0, 230, 1480, 1.75, { mouth: 'smirk', look: 1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.2, re: -.6 } }); if (t > T.bed) { const kk = eob(inv(T.bed, T.bed + .3, t)); ctx.save(); ctx.translate(700, 520); ctx.rotate(-.05); ctx.scale(kk, kk); box(-300, -60, 600, 120, '#ef4444', 22, 9); txt('UNDER THE BED', 0, 10, 62, '#fff', { stroke: false }); ctx.restore(); }
+}
+function sTwo(lt, t) {
+  land();
+  sib(1, 300, 1480, 1.75, { mouth: 'grin', eyes: 'huge', look: 1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: 2.3, le: .4, ra: -2.3, re: -.4 } });
+  const items = [[T.pizza, 'PIZZA', '#fb923c', 760, 620], [T.games, 'GAMES', '#a78bfa', 820, 860], [T.snk, 'SNEAKERS', '#38bdf8', 760, 1100]];
+  items.forEach(([t0, s, c, x, y]) => { if (t < t0) return; const k = eob(inv(t0, t0 + .3, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); box(-200, -70, 400, 140, c, 24, 9); txt(s, 0, 12, 72, '#fff', { lw: 10 }); ctx.restore(); line(x - 150, y + 70, x - 160, y + 120, 0); }); if (t > T.two + .2) { const k = eob(inv(T.two + .2, T.two + .5, t)); ctx.save(); ctx.translate(540, 380); ctx.rotate(.04); ctx.scale(k, k); box(-180, -60, 360, 120, '#f59e0b', 22, 9); txt('SPEND', 0, 10, 70, '#fff', { stroke: false }); ctx.restore(); }
+  for (let i = 0; i < 5; i++) { const ft = (t * .9 + i * .2) % 1; if (t > T.two) note(540 + Math.sin(i * 2) * 50, 1150 - ft * 400, .4, i); }
+}
+function piggy(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#f9a8d4'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.ellipse(0, 0, 200, 150, 0, 0, 7); ctx.fill(); ctx.stroke(); circ(190, -10, 50, '#f9a8d4', INK, 8); circ(180, -20, 8, INK, INK, 2); circ(205, -20, 8, INK, INK, 2); circ(60, -70, 14, INK, INK, 2); box(-40, -165, 80, 22, INK, 8, 0); for (const lx of [-110, -40, 50, 120]) box(lx - 20, 120, 40, 70, '#f9a8d4', 8, 8); ctx.restore(); }
+function sThree(lt, t) {
+  land();
+  sib(2, 230, 1480, 1.75, { mouth: 'smile', look: 1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.4, re: -.3 } });
+  piggy(720, 1050, 1.05);
+  const k = eo(inv(T.three, T.three + 2.5, t)); for (let i = 0; i < 3; i++) { const yy = lerp(500, 880, ((t * .8 + i / 3) % 1)); if (t > T.three) ctx.save(), ctx.globalAlpha = 1, circ(720, yy, 34, '#facc15', INK, 6), txt('€', 720, yy + 10, 34, INK, { stroke: false }), ctx.restore(); }
+  if (t > T.sav) { const kk = eob(inv(T.sav, T.sav + .3, t)); ctx.save(); ctx.translate(540, 380); ctx.rotate(-.04); ctx.scale(kk, kk); box(-310, -60, 620, 120, '#0ea5e9', 22, 9); txt('SAVINGS ACCOUNT', 0, 10, 60, '#fff', { stroke: false }); ctx.restore(); }
+  if (t > T.pct2) { const kk = eob(inv(T.pct2, T.pct2 + .3, t)); ctx.save(); ctx.translate(780, 1400); ctx.scale(kk, kk); box(-140, -55, 280, 110, '#fff', 22, 9); txt('~2 %', 0, 12, 76, '#0369a1', { stroke: false }); ctx.restore(); }
+}
+function sFour(lt, t) {
+  land();
+  sib(3, 230, 1480, 1.75, { mouth: 'grin', look: 1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.8, re: -.4 } });
+  // chart with a wavy rising line
+  box(470, 620, 520, 520, '#fff', 20, 9); const n = Math.floor(lerp(2, 30, inv(T.four, T.four + 2.5, t)));
+  ctx.save(); ctx.strokeStyle = '#16a34a'; ctx.lineWidth = 12; ctx.lineJoin = 'round'; ctx.beginPath(); for (let i = 0; i <= n; i++) { const x = 500 + i * 16, y = 1100 - i * 13 - Math.sin(i * 1.4) * 30 - (i > 14 ? (i - 14) * 6 : 0); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke(); ctx.restore();
+  if (t > T.fund) { const kk = eob(inv(T.fund, T.fund + .3, t)); ctx.save(); ctx.translate(540, 380); ctx.rotate(.04); ctx.scale(kk, kk); box(-320, -60, 640, 120, '#16a34a', 22, 9); txt('BROAD INDEX FUND', 0, 10, 60, '#fff', { stroke: false }); ctx.restore(); }
+  if (t > T.pct6) { const kk = eob(inv(T.pct6, T.pct6 + .3, t)); ctx.save(); ctx.translate(730, 1250); ctx.scale(kk, kk); box(-230, -55, 460, 110, '#fff', 22, 9); txt('~6 % ASSUMED', 0, 12, 62, '#15803d', { stroke: false }); ctx.restore(); }
+}
+// ---------- 20 years later ----------
+function sResult(lt, t) {
+  bgFill('#fdf3dc'); box(-300, 1500, W + 600, 900, '#3f2a1d', 0, 0);
+  if (lt < 1.6) { const k = eob(inv(0, .3, lt)); ctx.save(); ctx.translate(540, 760); ctx.scale(k, k); box(-230, -230, 460, 460, '#fff', 30, 10); box(-230, -230, 460, 130, '#ef4444', 30, 10); txt('20 YEARS', 0, -150, 64, '#fff', { stroke: false }); txt('LATER', 0, 60, 120, INK, { stroke: false }); ctx.restore(); return; }
+  const base = 1300, sc = 760 / 46435, xs = [190, 420, 650, 880], w = 180;
+  const vals = [24000, 0, 29529, 46435], ts = [T.n1, T.zero, T.n3, T.n4];
+  // paid-in line
+  const py = base - 24000 * sc; ctx.save(); ctx.setLineDash([22, 16]); ctx.strokeStyle = '#64748b'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(80, py); ctx.lineTo(1000, py); ctx.stroke(); ctx.restore(); txt('PAID IN 24,000 €', 405, py + 40, 28, '#475569', { stroke: false, font: 'Nun' });
+  vals.forEach((v, i) => { const x = xs[i]; const k = t < ts[i] ? 0 : eo(inv(ts[i], ts[i] + .9, t)); let h = v * sc * k;
+    if (i === 0 && t > T.infl) { const kk = eo(inv(T.infl, T.today + .4, t)); ctx.save(); ctx.globalAlpha = .35; box(x - w / 2, base - 24000 * sc, w, 24000 * sc, SIB[0].shirt, 12, 6); ctx.restore(); h = lerp(24000, 16151, kk) * sc; }
+    if (h > 2) box(x - w / 2, base - h, w, h, SIB[i].shirt, 12, 8);
+    if (t > ts[i]) { const lbl = i === 1 ? '0 €' : i === 0 ? (t > T.today ? '16k €*' : '24k €') : '~' + (i === 2 ? '29.5k' : '46k') + ' €'; txt(lbl, x, base - h - 40, 56, INK, { stroke: false }); }
+    circ(x, base + 70, 42, SIB[i].shirt, INK, 7); txt(String(i + 1), x, base + 86, 50, '#fff', { lw: 8 }); });
+    if (t > T.infl && t < T.n3) { const k = eob(inv(T.infl, T.infl + .3, t)); ctx.save(); ctx.translate(300, 470); ctx.rotate(-.06); ctx.scale(k, k); box(-190, -50, 380, 100, '#ef4444', 20, 8); txt('INFLATION', 0, 10, 56, '#fff', { stroke: false }); ctx.restore(); txt('*in today\'s money', 300, 560, 34, '#7f1d1d', { stroke: false, font: 'Nun' }); }
+  if (t > T.dbl) { const k = eob(inv(T.dbl, T.dbl + .3, t)); ctx.save(); ctx.translate(700, 330); ctx.rotate(-.05); ctx.scale(k, k); box(-230, -60, 460, 120, '#facc15', 22, 9); txt('ALMOST 2x', 0, 12, 76, INK, { stroke: false }); ctx.restore(); }
+  foot();
+}
+function sEnd(lt, t) {
+  land();
+  const xs = [150, 390, 690, 930];
+  xs.forEach((x, i) => sib(i, x, 1460, 1.15, { mouth: i === 3 ? 'grin' : 'smile', look: 0 }));
+  if (t < T.q) { const k = eob(inv(T.risk, T.risk + .3, t)); ctx.save(); ctx.translate(540, 450); ctx.scale(k, k); box(-380, -70, 760, 140, '#fff', 24, 9); txt('NOT GUARANTEED', 0, 12, 74, '#dc2626', { stroke: false }); ctx.restore();
+    if (t > T.time) { const kk = eob(inv(T.time, T.time + .3, t)); ctx.save(); ctx.translate(540, 640); ctx.rotate(-.04); ctx.scale(kk, kk); box(-330, -70, 660, 140, '#facc15', 24, 9); txt('TIME DID THE WORK', 0, 12, 64, INK, { stroke: false }); ctx.restore(); } }
+  else { const k = eob(inv(T.q, T.q + .3, t)); ctx.save(); ctx.translate(540, 520); ctx.scale(k, k); box(-420, -170, 840, 340, '#0f172a', 30, 10); txt('WHICH ONE', 0, -60, 96, '#fff', { stroke: false }); txt('ARE YOU?', 0, 50, 96, '#facc15', { stroke: false }); ctx.restore();
+    xs.forEach((x, i) => { if (t > T.opts + i * .25) { const kk = eob(inv(T.opts + i * .25, T.opts + i * .25 + .25, t)); ctx.save(); ctx.translate(x, 800); ctx.scale(kk, kk); circ(0, 0, 60, SIB[i].shirt, INK, 8); txt(String(i + 1), 0, 22, 70, '#fff', { lw: 10 }); ctx.restore(); } }); }
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .03 }, { t0: T.one - .15, fn: sOne, push: .05, flash: .6 }, { t0: mid(1, 2), fn: sTwo, push: .05, flash: .6 }, { t0: mid(2, 3), fn: sThree, push: .05, flash: .6 }, { t0: mid(3, 4), fn: sFour, push: .05, flash: .6 }, { t0: mid(4, 5), fn: sResult, push: .03, xfade: .25 }, { t0: mid(8, 9), fn: sEnd, push: .04, xfade: .25 }];
+const CAP = [["four siblings.", "same hundred euros", "a month.", "twenty years later,", "one is way ahead."], ["guess which one.", "number one", "hides it", "under her bed."], ["number two", "spends it.", "pizza,", "games,", "sneakers."], ["number three", "uses a savings account.", "about two percent."], ["number four", "picks a broad", "index fund.", "assumed six percent."], ["twenty years later...", "number two", "has zero."], ["number one", "has 24,000.", "after inflation,", "that buys what", "16,000 buys today."], ["number three", "has about", "29,500."], ["number four?", "about 46,000.", "almost double", "what she put in."], ["funds go", "up and down.", "nothing's guaranteed.", "but time", "did the work."], ["which sibling", "are you?", "one, two,", "three or four?"]];
+const HOT = new Set(["one is way ahead.", "guess which one.", "under her bed.", "spends it.", "about two percent.", "assumed six percent.", "has zero.", "16,000 buys today.", "29,500.", "about 46,000.", "almost double", "nothing's guaranteed.", "did the work.", "are you?", "three or four?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => { topBand(); captions(t, CAP, HOT, 1640); } });
+</script></body></html>

@@ -1,0 +1,22 @@
+[
+ "Four siblings. Same hundred euros a month. Twenty years later, one is way ahead.",
+ "Guess which one. Number one hides it under her bed.",
+ "Number two spends it. Pizza, games, sneakers.",
+ "Number three uses a savings account. About two percent.",
+ "Number four picks a broad index fund. Assumed six percent.",
+ {
+  "text": "Twenty years later... number two has zero.",
+  "gap": 0.5
+ },
+ "Number one has twenty four thousand. After inflation, that buys what sixteen thousand buys today.",
+ "Number three has about twenty nine and a half thousand.",
+ {
+  "text": "Number four? About forty six thousand. Almost double what she put in.",
+  "gap": 0.6
+ },
+ "Funds go up and down. Nothing's guaranteed. But time did the work.",
+ {
+  "text": "Which sibling are you? One, two, three or four?",
+  "gap": 1.0
+ }
+]

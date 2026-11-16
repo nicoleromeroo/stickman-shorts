@@ -40,6 +40,7 @@ Every video ever made. The daily run reads this to avoid repeats.
 - 2026-11-17 slot3 | SERIES | RESPAWN Part 3 (Kai's three rules, respawn deletes things, your house is gone) | fiction
 - 2026-11-17 slot4 | GAMING | GTA 6 two days before launch (13 years since GTA 5, $815.7M day-one Guinness record, delays 2025 → May 2026 → 19 Nov 2026, trailer 475M views in 24 h ≈ 6% of Earth, Take-Two $3.35–3.5B quarter forecast) | sources: guinnessworldrecords.com (highest-grossing videogame in 24 h), techradar.com (Gamer's Edition 2027), au.variety.com (delay), investing.com (Take-Two Q2 FY27 results, 9 Nov 2026)
 - 2026-11-17 slot2 | FINANCE small money big result | Start at 16 vs 26 with 50 €/month until 67: 30,600 € vs 24,600 € paid in → ~203k vs ~107k € at assumed 6 % | sources: finanztip.de (6 % planning return, 2025), finanztip.de press release (MSCI World 7.7 % avg over 15-year windows)
+- 2026-11-18 slot2 | FINANCE parable | 4 siblings, 100 €/month for 20 years: under the bed 24k (≈16k in today's money at 2 % inflation), spend 0, savings ~2 % ≈29.5k, index fund ~6 % ≈46k | sources: ecb.europa.eu (2 % target), destatis.de (Oct 2026 inflation 2.8 %), tagesgeldvergleich.net (avg. 2.13 % Nov 2026), finanztip.de (6 % planning return)
 
 ## Problems
 - 2026-11-16: the original slot2 for 16 Nov (head-heat myth-buster) was not a finance video and, like slot1 and the test, was uploaded as a private review copy. Added a finance video for 12:30 under tag video-20261116-slot2fin on Nicole's request.

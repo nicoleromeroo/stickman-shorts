@@ -81,3 +81,4 @@ Notes
 
 ## Done
 - 17 Nov 11:30 GTA 6 countdown · 16:00 start at 16 vs 26 · 20:00 RESPAWN Part 3
+- 18 Nov 16:00 4 siblings parable (made 16 Nov on Nicole's request)
