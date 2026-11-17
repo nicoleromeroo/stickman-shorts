@@ -1,0 +1,20 @@
+[
+ "Every phone on Earth just stopped working. Yours too. For a whole day.",
+ "Impossible? Something like it already happened to twelve million customers.",
+ "First, you'd still feel it buzzing. In one study, nearly nine in ten students felt phantom vibrations.",
+ "Teens in Germany spend almost four hours a day on their phone.",
+ {
+  "text": "That's four empty hours. Hello, boredom.",
+  "gap": 0.6
+ },
+ "But in twenty twenty two, one network in Canada went down for about a day.",
+ "Over twelve million customers lost phone and internet. Card payments failed. Even emergency calls.",
+ {
+  "text": "One day without phones isn't just boring. The world runs on them.",
+  "gap": 0.5
+ },
+ {
+  "text": "Could you survive a whole day? Yes or no?",
+  "gap": 1.2
+ }
+]

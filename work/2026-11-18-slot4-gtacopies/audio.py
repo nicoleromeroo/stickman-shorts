@@ -1,0 +1,12 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 7)
+m.music("upbeat")
+m.add("pop", .1, .4); m.add("tick", .5, .25); m.add("notify", m.wt(0, "comment"), .35)
+m.add("whoosh", m.mid(0, 1) - .12, .3); m.add("ding", m.wt(1, "september"), .3); m.add("boing", m.wt(1, "before you"), .3)
+m.add("whoosh", m.mid(1, 2) - .12, .3); m.add("cash", m.wt(2, "eleven"), .4)
+m.add("whoosh", m.mid(2, 3) - .12, .3); m.add("pop", m.wt(3, "fifty"), .35); m.add("pop", m.wt(3, "a hundred"), .35)
+m.add("bonk", m.at(4, 0), .4); m.add("sting", m.at(5, 0), .45); m.add("cash", m.at(5, .6), .4); m.add("shing", m.at(5, 1), .4)
+m.add("whoosh", m.mid(5, 6) - .12, .3); m.add("tick", m.wt(6, "every second"), .3); m.add("tick", m.wt(6, "nonstop"), .3); m.add("ding", m.wt(6, "seven"), .4)
+m.add("whoosh", m.mid(6, 7) - .12, .3); m.add("chime", m.wt(7, "five million"), .4)
+m.add("whoosh", m.mid(7, 8) - .12, .3); m.add("sting", m.wt(8, "that"), .35); m.add("notify", m.at(9, 0), .4)
+m.write(mvol=.08, svol=.3)

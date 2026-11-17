@@ -1,0 +1,12 @@
+["Kai has one heart left. And the Hall Monitor is right behind him.",
+ "Last time, Kai asked if you'd respawned before. You said no.",
+ "Then every light in the school turns red. New quest. Survive the boss.",
+ "At the end of the hall, something tall steps out. No face. A glowing yellow sash.",
+ {"text":"No running.","gap":0.6},
+ "Kai grabs your arm. Run!",
+ "Every time it says no running, Kai loses a heart.",
+ "And the hallway never ends. Same lockers. Same poster. Again.",
+ "Then you see it. A heart, floating above a locker. You jump. Three hearts!",
+ "But Kai trips. The Hall Monitor leans over him.",
+ {"text":"His last heart cracks. He starts to fade, and whispers... check your desk.","gap":0.7},
+ {"text":"Then he's gone. Would you trust Kai? Comment yes or no.","gap":1.6}]

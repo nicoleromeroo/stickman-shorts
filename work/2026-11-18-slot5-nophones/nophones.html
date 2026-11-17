@@ -1,0 +1,97 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function bigTop(s, y, size, col, t0, t) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); txt(s, 540, y, size * k, col, { lw: size * .17 }); }
+function footnote(a, b) { txt(a, 540, 1830, 28, '#e2e8f0', { stroke: false, font: 'Nun' }); if (b) txt(b, 540, 1868, 28, '#e2e8f0', { stroke: false, font: 'Nun' }); }
+const T = { yours: wt(0, 'yours'), day: wt(0, 'a whole day'), imp: at(1, 0), hit: wt(1, 'twelve'), buzz: wt(2, 'buzzing'), study: wt(2, 'in one study'), nine: wt(2, 'nine in ten'),
+  teens: at(3, 0), four: wt(3, 'almost four'), empty: at(4, 0), bored: wt(4, 'hello'), y22: wt(5, 'twenty twenty two'), net: wt(5, 'one network'), dayc: wt(5, 'about a day'),
+  cust: at(6, 0), card: wt(6, 'card'), emerg: wt(6, 'even emergency'), world: at(7, 0), runs: wt(7, 'the world'), q: at(8, 0) };
+const PH = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.6, re: -1.5 };
+function room() { bgFill('#1e293b'); floor('#334155', 1380); spot(540, 900, 800, .18, '147,197,253'); }
+function xMark(x, y, r, a = 1) { ctx.save(); ctx.globalAlpha = a; line(x - r, y - r, x + r, y + r, r * .32, '#ef4444'); line(x + r, y - r, x - r, y + r, r * .32, '#ef4444'); ctx.restore(); }
+function tower(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); line(-90, 0, 0, -420, 14); line(90, 0, 0, -420, 14); for (let i = 1; i < 5; i++) line(-90 + i * 18, -i * 84, 90 - i * 18, -i * 84, 9); circ(0, -430, 22, '#ef4444', INK, 6); for (const r of [60, 110]) { ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 9; ctx.beginPath(); ctx.arc(0, -430, r, -.6, .6); ctx.stroke(); ctx.beginPath(); ctx.arc(0, -430, r, Math.PI - .6, Math.PI + .6); ctx.stroke(); } ctx.restore(); }
+function terminal(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-90, -150, 180, 300, '#475569', 24, 8); box(-66, -126, 132, 80, '#a5f3fc', 8, 5); for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) box(-60 + c * 44, -24 + r * 44, 32, 32, '#e2e8f0', 6, 4); box(-120, -40, 70, 110, '#facc15', 10, 6); ctx.restore(); }
+function sosIcon(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); circ(0, 0, 110, '#dc2626', INK, 9); txt('911', 0, 6, 80, '#fff', { lw: 10 }); ctx.restore(); }
+function globe(x, y, r, t) { circ(x, y, r, '#38bdf8', INK, 10); ctx.save(); ctx.beginPath(); ctx.arc(x, y, r - 5, 0, 7); ctx.clip(); ctx.fillStyle = '#4ade80'; for (let i = 0; i < 6; i++) { const bx = x + ((i * 170 + t * 60) % (r * 3)) - r * 1.5, by = y - r * .6 + (i % 3) * r * .5; ctx.beginPath(); ctx.ellipse(bx, by, r * .32, r * .2, i, 0, 7); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.stroke(); } ctx.restore(); }
+// ---------- cold open ----------
+function sDead(lt, t) {
+  room();
+  const sh = Math.sin(t * 22) * .25;
+  hero({ x: 540, y: 1500, s: 1.25, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.5 + sh, re: -1.5 }, eyes: 'huge', mouth: 'scream', look: 1, lookY: -1, hold: (hx, hy) => { phoneDev(hx + 40, hy + 10, .42, 'dead', { rot: sh * .4 }); } });
+  for (const [px, py, r] of [[150, 1050, -.3], [930, 1050, .3]]) { phoneDev(px, py, .7, 'dead', { rot: r }); xMark(px, py, 60); }
+  txt('EVERY PHONE.', 540, 220, 120, '#fff', { lw: 20 }); txt('DEAD.', 540, 360, 140, '#ef4444', { lw: 22 });
+  if (t > T.day) popIn(t, T.day, 540, 560, () => { box(-260, -70, 520, 140, '#0f172a', 30, 8); txt('24 HOURS', 0, 6, 90, '#fde047', { stroke: false }); });
+}
+function sHappened(lt, t) {
+  bgFill('#0f172a');
+  for (let i = 0; i < 40; i++) { const c = i % 8, r = Math.floor(i / 8); const x = 120 + c * 120, y = 820 + r * 120; const on = t > T.hit + i * .02; circ(x, y, 34, on ? '#f87171' : '#334155', INK, 5); line(x, y + 34, x, y + 80, 8, on ? '#f87171' : '#334155'); }
+  bigTop('IMPOSSIBLE?', 260, 120, '#fff', T.imp, t);
+  if (t > T.hit) popIn(t, T.hit, 540, 520, () => { box(-430, -110, 860, 220, '#dc2626', 30, 9); txt('12,000,000', 0, -20, 100, '#fff', { lw: 12 }); txt('CUSTOMERS', 0, 62, 54, '#fde68a', { stroke: false, font: 'Nun' }); });
+}
+function sBuzz(lt, t) {
+  room();
+  const bz = t > T.buzz && t < T.study ? 1 : 0;
+  hero({ x: 330, y: 1500, s: 1.2, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -.2, re: -.9 }, eyes: 'huge', mouth: 'o', look: 1, lookY: 1 });
+  const px = 370, py = 1310; if (bz || t < T.study) { for (const k of [1, 2]) { ctx.save(); ctx.globalAlpha = .5 + .5 * Math.sin(t * 20); ctx.strokeStyle = '#fde047'; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(px, py, 40 * k + Math.sin(t * 30) * 5, -.7, .7); ctx.stroke(); ctx.restore(); } }
+  if (t > T.buzz && t < T.study) popIn(t, T.buzz, 720, 1150, () => bubble(0, 0, 'BZZZ?', 80));
+  if (t < T.study) bigTop('STILL BUZZING', 260, 112, '#fff', at(2, 0), t);
+  else { bigTop('PHANTOM VIBRATIONS', 240, 86, '#fde047', T.study, t);
+    const n = t > T.nine ? 9 : 0; for (let i = 0; i < 10; i++) { const x = 140 + (i % 5) * 200, y = 460 + Math.floor(i / 5) * 230; const on = i < n; ctx.save(); ctx.translate(x, y); circ(0, 0, 40, on ? '#fde047' : '#475569', INK, 6); box(-40, 45, 80, 110, on ? '#fde047' : '#475569', 18, 6); ctx.restore(); }
+    if (t > T.nine) popIn(t, T.nine, 760, 1150, () => { box(-260, -80, 520, 160, '#0f172a', 30, 8); txt('9 IN 10', 0, 6, 110, '#fde047', { stroke: false }); });
+    footnote('One study of college undergraduates (reported by NPR)'); }
+}
+function sHours(lt, t) {
+  bgFill('#fef3c7'); floor('#d6a26b');
+  if (t < T.empty) {
+    const k = eo(inv(T.four - .2, T.four + 1, t));
+    box(140, 520, 800, 120, '#fff', 30, 8); ctx.fillStyle = '#3b82f6'; rr(152, 532, 776 * (3.9 / 24) * k * 1, 96, 24); ctx.fill(); txt('YOUR DAY: 24 H', 540, 470, 56, INK, { stroke: false, font: 'Nun' });
+    hero({ x: 540, y: 1500, s: 1.2, pose: PH, eyes: 'norm', mouth: 'smile', look: 1, lookY: 1, hold: (hx, hy) => phoneDev(hx + 40, hy + 10, .4, 'on') });
+    bigTop('TEENS IN GERMANY', 260, 96, '#fff', T.teens, t);
+    if (t > T.four) popIn(t, T.four, 540, 790, () => { box(-360, -80, 720, 160, '#3b82f6', 30, 8); txt('ALMOST 4 HOURS', 0, 6, 80, '#fff', { lw: 10 }); });
+    footnote('JIM-Studie 2025: 12 to 19-year-olds, just under 4 h a day on the smartphone');
+  } else {
+    hero({ x: 560, y: 1400, s: 1.2, lean: -1.5, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: 2.6, le: .2, ra: -2.6, re: -.2 }, eyes: 'closed', mouth: 'wavy', shadow: false });
+    clockFace(540, 760, 200, t * 2);
+    bigTop('4 EMPTY HOURS', 230, 110, '#fff', T.empty, t); if (t > T.bored) bigTop('HELLO, BOREDOM.', 380, 96, '#7c3aed', T.bored, t);
+  }
+}
+function clockFace(x, y, r, a) { circ(x, y, r, '#fff', INK, 10); for (let i = 0; i < 12; i++) { const b = i * Math.PI / 6; line(x + Math.cos(b) * r * .8, y + Math.sin(b) * r * .8, x + Math.cos(b) * r * .92, y + Math.sin(b) * r * .92, 6); } line(x, y, x + Math.sin(a) * r * .8, y - Math.cos(a) * r * .8, 8, '#ef4444'); line(x, y, x + Math.sin(a / 12) * r * .5, y - Math.cos(a / 12) * r * .5, 12); circ(x, y, 12, INK); }
+function sCanada(lt, t) {
+  bgFill('#0f172a'); floor('#1e293b', 1380);
+  if (t < T.cust) {
+    tower(540, 1380, 1.6); if (t > T.net + .3) { const k = eob(inv(T.net + .3, T.net + .6, t)); xMark(540, 690, 140 * k); }
+    bigTop('CANADA, JULY 2022', 230, 92, '#fff', at(5, 0), t);
+    if (t > T.dayc) popIn(t, T.dayc, 540, 420, () => { box(-280, -70, 560, 140, '#dc2626', 30, 8); txt('ABOUT A DAY', 0, 6, 76, '#fff', { lw: 10 }); });
+  } else {
+    popIn(t, T.cust, 540, 330, () => { box(-460, -110, 920, 220, '#dc2626', 30, 9); txt('12,000,000+', 0, -20, 100, '#fff', { lw: 12 }); txt('CUSTOMERS OFFLINE', 0, 62, 50, '#fde68a', { stroke: false, font: 'Nun' }); });
+    popIn(t, T.cust + .5, 200, 900, () => { phoneDev(0, 0, .9, 'dead'); xMark(0, 0, 70); });
+    popIn(t, T.card, 540, 900, () => { terminal(0, 0, 1.1); xMark(0, 0, 80); });
+    popIn(t, T.emerg, 880, 900, () => { sosIcon(0, 0, 1.1); xMark(0, 0, 90); });
+    hero({ x: 540, y: 1500, s: .95, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: 2.5, le: .3, ra: -2.5, re: -.3 }, eyes: 'huge', mouth: 'scream' });
+  }
+  footnote('Rogers outage, 8 to 9 July 2022 (CRTC report)');
+}
+function sWorld(lt, t) {
+  bgFill('#1e1b4b'); spot(540, 900, 700, .3, '147,197,253');
+  globe(540, 900, 330, t);
+  for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4 + t * .5; const x = 540 + Math.cos(a) * 440, y = 900 + Math.sin(a) * 440; phoneDev(x, y, .35, 'on'); line(540 + Math.cos(a) * 330, 900 + Math.sin(a) * 330, x - Math.cos(a) * 60, y - Math.sin(a) * 60, 6, '#fde047'); }
+  bigTop('NOT JUST BORING', 230, 104, '#fff', at(7, 0), t); if (t > T.runs) bigTop('THE WORLD RUNS ON THEM', 380, 74, '#fde047', T.runs, t);
+}
+function sPrompt(lt, t) {
+  room();
+  hero({ x: 540, y: 1500, s: 1.2, pose: PH, eyes: 'huge', mouth: 'wavy', look: 1, lookY: 1, hold: (hx, hy) => phoneDev(hx + 40, hy + 10, .4, 'dead') });
+  popIn(t, T.q, 540, 420, () => { box(-470, -200, 940, 400, 'rgba(15,23,42,.95)', 30, 9); txt('COULD YOU SURVIVE', 0, -110, 70, '#fff', { stroke: false }); txt('24 HOURS?', 0, -25, 80, '#fde047', { stroke: false });
+    box(-330, 50, 280, 110, '#22c55e', 20, 7); txt('YES', -190, 108, 70, '#fff', { lw: 10 }); box(50, 50, 280, 110, '#ef4444', 20, 7); txt('NO', 190, 108, 70, '#fff', { lw: 10 }); });
+}
+const SCENES = [{ t0: 0, fn: sDead, push: .04 }, { t0: mid(0, 1), fn: sHappened, push: .05, flash: .8 }, { t0: mid(1, 2), fn: sBuzz, push: .04, flash: .7 }, { t0: mid(2, 3), fn: sHours, push: .04, xfade: .2 },
+  { t0: mid(4, 5), fn: sCanada, push: .04, flash: .9 }, { t0: mid(6, 7), fn: sWorld, push: .05, xfade: .25 }, { t0: mid(7, 8), fn: sPrompt, push: .04, flash: .7 }];
+const CAP = [["every phone on earth", "just stopped working.", "yours too.", "for a whole day."], ["impossible?", "something like it", "already happened to", "twelve million customers."], ["first,", "you'd still feel it", "buzzing.", "in one study,", "nearly nine in ten students", "felt phantom vibrations."],
+  ["teens in germany", "spend almost four hours", "a day on their phone."], ["that's four empty hours.", "hello, boredom."], ["but in 2022,", "one network in canada", "went down", "for about a day."],
+  ["over twelve million customers", "lost phone and internet.", "card payments failed.", "even emergency calls."], ["one day without phones", "isn't just boring.", "the world runs on them."], ["could you survive", "a whole day?", "yes or no?"]];
+const HOT = new Set(["just stopped working.", "twelve million customers.", "buzzing.", "nearly nine in ten students", "spend almost four hours", "hello, boredom.", "for about a day.", "card payments failed.", "even emergency calls.", "the world runs on them.", "yes or no?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

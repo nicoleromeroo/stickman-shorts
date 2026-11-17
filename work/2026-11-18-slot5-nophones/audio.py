@@ -1,0 +1,11 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 8)
+m.music("upbeat")
+m.add("pdown", .1, .45); m.add("static", .3, .3); m.add("buzz", m.wt(0, "yours"), .3); m.add("alarm", m.wt(0, "a whole day"), .25)
+m.add("whoosh", m.mid(0, 1) - .12, .3); m.add("sting", m.wt(1, "twelve"), .4)
+m.add("whoosh", m.mid(1, 2) - .12, .3); m.add("buzz", m.wt(2, "buzzing"), .45); m.add("ding", m.wt(2, "nine in ten"), .35)
+m.add("whoosh", m.mid(2, 3) - .12, .3); m.add("notify", m.wt(3, "almost four"), .35); m.add("tick", m.at(4, .1), .3); m.add("yawn", m.wt(4, "hello"), .4)
+m.add("whoosh", m.mid(4, 5) - .12, .3); m.add("pdown", m.wt(5, "went down"), .4)
+m.add("pop", m.at(6, 0), .35); m.add("bonk", m.wt(6, "card"), .4); m.add("alarm", m.wt(6, "even emergency"), .3)
+m.add("whoosh", m.mid(6, 7) - .12, .3); m.add("chime", m.wt(7, "the world"), .4); m.add("notify", m.at(8, 0), .4)
+m.write(mvol=.08, svol=.3)

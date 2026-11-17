@@ -1,0 +1,106 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function wtn(i, w, n) { const s = L[i].text.toLowerCase(); let p = -1; for (let k = 0; k <= n; k++) p = s.indexOf(w, p + 1); return at(i, Math.max(p, 0) / s.length); }
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function controller(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); ctx.fillStyle = '#1f2937'; ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.ellipse(-55, 10, 45, 40, 0, 0, 7); ctx.ellipse(55, 10, 45, 40, 0, 0, 7); ctx.fill(); ctx.stroke(); box(-70, -30, 140, 60, '#1f2937', 24, 7); box(-62, -8, 30, 10, '#e5e7eb', 3, 0); box(-52, -18, 10, 30, '#e5e7eb', 3, 0); circ(45, -10, 7, '#ef4444', INK, 3); circ(62, 4, 7, '#22c55e', INK, 3); ctx.restore(); }
+const GAMER = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .9, le: -1.9, ra: -.9, re: 1.9 };
+function gamer(x, y, s, o = {}) { hero(Object.assign({ x, y, s, pose: GAMER, hold: (hx, hy) => controller(hx - 32, hy + 4, .9) }, o)); }
+function calendar(x, y, s, top, big, col = '#ef4444') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-190, -200, 380, 400, '#fff', 24, 9); box(-190, -200, 380, 110, col, 24, 9); txt(top, 0, -140, 60, '#fff', { lw: 8 }); txt(big, 0, 60, 150, INK, { stroke: false }); for (const rx of [-110, 110]) box(rx - 12, -230, 24, 60, '#9ca3af', 10, 6); ctx.restore(); }
+function cash(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); for (let i = 0; i < 6; i++) { box(-120, -i * 34, 240, 40, '#4ade80', 6, 6); circ(0, -i * 34 + 20, 13, '#16a34a', INK, 3); } ctx.restore(); }
+function trophy(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#facc15'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-110, -160); ctx.lineTo(110, -160); ctx.quadraticCurveTo(110, 30, 0, 50); ctx.quadraticCurveTo(-110, 30, -110, -160); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.arc(-120, -90, 50, Math.PI * .5, Math.PI * 1.5); ctx.stroke(); ctx.beginPath(); ctx.arc(120, -90, 50, -Math.PI * .5, Math.PI * .5); ctx.stroke(); box(-25, 45, 50, 60, '#facc15', 4, 8); box(-90, 100, 180, 50, '#92400e', 8, 8); ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillRect(-70, -140, 20, 110); ctx.restore(); }
+function tv(x, y, w, h, fn) { box(x - w / 2, y - h / 2, w, h, '#111827', 20, 9); ctx.save(); rr(x - w / 2 + 20, y - h / 2 + 20, w - 40, h - 40, 8); ctx.clip(); fn(x - w / 2 + 20, y - h / 2 + 20, w - 40, h - 40); ctx.restore(); box(x - 80, y + h / 2, 160, 30, '#374151', 6, 7); }
+function loadBar(x, y, w, k, col = '#22c55e') { box(x - w / 2, y - 40, w, 80, '#0f172a', 40, 8); ctx.fillStyle = col; rr(x - w / 2 + 12, y - 28, (w - 24) * clamp(k), 56, 28); ctx.fill(); }
+function room() { bgFill('#312e81'); floor('#4c1d95', 1380); spot(540, 900, 800, .25, '147,197,253'); }
+function couch(x, y) { box(x - 330, y - 200, 660, 150, '#7c3aed', 30, 9); box(x - 380, y - 90, 760, 130, '#8b5cf6', 30, 9); box(x - 380, y - 170, 90, 210, '#6d28d9', 26, 9); box(x + 290, y - 170, 90, 210, '#6d28d9', 26, 9); }
+const SIT = { lt: -1.45, ls: 1.45, rt: -1.35, rs: 1.4, la: .9, le: -1.9, ra: -.9, re: 1.9 };
+function footnote(a, b) { txt(a, 540, 1830, 28, '#e2e8f0', { stroke: false, font: 'Nun' }); if (b) txt(b, 540, 1868, 28, '#e2e8f0', { stroke: false, font: 'Nun' }); }
+const T = { guess: wt(0, 'comment'), sep: wt(1, 'september'), read: wt(1, 'before you'), d1: wt(2, 'eleven'), g50: wt(3, 'fifty'), g100: wt(3, 'a hundred'), way: at(4, 0), big: at(5, 0),
+  sec: wt(6, 'every second'), seven: wt(6, 'more than seven'), still: at(7, 0), twelve: wt(7, 'twelve'), five: wt(7, 'five million'), tom: at(8, 0), up: wt(8, 'that'), low: at(9, 0) };
+const fmt = n => Math.round(n).toLocaleString('en-US');
+function gameCase(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); box(-60, -80, 120, 160, '#e5e7eb', 10, 6); box(-48, -66, 96, 132, '#94a3b8', 6, 0); txt('GTA 5', 0, 0, 34, '#fff', { lw: 6 }); ctx.restore(); }
+function counter(x, y, w, label, val, col = '#fde047') { ctx.save(); ctx.translate(x, y); box(-w / 2, -120, w, 240, '#0f172a', 30, 9); txt(label, 0, -60, 52, '#93c5fd', { stroke: false, font: 'Nun' }); txt(val, 0, 40, 112, col, { stroke: false }); ctx.restore(); }
+function clock(x, y, r, t) { circ(x, y, r, '#fff', INK, 10); for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; line(x + Math.cos(a) * r * .8, y + Math.sin(a) * r * .8, x + Math.cos(a) * r * .92, y + Math.sin(a) * r * .92, 6); } const a = t * 6; line(x, y, x + Math.sin(a) * r * .8, y - Math.cos(a) * r * .8, 8, '#ef4444'); line(x, y, x + Math.sin(a / 12) * r * .5, y - Math.cos(a / 12) * r * .5, 12); circ(x, y, 12, INK); }
+function bigTop(s, y, size, col, t0, t) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); txt(s, 540, y, size * k, col, { lw: size * .17 }); }
+// ---------- guess ----------
+function sGuess(lt, t) {
+  room();
+  tv(540, 700, 760, 420, (x, y, w, h) => { ctx.fillStyle = '#0b1020'; ctx.fillRect(x, y, w, h); txt('GTA 5 COPIES SOLD', x + w / 2, y + 90, 54, '#93c5fd', { stroke: false, font: 'Nun' });
+    txt(Math.floor(t * 3) % 2 ? '???,???,???' : '?,???,???', x + w / 2, y + 230, 96, '#fde047', { stroke: false }); });
+  hero({ x: 250, y: 1500, s: 1.2, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.4 + Math.sin(t * 9) * .25, re: -1.6 }, eyes: 'norm', mouth: 'wavy', look: 1, lookY: -1 });
+  qmark(820, 1100, t, 0, '#ffd23f', 160);
+  txt('HOW MANY', 540, 200, 130, '#fff', { lw: 20 }); txt('COPIES?', 540, 340, 130, '#fde047', { lw: 20 });
+  if (t > T.guess) popIn(t, T.guess, 700, 1300, () => { box(-330, -60, 660, 120, '#22c55e', 30, 8); txt('COMMENT A NUMBER', 0, 6, 58, '#fff', { lw: 10 }); });
+}
+function s2013(lt, t) {
+  room(); calendar(540, 650, 1.3, '2013', 'SEP');
+  stick({ x: 270, y: 1480, s: 1.05, shirt: '#3b82f6', pants: '#334155', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .4, le: -1.5, ra: -.4, re: 1.5 }, eyes: 'huge', mouth: 'o', look: 1,
+    hold: (hx, hy) => { ctx.save(); ctx.translate(hx - 40, hy - 30); ctx.rotate(Math.PI); box(-80, -55, 160, 110, '#f87171', 10, 7); txt('ABC', 0, 4, 54, '#fff', { lw: 8 }); ctx.restore(); } });
+  if (t > T.read) { qmark(480, 900, t, T.read, '#ffd23f', 120); if (t > T.read) { const k = eob(inv(T.read, T.read + .25, t)); txt('YOU, PROBABLY', 740, 1220, 72 * k, '#fff', { lw: 12 }); } }
+  bigTop('GTA 5 CAME OUT', 230, 96, '#fff', at(1, 0), t);
+  footnote('Released 17 Sept 2013 (Guinness World Records)');
+}
+function sDay1(lt, t) {
+  bgFill('#064e3b'); spot(540, 900, 700, .35, '250,204,21'); floor('#065f46', 1380);
+  const n = Math.floor(eo(inv(T.d1 - .3, T.d1 + 1.4, t)) * 26);
+  for (let i = 0; i < n; i++) { const col = i % 7, row = Math.floor(i / 7); gameCase(160 + col * 127, 1300 - row * 170, 1, (rnd(i) - .5) * .1); }
+  bigTop('DAY ONE', 230, 120, '#fff', at(2, 0), t);
+  counter(540, 520, 860, 'COPIES SOLD', fmt(11e6 * eo(inv(T.d1 - .3, T.d1 + 1.4, t))));
+  footnote('11.21 million units on day one (Guinness World Records)');
+}
+function sGuesses(lt, t) {
+  room();
+  hero({ x: 260, y: 1500, s: 1.15, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.4 + Math.sin(t * 9) * .25, re: -1.6 }, mouth: t > T.way ? 'o' : 'wavy', eyes: t > T.way ? 'huge' : 'norm', look: 1, lookY: -1 });
+  popIn(t, T.g50, 700, 640, () => bubble(0, 0, '50 MILLION?', 66));
+  popIn(t, T.g100, 700, 900, () => bubble(0, 0, '100 MILLION?', 66));
+  if (t > T.way) { const k = eo(inv(T.way, T.way + .2, t)); line(420, 640, 420 + 560 * k, 640, 16, '#ef4444'); line(420, 900, 420 + 560 * k, 900, 16, '#ef4444'); }
+  bigTop('TEN YEARS LATER...', 260, 92, '#fff', at(3, 0), t); if (t > T.way) bigTop('WAY MORE.', 430, 130, '#ef4444', T.way, t);
+}
+function sBig(lt, t) {
+  bgFill('#1e1b4b'); spot(540, 800, 800, .4, '250,204,21');
+  for (let i = 0; i < 18; i++) { const fy = ((t * 300 + i * 130) % 2100) - 100; ctx.save(); ctx.translate((i * 157) % W, fy); ctx.rotate(i + t * 2); gameCase(0, 0, .55); ctx.restore(); }
+  const v = 230e6 * eo(inv(T.big, T.big + 1.6, t));
+  counter(540, 760, 1000, 'COPIES SOLD', fmt(v) + (t > T.big + 1.6 ? '+' : ''));
+  trophy(540, 1330, 1.1);
+  bigTop('OVER 230 MILLION', 300, 104, '#fde047', T.big + .2, t);
+  footnote('Units sold-in worldwide, Take-Two Interactive (quarter to 30 June 2026)');
+}
+function sClock(lt, t) {
+  bgFill('#fef3c7'); floor('#d6a26b');
+  clock(320, 760, 230, t);
+  const yrs = clamp((t - T.sec) / (T.seven - T.sec)) * 7.29;
+  calendar(800, 760, .9, 'YEARS', yrs.toFixed(1), '#7c3aed');
+  hero({ x: 540, y: 1480, s: 1.1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.2 + Math.sin(t * 12) * .3, re: -.4 }, eyes: t > T.seven ? 'huge' : 'norm', mouth: t > T.seven ? 'o' : 'flat', look: -1 });
+  const c = Math.floor((t - at(6, 0)) * 1) + 1; txt('COPIES: ' + fmt(Math.max(1, c)), 800, 1200, 60, '#fff', { lw: 12 });
+  bigTop('1 COPY EVERY SECOND', 230, 88, '#fff', at(6, 0), t); if (t > T.seven) bigTop('7+ YEARS', 420, 130, '#ef4444', T.seven, t);
+  footnote('230 million seconds = 7.3 years');
+}
+function sStill(lt, t) {
+  bgFill('#0f172a');
+  const k = eo(inv(at(7, 0), T.five + .8, t)); ctx.save(); ctx.strokeStyle = '#334155'; ctx.lineWidth = 4; for (let i = 0; i < 6; i++) line(120, 700 + i * 120, 960, 700 + i * 120, 4, '#334155'); ctx.restore();
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 18; ctx.lineCap = 'round'; ctx.beginPath(); const pts = 40; for (let i = 0; i <= pts * k; i++) { const x = 120 + i / pts * 840, y = 1300 - 560 * Math.pow(i / pts, .55); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
+  txt('2013', 140, 1370, 52, '#94a3b8', { stroke: false }); txt('2025', 940, 1370, 52, '#94a3b8', { stroke: false });
+  bigTop('STILL SELLING', 240, 120, '#4ade80', at(7, 0), t);
+  if (t > T.twelve) bigTop('12 YEARS LATER', 400, 90, '#fff', T.twelve, t);
+  if (t > T.five) popIn(t, T.five, 540, 560, () => { box(-420, -70, 840, 140, '#22c55e', 30, 9); txt('+5 MILLION IN 3 MONTHS', 0, 6, 62, '#fff', { lw: 10 }); });
+  footnote('Oct to Dec 2025, Take-Two results via Outlook Respawn');
+}
+function sTomorrow(lt, t) {
+  room();
+  tv(540, 720, 780, 440, (x, y, w, h) => { ctx.fillStyle = '#0b1020'; ctx.fillRect(x, y, w, h); txt('GTA 6', x + w / 2, y + 110, 110, '#fff', { lw: 14 }); txt('19 NOV · TOMORROW', x + w / 2, y + 220, 58, '#fde047', { stroke: false, font: 'Nun' }); loadBar(x + w / 2, y + 320, w - 120, .9 + .1 * eo(inv(at(8, 0), at(8, 1), t))); });
+  gamer(540, 1500, 1.2, { eyes: 'huge', mouth: 'grin' });
+  if (t < T.low) { bigTop('TO BEAT:', 200, 90, '#fff', T.up, t); if (t > T.up) bigTop('230,000,000+', 330, 110, '#fde047', T.up, t); }
+  else popIn(t, T.low, 540, 290, () => { box(-460, -170, 920, 340, 'rgba(15,23,42,.95)', 30, 9); txt('WAS YOUR GUESS', 0, -95, 70, '#fff', { stroke: false }); txt('TOO LOW?', 0, -15, 70, '#fde047', { stroke: false });
+    box(-330, 40, 280, 100, '#22c55e', 20, 7); txt('YES', -190, 92, 66, '#fff', { lw: 10 }); box(50, 40, 280, 100, '#ef4444', 20, 7); txt('NO', 190, 92, 66, '#fff', { lw: 10 }); });
+}
+const SCENES = [{ t0: 0, fn: sGuess, push: .04 }, { t0: mid(0, 1), fn: s2013, push: .04, flash: .7 }, { t0: mid(1, 2), fn: sDay1, push: .05, flash: .8 }, { t0: mid(2, 3), fn: sGuesses, push: .04, xfade: .2 },
+  { t0: mid(4, 5), fn: sBig, push: .06, flash: 1 }, { t0: mid(5, 6), fn: sClock, push: .04, flash: .7 }, { t0: mid(6, 7), fn: sStill, push: .04, xfade: .2 }, { t0: mid(7, 8), fn: sTomorrow, push: .04, flash: .8 }];
+const CAP = [["guess how many copies", "gta 5 has sold.", "comment your number", "before the end."], ["it came out in", "september 2013.", "maybe before", "you could even read."], ["on day one alone,", "it sold eleven million", "copies."],
+  ["so ten years later...", "fifty million?", "a hundred million?"], ["way more."], ["over two hundred", "thirty million copies."], ["if you counted", "one copy every second,", "nonstop,", "that would take you", "more than seven years."],
+  ["and it's still selling.", "twelve years after launch,", "five million more", "in just three months."], ["tomorrow,", "gta 6 finally comes out.", "and that's the number", "it's up against."], ["so, was your guess", "too low?", "yes or no."]];
+const HOT = new Set(["gta 5 has sold.", "comment your number", "you could even read.", "it sold eleven million", "a hundred million?", "way more.", "thirty million copies.", "more than seven years.", "five million more", "gta 6 finally comes out.", "too low?", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

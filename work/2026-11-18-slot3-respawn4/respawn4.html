@@ -1,0 +1,147 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function wtn(i, w, n) { const s = L[i].text.toLowerCase(); let p = -1; for (let k = 0; k <= n; k++) p = s.indexOf(w, p + 1); return at(i, Math.max(p, 0) / s.length); }
+function heart(x, y, s, full, crack = 0, col = '#ef4444') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = full ? col : '#334155'; ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(0, 30); ctx.bezierCurveTo(-70, -20, -40, -80, 0, -45); ctx.bezierCurveTo(40, -80, 70, -20, 0, 30); ctx.fill(); ctx.stroke(); if (full) { ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillRect(-28, -40, 12, 12); } if (crack > 0) { ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(0, -40); ctx.lineTo(-8, -15); ctx.lineTo(8, 0); ctx.lineTo(0, 25); ctx.stroke(); } ctx.restore(); }
+function hearts(x, y, n, s = 1, t = 0, col) { const bob = Math.sin(t * 3) * 6; for (let i = 0; i < 3; i++) heart(x + (i - 1) * 70 * s, y + bob, .7 * s, i < n, 0, col); }
+function headY(y, s) { return y - 368 * s; }
+function uiPanel(x, y, w, h) { box(x - w / 2, y - h / 2, w, h, 'rgba(15,23,42,.94)', 18, 8); ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; rr(x - w / 2 + 12, y - h / 2 + 12, w - 24, h - 24, 12); ctx.stroke(); }
+function nameTag(x, y, s) { ctx.save(); ctx.font = '900 32px Nun'; const w = ctx.measureText(s).width + 50; ctx.restore(); box(x - w / 2, y - 30, w, 60, 'rgba(15,23,42,.9)', 12, 5); txt(s, x, y + 4, 32, '#fde047', { stroke: false, font: 'Nun' }); }
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function glitch(t, a = .18) { const g = Math.sin(t * 40) > .3 ? 1 : 0; ctx.save(); ctx.globalAlpha = a * g; ctx.fillStyle = '#ff0040'; ctx.fillRect(-300, 640 + Math.sin(t * 13) * 200, W + 600, 70); ctx.fillStyle = '#00e5ff'; ctx.fillRect(-300, 1150 + Math.sin(t * 9) * 150, W + 600, 50); ctx.restore(); }
+const KAI = (o) => stick(Object.assign({ shirt: '#f97316', pants: '#1f2937', hood: true }, o));
+function playerTag(x, y, s, col) { ctx.save(); ctx.font = '900 32px Nun'; const w = ctx.measureText(s).width + 50; ctx.restore(); box(x - w / 2, y - 30, w, 60, 'rgba(15,23,42,.9)', 12, 5); txt(s, x, y + 4, 32, col, { stroke: false, font: 'Nun' }); }
+const T = { one: wt(0, 'one heart'), behind: wt(0, 'right behind'), said: wt(1, 'you said no'), red: wt(2, 'turns red'), quest: wt(2, 'new quest'), boss: wt(2, 'survive'),
+  tall: wt(3, 'something tall'), noface: wt(3, 'no face'), sash: wt(3, 'glowing'), nr: at(4, 0), grab: at(5, 0), run: wt(5, 'run'),
+  nr2: wt(6, 'no running'), lose: wt(6, 'loses'), never: wt(7, 'never ends'), same: wt(7, 'same lockers'), again: wt(7, 'again'),
+  see: wt(8, 'a heart'), jump: wt(8, 'you jump'), three: wt(8, 'three'), trip: at(9, 0), lean: wt(9, 'leans'),
+  crack: at(10, 0), fade: wt(10, 'fade'), desk: wt(10, 'check'), gone: at(11, 0), trust: wt(11, 'would') };
+function monitor(x, y, s, o = {}) {
+  ctx.save(); if (o.a !== undefined) ctx.globalAlpha = o.a;
+  stick({ x, y, s, shirt: '#64748b', pants: '#475569', pose: o.pose || STAND, flip: o.flip, lean: o.lean || 0, eyes: 'closed', mouth: 'flat' });
+  ctx.save(); ctx.translate(x, y); ctx.rotate(o.lean || 0); ctx.scale(s * (o.flip ? -1 : 1), s);
+  circ(0, -368, 62, '#cbd5e1', INK, 9); // faceless head
+  ctx.save(); ctx.shadowColor = '#fde047'; ctx.shadowBlur = 30; line(-38, -282, 38, -162, 18, '#fde047'); ctx.restore();
+  ctx.restore(); ctx.restore();
+}
+function hall(t, scroll, redK) {
+  bgFill('#e2e8f0'); box(-40, 540, W + 80, 60, '#94a3b8', 0, 8);
+  for (let i = 0; i < 4; i++) { const lx = 135 + i * 270; box(lx - 80, 558, 160, 26, redK > 0 && Math.sin(t * 10) > -.2 ? '#ef4444' : '#fefce8', 8, 5); }
+  const lw = 150, off = ((scroll % (lw * 6)) + lw * 6) % (lw * 6);
+  for (let i = -1; i < 10; i++) { const x = i * lw - off % lw; const idx = Math.floor((off) / lw) + i;
+    if (((idx % 6) + 6) % 6 === 3) { box(x + 15, 720, lw - 30, 200, '#fde68a', 6, 6); txt('BE ON', x + lw / 2, 790, 34, '#b45309', { stroke: false, font: 'Nun' }); txt('TIME', x + lw / 2, 840, 34, '#b45309', { stroke: false, font: 'Nun' }); continue; }
+    box(x + 6, 660, lw - 12, 720, '#60a5fa', 6, 7); for (let v = 0; v < 3; v++) line(x + 40, 700 + v * 22, x + lw - 40, 700 + v * 22, 5); circ(x + lw - 34, 1000, 10, '#e5e7eb', INK, 4); }
+  floorTiles(1380, '#cbd5e1', '#f1f5f9');
+  if (redK > 0) { ctx.fillStyle = `rgba(220,38,38,${redK * (.22 + .12 * Math.sin(t * 10))})`; ctx.fillRect(-300, -300, W + 600, H + 600); }
+}
+function bigTop(s, y, size, col, t0, t) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); txt(s, 540, y, size * k, col, { lw: size * .17 }); }
+function crackFx(t, t0, x, y) { if (t < t0 || t > t0 + .5) return; const k = inv(t0, t0 + .5, t); impact(x, y, 90 + 60 * k, 1 - k); ctx.fillStyle = `rgba(239,68,68,${.35 * (1 - k)})`; ctx.fillRect(-300, -300, W + 600, H + 600); }
+// ---------- cold open ----------
+function sCold(lt, t) {
+  hall(t, t * 1100, 1); glitch(t, .2);
+  const mx = 150 + Math.sin(t * 2) * 10;
+  monitor(mx, 1470, 1.45, { pose: walkPose(t * 7, .7) });
+  KAI({ x: 600, y: 1470, s: 1.15, pose: runPose(t * 11), eyes: 'huge', mouth: 'scream', look: 1 }); hearts(600, headY(1470, 1.15) - 100, 1, .9, t, '#dc2626');
+  txt('ONE HEART', 540, 230, 140, '#fff', { lw: 20 }); txt('LEFT', 540, 390, 140, '#ef4444', { lw: 20 });
+  if (t > T.behind) { const k = eob(inv(T.behind, T.behind + .25, t)); ctx.save(); ctx.translate(mx + 60, 560); ctx.scale(k, k); uiPanel(0, 0, 330, 100); txt('BOSS', 0, 6, 64, '#fde047', { stroke: false }); ctx.restore(); }
+}
+// ---------- recap ----------
+function sRecap(lt, t) {
+  bgFill('#fef3c7'); floor('#d6a26b'); windowFrame(80, 520, 480, 520, '#bfdbfe');
+  hero({ x: 300, y: 1460, s: 1.15, pose: STAND, eyes: 'huge', mouth: t > T.said ? 'o' : 'wavy', look: 1 }); hearts(300, headY(1460, 1.15) - 100, 2, .9, t);
+  KAI({ x: 800, y: 1460, s: 1.15, flip: true, pose: STAND, mouth: 'o', look: -1, brows: -1 }); hearts(800, headY(1460, 1.15) - 100, 3, .9, t, '#dc2626');
+  sepia();
+  box(250, 190, 580, 130, '#0f172a', 24, 8); txt('LAST TIME...', 540, 260, 84, '#fde047', { stroke: false });
+  popIn(t, at(1, .25), 700, 470, () => bubble(0, 0, 'RESPAWNED BEFORE?', 56, 640));
+  popIn(t, T.said, 300, 650, () => bubble(0, 0, 'NO!', 80));
+}
+// ---------- lights go red ----------
+function sRed(lt, t) {
+  const rk = t > T.red ? eo(inv(T.red, T.red + .3, t)) : 0; hall(t, 0, rk);
+  hero({ x: 300, y: 1470, s: 1.15, pose: STAND, eyes: 'huge', mouth: rk ? 'o' : 'flat', look: 1, lookY: -1 }); hearts(300, headY(1470, 1.15) - 100, 2, .9, t);
+  KAI({ x: 790, y: 1470, s: 1.15, flip: true, pose: STAND, eyes: rk ? 'huge' : 'norm', mouth: 'flat', look: -1, lookY: -1 }); hearts(790, headY(1470, 1.15) - 100, 3, .9, t, '#dc2626');
+  if (rk) glitch(t, .25);
+  popIn(t, T.quest, 540, 470, () => { uiPanel(0, 0, 900, 250); circ(-370, -50, 44, '#facc15', INK, 6); txt('!', -370, -42, 66, INK, { stroke: false }); txt('NEW QUEST', 40, -50, 76, '#facc15', { stroke: false });
+    if (t > T.boss) txt('SURVIVE THE BOSS', 0, 60, 66, '#f87171', { stroke: false, font: 'Nun' }); });
+  if (t < T.quest) txt(rk ? 'RED ALERT' : 'BRRRING', 540, 470, 110, rk ? '#ef4444' : '#fff', { lw: 18 });
+}
+// ---------- the boss ----------
+function sMonitor(lt, t) {
+  hall(t, 0, 1);
+  const k = eo(inv(T.tall - .2, T.tall + .9, t)), sh = t > T.nr && t < T.nr + .5 ? (rnd(Math.floor(t * 30)) - .5) * 40 : 0;
+  ctx.save(); ctx.translate(sh, 0);
+  box(380, 560, 320, 820, '#0b1020', 6, 8);
+  monitor(lerp(540, 540, k), 1460, 1.7, { a: k, pose: t > T.nr ? { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.3, re: -.2 } : STAND });
+  hero({ x: 150, y: 1500, s: .9, pose: STAND, eyes: 'huge', mouth: 'scream', look: 1, lookY: -1 }); hearts(150, headY(1500, .9) - 90, 2, .7, t);
+  KAI({ x: 935, y: 1500, s: .9, flip: true, pose: STAND, eyes: 'huge', mouth: 'o', look: -1, lookY: -1 }); hearts(935, headY(1500, .9) - 90, 3, .7, t, '#dc2626');
+  ctx.restore();
+  popIn(t, T.tall + .3, 540, 200, () => { uiPanel(0, 0, 840, 140); txt('BOSS: HALL MONITOR', 0, 6, 64, '#fde047', { stroke: false }); });
+  if (t > T.noface && t < T.nr) popIn(t, T.noface, 780, 640, () => nameTag(0, 0, 'NO FACE'));
+  if (t > T.sash && t < T.nr) popIn(t, T.sash, 300, 980, () => nameTag(0, 0, 'GLOWING SASH'));
+  if (t > T.nr) popIn(t, T.nr, 540, 420, () => { box(-400, -100, 800, 200, '#fff', 40, 9); txt('NO RUNNING.', 0, 6, 104, '#dc2626', { lw: 12 }); });
+}
+// ---------- chase ----------
+function sChase(lt, t) {
+  hall(t, t * 1300, 1);
+  const kh = t < T.nr2 ? 3 : t < T.lose ? 2 : 1;
+  monitor(140, 1470, 1.45, { pose: walkPose(t * 7, .7) });
+  KAI({ x: 500, y: 1470, s: 1.05, pose: runPose(t * 11 + 1), eyes: 'huge', mouth: 'scream', look: 1 }); hearts(500, headY(1470, 1.05) - 100, kh, .85, t, '#dc2626');
+  hero({ x: 830, y: 1470, s: 1.05, pose: runPose(t * 11), eyes: 'huge', mouth: 'o', look: 1 }); hearts(830, headY(1470, 1.05) - 100, 2, .85, t);
+  crackFx(t, T.nr2, 500, 960); crackFx(t, T.lose, 500, 960);
+  if (t > T.nr2 - .1 && t < T.nr2 + .9) bubble(260, 700, 'NO RUNNING.', 54, 520);
+  if (t < T.nr2) bigTop('RUN!', 300, 190, '#fff', T.run, t);
+  else if (t < T.never) { bigTop('KAI', 230, 110, '#fb923c', T.nr2, t); txt(kh + (kh === 1 ? ' HEART' : ' HEARTS'), 540, 360, 110, '#ef4444', { lw: 18 }); }
+  else { const n = 2 + Math.floor((t - T.never) / .7); ctx.save(); ctx.translate(540, 260); uiPanel(0, 0, 640, 140); txt('HALLWAY #' + n, 0, 6, 72, '#fff', { stroke: false }); ctx.restore();
+    if (t > T.same) bigTop(t > T.again ? 'AGAIN.' : 'SAME LOCKERS', 450, 104, t > T.again ? '#ef4444' : '#fff', t > T.again ? T.again : T.same, t); }
+}
+// ---------- floating heart ----------
+function sGrab(lt, t) {
+  hall(t, t * 1300, 1);
+  const jk = t > T.jump ? Math.sin(Math.PI * clamp((t - T.jump) / .7)) : 0, got = t > T.jump + .35;
+  const hx = lerp(1250, 830, eo(inv(T.see - .6, T.jump, t)));
+  if (!got) { const pul = 1 + .08 * Math.sin(t * 9); spot(hx, 640, 180, .6, '255,120,120'); heart(hx, 640, 1.3 * pul, true); }
+  monitor(140, 1470, 1.45, { pose: walkPose(t * 7, .7) });
+  KAI({ x: 500, y: 1470, s: 1.05, pose: runPose(t * 11 + 1), eyes: 'huge', mouth: 'scream', look: 1 }); hearts(500, headY(1470, 1.05) - 100, 1, .85, t, '#dc2626');
+  const hy = 1470 - jk * 260;
+  hero({ x: 830, y: hy, s: 1.05, pose: jk > .1 ? { lt: -.3, ls: .9, rt: .4, rs: .6, la: .3, le: .2, ra: -2.9, re: 0 } : runPose(t * 11), eyes: 'huge', mouth: got ? 'grin' : 'o', look: 1, lookY: -1, shadow: jk < .1 }); hearts(830, headY(hy, 1.05) - 100, got ? 3 : 2, .85, t);
+  if (got) { sparkle(830, headY(hy, 1.05) - 100, 140, 1 - inv(T.jump + .35, T.jump + 1.2, t)); bigTop('3 HEARTS!', 300, 130, '#4ade80', T.jump + .35, t); }
+  else bigTop('A HEART!', 300, 130, '#fff', T.see, t);
+}
+// ---------- Kai falls ----------
+function sTrip(lt, t) {
+  hall(t, 0, 1);
+  const fk = eo(inv(T.trip, T.trip + .5, t)), fadeA = 1 - .75 * inv(T.fade, T.desk + .8, t);
+  hero({ x: 930, y: 1480, s: .95, flip: true, pose: STAND, eyes: 'huge', mouth: 'o', look: -1 }); hearts(930, headY(1480, .95) - 95, 3, .75, t);
+  monitor(220, 1470, 1.5, { lean: lerp(0, .38, eo(inv(T.lean, T.lean + .8, t))), pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.3, re: -.3 } });
+  ctx.save(); ctx.globalAlpha = fadeA; if (t > T.fade) ctx.translate(Math.sin(t * 50) * 8, 0);
+  KAI({ x: 330, y: 1470, s: 1.05, lean: lerp(0, 1.42, fk), pose: { lt: .3, ls: .4, rt: -.1, rs: .2, la: 1.2, le: .4, ra: -.4, re: -.6 }, eyes: t > T.crack ? 'closed' : 'huge', mouth: 'o', look: 1, shadow: false });
+  hearts(640, 1150, t > T.crack ? 0 : 1, .85, t, '#dc2626'); ctx.restore();
+  if (t > T.fade) glitch(t, .35);
+  crackFx(t, T.crack, 640, 1150);
+  if (t < T.crack) bigTop('TRIP!', 300, 150, '#fff', T.trip + .2, t);
+  else if (t < T.desk) { bigTop('KAI: 0 HEARTS', 260, 104, '#ef4444', T.crack, t); }
+  else popIn(t, T.desk, 600, 380, () => { box(-420, -110, 840, 220, '#fff', 40, 8); txt('"check your desk..."', 0, 6, 70, '#7c3aed', { stroke: false, font: 'Nun' }); });
+}
+// ---------- gone ----------
+function sGone(lt, t) {
+  hall(t, 0, 0);
+  sparkle(400, 1250, 120, .6 + .3 * Math.sin(t * 5)); ctx.save(); ctx.setLineDash([22, 18]); ctx.strokeStyle = '#f97316'; ctx.lineWidth = 7; ctx.strokeRect(250, 900, 300, 470); ctx.setLineDash([]); ctx.restore();
+  hero({ x: 800, y: 1470, s: 1.15, flip: true, pose: STAND, eyes: 'huge', mouth: 'wavy', look: -1 }); hearts(800, headY(1470, 1.15) - 100, 3, .9, t);
+  popIn(t, T.trust, 540, 330, () => { uiPanel(0, 0, 940, 330); txt('WOULD YOU TRUST KAI?', 0, -70, 66, '#fff', { stroke: false });
+    box(-330, 10, 280, 110, '#22c55e', 20, 7); txt('YES', -190, 70, 70, '#fff', { lw: 10 }); box(50, 10, 280, 110, '#ef4444', 20, 7); txt('NO', 190, 70, 70, '#fff', { lw: 10 }); });
+  if (t < T.trust) bigTop('GONE.', 330, 160, '#fff', T.gone, t);
+  const endT = L[11].end + .75;
+  if (t > endT) { const k = eob(inv(endT, endT + .35, t)); ctx.save(); ctx.fillStyle = `rgba(0,0,0,${.6 * k})`; ctx.fillRect(-300, -300, W + 600, H + 600); ctx.translate(540, 950); ctx.scale(k, k); box(-380, -110, 760, 220, '#dc2626', 26, 10); txt('PART 5 TOMORROW', 0, 8, 84, '#fff', { lw: 12 }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sCold, push: .04 }, { t0: mid(0, 1), fn: sRecap, push: .04, flash: .8 }, { t0: mid(1, 2), fn: sRed, push: .04, flash: .8 }, { t0: mid(2, 3), fn: sMonitor, push: .05, xfade: .25 },
+  { t0: mid(4, 5), fn: sChase, push: .03, flash: 1 }, { t0: mid(7, 8), fn: sGrab, push: .03, xfade: .2 }, { t0: mid(8, 9), fn: sTrip, push: .05, flash: .8 }, { t0: mid(10, 11), fn: sGone, push: .04, flash: .6 }];
+const CAP = [["kai has one heart left.", "and the hall monitor", "is right behind him."], ["last time,", "kai asked if", "you'd respawned before.", "you said no."], ["then every light", "in the school", "turns red.", "new quest.", "survive the boss."],
+  ["at the end of the hall,", "something tall", "steps out.", "no face.", "a glowing yellow sash."], ["no running."], ["kai grabs your arm.", "run!"], ["every time it says", "no running,", "kai loses a heart."],
+  ["and the hallway", "never ends.", "same lockers.", "same poster.", "again."], ["then you see it.", "a heart,", "floating above a locker.", "you jump.", "three hearts!"], ["but kai trips.", "the hall monitor", "leans over him."],
+  ["his last heart cracks.", "he starts to fade,", "and whispers...", "check your desk."], ["then he's gone.", "would you trust kai?", "comment yes or no."]];
+const HOT = new Set(["kai has one heart left.", "you said no.", "turns red.", "survive the boss.", "something tall", "no running.", "run!", "kai loses a heart.", "never ends.", "again.", "three hearts!", "but kai trips.", "his last heart cracks.", "check your desk.", "then he's gone.", "comment yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>
