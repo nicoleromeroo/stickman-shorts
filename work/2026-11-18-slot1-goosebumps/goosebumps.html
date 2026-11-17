@@ -1,0 +1,132 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { threat: wt(0, 'threat'), guess: at(1, 0), surp: at(2, 0), key: wt(2, 'key'), inst: wt(2, 'new instr'), build: wt(2, 'huge'),
+  alarm: at(3, 0), danger: wt(3, 'danger'), scared: at(4, 0), pull: wt(4, 'tiny'), gb: wt(4, 'goosebumps'),
+  anc: at(5, 0), puff: wt(5, 'puffed'), slow: at(6, 0), song: wt(6, "it's just"), relief: wt(6, 'relief'),
+  scan: at(7, 0), dop: wt(7, 'dopamine'), chill: wt(7, 'chill'), before: at(8, 0), wait: wt(8, 'wait'), end: at(9, 0), yn: wt(9, 'do you') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function credit(s, y = 1800) { txt(s, 540, y, 30, '#334155', { stroke: false, font: 'Nun', weight: '900 ' }); }
+function note(x, y, s, col = '#7c3aed', rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s);
+  ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(0, 0, 26, 19, -.4, 0, 7); ctx.fill(); ctx.stroke();
+  line(22, -6, 22, -100, 8); ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(22, -100); ctx.quadraticCurveTo(60, -80, 52, -40); ctx.quadraticCurveTo(48, -68, 22, -70); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+function headphones(x, y, s, col = '#ef4444') { const hy = y - 368 * s; ctx.save(); ctx.translate(x, hy); ctx.scale(s, s);
+  ctx.strokeStyle = INK; ctx.lineWidth = 22; ctx.beginPath(); ctx.arc(0, 0, 80, Math.PI * 1.05, Math.PI * 1.95); ctx.stroke();
+  ctx.strokeStyle = col; ctx.lineWidth = 12; ctx.beginPath(); ctx.arc(0, 0, 80, Math.PI * 1.05, Math.PI * 1.95); ctx.stroke();
+  for (const sx of [-1, 1]) box(sx * 72 - 22, -30, 44, 70, col, 16, 7); ctx.restore(); }
+function flyNotes(t, cx, cy, n = 6, sp = 1) { for (let i = 0; i < n; i++) { const k = (t * .45 * sp + rnd(i)) % 1; const a = rnd(i + 4) * Math.PI - Math.PI; note(cx + Math.cos(a) * 160 * (1 + k * 2.2) * .8, cy - k * 520 + Math.sin(t * 3 + i) * 20, .9 + rnd(i + 2) * .5, ['#7c3aed', '#ec4899', '#0ea5e9', '#f59e0b'][i % 4], Math.sin(t * 4 + i) * .3); } }
+function goosebumpArm(x, y, k, t) { // close-up forearm, k = 0 smooth .. 1 bumps + hairs up
+  ctx.save(); ctx.translate(x, y); box(-460, -120, 920, 240, '#ffe4cc', 120, 10);
+  for (let i = 0; i < 26; i++) { const bx = -400 + (i % 13) * 66 + (Math.floor(i / 13) % 2) * 33, by = -50 + Math.floor(i / 13) * 90; const r = 4 + 18 * k;
+    circ(bx, by, r, '#fcd3b0', INK, 3 * k + .01);
+    const ang = lerp(1.35, .05, k) + Math.sin(t * 9 + i) * .04 * k; ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(bx, by - r * .6); ctx.lineTo(bx + Math.sin(ang) * 60, by - r * .6 - Math.cos(ang) * 60); ctx.stroke(); }
+  ctx.restore(); }
+function hairy(x, y, s, puff, t) { // fuzzy ancestor stick figure, fur grows with puff
+  const n = 40; ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  const R = 150 + 90 * puff; ctx.fillStyle = '#92400e'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath();
+  for (let i = 0; i <= n; i++) { const a = i / n * Math.PI * 2; const r = R + (i % 2 ? 30 + 40 * puff : 0); ctx.lineTo(Math.cos(a) * r * .85, -260 + Math.sin(a) * r * 1.1); }
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+  circ(0, -420 - 30 * puff, 70, '#fde68a', INK, 8); for (const sx of [-1, 1]) { circ(sx * 24, -428 - 30 * puff, 14, '#fff', INK, 5); circ(sx * 24 + 3, -426 - 30 * puff, 6, INK); }
+  line(-24, -392 - 30 * puff, 24, -392 - 30 * puff, 7);
+  line(-50, -120, -70, 0, 18); line(50, -120, 70, 0, 18); ctx.restore(); }
+function siren(x, y, on, t) { const fl = on && Math.floor(t * 6) % 2; if (fl) spot(x, y - 40, 380, .55, '255,60,60'); box(x - 90, y - 10, 180, 50, '#334155', 10, 8);
+  ctx.fillStyle = fl ? '#ff3b3b' : '#9f1239'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(x - 70, y - 10); ctx.lineTo(x - 70, y - 90); ctx.arc(x, y - 90, 70, Math.PI, 0); ctx.lineTo(x + 70, y - 10); ctx.closePath(); ctx.fill(); ctx.stroke();
+  if (fl) for (let i = -2; i <= 2; i++) { const a = -Math.PI / 2 + i * .45; line(x + Math.cos(a) * 190, y - 100 + Math.sin(a) * 190, x + Math.cos(a) * 260, y - 100 + Math.sin(a) * 260, 10, '#ef4444'); } }
+function check(x, y, s, col = '#16a34a') { circ(x, y, 90 * s, col, INK, 9); ctx.strokeStyle = '#fff'; ctx.lineWidth = 22 * s; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x - 40 * s, y); ctx.lineTo(x - 10 * s, y + 32 * s); ctx.lineTo(x + 44 * s, y - 34 * s); ctx.stroke(); }
+
+function sHook(lt, t) {
+  bgFill('#1e1b4b'); spot(540, 900, 700, .35, '167,139,250'); floor('#312e81', 1420);
+  flyNotes(t, 540, 760, 7);
+  const bob = Math.abs(Math.sin(t * 5)) * 14, shiver = t > T.threat ? Math.sin(t * 50) * 4 : 0;
+  hero({ x: 540 + shiver, y: 1480, s: 1.9, bob, tilt: Math.sin(t * 2.5) * .12, pose: { lt: .1, ls: .1, rt: -.1, rs: .1, la: -2.4 + Math.sin(t * 5) * .3, le: -.6, ra: 2.4 - Math.sin(t * 5) * .3, re: .6 }, eyes: t > T.threat ? 'huge' : 'closed', mouth: t > T.threat ? 'o' : 'grin' });
+  headphones(540 + shiver, 1480 - bob * 1.9, 1.9);
+  const k = eob(inv(0, .2, t)); txt('YOUR SONG', 540, 230, 150 * Math.max(.75, k), '#fff', { lw: 24 }); txt('= DANGER?', 540, 400, 150 * Math.max(.75, k), '#f87171', { lw: 24 });
+  if (t > T.threat) { const k2 = pop(T.threat, t); ctx.save(); ctx.translate(540, 560); ctx.scale(k2, k2); box(-330, -60, 660, 120, '#ef4444', 30, 9); txt('YOUR BRAIN THINKS SO', 0, 6, 58, '#fff', { stroke: false }); ctx.restore(); }
+}
+function sGuess(lt, t) {
+  bgFill('#ede9fe'); floor('#c4b5fd', 1500);
+  brainChar(270, 1320, 1.0, { eyes: t > T.surp ? 'huge' : 'norm', mouth: t > T.surp ? 'o' : 'smile', look: 1 });
+  // staff with notes left to right
+  ctx.save(); for (let i = 0; i < 5; i++) line(80, 560 + i * 40, 1000, 560 + i * 40, 5, '#4c1d95'); ctx.restore();
+  const shown = Math.min(4, Math.floor(lt * 1.6) + 1);
+  for (let i = 0; i < shown; i++) note(160 + i * 160, 680 - i * 25, 1, '#7c3aed');
+  if (t < T.surp) { qmark(820, 640, t, T.guess + .6, '#7c3aed', 170); badge(540, 260, 760, 150, '#7c3aed', ['NEXT NOTE?'], [100], T.guess, t, -.03); }
+  else {
+    const j = Math.sin(t * 20) * 8; note(820 + j, 560, 1.6, '#f59e0b', .4);
+    impact(840, 560, 200, 1 - inv(T.surp, T.surp + .5, t));
+    badge(540, 250, 700, 150, '#f59e0b', ['SURPRISE!'], [110], T.surp, t, -.04, INK);
+    badge(700, 820, 620, 110, '#fff', ['KEY CHANGE'], [80], T.key, t, .03, INK);
+    badge(640, 950, 740, 110, '#fff', ['NEW INSTRUMENT'], [80], T.inst, t, -.03, INK);
+    badge(760, 1080, 520, 110, '#fff', ['BUILD-UP'], [80], T.build, t, .03, INK);
+  }
+}
+function sAlarm(lt, t) {
+  const on = t > T.danger - .3;
+  bgFill(on && Math.floor(t * 6) % 2 ? '#7f1d1d' : '#450a0a');
+  if (t < T.scared) {
+    siren(540, 760, on, t);
+    brainChar(540, 1250, 1.3, { eyes: 'huge', mouth: 'o', armL: [-60, -120], armR: [60, -120] });
+    for (let i = 0; i < 3; i++) sweat(330 + i * 200, 1000 - (i % 2) * 40, inv(T.alarm, T.alarm + .4, t));
+    badge(540, 260, 680, 160, '#ef4444', ['DANGER?!'], [130], T.danger, t, -.04);
+    if (t < T.danger) badge(540, 260, 760, 140, '#fff', ['ALARM MODE'], [100], T.alarm, t, .02, '#b91c1c');
+  } else {
+    bgFill('#fde68a');
+    const k = eo(inv(T.pull - .2, T.gb, t));
+    goosebumpArm(540, 1000, k, t);
+    badge(540, 280, 760, 150, '#2563eb', ['HAIRS UP!'], [110], T.pull, t, -.03);
+    if (t > T.gb) { const k2 = pop(T.gb, t); txt('GOOSEBUMPS', 540, 1290, 140 * k2, '#fff', { lw: 26 }); }
+  }
+}
+function sAnc(lt, t) {
+  bgFill('#fef3c7'); floor('#a16207', 1450);
+  ctx.save(); ctx.fillStyle = '#65a30d'; for (let i = 0; i < 5; i++) { ctx.beginPath(); ctx.arc(80 + i * 240, 1450, 120, Math.PI, 0); ctx.fill(); } ctx.restore();
+  const puff = eob(inv(T.puff, T.puff + .5, t));
+  hairy(540, 1440, 1.6, puff, t);
+  badge(540, 250, 800, 150, '#a16207', ['HAIRY ANCESTORS'], [96], T.anc, t, -.03);
+  if (t > T.puff) { badge(540, 430, 600, 130, '#16a34a', ['LOOK BIGGER!'], [86], T.puff, t, .04); impact(540, 1060, 520, 1 - inv(T.puff, T.puff + .6, t)); }
+  credit('Explanation: musicologist David Huron, via Radboud University');
+}
+function sRelief(lt, t) {
+  bgFill(t > T.relief ? '#bbf7d0' : '#e2e8f0');
+  siren(830, 700, false, t);
+  const calm = t > T.song;
+  brainChar(420, 1250, 1.25, { eyes: calm ? 'closed' : 'norm', mouth: calm ? 'smile' : 'flat', look: 1, armR: calm ? [70, -100] : [80, 40], armL: [-70, 60] });
+  if (!calm) { badge(540, 250, 760, 150, '#475569', ['CHECKING...'], [100], T.slow, t, -.03); const d = Math.floor(lt * 3) % 4; txt('.'.repeat(d), 690, 1000, 150, INK, { stroke: false }); }
+  else { badge(540, 250, 800, 150, '#16a34a', ['JUST A SONG'], [110], T.song, t, -.03); check(800, 980, eob(inv(T.song, T.song + .3, t))); }
+  if (t > T.relief) { const k = pop(T.relief, t); txt('RELIEF', 540, 470, 140 * k, '#fff', { lw: 24 }); }
+}
+function sScan(lt, t) {
+  bgFill('#0f172a');
+  // head side view outline with brain glow
+  ctx.save(); ctx.translate(400, 1050); circ(0, 0, 300, '#1e293b', '#94a3b8', 12); ctx.restore();
+  const g1 = t > T.before, gk = t > T.dop ? .5 + .3 * Math.sin(t * 6) : 0;
+  if (gk > 0) spot(400, 980, 260, gk, '250,204,21');
+  if (g1) spot(320, 1100, 190, .6 + .3 * Math.sin(t * 8), '74,222,128');
+  ctx.save(); ctx.translate(400, 1050); ctx.globalAlpha = .9; brainChar(0, -40, .9, { eyes: g1 ? 'huge' : 'closed', mouth: 'smile', legs: false }); ctx.restore();
+  // dopamine meter
+  const v = t < T.dop ? .1 : t < T.chill ? .45 : t < T.before ? .95 : .7 + .1 * Math.sin(t * 5);
+  meter(880, 1300, '', v, '#facc15'); txt('DOPAMINE', 860, 1380, 64, '#facc15', { lw: 12 });
+  badge(540, 230, 820, 140, '#facc15', ['FEEL-GOOD CHEMICAL'], [76], T.dop, t, -.03, INK);
+  if (t < T.before) { if (t > T.chill) badge(540, 400, 600, 120, '#ec4899', ['AT THE CHILL'], [80], T.chill, t, .03); }
+  else { badge(540, 400, 780, 120, '#22c55e', ['EVEN BEFORE IT!'], [80], T.before, t, .03); if (t > T.wait) { const s = Math.max(1, 3 - Math.floor((t - T.wait) * 2)); txt(String(s), 880, 820, 150, '#fff', { lw: 22 }); } }
+  if (t < T.dop) badge(540, 400, 720, 120, '#fff', ['BRAIN SCANS'], [80], T.scan, t, .03, INK);
+  ctx.save(); ctx.globalAlpha = 1; txt('Source: Salimpoor et al. 2011, Nature Neuroscience (McGill University)', 540, 1790, 30, '#cbd5e1', { stroke: false, font: 'Nun', weight: '900 ' }); ctx.restore();
+}
+function sEnd(lt, t) {
+  bgFill('#1e1b4b'); spot(540, 900, 700, .35, '167,139,250'); floor('#312e81', 1420);
+  const bob = Math.abs(Math.sin(t * 5)) * 14;
+  hero({ x: 540, y: 1480, s: 1.8, bob, pose: { lt: .1, ls: .1, rt: -.1, rs: .1, la: -2.4, le: -.6, ra: 2.4, re: .6 }, eyes: 'huge', mouth: 'grin' });
+  headphones(540, 1480 - bob * 1.8, 1.8);
+  for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2; sparkle(540 + Math.cos(a) * 330, 1000 + Math.sin(a) * 330, 26, .6 + .4 * Math.sin(t * 6 + i)); }
+  const k = pop(T.end, t); txt('SCARED +', 540, 200, 120 * k, '#f87171', { lw: 22 }); txt('REWARDED', 540, 330, 120 * k, '#facc15', { lw: 22 });
+  if (t > T.yn) { const k2 = pop(T.yn, t); ctx.save(); ctx.translate(540, 540); ctx.rotate(-.03); ctx.scale(k2, k2); box(-440, -110, 880, 220, '#fff', 30, 9); txt('DO YOU GET THEM?', 0, -36, 78, INK, { stroke: false }); txt('YES OR NO?', 0, 50, 92, '#16a34a', { stroke: false }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(0, 1), fn: sGuess, push: .04, flash: 1 }, { t0: mid(2, 3), fn: sAlarm, push: .05, flash: 1 }, { t0: mid(4, 5), fn: sAnc, push: .05, xfade: .25 }, { t0: mid(5, 6), fn: sRelief, push: .04, xfade: .25 }, { t0: mid(6, 7), fn: sScan, push: .05, flash: .8 }, { t0: mid(8, 9), fn: sEnd, push: .06, flash: 1 }];
+const CAP = [["think of the song", "that gives you", "goosebumps.", "your brain thinks", "it's a threat."], ["your brain", "always guesses", "what comes next", "in a song."], ["then, surprise!", "a key change.", "a new instrument.", "a huge build-up."], ["scientists think", "a fast alarm", "in your brain asks:", "danger?"], ["your body reacts", "like you're scared.", "tiny muscles pull", "every hair up.", "goosebumps."], ["a leftover from", "hairy ancestors:", "puffed-up hair", "looked bigger."], ["then a slower", "part checks.", "it's just a song.", "relief."], ["brain scans at", "mcgill university", "showed dopamine,", "a feel-good chemical,", "at the chill moment."], ["and even in", "the seconds before,", "while you wait for it."], ["scared and rewarded", "at once.", "do you get them?", "yes or no?"]];
+const HOT = new Set(["goosebumps.", "it's a threat.", "then, surprise!", "danger?", "goosebumps.", "looked bigger.", "relief.", "showed dopamine,", "the seconds before,", "yes or no?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>
