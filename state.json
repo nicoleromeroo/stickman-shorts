@@ -1,5 +1,5 @@
 {
- "uploaded_count": 25,
+ "uploaded_count": 27,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -201,6 +201,22 @@
    "mode": "scheduled 2026-11-19T10:30:00Z",
    "publish_at": "2026-11-19T11:30:00+01:00",
    "uploaded_at": "2026-11-18T14:54:33+00:00"
+  },
+  {
+   "tag": "video-20261119-slot1",
+   "video_id": "KpGTYnPs7iY",
+   "title": "Does Cracking Your Knuckles Cause Arthritis? #shorts",
+   "mode": "scheduled 2026-11-19T05:00:00Z",
+   "publish_at": "2026-11-19T06:00:00+01:00",
+   "uploaded_at": "2026-11-18T19:53:01+00:00"
+  },
+  {
+   "tag": "video-20261119-slot5",
+   "video_id": "Xa2G1-NzV3o",
+   "title": "Delete Music or Video Games Forever? Pick One \ud83c\udfae #shorts",
+   "mode": "scheduled 2026-11-19T17:30:00Z",
+   "publish_at": "2026-11-19T18:30:00+01:00",
+   "uploaded_at": "2026-11-18T19:53:01+00:00"
   }
  ]
 }
