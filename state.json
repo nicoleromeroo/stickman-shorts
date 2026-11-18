@@ -1,5 +1,5 @@
 {
- "uploaded_count": 22,
+ "uploaded_count": 25,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -177,6 +177,30 @@
    "mode": "scheduled 2026-11-18T05:00:00Z",
    "publish_at": "2026-11-18T06:00:00+01:00",
    "uploaded_at": "2026-11-17T19:46:43+00:00"
+  },
+  {
+   "tag": "video-20261119-slot2",
+   "video_id": "lksumJdj7Ps",
+   "title": "Is a 200 \u20ac Raise Really 200 \u20ac? \ud83d\udcb6 #shorts",
+   "mode": "scheduled 2026-11-19T15:00:00Z",
+   "publish_at": "2026-11-19T16:00:00+01:00",
+   "uploaded_at": "2026-11-18T14:54:33+00:00"
+  },
+  {
+   "tag": "video-20261119-slot3",
+   "video_id": "aNYtbEWe8JU",
+   "title": "RESPAWN (Part 5) #shorts",
+   "mode": "scheduled 2026-11-19T19:00:00Z",
+   "publish_at": "2026-11-19T20:00:00+01:00",
+   "uploaded_at": "2026-11-18T14:54:33+00:00"
+  },
+  {
+   "tag": "video-20261119-slot4",
+   "video_id": "G8zk_PuliIE",
+   "title": "This Game Made $1 Billion Faster Than Any Movie \ud83c\udfae #shorts",
+   "mode": "scheduled 2026-11-19T10:30:00Z",
+   "publish_at": "2026-11-19T11:30:00+01:00",
+   "uploaded_at": "2026-11-18T14:54:33+00:00"
   }
  ]
 }
