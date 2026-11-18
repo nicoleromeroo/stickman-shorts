@@ -1,0 +1,13 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 23)
+m.music("upbeat")
+m.add("pop", 0.05, .3); m.add("bonk", m.wt(0, "music"), .3); m.add("bonk", m.wt(0, "video"), .3); m.add("ding", m.wt(0, "you have"), .3)
+m.add("tick", m.at(1, .1), .4); m.add("tick", m.at(1, .45), .4); m.add("tick", m.at(1, .8), .4)
+m.add("whoosh", m.mid(1, 2) - .12, .3); m.add("pdown", m.wt(2, "three point"), .35)
+m.add("whoosh", m.mid(2, 3) - .12, .3); m.add("cash", m.wt(3, "two hundred"), .4); m.add("pop", m.wt(3, "six"), .4)
+m.add("whoosh", m.mid(3, 4) - .12, .3); m.add("ding", m.wt(4, "nineteen"), .35)
+m.add("whoosh", m.mid(4, 5) - .12, .3); m.add("chime", m.wt(5, "bone"), .35); m.add("ding", m.wt(5, "forty"), .4)
+m.add("whoosh", m.mid(5, 6) - .12, .3); m.add("pop", m.wt(6, "movies"), .35); m.add("pop", m.wt(6, "birthdays"), .35); m.add("pop", m.wt(6, "stadiums"), .35)
+m.add("pdown", m.at(7, .05), .4); m.add("thump", m.wt(7, "ever"), .45)
+m.add("whoosh", m.mid(7, 8) - .12, .3); m.add("boing", m.wt(8, "music or"), .35); m.add("ding", m.wt(8, "comment"), .3)
+m.write(mvol=.08, svol=.3, )

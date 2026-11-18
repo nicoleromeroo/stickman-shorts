@@ -1,0 +1,21 @@
+[
+ "Crack your knuckles. Right now. Go on.",
+ "Everyone says that gives you arthritis. True or false? Comment before the end.",
+ "One doctor, Donald Unger, tested it on himself.",
+ "For over sixty years, he cracked the knuckles of his left hand, at least twice a day.",
+ {
+  "text": "His right hand? Never.",
+  "gap": 0.5
+ },
+ {
+  "text": "The result? No arthritis in either hand.",
+  "gap": 0.4
+ },
+ "He even won a prize for it. The Ig Nobel.",
+ "A later study of two hundred fifteen people: crackers had no more hand arthritis.",
+ "So what's the pop? M R I videos show a gas bubble forming in the fluid inside your joint.",
+ {
+  "text": "So, false. No link to arthritis. If a joint hurts, get it checked. Do you crack yours?",
+  "gap": 0.6
+ }
+]

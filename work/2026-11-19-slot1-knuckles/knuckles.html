@@ -1,0 +1,125 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { now: wt(0, 'right now'), go: wt(0, 'go on'), arth: at(1, 0), tf: wt(1, 'true'), com: wt(1, 'comment'),
+  doc: at(2, 0), name: wt(2, 'donald'), yrs: wt(3, 'sixty'), left: wt(3, 'left'), twice: wt(3, 'twice'), right: at(4, 0), never: wt(4, 'never'),
+  res: at(5, 0), noa: wt(5, 'no arthritis'), prize: wt(6, 'prize'), ig: wt(6, 'ig nobel'),
+  study: at(7, 0), crk: wt(7, 'crackers'), pop: wt(8, 'pop'), mri: wt(8, 'm r i'), bub: wt(8, 'bubble'),
+  fals: at(9, 0), nol: wt(9, 'no link'), hurt: wt(9, 'if a joint'), you: wt(9, 'do you') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function credit(s, y = 1800) { txt(s, 540, y, 30, '#334155', { stroke: false, font: 'Nun', weight: '900 ' }); }
+// cartoon hand, fingers up; o.flex 0..1 bends fingers, o.col fill
+function hand(x, y, s, o = {}) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s * (o.flip ? -1 : 1), s); ctx.rotate(o.rot || 0);
+  const col = o.col || '#fff', fl = o.flex || 0;
+  const fx = [-66, -22, 22, 66], fh = [150, 175, 165, 130];
+  for (let i = 0; i < 4; i++) { const h = fh[i] * (1 - .35 * fl); box(fx[i] - 21, -90 - h, 42, h + 40, col, 21, 8); }
+  ctx.save(); ctx.translate(-100, -10); ctx.rotate(-.7 - fl * .3); box(-22, -110, 44, 125, col, 22, 8); ctx.restore();
+  box(-95, -100, 190, 200, col, 40, 9);
+  for (let i = 0; i < 4; i++) { ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(fx[i], -96, 12, Math.PI * 1.1, Math.PI * 1.9); ctx.stroke(); }
+  ctx.restore();
+}
+function crack(x, y, t, t0, s = 1) { const d = t - t0; if (d < 0 || d > .5) return; const k = eob(inv(0, .15, d)); impact(x, y, 110 * s * k, 1 - d / .5); txt('CRACK!', x, y - 10, 70 * s * k, '#facc15', { lw: 14 }); }
+function xhand(x, y, s) { // x-ray panel with a bone hand
+  box(x - 190, y - 260, 380, 460, '#1e293b', 24, 10);
+  ctx.save(); ctx.translate(x, y + 80); ctx.scale(s, s); ctx.strokeStyle = '#e2e8f0'; ctx.lineCap = 'round';
+  const fx = [-60, -20, 20, 60], fh = [150, 175, 165, 130];
+  for (let i = 0; i < 4; i++) { ctx.lineWidth = 18; ctx.beginPath(); ctx.moveTo(fx[i] * .6, 40); ctx.lineTo(fx[i], -70); ctx.stroke(); for (let j = 0; j < 3; j++) { const y0 = -80 - j * fh[i] / 3.2, y1 = y0 - fh[i] / 3.6; ctx.lineWidth = 15; ctx.beginPath(); ctx.moveTo(fx[i], y0); ctx.lineTo(fx[i], y1); ctx.stroke(); } }
+  ctx.lineWidth = 18; ctx.beginPath(); ctx.moveTo(-40, 50); ctx.lineTo(-110, -20); ctx.stroke(); ctx.beginPath(); ctx.moveTo(-115, -32); ctx.lineTo(-145, -80); ctx.stroke();
+  ctx.restore();
+}
+function check(x, y, r, t0, t) { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); circ(0, 0, r, '#22c55e', INK, 8); ctx.strokeStyle = '#fff'; ctx.lineWidth = r * .22; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(-r * .45, 0); ctx.lineTo(-r * .1, r * .35); ctx.lineTo(r * .5, -r * .35); ctx.stroke(); ctx.restore(); }
+function trophy(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-90, 120, 180, 50, '#92400e', 10, 8); box(-30, 60, 60, 70, '#facc15', 8, 8); ctx.fillStyle = '#facc15'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-110, -90); ctx.lineTo(110, -90); ctx.quadraticCurveTo(110, 70, 0, 70); ctx.quadraticCurveTo(-110, 70, -110, -90); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.lineWidth = 12; ctx.beginPath(); ctx.arc(-110, -30, 45, Math.PI * .5, Math.PI * 1.5); ctx.stroke(); ctx.beginPath(); ctx.arc(110, -30, 45, -Math.PI * .5, Math.PI * .5); ctx.stroke(); ctx.restore(); }
+const HANDS = { lt: .05, ls: 0, rt: -.05, rs: 0, la: -.9, le: -1.6, ra: .9, re: 1.6 };
+function sHook(lt, t) {
+  bgFill('#fef3c7'); floor('#d6a26b', 1420);
+  const f = t < T.arth ? (Math.sin(t * 9) * .5 + .5) : .2;
+  hero({ x: 540, y: 1440, s: 1.25, pose: HANDS, eyes: t > T.arth ? 'huge' : 'norm', mouth: t > T.arth ? 'o' : 'grin', bob: Math.abs(Math.sin(t * 9)) * 8 });
+  hand(330, 1080, .95, { flex: f, rot: .25, col: '#fde68a' }); hand(750, 1080, .95, { flex: 1 - f, rot: -.25, flip: true, col: '#fde68a' });
+  crack(300, 880, t, .25); crack(780, 880, t, .95); crack(320, 880, t, T.now); crack(760, 880, t, T.go); crack(540, 820, t, T.go + .4, 1.2);
+  if (t < T.arth) { const k = eob(inv(0, .2, t)); txt('CRACK YOUR', 540, 230, 120 * Math.max(.75, k), '#fff', { lw: 20 }); txt('KNUCKLES!', 540, 380, 150 * Math.max(.75, k), '#f97316', { lw: 24 }); }
+  else { txt('ARTHRITIS?', 540, 250, 140, '#ef4444', { lw: 22 }); badge(540, 450, 800, 150, '#1e3a8a', ['TRUE OR FALSE?'], [92], T.tf, t, -.03); }
+  if (t > T.com) { const k = pop(T.com, t); ctx.save(); ctx.translate(540, 620); ctx.scale(k, k); box(-380, -55, 760, 110, '#fff', 30, 8); txt('COMMENT BEFORE THE END', 0, 6, 54, INK, { stroke: false }); ctx.restore(); }
+}
+function sDoc(lt, t) {
+  bgFill('#e0f2fe'); floor('#94a3b8', 1420);
+  stick({ x: 540, y: 1460, s: 1.6, shirt: '#f8fafc', pants: '#334155', hair: '#9ca3af', pose: STAND, mouth: 'smile', look: 0 });
+  badge(540, 230, 820, 140, '#0ea5e9', ['DR. DONALD UNGER'], [80], T.name, t, -.03);
+  if (t < T.yrs) { if (t < T.name) txt('A DOCTOR', 540, 230, 120, '#fff', { lw: 20 }); return; }
+  badge(300, 420, 420, 130, '#f97316', ['60+ YEARS'], [76], T.yrs, t, -.04);
+  badge(780, 420, 420, 130, '#16a34a', ['2x A DAY'], [76], T.twice, t, .04);
+  const L1 = t > T.left;
+  if (L1) { txt('LEFT', 210, 660, 70, '#fff', { lw: 14 }); hand(210, 1010, .8, { flex: Math.sin(t * 8) * .5 + .5, col: '#fde68a', rot: .1 }); if (t < T.right) { crack(210, 790, t, T.left + .2, .8); crack(210, 790, t, T.left + .9, .8); crack(210, 790, t, T.twice + .3, .8); crack(210, 790, t, T.twice + 1, .8); } else { crack(210, 790, t, T.right + .15, .8); } }
+  if (t > T.right) { txt('RIGHT', 870, 660, 70, '#fff', { lw: 14 }); hand(870, 1010, .8, { flip: true, col: '#fff', rot: -.1 }); }
+  if (t > T.never) { const k = pop(T.never, t); ctx.save(); ctx.translate(870, 960); ctx.rotate(-.2); ctx.scale(k, k); box(-180, -60, 360, 120, 'rgba(255,255,255,.95)', 16, 0); ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 12; rr(-170, -50, 340, 100, 14); ctx.stroke(); txt('NEVER', 0, 8, 86, '#dc2626', { stroke: false }); ctx.restore(); }
+}
+function sResult(lt, t) {
+  bgFill('#dcfce7');
+  if (t < T.prize) {
+    txt('THE RESULT?', 540, 250, 120, '#fff', { lw: 20 });
+    xhand(290, 900, .9); xhand(790, 900, .9);
+    txt('LEFT', 290, 580, 56, '#fff', { lw: 12 }); txt('RIGHT', 790, 580, 56, '#fff', { lw: 12 });
+    check(290, 1180, 70, T.noa, t); check(790, 1180, 70, T.noa + .2, t);
+    badge(540, 1400, 760, 130, '#16a34a', ['NO ARTHRITIS'], [86], T.noa, t, -.02);
+  } else {
+    floor('#86efac', 1420); spot(540, 800, 500, .6);
+    trophy(540, 820, 2.0 * pop(T.prize, t));
+    for (let i = 0; i < 6; i++) sparkle(540 + Math.cos(i + t * 2) * 330, 780 + Math.sin(i * 2 + t * 2) * 260, 26, 1);
+    badge(540, 280, 820, 150, '#a855f7', ['A PRIZE?!'], [100], T.prize, t, -.03);
+    badge(540, 1230, 780, 150, '#facc15', ['IG NOBEL PRIZE', '2009'], [72, 52], T.ig, t, .02, INK);
+    stick({ x: 860, y: 1560, s: .9, shirt: '#f8fafc', pants: '#334155', hair: '#9ca3af', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.6, re: -.3 }, mouth: 'grin', look: -1 });
+    credit('Sources: Improbable Research (Ig Nobel 2009), Live Science', 1810);
+  }
+}
+function sStudy(lt, t) {
+  bgFill('#fae8ff');
+  txt('215 PEOPLE', 540, 220, 130, '#fff', { lw: 22 });
+  const n = Math.floor(215 * clamp(eo(inv(T.study, T.study + 1.6, t))));
+  for (let i = 0; i < n; i++) { const c = i % 15, r = Math.floor(i / 15); const cr = (i * 37) % 100 < 20; circ(130 + c * 59, 360 + r * 40, 16, t > T.crk ? (cr ? '#f97316' : '#60a5fa') : '#cbd5e1', INK, 4); }
+  if (t > T.crk) {
+    const k = eo(inv(T.crk, T.crk + .8, t));
+    txt('HAD HAND ARTHRITIS', 540, 1100, 64, '#fff', { lw: 12 });
+    box(170, 1170, 740, 380, '#fff', 24, 8);
+    const bars = [['CRACKERS', 18.1, '#f97316'], ['NON-CRACKERS', 21.5, '#60a5fa']];
+    bars.forEach((b, i) => { const y = 1250 + i * 160; txt(b[0], 210, y - 2, 46, INK, { stroke: false, align: 'left' }); const w = 380 * b[1] / 25 * k; box(250, y + 32, w, 70, b[2], 14, 7); txt(Math.round(b[1] * k) + ' %', 250 + w + 70, y + 72, 52, INK, { stroke: false }); });
+  }
+  credit('Source: deWeber et al. 2011, J Am Board Fam Med (ages 50 to 89)');
+}
+function sPop(lt, t) {
+  bgFill('#fff1f2');
+  txt("WHAT'S THE POP?", 540, 220, 110, '#fff', { lw: 20 });
+  const sep = eo(inv(T.bub - .4, T.bub + .1, t)) * 60;
+  // joint capsule + fluid
+  ctx.save(); ctx.fillStyle = '#fde68a'; ctx.strokeStyle = '#f472b6'; ctx.lineWidth = 14; ctx.beginPath(); ctx.ellipse(540, 960, 270, 170 + sep * .5, 0, 0, 7); ctx.fill(); ctx.stroke(); ctx.restore();
+  // bones
+  box(400, 520, 280, 300 - sep, '#fff', 40, 10); ctx.fillStyle = '#fff'; ctx.strokeStyle = INK; ctx.lineWidth = 10; ctx.beginPath(); ctx.ellipse(540, 820 - sep, 190, 70, 0, 0, Math.PI); ctx.fill(); ctx.stroke();
+  box(400, 1100 + sep, 280, 320, '#fff', 40, 10); ctx.beginPath(); ctx.ellipse(540, 1100 + sep, 190, 70, 0, Math.PI, 0); ctx.fill(); ctx.stroke();
+  if (t > T.bub) { const k = eob(inv(T.bub, T.bub + .35, t)); circ(540, 960, 70 * k, 'rgba(255,255,255,.9)', '#38bdf8', 8); circ(515, 935, 16 * k, '#fff'); impact(540, 960, 190 * k, 1 - inv(T.bub + .3, T.bub + 1, t)); badge(830, 760, 340, 120, '#38bdf8', ['GAS BUBBLE'], [56], T.bub + .2, t, .05); }
+  if (t > T.pop) { const k = pop(T.pop, t); txt('POP!', 540, 420, 130 * k, '#facc15', { lw: 22 }); }
+  badge(220, 1250, 300, 110, '#a855f7', ['MRI VIDEO'], [56], T.mri, t, -.06);
+  credit('Source: Kawchuk et al. 2015, University of Alberta (PLOS ONE)', 1810);
+}
+function sEnd(lt, t) {
+  bgFill('#fef3c7'); floor('#d6a26b', 1420);
+  const f = Math.sin(t * 6) * .5 + .5;
+  hero({ x: 540, y: 1440, s: 1.1, pose: HANDS, mouth: 'grin', eyes: 'norm' });
+  hand(360, 1130, .75, { flex: f, rot: .25, col: '#fde68a' }); hand(720, 1130, .75, { flex: 1 - f, rot: -.25, flip: true, col: '#fde68a' });
+  if (t < T.you) {
+    const k = pop(T.fals, t); ctx.save(); ctx.translate(540, 290); ctx.rotate(-.08); ctx.scale(k, k); box(-330, -110, 660, 220, 'rgba(255,255,255,.92)', 24, 12); ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 14; rr(-310, -90, 620, 180, 18); ctx.stroke(); txt('FALSE', 0, 14, 150, '#dc2626', { stroke: false }); ctx.restore();
+    badge(540, 540, 760, 130, '#16a34a', ['NO LINK TO ARTHRITIS'], [64], T.nol, t, .03);
+    badge(540, 720, 760, 120, '#fff', ['PAIN? GET IT CHECKED'], [60], T.hurt, t, -.02, INK);
+  } else {
+    const k = pop(T.you, t); txt('DO YOU CRACK', 540, 250, 120 * k, '#fff', { lw: 20 }); txt('YOURS?', 540, 400, 140 * k, '#f97316', { lw: 22 });
+    badge(330, 620, 300, 140, '#16a34a', ['YES'], [100], T.you + .2, t, -.05); badge(750, 620, 300, 140, '#dc2626', ['NO'], [100], T.you + .4, t, .05);
+  }
+  credit('Not medical advice: if a joint hurts, swells or feels stuck, see a doctor.', 1810);
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(1, 2), fn: sDoc, push: .04, flash: 1 }, { t0: mid(4, 5), fn: sResult, push: .05, flash: .8 }, { t0: mid(6, 7), fn: sStudy, push: .04, xfade: .25 }, { t0: mid(7, 8), fn: sPop, push: .05, flash: .8 }, { t0: mid(8, 9), fn: sEnd, push: .05, flash: 1 }];
+const CAP = [["crack your knuckles.", "right now.", "go on."], ["everyone says", "that gives you", "arthritis.", "true or false?", "comment", "before the end."], ["one doctor,", "donald unger,", "tested it", "on himself."], ["for over 60 years,", "he cracked", "the knuckles", "of his left hand,", "at least", "twice a day."], ["his right hand?", "never."], ["the result?", "no arthritis", "in either hand."], ["he even won", "a prize for it.", "the ig nobel."], ["a later study", "of 215 people:", "crackers had", "no more", "hand arthritis."], ["so what's the pop?", "mri videos show", "a gas bubble", "forming in the fluid", "inside your joint."], ["so, false.", "no link", "to arthritis.", "if a joint hurts,", "get it checked.", "do you", "crack yours?"]];
+const HOT = new Set(["right now.", "arthritis.", "true or false?", "for over 60 years,", "twice a day.", "never.", "no arthritis", "the ig nobel.", "of 215 people:", "no more", "a gas bubble", "so, false.", "no link", "crack yours?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>
