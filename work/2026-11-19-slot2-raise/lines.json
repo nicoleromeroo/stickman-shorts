@@ -1,0 +1,9 @@
+["You get a two hundred euro raise. Guess how much more lands in your account. Comment a number.",
+ "You earned two thousand five hundred a month. Now it's two thousand seven hundred.",
+ "First, your pension takes eighteen euros sixty.",
+ "Health, care and unemployment insurance? About twenty four more.",
+ "Then income tax grabs another forty one fifty.",
+ {"text":"What's left? About one hundred sixteen euros. Not two hundred.","gap":0.6},
+ "And no, a raise can't push your whole salary into a higher tax bracket.",
+ "Only the extra euros get taxed more. You always keep more than before.",
+ {"text":"So, how close was your guess? Too high or too low?","gap":1.4}]

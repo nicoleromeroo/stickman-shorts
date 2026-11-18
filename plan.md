@@ -85,3 +85,4 @@ Notes
 - 2026-11-17 slot1: Goldfish 3-second memory myth (made 16 Nov)
 - 2026-11-17 slot5: What if school started at 10 AM? (made 16 Nov)
 - 18 Nov 06:00 Why songs give you goosebumps (made 17 Nov)
+- 19 Nov 20:00 RESPAWN Part 5 · 11:30 GTA 6 launch day: fastest to $1 billion · 16:00 Is a 200 € raise really 200 €? (made 18 Nov)

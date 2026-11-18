@@ -1,0 +1,157 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function wtn(i, w, n) { const s = L[i].text.toLowerCase(); let p = -1; for (let k = 0; k <= n; k++) p = s.indexOf(w, p + 1); return at(i, Math.max(p, 0) / s.length); }
+function heart(x, y, s, full, crack = 0, col = '#ef4444') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = full ? col : '#334155'; ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(0, 30); ctx.bezierCurveTo(-70, -20, -40, -80, 0, -45); ctx.bezierCurveTo(40, -80, 70, -20, 0, 30); ctx.fill(); ctx.stroke(); if (full) { ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillRect(-28, -40, 12, 12); } if (crack > 0) { ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(0, -40); ctx.lineTo(-8, -15); ctx.lineTo(8, 0); ctx.lineTo(0, 25); ctx.stroke(); } ctx.restore(); }
+function hearts(x, y, n, s = 1, t = 0, col) { const bob = Math.sin(t * 3) * 6; for (let i = 0; i < 3; i++) heart(x + (i - 1) * 70 * s, y + bob, .7 * s, i < n, 0, col); }
+function headY(y, s) { return y - 368 * s; }
+function uiPanel(x, y, w, h) { box(x - w / 2, y - h / 2, w, h, 'rgba(15,23,42,.94)', 18, 8); ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; rr(x - w / 2 + 12, y - h / 2 + 12, w - 24, h - 24, 12); ctx.stroke(); }
+function nameTag(x, y, s) { ctx.save(); ctx.font = '900 32px Nun'; const w = ctx.measureText(s).width + 50; ctx.restore(); box(x - w / 2, y - 30, w, 60, 'rgba(15,23,42,.9)', 12, 5); txt(s, x, y + 4, 32, '#fde047', { stroke: false, font: 'Nun' }); }
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function glitch(t, a = .18) { const g = Math.sin(t * 40) > .3 ? 1 : 0; ctx.save(); ctx.globalAlpha = a * g; ctx.fillStyle = '#ff0040'; ctx.fillRect(-300, 640 + Math.sin(t * 13) * 200, W + 600, 70); ctx.fillStyle = '#00e5ff'; ctx.fillRect(-300, 1150 + Math.sin(t * 9) * 150, W + 600, 50); ctx.restore(); }
+const KAI = (o) => stick(Object.assign({ shirt: '#f97316', pants: '#1f2937', hood: true }, o));
+function playerTag(x, y, s, col) { ctx.save(); ctx.font = '900 32px Nun'; const w = ctx.measureText(s).width + 50; ctx.restore(); box(x - w / 2, y - 30, w, 60, 'rgba(15,23,42,.9)', 12, 5); txt(s, x, y + 4, 32, col, { stroke: false, font: 'Nun' }); }
+function bricks() { bgFill('#93c5fd'); box(-40, 420, W + 80, 960, '#b45309', 0, 8); ctx.strokeStyle = 'rgba(0,0,0,.35)'; ctx.lineWidth = 4; for (let r = 0; r < 16; r++) { const y = 420 + r * 60; line(-40, y, W + 40, y, 4, 'rgba(0,0,0,.35)'); for (let c = 0; c < 10; c++) { const x = c * 120 + (r % 2) * 60; line(x, y, x, y + 60, 4, 'rgba(0,0,0,.35)'); } } box(-40, 330, W + 80, 100, '#78350f', 0, 8); txt('GYM', 540, 382, 70, '#fde68a', { lw: 10 }); floor('#9ca3af'); }
+function glowDoor(x, y, w, h, k, t) { if (k <= 0) return; const pul = .5 + .5 * Math.sin(t * 6); ctx.save(); ctx.globalAlpha = k; spot(x + w / 2, y + h / 2, 420 + 40 * pul, .55, '120,220,255'); box(x - 14, y - 14, w + 28, h + 14, '#e0f2fe', 10, 8); const g = ctx.createLinearGradient(0, y, 0, y + h); g.addColorStop(0, '#a5f3fc'); g.addColorStop(1, '#22d3ee'); ctx.fillStyle = g; ctx.strokeStyle = INK; ctx.lineWidth = 8; rr(x, y, w, h, 8); ctx.fill(); ctx.stroke(); circ(x + w - 40, y + h / 2, 14, '#fde047', INK, 5); ctx.restore(); }
+function bigTop(s, y, size, col, t0, t) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); txt(s, 540, y, size * k, col, { lw: size * .17 }); }
+function crackFx(t, t0, x, y) { if (t < t0 || t > t0 + .5) return; const k = inv(t0, t0 + .5, t); impact(x, y, 90 + 60 * k, 1 - k); ctx.fillStyle = `rgba(239,68,68,${.35 * (1 - k)})`; ctx.fillRect(-300, -300, W + 600, H + 600); }
+const T = { dated: wt(0, 'dated'), whisper: wt(1, 'whispered'), ready: wt(2, 'breakfast'), reset: wt(2, 'the whole'), door: wt(3, 'kai is back'), full: wt(3, 'red hearts'),
+  me: at(4, 0), stare: wt(4, 'he just'), who: wt(4, 'who are'), desk: at(5, 0), sprint: wt(5, 'you sprint'), nb: at(6, 0), maps: wt(6, 'maps'), path: wt(6, 'the hall'),
+  rule: at(7, 0), under: wt(7, 'underlined'), dont: wt(7, "don't"), forgets: wt(7, 'he forgets'), hand: at(8, 0), yours: wt(8, 'yours'), page: wt(8, 'page one'), d300: wt(8, 'three hundred'),
+  twist: at(9, 0), you: wt(9, 'you were'), q: at(10, 0) };
+const MOM = (o) => stick(Object.assign({ shirt: '#f472b6', pants: '#1f2937', hair: '#7c2d12', apron: '#fff' }, o));
+function scribble(x, y, w, seed, col = '#1d4ed8') { ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x, y); for (let i = 1; i <= 14; i++) ctx.lineTo(x + w * i / 14, y + (rnd(seed + i) - .5) * 14); ctx.stroke(); ctx.restore(); }
+function hand(s, x, y, size, col = '#1d4ed8', rot = -.04) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); txt(s, 0, 0, size, col, { stroke: false, font: 'Nun', weight: '900 ' }); ctx.restore(); }
+// open notebook centred at x,y; pages: left/right modes
+function notebook(x, y, s, mode, t, o = {}) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  box(-430, -290, 860, 580, '#7c2d12', 24, 9);
+  box(-410, -270, 405, 540, '#fefce8', 10, 6); box(5, -270, 405, 540, '#fefce8', 10, 6);
+  for (let i = 0; i < 9; i++) { line(-390, -200 + i * 54, -25, -200 + i * 54, 2, '#bfdbfe'); line(25, -200 + i * 54, 390, -200 + i * 54, 2, '#bfdbfe'); }
+  line(0, -270, 0, 270, 6);
+  if (mode === 'cold' || mode === 'date') {
+    hand('DAY 1', -205, -200, 58); for (let i = 0; i < 6; i++) scribble(-380, -120 + i * 54, 320, i * 7);
+    hand('300 DAYS AGO', -205, 220, 46, '#dc2626', -.06);
+    hand('RULES', 205, -200, 58); for (let i = 0; i < 7; i++) scribble(45, -120 + i * 54, 330, 50 + i * 7);
+  } else if (mode === 'map') {
+    hand('SCHOOL MAP', -205, -215, 46);
+    ctx.strokeStyle = '#1d4ed8'; ctx.lineWidth = 6; ctx.strokeRect(-370, -160, 140, 120); ctx.strokeRect(-210, -160, 160, 120); ctx.strokeRect(-370, -20, 320, 80); ctx.strokeRect(-370, 80, 140, 150); ctx.strokeRect(-210, 80, 160, 150);
+    hand('GYM', -290, 155, 32); hand('DOOR', -130, 155, 32, '#0891b2');
+    const pk = clamp(o.pathK || 0); if (pk > 0) { ctx.save(); ctx.setLineDash([16, 12]); ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(30, -150); const pts = [[370, -150], [370, 0], [40, 0], [40, 180], [370, 180]]; let px = 30, py = -150, total = 0; const segs = pts.map(p => { const d = Math.hypot(p[0] - px, p[1] - py); const r = { x0: px, y0: py, x1: p[0], y1: p[1], d }; total += d; px = p[0]; py = p[1]; return r; });
+      let left = pk * total; for (const g of segs) { if (left <= 0) break; const f = Math.min(1, left / g.d); ctx.lineTo(g.x0 + (g.x1 - g.x0) * f, g.y0 + (g.y1 - g.y0) * f); left -= g.d; } ctx.stroke(); ctx.restore();
+      hand('HALL MONITOR', 205, 245, 36, '#dc2626'); }
+  } else if (mode === 'rule') {
+    hand('RULES', -205, -200, 58); for (let i = 0; i < 6; i++) scribble(-380, -120 + i * 54, 320, 90 + i * 7);
+    hand("DON'T", 205, -110, 84, '#1d4ed8', -.05); hand('TELL KAI', 205, -10, 70, '#1d4ed8', -.05);
+    const n = o.lines || 0; for (let i = 0; i < n; i++) { ctx.save(); ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(60, 45 + i * 26); ctx.quadraticCurveTo(205, 35 + i * 26, 350, 50 + i * 26); ctx.stroke(); ctx.restore(); }
+    if (o.forgets) hand('HE FORGETS.', 205, 190, 52, '#dc2626', -.03);
+  }
+  ctx.restore();
+}
+function classroom() { bgFill('#fef3c7'); box(140, 420, 800, 360, '#14532d', 14, 10); hand('2 + 2 = 4', 540, 600, 70, '#f1f5f9', 0); floor('#d6a26b'); }
+function bedroom() { bgFill('#fde7c7'); floor('#d6a26b'); windowFrame(660, 420, 300, 330, '#bae6fd'); circ(770, 520, 44, '#facc15', INK, 5); }
+// ---------- cold open ----------
+function sCold(lt, t) {
+  bgFill('#0f172a'); spot(540, 820, 700, .55); glitch(t, .15);
+  const tr = Math.sin(t * 38) * 5;
+  notebook(540 + tr, 760, 1.0, 'cold', t);
+  hero({ x: 540, y: 1720, s: 1.12, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: -2.4, le: -.3, ra: 2.4, re: .3 }, eyes: 'huge', mouth: 'o', lookY: -1, shadow: false });
+  txt('YOUR', 540, 190, 120, '#fff', { lw: 18 }); txt('HANDWRITING?!', 540, 330, 120, '#fde047', { lw: 18 });
+  if (t > T.dated) popIn(t, T.dated, 760, 1010, () => { ctx.rotate(-.12); box(-260, -70, 520, 140, '#dc2626', 18, 8); txt('300 DAYS AGO', 0, 6, 70, '#fff', { lw: 10 }); });
+}
+// ---------- recap ----------
+function sRecap(lt, t) {
+  bgFill('#e2e8f0'); box(-40, 540, W + 80, 60, '#94a3b8', 0, 8); for (let i = 0; i < 7; i++) { box(i * 150 + 6, 660, 138, 720, '#60a5fa', 6, 7); } floorTiles(1380, '#cbd5e1', '#f1f5f9');
+  ctx.save(); ctx.globalAlpha = .55 + .2 * Math.sin(t * 20); KAI({ x: 320, y: 1470, s: 1.15, pose: STAND, eyes: 'closed', mouth: 'o' }); ctx.restore();
+  hero({ x: 790, y: 1470, s: 1.15, flip: true, pose: STAND, eyes: 'huge', mouth: 'o', look: -1 }); hearts(790, headY(1470, 1.15) - 100, 3, .9, t);
+  sepia();
+  box(250, 190, 580, 130, '#0f172a', 24, 8); txt('LAST TIME...', 540, 260, 84, '#fde047', { stroke: false });
+  popIn(t, T.whisper, 420, 520, () => bubble(0, 0, 'CHECK YOUR DESK...', 58, 700));
+}
+// ---------- morning reset ----------
+function sMorning(lt, t) {
+  bedroom();
+  box(60, 1200, 560, 180, '#60a5fa', 30, 9); box(60, 1120, 150, 110, '#fff', 40, 7);
+  const sit = eo(inv(at(2, 0), at(2, 0) + .5, t));
+  hero({ x: 300, y: 1330, s: 1.0, lean: lerp(-1.2, 0, sit), pose: { lt: -1.4, ls: 0, rt: -1.4, rs: 0, la: .3, le: .2, ra: -.4, re: -.2 }, eyes: 'huge', mouth: 'o', look: 1, shadow: false });
+  hearts(300, headY(1330, 1) - 90 + (1 - sit) * 200, 3, .8, t);
+  box(60, 1250, 560, 130, '#3b82f6', 30, 9);
+  MOM({ x: 850, y: 1460, s: 1.15, flip: true, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.0, re: -.8 }, look: -1 });
+  nameTag(850, headY(1460, 1.15) - 100, 'MOM · NPC');
+  popIn(t, T.ready, 620, 820, () => bubble(0, 0, 'BREAKFAST IS READY!', 52, 760));
+  if (t > T.reset) { glitch(t, .25); bigTop('DAY RESET', 300, 140, '#fde047', T.reset, t); } else bigTop('MORNING.', 300, 140, '#fff', at(2, 0), t);
+}
+// ---------- door, Kai doesn't know you ----------
+function sDoor(lt, t) {
+  bricks(); glowDoor(610, 860, 300, 520, 1, t);
+  const kx = 760, comeK = eo(inv(T.me - .6, T.me + .2, t)), hx = lerp(-150, 330, Math.max(comeK, t < T.me - .6 ? eo(inv(T.door, T.door + .8, t)) * .0 : 0));
+  KAI({ x: kx, y: 1470, s: 1.15, flip: t > T.me, pose: STAND, eyes: t > T.stare ? 'norm' : 'norm', mouth: t > T.who ? 'o' : 'flat', look: t > T.me ? -1 : 0, brows: t > T.stare ? 1 : 0 });
+  hearts(kx, headY(1470, 1.15) - 100, 3, .9, t, '#dc2626');
+  if (t > T.full && t < T.me) popIn(t, T.full, kx, headY(1470, 1.15) - 230, () => nameTag(0, 0, 'FULL HEARTS?'));
+  if (t > T.me - .6) { hero({ x: hx, y: 1470, s: 1.15, pose: comeK < 1 ? runPose(t * 11) : STAND, eyes: 'huge', mouth: t > T.who ? 'o' : 'grin', look: 1 }); hearts(hx, headY(1470, 1.15) - 100, 3, .9, t); }
+  if (t < T.me) bigTop('KAI IS BACK', 200, 130, '#fb923c', T.door, t);
+  else if (t < T.who) { popIn(t, T.me, 360, 620, () => bubble(0, 0, "KAI! IT'S ME!", 62, 640)); if (t > T.stare) bigTop('...', 200, 160, '#fff', T.stare, t); }
+  else { popIn(t, T.who, 700, 600, () => bubble(0, 0, 'WHO ARE YOU?', 66, 640)); bigTop('HE FORGOT YOU', 200, 116, '#ef4444', T.who, t); }
+}
+// ---------- sprint to desk ----------
+function sDesk(lt, t) {
+  classroom();
+  const open = t > T.nb ? eo(inv(T.nb, T.nb + .4, t)) : 0;
+  const hx = lerp(90, 300, eo(inv(T.desk, T.sprint + .8, t)));
+  box(480, 1180, 520, 40, '#a16207', 8, 8); box(500, 1220, 480, 160, '#ca8a04', 8, 8); line(520, 1380, 520, 1500, 14); line(960, 1380, 960, 1500, 14);
+  box(480, 1180 - open * 120, 520, 40, '#a16207', 8, 8);
+  hero({ x: hx, y: 1470, s: 1.15, pose: hx < 290 ? runPose(t * 11) : STAND, eyes: 'huge', mouth: 'o', look: 1 }); hearts(hx, headY(1470, 1.15) - 100, 3, .9, t);
+  if (open > 0) { spot(740, 1100, 300, .5 * open); }
+  bigTop(t > T.sprint ? 'YOUR DESK' : 'CHECK YOUR DESK', 300, 116, '#fde047', T.desk, t);
+}
+// ---------- the notebook pages ----------
+function sPages(lt, t) {
+  bgFill('#1e293b'); spot(540, 900, 700, .5);
+  const mode = t < T.rule ? 'map' : 'rule';
+  const k = eob(inv(T.nb, T.nb + .35, t));
+  ctx.save(); ctx.translate(540, 960); ctx.scale(k, k); ctx.translate(-540, -960);
+  notebook(540, 960, 1.15, mode, t, { pathK: inv(T.path, T.path + 1.4, t), lines: t > T.under ? Math.min(3, 1 + Math.floor((t - T.under) / .3)) : 0, forgets: t > T.forgets });
+  ctx.restore();
+  if (mode === 'map') bigTop(t > T.path ? 'BOSS ROUTE' : t > T.maps ? 'MAPS' : 'A NOTEBOOK', 300, 140, '#fff', t > T.path ? T.path : t > T.maps ? T.maps : T.nb, t);
+  else bigTop(t > T.dont ? 'RULE #1' : 'UNDERLINED X3', 300, 130, '#ef4444', t > T.dont ? T.dont : T.rule, t);
+}
+// ---------- your handwriting ----------
+function sHand(lt, t) {
+  bgFill('#0f172a'); spot(540, 760, 700, .5);
+  notebook(540, 720, 1.0, 'date', t);
+  hero({ x: 540, y: 1720, s: 1.12, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: -2.4, le: -.3, ra: 2.4, re: .3 }, eyes: 'huge', mouth: 'o', lookY: -1, shadow: false });
+  if (t > T.page) { const k = .5 + .5 * Math.sin(t * 8); ctx.save(); ctx.strokeStyle = `rgba(239,68,68,${.6 + .4 * k})`; ctx.lineWidth = 10; ctx.beginPath(); ctx.ellipse(540 - 205, 720 + 220, 230, 60, -.06, 0, 7); ctx.stroke(); ctx.restore(); }
+  bigTop(t > T.page ? 'PAGE ONE' : 'IT\'S YOURS', 250, 130, t > T.page ? '#ef4444' : '#fde047', t > T.page ? T.page : T.yours, t);
+  if (t < T.yours) bigTop('THE HANDWRITING', 250, 110, '#fff', T.hand, t);
+}
+// ---------- twist ----------
+function sTwist(lt, t) {
+  bgFill('#020617'); glitch(t, .3);
+  const rings = 5; for (let i = 0; i < rings; i++) { const r = ((t * 260 + i * 160) % 800); ctx.save(); ctx.globalAlpha = .5 * (1 - r / 800); ctx.strokeStyle = '#fde047'; ctx.lineWidth = 10; ctx.beginPath(); ctx.arc(540, 1050, r, 0, 7); ctx.stroke(); ctx.restore(); }
+  const show = t > T.you;
+  ctx.save(); ctx.globalAlpha = show ? .35 : .9; KAI({ x: 260, y: 1470, s: 1.05, pose: STAND, mouth: 'flat' }); hearts(260, headY(1470, 1.05) - 100, 3, .8, t, '#dc2626'); ctx.restore();
+  hero({ x: 760, y: 1470, s: show ? 1.25 : 1.05, flip: true, pose: STAND, eyes: 'huge', mouth: 'scream', look: -1 }); hearts(760, headY(1470, show ? 1.25 : 1.05) - 100, 3, .9, t);
+  if (show) { popIn(t, T.you, 760, headY(1470, 1.25) - 230, () => nameTag(0, 0, 'LOOP · DAY 300')); bigTop('YOU WERE.', 300, 170, '#fde047', T.you, t); }
+  else { txt('NOT KAI...', 540, 300, 140, '#fff', { lw: 20 }); }
+}
+// ---------- end ----------
+function sEnd(lt, t) {
+  bgFill('#020617'); spot(540, 1000, 600, .35);
+  hero({ x: 540, y: 1470, s: 1.2, pose: STAND, eyes: 'huge', mouth: 'wavy' }); hearts(540, headY(1470, 1.2) - 100, 3, .9, t);
+  popIn(t, T.q + .2, 540, 420, () => { uiPanel(0, 0, 940, 330); txt('SAW THE TWIST COMING?', 0, -70, 62, '#fff', { stroke: false });
+    box(-330, 10, 280, 110, '#22c55e', 20, 7); txt('YES', -190, 70, 70, '#fff', { lw: 10 }); box(50, 10, 280, 110, '#ef4444', 20, 7); txt('NO', 190, 70, 70, '#fff', { lw: 10 }); });
+  const endT = L[10].end + .6;
+  if (t > endT) { const k = eob(inv(endT, endT + .35, t)); ctx.save(); ctx.fillStyle = `rgba(0,0,0,${.6 * k})`; ctx.fillRect(-300, -300, W + 600, H + 600); ctx.translate(540, 950); ctx.scale(k, k); box(-400, -150, 800, 300, '#dc2626', 26, 10); txt('PART 6 TOMORROW', 0, -40, 80, '#fff', { lw: 12 }); txt('THE FINALE', 0, 70, 64, '#fde047', { lw: 10 }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sCold, push: .04 }, { t0: mid(0, 1), fn: sRecap, push: .04, flash: .8 }, { t0: mid(1, 2), fn: sMorning, push: .04, flash: .8 }, { t0: mid(2, 3), fn: sDoor, push: .04, flash: .8 },
+  { t0: mid(4, 5), fn: sDesk, push: .04, flash: .8 }, { t0: mid(5, 6), fn: sPages, push: .03, xfade: .2 }, { t0: mid(7, 8), fn: sHand, push: .05, flash: .6 }, { t0: mid(8, 9), fn: sTwist, push: .06, flash: 1 }, { t0: mid(9, 10), fn: sEnd, push: .03, xfade: .25 }];
+const CAP = [["the notebook is in", "your handwriting.", "and it's dated", "three hundred days ago."], ["last time,", "kai lost his last heart", "and whispered:", "check your desk."], ["morning.", "breakfast is ready!", "the whole day", "has reset."],
+  ["at school, kai is back", "at the glowing door.", "red hearts,", "full again."], ["kai! it's me!", "he just stares at you.", "who are you?"], ["check your desk.", "you sprint", "to your classroom."],
+  ["inside, a notebook.", "maps of the school.", "the hall monitor's path."], ["and one rule,", "underlined three times.", "don't tell kai.", "he forgets."], ["the handwriting", "is yours.", "page one is dated", "three hundred days ago."],
+  ["kai wasn't the one", "stuck in the loop.", "you were."], ["did you see", "the twist coming?", "comment yes or no."]];
+const HOT = new Set(["your handwriting.", "three hundred days ago.", "check your desk.", "has reset.", "full again.", "who are you?", "a notebook.", "don't tell kai.", "he forgets.", "is yours.", "you were.", "comment yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

@@ -1,0 +1,101 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function wtn(i, w, n) { const s = L[i].text.toLowerCase(); let p = -1; for (let k = 0; k <= n; k++) p = s.indexOf(w, p + 1); return at(i, Math.max(p, 0) / s.length); }
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function footnote(a, b) { txt(a, 540, 1830, 28, '#e2e8f0', { stroke: false, font: 'Nun' }); if (b) txt(b, 540, 1868, 28, '#e2e8f0', { stroke: false, font: 'Nun' }); }
+function bigTop(s, y, size, col, t0, t) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); txt(s, 540, y, size * k, col, { lw: size * .17 }); }
+const fmt = v => v.toFixed(2).replace('.', ',') + ' €';
+const T = { guess: wt(0, 'guess'), comment: wt(0, 'comment'), earn: at(1, 0), now: wt(1, 'now'), pen: at(2, 0), pen2: wt(2, 'eighteen'), ins: at(3, 0), ins2: wt(3, 'about'), tax: at(4, 0), tax2: wt(4, 'forty'),
+  left: at(5, 0), n116: wt(5, 'about'), not: wt(5, 'not two'), myth: at(6, 0), whole: wt(6, 'whole'), only: at(7, 0), keep: wt(7, 'you always'), q: at(8, 0) };
+const BOSS = (o) => stick(Object.assign({ shirt: '#475569', pants: '#1f2937', hair: '#374151' }, o));
+function office() { bgFill('#e0f2fe'); windowFrame(80, 460, 340, 380, '#bae6fd'); box(620, 480, 320, 220, '#fff', 10, 7); line(660, 640, 720, 580, 8, '#22c55e'); line(720, 580, 780, 610, 8, '#22c55e'); line(780, 610, 880, 520, 8, '#22c55e'); floor('#94a3b8'); }
+function envelope(x, y, s, label) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-130, -85, 260, 170, '#fef3c7', 12, 7); ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(-130, -85); ctx.lineTo(0, 10); ctx.lineTo(130, -85); ctx.stroke(); txt(label, 0, 40, 56, '#16a34a', { lw: 9 }); ctx.restore(); }
+function footA() { ctx.fillStyle = 'rgba(15,23,42,.85)'; ctx.fillRect(-300, 1800, W + 600, 200); footnote('2026 · tax class I · no kids · no church tax · avg. health add-on 2.9 %', 'age 23+ · BMF 2026 payroll-tax formula · rounded'); }
+// scene 1: the raise
+function sRaise(lt, t) {
+  office();
+  const give = eo(inv(.1, .8, t));
+  BOSS({ x: 800, y: 1480, s: 1.25, flip: true, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.5, re: -.1 }, mouth: 'smile', look: -1 });
+  envelope(lerp(640, 560, give), 1020, 1, '+200 €');
+  hero({ x: 290, y: 1480, s: 1.25, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.4, re: -.2 }, eyes: 'huge', mouth: 'grin', look: 1, bob: Math.abs(Math.sin(t * 7)) * 18 });
+  txt('+200 €', 540, 220, 170, '#22c55e', { lw: 24 }); txt('RAISE!', 540, 380, 110, '#fff', { lw: 18 });
+  if (t > T.guess) popIn(t, T.guess, 540, 640, () => { box(-330, -70, 660, 140, '#0f172a', 30, 8); txt('YOU GET: ? €', 0, 6, 78, '#fde047', { stroke: false }); });
+}
+// scene 2: payslip
+function sSlip(lt, t) {
+  bgFill('#fef9c3');
+  box(470, 520, 520, 820, '#fff', 20, 9); txt('PAYSLIP', 730, 600, 60, INK, { stroke: false, font: 'Nun', weight: '900 ' });
+  for (let i = 0; i < 4; i++) line(520, 1050 + i * 60, 940, 1050 + i * 60, 5, '#cbd5e1');
+  txt('GROSS', 730, 720, 50, '#64748b', { stroke: false });
+  txt('2.500 €', 730, 830, 100, t > T.now ? '#94a3b8' : INK, { stroke: false }); if (t > T.now) { line(560, 830, 900, 830, 12, '#ef4444'); popIn(t, T.now, 730, 950, () => txt('2.700 €', 0, 0, 110, '#16a34a', { lw: 14 })); }
+  hero({ x: 230, y: 1480, s: 1.2, pose: STAND, eyes: 'norm', mouth: 'smile', look: 1 });
+  bigTop('PER MONTH', 300, 110, '#fff', T.earn, t);
+  footA();
+}
+// scene 3: the 200 € bar gets eaten
+const CUTS = [[18.6, 'PENSION', '#a78bfa'], [24.3, 'INSURANCE', '#f472b6'], [41.5, 'TAX', '#ef4444']];
+function sBar(lt, t) {
+  bgFill('#1e293b'); floor('#334155', 1440);
+  const tc = [T.pen2, T.ins2, T.tax2];
+  const bx = 640, bw = 300, by = 1440, ppe = 4.3; // px per euro
+  let left = 200, y = by - 200 * ppe;
+  // green remainder (drawn from bottom)
+  const done = tc.map(x => t > x);
+  CUTS.forEach((c, i) => { if (done[i]) left -= c[0]; });
+  box(bx - bw / 2, by - left * ppe, bw, left * ppe, '#22c55e', 10, 8);
+  txt(fmt(left), bx, by - left * ppe / 2, 70, '#fff', { lw: 10 });
+  // chunks: on top of the remainder until cut, then fly off
+  let top = by - left * ppe;
+  for (let i = CUTS.length - 1; i >= 0; i--) { }
+  let yy = by - 200 * ppe;
+  CUTS.forEach((c, i) => {
+    const h = c[0] * ppe; const yTop = yy; yy += h;
+    if (!done[i]) { box(bx - bw / 2, yTop, bw, h, '#86efac', 6, 6); return; }
+    const k = eo(inv(tc[i], tc[i] + .6, t));
+    const fx = bx + k * 420, fy = yTop - k * 260 + i * 0;
+    ctx.save(); ctx.translate(fx, fy + h / 2); ctx.rotate(k * .4); box(-bw / 2 * (1 - .4 * k), -h / 2, bw * (1 - .4 * k), h, c[2], 6, 6); ctx.restore();
+    // label list at left
+    popIn(t, tc[i], 250, 640 + i * 150, () => { box(-210, -55, 420, 110, c[2], 20, 7); txt(c[1], 0, -18, 40, '#fff', { stroke: false }); txt('-' + fmt(c[0]), 0, 26, 46, '#fff', { stroke: false }); });
+  });
+  hero({ x: 250, y: 1440, s: .95, pose: STAND, eyes: 'huge', mouth: done[2] ? 'frown' : done[0] ? 'o' : 'smile', look: 1, lookY: -1 });
+  txt('YOUR +200 €', 540, 200, 120, '#fde047', { lw: 18 });
+  footA();
+}
+// scene 4: 116
+function sLeft(lt, t) {
+  bgFill('#14532d');
+  hero({ x: 540, y: 1500, s: 1.25, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: 1.2, le: 1, ra: -1.2, re: -1 }, eyes: 'huge', mouth: 'wavy' });
+  bigTop('WHAT\'S LEFT?', 220, 110, '#fff', T.left, t);
+  if (t > T.n116) popIn(t, T.n116, 540, 520, () => { txt('+116 €', 0, 0, 230, '#4ade80', { lw: 30 }); });
+  if (t > T.not) popIn(t, T.not, 540, 790, () => { txt('NOT 200 €', 0, 0, 110, '#fca5a5', { lw: 16 }); line(-300, 0, 300, 0, 14, '#ef4444'); });
+  footA();
+}
+// scene 5: stairs myth
+function sStairs(lt, t) {
+  bgFill('#312e81');
+  const steps = 5; for (let i = 0; i < steps; i++) { const x = 90 + i * 180, h = 160 + i * 110; box(x, 1440 - h, 180, h, ['#475569', '#64748b', '#7c3aed', '#a855f7', '#c084fc'][i], 6, 7); }
+  for (let i = 0; i < 4; i++) { const x = 180 + i * 180, h = 160 + i * 110; txt(['0 %', '14 %', '24 %', '30 %'][i], x, 1440 - h + 50, 46, '#fff', { lw: 7 }); }
+  hero({ x: 720, y: 1440 - 490, s: .8, pose: STAND, eyes: 'huge', mouth: t > T.only ? 'smile' : 'o', look: 1, shadow: false });
+  if (t > T.only) popIn(t, T.only, 900, 760, () => { box(-120, -55, 240, 110, '#22c55e', 18, 7); txt('+200 €', 0, 6, 54, '#fff', { lw: 8 }); });
+  if (t < T.only) { bigTop('MYTH:', 210, 110, '#fca5a5', T.myth, t); if (t > T.whole) { txt('WHOLE SALARY', 540, 340, 90, '#fff', { lw: 14 }); txt('TAXED HIGHER', 540, 450, 90, '#fff', { lw: 14 }); line(150, 400, 930, 380, 16, '#ef4444'); } }
+  else { bigTop('ONLY THE EXTRA', 220, 110, '#4ade80', T.only, t); if (t > T.keep) txt('YOU KEEP MORE', 540, 360, 96, '#fde047', { lw: 15 }); }
+  ctx.fillStyle = 'rgba(15,23,42,.85)'; ctx.fillRect(-300, 1800, W + 600, 200); footnote('Steps show the idea: German income tax rises smoothly from 14 % up to 45 %', 'on each extra euro (Grundfreibetrag 12,348 € tax-free).');
+}
+function sEnd(lt, t) {
+  office();
+  hero({ x: 540, y: 1480, s: 1.3, pose: STAND, eyes: 'norm', mouth: 'smile' });
+  popIn(t, T.q + .2, 540, 450, () => { box(-470, -170, 940, 340, '#0f172a', 30, 8); txt('YOUR GUESS WAS...', 0, -70, 62, '#fff', { stroke: false });
+    box(-420, 10, 380, 110, '#ef4444', 20, 7); txt('TOO HIGH', -230, 70, 60, '#fff', { lw: 9 }); box(40, 10, 380, 110, '#3b82f6', 20, 7); txt('TOO LOW', 230, 70, 60, '#fff', { lw: 9 }); });
+}
+const SCENES = [{ t0: 0, fn: sRaise, push: .04 }, { t0: mid(0, 1), fn: sSlip, push: .04, flash: .8 }, { t0: mid(1, 2), fn: sBar, push: .03, flash: .8 }, { t0: mid(4, 5), fn: sLeft, push: .05, flash: 1 },
+  { t0: mid(5, 6), fn: sStairs, push: .03, flash: .8 }, { t0: mid(7, 8), fn: sEnd, push: .03, xfade: .25 }];
+const CAP = [["you get a", "two hundred euro raise.", "guess how much more", "lands in your account.", "comment a number."], ["you earned", "two thousand five hundred", "a month.", "now it's", "two thousand seven hundred."], ["first, your pension takes", "eighteen euros sixty."],
+  ["health, care and", "unemployment insurance?", "about twenty four more."], ["then income tax grabs", "another forty one fifty."], ["what's left?", "about one hundred", "sixteen euros.", "not two hundred."],
+  ["and no, a raise", "can't push your whole salary", "into a higher tax bracket."], ["only the extra euros", "get taxed more.", "you always keep", "more than before."], ["so, how close", "was your guess?", "too high or too low?"]];
+const HOT = new Set(["two hundred euro raise.", "comment a number.", "two thousand seven hundred.", "eighteen euros sixty.", "about twenty four more.", "another forty one fifty.", "sixteen euros.", "not two hundred.", "into a higher tax bracket.", "get taxed more.", "too high or too low?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>
