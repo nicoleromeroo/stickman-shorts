@@ -80,6 +80,7 @@ Notes
 - 1 cent doubled for 30 days: moved to the backlog (good "pick 1 or 2" finance video for later).
 
 ## Done
+- 20 Nov 20:00 RESPAWN Part 6 FINALE · 11:30 Minecraft copies sold · 16:00 Is an 80 € game worth it? (game vs cinema) (made 19 Nov)
 - 17 Nov 11:30 GTA 6 countdown · 16:00 start at 16 vs 26 · 20:00 RESPAWN Part 3
 - 18 Nov 16:00 4 siblings parable (made 16 Nov on Nicole's request)
 - 2026-11-17 slot1: Goldfish 3-second memory myth (made 16 Nov)

@@ -1,0 +1,138 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function heart(x, y, s, full, crack = 0, col = '#ef4444') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = full ? col : '#334155'; ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(0, 30); ctx.bezierCurveTo(-70, -20, -40, -80, 0, -45); ctx.bezierCurveTo(40, -80, 70, -20, 0, 30); ctx.fill(); ctx.stroke(); if (full) { ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillRect(-28, -40, 12, 12); } ctx.restore(); }
+function hearts(x, y, n, s = 1, t = 0, col) { const bob = Math.sin(t * 3) * 6; for (let i = 0; i < 3; i++) heart(x + (i - 1) * 70 * s, y + bob, .7 * s, i < n, 0, col); }
+function headY(y, s) { return y - 368 * s; }
+function uiPanel(x, y, w, h) { box(x - w / 2, y - h / 2, w, h, 'rgba(15,23,42,.94)', 18, 8); ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; rr(x - w / 2 + 12, y - h / 2 + 12, w - 24, h - 24, 12); ctx.stroke(); }
+function nameTag(x, y, s, col = '#fde047') { ctx.save(); ctx.font = '900 32px Nun'; const w = ctx.measureText(s).width + 50; ctx.restore(); box(x - w / 2, y - 30, w, 60, 'rgba(15,23,42,.9)', 12, 5); txt(s, x, y + 4, 32, col, { stroke: false, font: 'Nun' }); }
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function glitch(t, a = .18) { const g = Math.sin(t * 40) > .3 ? 1 : 0; ctx.save(); ctx.globalAlpha = a * g; ctx.fillStyle = '#ff0040'; ctx.fillRect(-300, 640 + Math.sin(t * 13) * 200, W + 600, 70); ctx.fillStyle = '#00e5ff'; ctx.fillRect(-300, 1150 + Math.sin(t * 9) * 150, W + 600, 50); ctx.restore(); }
+const KAI = (o) => stick(Object.assign({ shirt: '#f97316', pants: '#1f2937', hood: true }, o));
+const MOM = (o) => stick(Object.assign({ shirt: '#f472b6', pants: '#1f2937', hair: '#7c2d12', apron: '#fff' }, o));
+function glowDoor(x, y, w, h, k, t, open = 0) { if (k <= 0) return; const pul = .5 + .5 * Math.sin(t * 6); ctx.save(); ctx.globalAlpha = k; spot(x + w / 2, y + h / 2, 420 + 40 * pul + open * 200, .55 + open * .3, '120,220,255'); box(x - 14, y - 14, w + 28, h + 14, '#e0f2fe', 10, 8);
+  ctx.fillStyle = '#ffffff'; rr(x, y, w, h, 8); ctx.fill(); const dw = w * (1 - open * .85); const g = ctx.createLinearGradient(0, y, 0, y + h); g.addColorStop(0, '#a5f3fc'); g.addColorStop(1, '#22d3ee'); ctx.fillStyle = g; ctx.strokeStyle = INK; ctx.lineWidth = 8; rr(x, y, dw, h, 8); ctx.fill(); ctx.stroke(); if (open < .5) circ(x + dw - 40, y + h / 2, 14, '#fde047', INK, 5); ctx.restore(); }
+function bigTop(s, y, size, col, t0, t) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); txt(s, 540, y, size * k, col, { lw: size * .17 }); }
+function hand(s, x, y, size, col = '#1d4ed8', rot = -.04) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); txt(s, 0, 0, size, col, { stroke: false, font: 'Nun', weight: '900 ' }); ctx.restore(); }
+function scribble(x, y, w, seed, col = '#1d4ed8') { ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x, y); for (let i = 1; i <= 14; i++) ctx.lineTo(x + w * i / 14, y + (rnd(seed + i) - .5) * 14); ctx.stroke(); ctx.restore(); }
+function notebook(x, y, s, mode, t, o = {}) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  box(-430, -290, 860, 580, '#7c2d12', 24, 9); box(-410, -270, 405, 540, '#fefce8', 10, 6); box(5, -270, 405, 540, '#fefce8', 10, 6);
+  for (let i = 0; i < 9; i++) { line(-390, -200 + i * 54, -25, -200 + i * 54, 2, '#bfdbfe'); line(25, -200 + i * 54, 390, -200 + i * 54, 2, '#bfdbfe'); }
+  line(0, -270, 0, 270, 6);
+  if (mode === 'date') { hand('DAY 1', -205, -200, 58); for (let i = 0; i < 6; i++) scribble(-380, -120 + i * 54, 320, i * 7); hand('300 DAYS AGO', -205, 220, 46, '#dc2626', -.06); hand('RULES', 205, -200, 58); for (let i = 0; i < 7; i++) scribble(45, -120 + i * 54, 330, 50 + i * 7); }
+  else if (mode === 'last') { hand('LAST PAGE', -205, -200, 52); for (let i = 0; i < 6; i++) scribble(-380, -120 + i * 54, 320, 140 + i * 7);
+    hand('THE GAME', 205, -170, 54); hand('ONLY FOLLOWS', 205, -100, 50); hand('ITS SCRIPT.', 205, -30, 54);
+    if (o.brk) { const k = eob(inv(o.brk, o.brk + .3, t)); ctx.save(); ctx.translate(205, 150); ctx.scale(k, k); hand('BREAK IT.', 0, 0, 84, '#dc2626', -.08); ctx.restore(); } }
+  ctx.restore();
+}
+function questBox(x, y, title, sub, t, err = 0) { ctx.save(); if (err) ctx.translate(Math.sin(t * 60) * 10 * err, 0); uiPanel(x, y, 880, 230); circ(x - 350, y, 50, '#fde047', INK, 6); txt('!', x - 350, y + 28, 80, INK, { stroke: false });
+  txt(title, x + 50, y - 30, 50, err ? '#f87171' : '#fde047', { stroke: false, font: 'Nun' }); txt(sub, x + 50, y + 50, 56, '#fff', { stroke: false }); ctx.restore(); if (err) glitch(t, .35 * err); }
+function bedroom() { bgFill('#fde7c7'); floor('#d6a26b'); windowFrame(660, 420, 300, 330, '#bae6fd'); circ(770, 520, 44, '#facc15', INK, 5); }
+function kitchen() { bgFill('#fef9c3'); floor('#a3a3a3'); box(-20, 1040, 640, 340, '#e5e7eb', 10, 9); box(-20, 1010, 640, 50, '#78716c', 6, 8); box(80, 1090, 200, 140, '#334155', 12, 7); circ(560, 1000, 30, '#475569', INK, 6); windowFrame(140, 470, 300, 300, '#bae6fd'); }
+const T = { beat: at(0, 0), q1: wt(0, 'with one'), rec: at(1, 0), you: wt(1, 'you were'), d301: at(2, 0), ready: wt(2, 'breakfast'), same: wt(2, 'same words'), last: at(3, 0), script: wt(3, 'the game only'), brk: wt(3, 'so break'),
+  walk: at(4, 0), ask: wt(4, 'do you'), frz: at(5, 0), smile: wt(5, 'then she'), nob: wt(5, 'nobody'), gl: at(6, 0), uns: wt(6, 'unscripted'), door: wt(6, 'and the glowing'), kai: wt(6, 'for you and'),
+  done: at(7, 0), wake: wt(7, 'you wake'), noh: wt(7, 'no hearts'), norm: wt(7, 'just a'), ph: at(8, 0), ng: wt(8, 'new game'), q: at(9, 0) };
+// ---------- cold open ----------
+function sCold(lt, t) {
+  kitchen(); glitch(t, .2);
+  MOM({ x: 780, y: 1470, s: 1.15, flip: true, pose: STAND, eyes: 'huge', mouth: 'smile', look: -1 }); nameTag(780, headY(1470, 1.15) - 110, 'MOM');
+  hero({ x: 330, y: 1470, s: 1.15, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.5 + Math.sin(t * 10) * .3, re: -.3 }, eyes: 'huge', mouth: 'grin', look: 1, bob: Math.abs(Math.sin(t * 8)) * 10 }); hearts(330, headY(1470, 1.15) - 100, 3, .9, t);
+  for (let i = 0; i < 6; i++) sparkle(200 + i * 140, 620 + Math.sin(t * 4 + i) * 60, 30, t * 3 + i);
+  txt('YOU BEAT', 540, 200, 140, '#fff', { lw: 20 }); txt('THE GAME', 540, 350, 140, '#fde047', { lw: 20 });
+  if (t > T.q1) popIn(t, T.q1, 540, 560, () => { box(-330, -60, 660, 120, '#22c55e', 28, 8); txt('WITH 1 QUESTION', 0, 8, 62, '#fff', { lw: 10 }); });
+}
+// ---------- recap ----------
+function sRecap(lt, t) {
+  bgFill('#0f172a'); spot(540, 760, 700, .5);
+  notebook(540, 820, 1.0, 'date', t);
+  hero({ x: 540, y: 1720, s: 1.0, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: -2.4, le: -.3, ra: 2.4, re: .3 }, eyes: 'huge', mouth: 'o', lookY: -1, shadow: false });
+  sepia();
+  box(250, 190, 580, 130, '#0f172a', 24, 8); txt('LAST TIME...', 540, 260, 84, '#fde047', { stroke: false });
+  if (t > T.you) popIn(t, T.you, 540, 440, () => { box(-330, -55, 660, 110, '#dc2626', 24, 8); txt('YOU WERE LOOPING', 0, 8, 58, '#fff', { lw: 9 }); });
+}
+// ---------- day 301 ----------
+function sMorning(lt, t) {
+  bedroom();
+  hero({ x: 300, y: 1470, s: 1.1, pose: STAND, eyes: 'norm', mouth: 'flat', look: 1 }); hearts(300, headY(1470, 1.1) - 100, 3, .85, t);
+  MOM({ x: 820, y: 1470, s: 1.1, flip: true, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.0, re: -.8 }, look: -1 }); nameTag(820, headY(1470, 1.1) - 90, 'MOM · NPC');
+  popIn(t, T.ready, 620, 830, () => bubble(0, 0, 'BREAKFAST IS READY!', 52, 760));
+  if (t > T.same) popIn(t, T.same, 540, 560, () => questBox(0, 0, 'QUEST', 'FINISH THE SCHOOL DAY', t));
+  bigTop('DAY 301', 260, 150, '#7c3aed', mid(1, 2), t);
+}
+// ---------- last page ----------
+function sLast(lt, t) {
+  bgFill('#1e293b'); spot(540, 900, 700, .5);
+  const k = eob(inv(mid(2, 3), mid(2, 3) + .35, t)); ctx.save(); ctx.translate(540, 960); ctx.scale(k, k); ctx.translate(-540, -960);
+  notebook(540, 960, 1.15, 'last', t, { brk: t > T.brk ? T.brk : 0 }); ctx.restore();
+  bigTop(t > T.brk ? 'SO BREAK IT' : 'ONE LAST PAGE', 300, 130, t > T.brk ? '#ef4444' : '#fff', t > T.brk ? T.brk : mid(2, 3), t);
+}
+// ---------- ask Mom ----------
+function sAsk(lt, t) {
+  kitchen();
+  const hx = lerp(120, 380, eo(inv(T.walk, T.ask - .1, t)));
+  const smile = t > T.smile, frozen = t > T.frz && !smile;
+  if (frozen) glitch(t, .25);
+  MOM({ x: 780, y: 1470, s: 1.15, flip: true, pose: smile ? { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.4, re: -1.2 } : STAND, eyes: frozen ? 'huge' : 'norm', mouth: smile ? 'smile' : frozen ? 'o' : 'flat', look: -1 });
+  nameTag(780, headY(1470, 1.15) - 110, t > T.nob ? 'MOM' : 'MOM · NPC', t > T.nob ? '#4ade80' : '#fde047');
+  hero({ x: hx, y: 1470, s: 1.15, pose: hx < 370 ? walkPose(t * 8) : { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.2, re: -.4 }, eyes: 'norm', mouth: 'smile', look: 1 }); hearts(hx, headY(1470, 1.15) - 100, 3, .9, t);
+  if (t < T.frz) { if (t > T.ask) popIn(t, T.ask, 380, 700, () => bubble(0, 0, 'DO YOU NEED HELP?', 58, 660)); bigTop('NO SCRIPT', 260, 140, '#fff', mid(3, 4), t); }
+  else if (!smile) bigTop('...', 260, 180, '#fff', T.frz, t);
+  else { if (t > T.nob) popIn(t, T.nob, 540, 640, () => bubble(0, 0, 'NOBODY EVER ASKED ME THAT.', 50, 980)); bigTop('SHE SMILES', 260, 130, '#f472b6', T.smile, t); }
+}
+// ---------- glitch + door ----------
+function sGlitch(lt, t) {
+  const doorOn = t > T.door;
+  if (!doorOn) { kitchen(); questBox(540, 760, t > T.uns ? 'ERROR' : 'QUEST', t > T.uns ? 'UNSCRIPTED MOVE' : 'FINISH THE SCHOOL DAY', t, 1);
+    hero({ x: 330, y: 1470, s: 1.1, pose: STAND, eyes: 'huge', mouth: 'o', lookY: -1 }); hearts(330, headY(1470, 1.1) - 100, 3, .85, t);
+    MOM({ x: 800, y: 1470, s: 1.1, flip: true, pose: STAND, mouth: 'smile', look: -1 }); bigTop('GLITCH', 260, 150, '#ef4444', mid(5, 6), t); return; }
+  bgFill('#0c4a6e'); floor('#075985');
+  const op = eo(inv(T.door, T.door + .8, t)); glowDoor(390, 780, 300, 600, 1, t, op);
+  hero({ x: 230, y: 1470, s: 1.05, pose: STAND, eyes: 'huge', mouth: 'grin', look: 1 }); hearts(230, headY(1470, 1.05) - 100, 3, .8, t);
+  if (t > T.kai - .3) { const kk = eo(inv(T.kai - .3, T.kai + .4, t)); KAI({ x: lerp(1200, 850, kk), y: 1470, s: 1.05, flip: true, pose: kk < 1 ? runPose(t * 11) : STAND, mouth: 'grin', look: -1 }); hearts(lerp(1200, 850, kk), headY(1470, 1.05) - 100, 3, .8, t, '#dc2626'); }
+  bigTop('THE DOOR OPENS', 260, 116, '#a5f3fc', T.door, t);
+}
+// ---------- game complete -> wake up ----------
+function sWake(lt, t) {
+  if (t < T.wake) { bgFill('#020617'); const rings = 5; for (let i = 0; i < rings; i++) { const r = ((t * 260 + i * 160) % 800); ctx.save(); ctx.globalAlpha = .5 * (1 - r / 800); ctx.strokeStyle = '#fde047'; ctx.lineWidth = 10; ctx.beginPath(); ctx.arc(540, 960, r, 0, 7); ctx.stroke(); ctx.restore(); }
+    popIn(t, T.done, 540, 900, () => { uiPanel(0, 0, 900, 300); txt('GAME', 0, -30, 120, '#fde047', { lw: 16 }); txt('COMPLETE', 0, 95, 110, '#fde047', { lw: 16 }); }); return; }
+  bedroom();
+  box(60, 1200, 640, 180, '#60a5fa', 30, 9); box(60, 1120, 150, 110, '#fff', 40, 7);
+  const sit = eo(inv(T.wake, T.wake + .5, t));
+  hero({ x: 470, y: 1330, s: 1.0, lean: lerp(-1.2, 0, sit), pose: { lt: -1.4, ls: 0, rt: -1.4, rs: 0, la: .3, le: .2, ra: -2.4, re: -.2 }, eyes: t > T.norm ? 'norm' : 'huge', mouth: t > T.norm ? 'smile' : 'o', look: -1, lookY: -1, shadow: false });
+  box(260, 1250, 440, 130, '#3b82f6', 30, 9);
+  if (t > T.noh) { const k = eob(inv(T.noh, T.noh + .3, t)); ctx.save(); ctx.translate(470, headY(1330, 1) - 60); ctx.scale(k, k); hearts(0, 0, 0, .8, 0); line(-140, -30, 140, 30, 12, '#ef4444'); ctx.restore(); }
+  bigTop(t > T.norm ? 'NORMAL MORNING' : 'NO HEARTS', 260, 120, '#fff', t > T.norm ? T.norm : T.noh, t);
+}
+// ---------- phone ----------
+function sPhone(lt, t) {
+  bgFill('#fde7c7'); floor('#d6a26b');
+  const buzz = t > T.ph && t < T.ph + 1.2 ? Math.sin(t * 70) * 6 : 0;
+  ctx.save(); ctx.translate(540 + buzz, 880); ctx.scale(2.7, 2.7); phoneDev(0, 0, 1, 'on', { c1: '#0f172a', c2: '#1e293b', draw: (x, y, w, h) => {
+    if (t > T.ng) { const k = eob(inv(T.ng, T.ng + .3, t)); txt('NEW', x + w / 2, y + 90, 40 * k, '#fde047', { lw: 5 }); txt('GAME+ ?', x + w / 2, y + 135, 34 * k, '#fde047', { lw: 5 });
+      box(x + 12, y + 180, 60, 40, '#22c55e', 8, 3); txt('YES', x + 42, y + 208, 22, '#fff', { stroke: false }); box(x + w - 72, y + 180, 60, 40, '#ef4444', 8, 3); txt('NO', x + w - 42, y + 208, 22, '#fff', { stroke: false }); }
+    else { circ(x + w / 2, y + 120, 26, '#fde047', INK, 3); } } }); ctx.restore();
+  hero({ x: 160, y: 1560, s: .9, pose: STAND, eyes: 'huge', mouth: 'o', look: 1, lookY: -1 });
+  bigTop('THEN...', 250, 150, '#7c3aed', mid(7, 8), t);
+}
+// ---------- end ----------
+function sEnd(lt, t) {
+  bgFill('#020617'); spot(540, 1000, 600, .35);
+  hero({ x: 540, y: 1470, s: 1.2, pose: PHONE_POSE, hold: holdPhone('on'), eyes: 'norm', mouth: 'wavy', lookY: 1 });
+  popIn(t, T.q + .1, 540, 420, () => { uiPanel(0, 0, 940, 330); txt('WOULD YOU PRESS YES?', 0, -70, 60, '#fff', { stroke: false });
+    box(-330, 10, 280, 110, '#22c55e', 20, 7); txt('YES', -190, 70, 70, '#fff', { lw: 10 }); box(50, 10, 280, 110, '#ef4444', 20, 7); txt('NO', 190, 70, 70, '#fff', { lw: 10 }); });
+  const endT = L[9].end + .5;
+  if (t > endT) { const k = eob(inv(endT, endT + .35, t)); ctx.save(); ctx.fillStyle = `rgba(0,0,0,${.6 * k})`; ctx.fillRect(-300, -300, W + 600, H + 600); ctx.translate(540, 950); ctx.scale(k, k); box(-400, -150, 800, 300, '#dc2626', 26, 10); txt('THE END', 0, -20, 110, '#fff', { lw: 14 }); txt('RESPAWN · 6 PARTS', 0, 85, 50, '#fde047', { lw: 8 }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sCold, push: .04 }, { t0: mid(0, 1), fn: sRecap, push: .04, flash: .8 }, { t0: mid(1, 2), fn: sMorning, push: .04, flash: .8 }, { t0: mid(2, 3), fn: sLast, push: .03, xfade: .2 },
+  { t0: mid(3, 4), fn: sAsk, push: .04, flash: .7 }, { t0: mid(5, 6), fn: sGlitch, push: .05, flash: .8 }, { t0: mid(6, 7), fn: sWake, push: .05, flash: 1 }, { t0: mid(7, 8), fn: sPhone, push: .04, flash: .7 }, { t0: mid(8, 9), fn: sEnd, push: .03, xfade: .25 }];
+const CAP = [["you just beat the game.", "not with a fight.", "with one question."], ["last time, the notebook", "was in your handwriting.", "you were the one", "stuck in the loop."], ["day three hundred and one.", "breakfast is ready!", "same words.", "same quest."],
+  ["but your notebook", "has one last page:", "the game only follows", "its script.", "so break it."], ["you walk up to mom", "and ask:", "do you need help?"], ["mom freezes.", "then she smiles.", "nobody ever", "asked me that."],
+  ["the quest box glitches.", "unscripted move.", "and the glowing door opens,", "for you and kai."], ["game complete.", "you wake up.", "no hearts. no loop.", "just a normal morning."], ["then your phone", "lights up.", "new game plus?", "yes or no."],
+  ["would you press yes?", "comment yes or no."]];
+const HOT = new Set(["you just beat the game.", "with one question.", "stuck in the loop.", "same quest.", "so break it.", "do you need help?", "asked me that.", "unscripted move.", "for you and kai.", "game complete.", "no hearts. no loop.", "new game plus?", "would you press yes?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

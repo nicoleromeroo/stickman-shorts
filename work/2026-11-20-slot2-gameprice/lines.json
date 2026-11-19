@@ -1,0 +1,10 @@
+["Eighty euros for one game, or ten for the cinema. Guess which is cheaper. Go.",
+ "Big new console games often cost around eighty euros at launch.",
+ "A cinema ticket in Germany cost about ten euros last year, on average.",
+ {"text":"But a movie is over in about two hours. That's five euros an hour.","gap":0.6},
+ "So let's split the game by hours too.",
+ "Play it for a hundred hours? Eighty cents an hour.",
+ "Sixteen hours? Five euros an hour. Same as the cinema.",
+ {"text":"Three hours, and then it's boring? Almost twenty-seven euros an hour.","gap":0.7},
+ {"text":"So the price tag doesn't decide. Your hours do.","gap":0.6},
+ {"text":"Game or cinema: which wins for you? Comment game or cinema.","gap":1.2}]

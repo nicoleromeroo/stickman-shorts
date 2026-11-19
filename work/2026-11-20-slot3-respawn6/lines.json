@@ -1,0 +1,10 @@
+["You just beat the game. Not with a fight. With one question.",
+ "Last time, the notebook was in your handwriting. You were the one stuck in the loop.",
+ "Day three hundred and one. Breakfast is ready! Same words. Same quest.",
+ "But your notebook has one last page: the game only follows its script. So break it.",
+ "You walk up to Mom and ask: do you need help?",
+ {"text":"Mom freezes. Then she smiles. Nobody ever asked me that.","gap":0.6},
+ "The quest box glitches. Unscripted move. And the glowing door opens, for you and Kai.",
+ {"text":"Game complete. You wake up. No hearts. No loop. Just a normal morning.","gap":0.6},
+ {"text":"Then your phone lights up. New game plus? Yes or no.","gap":0.8},
+ {"text":"Would you press yes? Comment yes or no.","gap":1.6}]

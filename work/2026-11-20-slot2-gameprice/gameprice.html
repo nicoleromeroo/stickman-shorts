@@ -1,0 +1,109 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function controller(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); ctx.fillStyle = '#1f2937'; ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.ellipse(-55, 10, 45, 40, 0, 0, 7); ctx.ellipse(55, 10, 45, 40, 0, 0, 7); ctx.fill(); ctx.stroke(); box(-70, -30, 140, 60, '#1f2937', 24, 7); box(-62, -8, 30, 10, '#e5e7eb', 3, 0); box(-52, -18, 10, 30, '#e5e7eb', 3, 0); circ(45, -10, 7, '#ef4444', INK, 3); circ(62, 4, 7, '#22c55e', INK, 3); ctx.restore(); }
+const GAMER = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .9, le: -1.9, ra: -.9, re: 1.9 };
+function gamer(x, y, s, o = {}) { hero(Object.assign({ x, y, s, pose: GAMER, hold: (hx, hy) => controller(hx - 32, hy + 4, .9) }, o)); }
+function gameCase(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); box(-120, -160, 240, 320, '#e5e7eb', 16, 8); box(-98, -136, 196, 272, '#7c3aed', 8, 0); txt('NEW', 0, -20, 60, '#fff', { lw: 8 }); txt('GAME', 0, 50, 60, '#fde047', { lw: 8 }); ctx.restore(); }
+function priceTag(x, y, s, label, col = '#ef4444', rot = -.12) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); box(-150, -60, 300, 120, col, 22, 8); circ(-118, 0, 12, '#fff', INK, 4); txt(label, 15, 22, 70, '#fff', { lw: 10 }); ctx.restore(); }
+function ticket(x, y, s, label, rot = .08) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); box(-200, -100, 400, 200, '#fbbf24', 18, 8); ctx.setLineDash([12, 10]); line(90, -90, 90, 90, 5, INK); ctx.setLineDash([]); txt('CINEMA', -55, -20, 50, INK, { stroke: false }); txt(label, -55, 60, 64, '#b91c1c', { stroke: false }); txt('ADMIT', 145, -10, 26, INK, { stroke: false, font: 'Nun' }); txt('ONE', 145, 25, 26, INK, { stroke: false, font: 'Nun' }); ctx.restore(); }
+function clock(x, y, r, t, speed = 6) { circ(x, y, r, '#fff', INK, 10); for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; line(x + Math.cos(a) * r * .8, y + Math.sin(a) * r * .8, x + Math.cos(a) * r * .92, y + Math.sin(a) * r * .92, 6); } const a = t * speed; line(x, y, x + Math.sin(a) * r * .8, y - Math.cos(a) * r * .8, 8, '#ef4444'); line(x, y, x + Math.sin(a / 12) * r * .5, y - Math.cos(a / 12) * r * .5, 12); circ(x, y, 12, INK); }
+function room() { bgFill('#4c1d95'); floor('#3b0764', 1400); spot(540, 900, 800, .25, '196,181,253'); }
+function footnote(a, b, c = '#e2e8f0') { txt(a, 540, 1830, 28, c, { stroke: false, font: 'Nun' }); if (b) txt(b, 540, 1868, 28, c, { stroke: false, font: 'Nun' }); }
+function bigTop(s, y, size, col, t0, t) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); txt(s, 540, y, size * k, col, { lw: size * .17 }); }
+const T = { ten: wt(0, 'or ten'), guess: wt(0, 'guess'), p80: wt(1, 'eighty'), cin: at(2, 0), p10: wt(2, 'ten euros'), two: wt(3, 'two hours'), five: wt(3, "that's five"), split: at(4, 0),
+  h100: at(5, 0), c80: wt(5, 'eighty cents'), h16: at(6, 0), same: wt(6, 'same as'), h3: at(7, 0), c27: wt(7, 'almost'), dec: at(8, 0), hours: wt(8, 'your hours'), q: at(9, 0) };
+// ---------- hook ----------
+function sHook(lt, t) {
+  room();
+  gameCase(250, 820, 1.0, -.08); priceTag(260, 1030, .95, '80 €');
+  ticket(800, 860, 1.0, '10 €');
+  txt('VS', 540, 900, 110, '#fde047', { lw: 16 });
+  gamer(540, 1520, 1.1, { eyes: 'huge', mouth: 'o', bob: Math.abs(Math.sin(t * 7)) * 10, lookY: -1 });
+  txt('WHICH IS', 540, 200, 130, '#fff', { lw: 20 }); txt('CHEAPER?', 540, 340, 140, '#fde047', { lw: 22 });
+  if (t > T.guess) popIn(t, T.guess, 540, 520, () => { box(-260, -55, 520, 110, '#22c55e', 28, 8); txt('GUESS NOW', 0, 8, 62, '#fff', { lw: 10 }); });
+}
+// ---------- 80 € game ----------
+function sGame(lt, t) {
+  room();
+  gameCase(540, 820, 1.5, 0); if (t > T.p80) popIn(t, T.p80, 700, 1100, () => priceTag(0, 0, 1.3, '79.99 €'));
+  hero({ x: 200, y: 1530, s: 1.0, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.3, re: -.3 }, eyes: 'huge', mouth: 'o', look: 1 });
+  bigTop('AT LAUNCH', 250, 130, '#fff', mid(0, 1), t);
+  footnote('Big new PS5 games often cost 79.99 € at launch (GIGA)');
+}
+// ---------- cinema ticket ----------
+function sTicket(lt, t) {
+  bgFill('#7f1d1d'); spot(540, 900, 800, .3, '254,202,202');
+  for (let i = 0; i < 7; i++) box(i * 160 - 20, 1380, 140, 120, '#b91c1c', 20, 7);
+  ticket(540, 820, 1.8, t > T.p10 ? '10.05 €' : '? €', -.05);
+  bigTop('CINEMA TICKET', 250, 110, '#fff', mid(1, 2), t);
+  if (t > T.p10) bigTop('AVERAGE, 2025', 420, 80, '#fde047', T.p10, t);
+  footnote('Average cinema ticket in Germany, 2025: 10.05 €', '(FFA, German Federal Film Board)');
+}
+// ---------- 2 hours = 5 €/h ----------
+function sHour(lt, t) {
+  bgFill('#1e293b'); spot(540, 900, 700, .3);
+  clock(320, 820, 210, t, 3);
+  txt('2 HOURS', 320, 1120, 80, '#fff', { lw: 12 });
+  ticket(790, 820, .9, '10 €', .1);
+  if (t > T.five) popIn(t, T.five, 540, 1330, () => { box(-360, -80, 720, 160, '#ef4444', 30, 9); txt('= 5 € / HOUR', 0, 12, 90, '#fff', { lw: 12 }); });
+  bigTop('THE MOVIE ENDS', 250, 110, '#fff', mid(2, 3), t);
+  footnote('10.05 € for about 2 hours = about 5 € per hour');
+}
+// ---------- split the game ----------
+function sSplit(lt, t) {
+  bgFill('#fef3c7'); floor('#d6a26b');
+  box(140, 440, 800, 540, '#14532d', 18, 10);
+  txt('PRICE', 540, 590, 110, '#f1f5f9', { stroke: false }); line(260, 660, 820, 660, 10, '#f1f5f9'); txt('HOURS', 540, 790, 110, '#f1f5f9', { stroke: false });
+  txt('= € PER HOUR', 540, 920, 70, '#fde047', { stroke: false });
+  hero({ x: 540, y: 1560, s: 1.0, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.4, re: -.4 }, eyes: 'norm', mouth: 'grin', lookY: -1 });
+  bigTop('SAME TRICK', 260, 130, '#7c3aed', mid(3, 4), t);
+}
+// ---------- the three cases ----------
+function row(y, t0, hours, val, frac, col, note, t) {
+  if (t < t0) return; const k = eo(inv(t0, t0 + .5, t));
+  txt(hours, 165, y + 26, 80, '#fff', { lw: 12 });
+  box(290, y - 60, 400 * frac * k + 24, 120, col, 22, 8);
+  txt(val, 920, y + 28, 74, col, { lw: 12 });
+  if (note) txt(note, 920, y + 110, 46, '#fbbf24', { stroke: false, font: 'Nun' });
+}
+function sRows(lt, t) {
+  bgFill('#0f172a'); spot(540, 900, 800, .2);
+  const cx = 290 + 400 * (5 / 26.67) + 24; ctx.save(); ctx.setLineDash([16, 12]); line(cx, 520, cx, 1360, 6, '#fbbf24'); ctx.restore(); txt('CINEMA: 5 € / HOUR', 540, 470, 52, '#fbbf24', { stroke: false });
+  row(660, T.h100, '100 H', '0.80 €', .03, '#22c55e', '', t);
+  row(930, T.h16, '16 H', '5 €', 5 / 26.67, '#fbbf24', t > T.same ? '= CINEMA' : '', t);
+  row(1200, T.h3, '3 H', '26.67 €', 1, '#ef4444', '', t);
+  bigTop('PER HOUR', 250, 140, '#fff', mid(4, 5), t);
+  if (t > T.c27) { const k = .5 + .5 * Math.sin(t * 10); txt('OUCH', 540, 1340, 70 + k * 10, '#fca5a5', { lw: 10 }); }
+  footnote('79.99 € divided by 100, 16 or 3 hours', '', '#cbd5e1');
+}
+// ---------- your hours decide ----------
+function sDecide(lt, t) {
+  room();
+  clock(800, 760, 170, t, 8);
+  gamer(380, 1520, 1.2, { eyes: 'norm', mouth: 'grin', look: 1 });
+  bigTop('THE PRICE TAG?', 250, 110, '#fff', mid(7, 8), t);
+  if (t > T.hours) bigTop('YOUR HOURS DECIDE', 420, 96, '#fde047', T.hours, t);
+  if (t > T.hours) priceTag(260, 860, .8, '80 €', '#64748b', -.2);
+}
+// ---------- end ----------
+function sEnd(lt, t) {
+  room();
+  gameCase(250, 1050, .7, -.08); ticket(820, 1050, .8, '10 €');
+  gamer(540, 1520, 1.1, { eyes: 'huge', mouth: 'grin' });
+  popIn(t, T.q + .1, 540, 480, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('WHICH WINS FOR YOU?', 0, -100, 64, '#fff', { stroke: false });
+    box(-420, -10, 380, 130, '#7c3aed', 22, 7); txt('GAME', -230, 75, 72, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#f59e0b', 22, 7); txt('CINEMA', 230, 75, 72, '#fff', { lw: 10 }); });
+  footnote('Example maths, not financial advice.');
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .04 }, { t0: mid(0, 1), fn: sGame, push: .04, flash: .8 }, { t0: mid(1, 2), fn: sTicket, push: .04, flash: .7 }, { t0: mid(2, 3), fn: sHour, push: .04, flash: .7 },
+  { t0: mid(3, 4), fn: sSplit, push: .04, xfade: .2 }, { t0: mid(4, 5), fn: sRows, push: .03, flash: .7 }, { t0: mid(7, 8), fn: sDecide, push: .05, flash: .9 }, { t0: mid(8, 9), fn: sEnd, push: .03, xfade: .25 }];
+const CAP = [["eighty euros for one game,", "or ten for the cinema.", "guess which is cheaper.", "go."], ["big new console games", "often cost", "around eighty euros", "at launch."], ["a cinema ticket in germany", "cost about ten euros", "last year,", "on average."],
+  ["but a movie is over", "in about two hours.", "that's five euros an hour."], ["so let's split", "the game by hours too."], ["play it for", "a hundred hours?", "eighty cents an hour."], ["sixteen hours?", "five euros an hour.", "same as the cinema."],
+  ["three hours,", "and then it's boring?", "almost twenty-seven", "euros an hour."], ["so the price tag", "doesn't decide.", "your hours do."], ["game or cinema:", "which wins for you?", "comment game", "or cinema."]];
+const HOT = new Set(["guess which is cheaper.", "around eighty euros", "cost about ten euros", "that's five euros an hour.", "the game by hours too.", "eighty cents an hour.", "same as the cinema.", "almost twenty-seven", "your hours do.", "which wins for you?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

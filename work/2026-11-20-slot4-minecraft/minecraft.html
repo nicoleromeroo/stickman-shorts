@@ -1,0 +1,129 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function controller(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); ctx.fillStyle = '#1f2937'; ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.ellipse(-55, 10, 45, 40, 0, 0, 7); ctx.ellipse(55, 10, 45, 40, 0, 0, 7); ctx.fill(); ctx.stroke(); box(-70, -30, 140, 60, '#1f2937', 24, 7); box(-62, -8, 30, 10, '#e5e7eb', 3, 0); box(-52, -18, 10, 30, '#e5e7eb', 3, 0); circ(45, -10, 7, '#ef4444', INK, 3); circ(62, 4, 7, '#22c55e', INK, 3); ctx.restore(); }
+const GAMER = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .9, le: -1.9, ra: -.9, re: 1.9 };
+function gamer(x, y, s, o = {}) { hero(Object.assign({ x, y, s, pose: GAMER, hold: (hx, hy) => controller(hx - 32, hy + 4, .9) }, o)); }
+function calendar(x, y, s, top, big, col = '#ef4444') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-190, -200, 380, 400, '#fff', 24, 9); box(-190, -200, 380, 110, col, 24, 9); txt(top, 0, -140, 60, '#fff', { lw: 8 }); txt(big, 0, 60, 150, INK, { stroke: false }); for (const rx of [-110, 110]) box(rx - 12, -230, 24, 60, '#9ca3af', 10, 6); ctx.restore(); }
+function trophy(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#facc15'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-110, -160); ctx.lineTo(110, -160); ctx.quadraticCurveTo(110, 30, 0, 50); ctx.quadraticCurveTo(-110, 30, -110, -160); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.arc(-120, -90, 50, Math.PI * .5, Math.PI * 1.5); ctx.stroke(); ctx.beginPath(); ctx.arc(120, -90, 50, -Math.PI * .5, Math.PI * .5); ctx.stroke(); box(-25, 45, 50, 60, '#facc15', 4, 8); box(-90, 100, 180, 50, '#92400e', 8, 8); ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillRect(-70, -140, 20, 110); txt('#1', 0, -55, 80, '#fff', { lw: 10 }); ctx.restore(); }
+function tv(x, y, w, h, fn) { box(x - w / 2, y - h / 2, w, h, '#111827', 20, 9); ctx.save(); rr(x - w / 2 + 20, y - h / 2 + 20, w - 40, h - 40, 8); ctx.clip(); fn(x - w / 2 + 20, y - h / 2 + 20, w - 40, h - 40); ctx.restore(); box(x - 80, y + h / 2, 160, 30, '#374151', 6, 7); }
+function room() { bgFill('#0e7490'); floor('#155e75', 1380); spot(540, 900, 800, .25, '186,230,253'); }
+function footnote(a, b, c = '#e2e8f0') { txt(a, 540, 1830, 28, c, { stroke: false, font: 'Nun' }); if (b) txt(b, 540, 1868, 28, c, { stroke: false, font: 'Nun' }); }
+const fmt = n => Math.round(n).toLocaleString('en-US');
+function gameCase(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); box(-60, -80, 120, 160, '#e5e7eb', 10, 6); box(-48, -66, 96, 132, '#38bdf8', 6, 0); txt('GAME', 0, 6, 30, '#fff', { lw: 6 }); ctx.restore(); }
+function counter(x, y, w, label, val, col = '#fde047') { ctx.save(); ctx.translate(x, y); box(-w / 2, -120, w, 240, '#0f172a', 30, 9); txt(label, 0, -60, 52, '#93c5fd', { stroke: false, font: 'Nun' }); txt(val, 0, 40, 112, col, { stroke: false }); ctx.restore(); }
+function clock(x, y, r, t) { circ(x, y, r, '#fff', INK, 10); for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; line(x + Math.cos(a) * r * .8, y + Math.sin(a) * r * .8, x + Math.cos(a) * r * .92, y + Math.sin(a) * r * .92, 6); } const a = t * 6; line(x, y, x + Math.sin(a) * r * .8, y - Math.cos(a) * r * .8, 8, '#ef4444'); line(x, y, x + Math.sin(a / 12) * r * .5, y - Math.cos(a / 12) * r * .5, 12); circ(x, y, 12, INK); }
+function bigTop(s, y, size, col, t0, t) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); txt(s, 540, y, size * k, col, { lw: size * .17 }); }
+const THINK = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.0, re: -2.3 };
+const T = { three: wt(0, 'three'), two: wt(0, 'two,'), one: wt(0, 'one.'), mc: at(1, 0), guess: wt(1, 'now guess'), com: wt(1, 'comment'), hint: at(2, 0), fif: wt(2, 'fifteen'),
+  l4: wt(3, 'four million'), g: at(4, 0), g350: wt(4, 'three hundred'), x: at(5, 0), x425: wt(5, 'more than'), hund: at(6, 0), daily: at(7, 0), d300: wt(7, 'three hundred'), every: wt(7, 'every single'),
+  sec: at(8, 0), over: wt(8, 'over a hundred'), q: at(9, 0) };
+// ---------- quick, name it ----------
+function sQuick(lt, t) {
+  room();
+  trophy(720, 900, 1.6);
+  hero({ x: 260, y: 1500, s: 1.2, pose: THINK, eyes: 'norm', mouth: 'wavy', look: 1, lookY: -1, bob: Math.abs(Math.sin(t * 6)) * 8 });
+  qmark(250, 860, t, 0, '#ffd23f', 150);
+  txt('BEST-SELLING', 540, 200, 120, '#fff', { lw: 18 }); txt('GAME EVER?', 540, 330, 130, '#fde047', { lw: 20 });
+  const n = t > T.one ? '1' : t > T.two ? '2' : t > T.three ? '3' : '';
+  if (n) { const t0 = n === '1' ? T.one : n === '2' ? T.two : T.three; const k = eob(inv(t0, t0 + .2, t)); circ(720, 1290, 110 * k, '#ef4444', INK, 9); txt(n, 720, 1330, 140 * k, '#fff', { lw: 14 }); }
+}
+// ---------- it's Minecraft, guess ----------
+function sReveal(lt, t) {
+  room();
+  tv(540, 700, 800, 440, (x, y, w, h) => { ctx.fillStyle = '#0b1020'; ctx.fillRect(x, y, w, h); txt('MINECRAFT', x + w / 2, y + 110, 100, '#4ade80', { lw: 12 }); txt('COPIES SOLD', x + w / 2, y + 200, 50, '#93c5fd', { stroke: false, font: 'Nun' });
+    txt(Math.floor(t * 3) % 2 ? '???,???,???' : '?,???,???', x + w / 2, y + 320, 92, '#fde047', { stroke: false }); });
+  gamer(300, 1500, 1.2, { eyes: t > T.guess ? 'huge' : 'norm', mouth: 'o', look: 1, lookY: -1 });
+  qmark(800, 1150, t, T.guess, '#ffd23f', 160);
+  bigTop("IT'S MINECRAFT", 250, 110, '#fff', T.mc, t);
+  if (t > T.com) popIn(t, T.com, 700, 1380, () => { box(-330, -60, 660, 120, '#22c55e', 30, 8); txt('COMMENT A NUMBER', 0, 6, 58, '#fff', { lw: 10 }); });
+}
+// ---------- 15 years ----------
+function sHint(lt, t) {
+  bgFill('#fef3c7'); floor('#d6a26b');
+  calendar(540, 720, 1.35, 'NOV 2011', '1.0');
+  hero({ x: 220, y: 1500, s: 1.1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.3, re: -.3 }, eyes: 'norm', mouth: 'grin', look: 1 });
+  if (t > T.fif) popIn(t, T.fif, 700, 1180, () => { ctx.rotate(-.1); box(-300, -80, 600, 160, '#ef4444', 24, 9); txt('15 YEARS AGO', 0, 8, 76, '#fff', { lw: 10 }); });
+  bigTop('HINT', 230, 140, '#7c3aed', T.hint, t);
+  footnote('Minecraft 1.0 launched 18 Nov 2011 at MineCon (GGRecon)', '', '#78350f');
+}
+// ---------- launch: 4 million ----------
+function sLaunch(lt, t) {
+  bgFill('#064e3b'); spot(540, 900, 700, .35, '250,204,21'); floor('#065f46', 1380);
+  const k = eo(inv(at(3, 0) + .2, T.l4 + .9, t)); const n = Math.floor(k * 21);
+  for (let i = 0; i < n; i++) { const col = i % 7, row = Math.floor(i / 7); gameCase(160 + col * 127, 1300 - row * 170, 1, (rnd(i) - .5) * .1); }
+  bigTop('BY LAUNCH DAY', 230, 110, '#fff', at(3, 0), t);
+  counter(540, 560, 860, 'COPIES SOLD', fmt(4e6 * k));
+  footnote('More than 4 million sold by the 1.0 launch (GGRecon)');
+}
+// ---------- Guinness 350M ----------
+function sGuinness(lt, t) {
+  bgFill('#1e1b4b'); spot(540, 800, 800, .4, '250,204,21');
+  for (let i = 0; i < 16; i++) { const fy = ((t * 300 + i * 140) % 1700) - 100; ctx.save(); ctx.translate((i * 157) % W, fy); ctx.rotate(i + t * 2); gameCase(0, 0, .55); ctx.restore(); }
+  const v = 350e6 * eo(inv(T.g350 - .2, T.g350 + 1.3, t));
+  counter(540, 700, 1000, 'CONFIRMED', fmt(v));
+  trophy(540, 1300, 1.1);
+  bigTop('LAST YEAR', 260, 120, '#fde047', T.g, t);
+  footnote('Guinness World Records: best-selling videogame,', '350 million, listed April 2025, confirmed by Mojang');
+}
+// ---------- Xbox post 425M ----------
+function sXbox(lt, t) {
+  bgFill('#14532d'); spot(540, 900, 800, .35, '134,239,172');
+  ctx.save(); ctx.translate(540, 900); ctx.scale(2.6, 2.6); phoneDev(0, 0, 1, 'on', { c1: '#f8fafc', c2: '#e2e8f0', draw: (x, y, w, h) => {
+    circ(x + 22, y + 26, 13, '#16a34a', INK, 2); box(x + 42, y + 18, 70, 8, '#94a3b8', 4, 0); box(x + 42, y + 30, 46, 6, '#cbd5e1', 3, 0);
+    if (t > T.x425) { const k = eob(inv(T.x425, T.x425 + .3, t)); txt('425M+', x + w / 2, y + 120, 44 * k, '#16a34a', { lw: 5 }); txt('COPIES', x + w / 2, y + 160, 24 * k, INK, { stroke: false }); txt('SOLD', x + w / 2, y + 188, 24 * k, INK, { stroke: false }); }
+    for (let i = 0; i < 3; i++) box(x + 14, y + 220 + i * 18, w - 28 - i * 20, 8, '#cbd5e1', 4, 0); } }); ctx.restore();
+  hero({ x: 170, y: 1540, s: .95, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.4, re: -.2 }, eyes: t > T.x425 ? 'huge' : 'norm', mouth: t > T.x425 ? 'o' : 'flat', look: 1, lookY: -1 });
+  bigTop('IN SEPTEMBER...', 230, 110, '#fff', mid(4, 5), t); if (t > T.x425) bigTop('MORE THAN 425 MILLION', 380, 80, '#fde047', T.x425, t);
+  footnote('Xbox CEO Asha Sharma on X, 26 Sept 2026: "425M+ copies sold"', '(reported by Gameswelt, Vandal)');
+}
+// ---------- x100 bars ----------
+function sBars(lt, t) {
+  bgFill('#f1f5f9'); floor('#cbd5e1', 1400);
+  const k = eo(inv(mid(5, 6), T.hund + 1.2, t)); const base = 1400, maxH = 900;
+  box(170, base - 14, 260, 14, '#64748b', 4, 6); txt('4M', 300, base - 50, 60, INK, { stroke: false }); txt('LAUNCH', 300, base + 70, 52, '#475569', { stroke: false });
+  const h = maxH * k; box(620, base - h, 260, h, '#22c55e', 12, 8); txt('425M', 750, base - h - 40, 66, INK, { stroke: false }); txt('NOW', 750, base + 70, 52, '#475569', { stroke: false });
+  bigTop('OVER 100 TIMES', 230, 120, '#16a34a', mid(5, 6), t);
+  footnote('425 million divided by 4 million = 106', '', '#334155');
+}
+// ---------- 300k new players a day ----------
+function sDaily(lt, t) {
+  bgFill('#fde68a'); floor('#d97706', 1460);
+  box(780, 820, 240, 640, '#78350f', 14, 9); box(800, 840, 200, 620, '#fef3c7', 8, 6); txt('NEW', 900, 1000, 54, '#16a34a', { stroke: false }); txt('PLAYER', 900, 1060, 44, '#16a34a', { stroke: false });
+  for (let i = 0; i < 6; i++) { const p = ((t - T.daily) * .35 + i / 6) % 1; if (p < 0) continue; const x = lerp(-120, 860, p); const cols = ['#ef4444', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#3b82f6']; ctx.save(); ctx.globalAlpha = p > .9 ? (1 - p) * 10 : 1;
+    stick({ x, y: 1460, s: .75, shirt: cols[i], pants: '#334155', pose: runPose(t * 9 + i), mouth: 'grin', look: 1 }); ctx.restore(); }
+  counter(540, 560, 900, 'FIRST-TIME PLAYERS', t > T.d300 ? '300,000' : '...');
+  if (t > T.every) bigTop('EVERY SINGLE DAY', 250, 104, '#b45309', T.every, t); else bigTop('AND STILL...', 250, 110, '#b45309', T.daily, t);
+  footnote('"More than 300,000 people play Minecraft for the first time', 'on an average day" (Xbox CEO, Sept 2026)');
+}
+// ---------- per second ----------
+function sSecond(lt, t) {
+  bgFill('#0f172a'); spot(540, 900, 700, .3, '134,239,172');
+  clock(300, 800, 200, t);
+  const n = Math.floor(t * 300000 / 86400);
+  counter(720, 780, 560, 'SINCE YOU HIT PLAY', '+' + fmt(n), '#4ade80');
+  hero({ x: 540, y: 1480, s: 1.1, pose: PHONE_POSE, hold: holdPhone('on'), eyes: t > T.over ? 'huge' : 'norm', mouth: t > T.over ? 'o' : 'flat', lookY: 1 });
+  bigTop('3+ EVERY SECOND', 240, 110, '#fde047', T.sec, t);
+  footnote('300,000 a day divided by 86,400 seconds = about 3.5 per second');
+}
+// ---------- end ----------
+function sEnd(lt, t) {
+  room();
+  gamer(540, 1500, 1.2, { eyes: 'huge', mouth: 'grin' });
+  popIn(t, T.q + .1, 540, 500, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('YOUR GUESS WAS...', 0, -100, 70, '#fff', { stroke: false });
+    box(-420, -10, 380, 130, '#22c55e', 22, 7); txt('HIGHER', -230, 75, 72, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#ef4444', 22, 7); txt('LOWER', 230, 75, 72, '#fff', { lw: 10 }); });
+}
+const SCENES = [{ t0: 0, fn: sQuick, push: .04 }, { t0: mid(0, 1), fn: sReveal, push: .04, flash: .8 }, { t0: mid(1, 2), fn: sHint, push: .04, flash: .7 }, { t0: mid(2, 3), fn: sLaunch, push: .05, flash: .7 },
+  { t0: mid(3, 4), fn: sGuinness, push: .05, flash: .9 }, { t0: mid(4, 5), fn: sXbox, push: .05, flash: 1 }, { t0: mid(5, 6), fn: sBars, push: .04, xfade: .2 }, { t0: mid(6, 7), fn: sDaily, push: .04, flash: .7 },
+  { t0: mid(7, 8), fn: sSecond, push: .04, flash: .7 }, { t0: mid(8, 9), fn: sEnd, push: .03, xfade: .25 }];
+const CAP = [["quick: name", "the best-selling", "video game of all time.", "three, two, one."], ["it's minecraft.", "now guess how many", "copies it sold.", "comment your number."], ["hint: the full game", "came out fifteen years ago", "this week."],
+  ["by launch day,", "it had already sold", "four million copies."], ["last year, guinness", "confirmed three hundred", "fifty million."], ["and in september,", "xbox's boss posted:", "more than four hundred", "twenty-five million."],
+  ["that's over", "a hundred times", "its launch sales."], ["and three hundred thousand", "people play it", "for the first time", "every single day."], ["that's more than", "three new players", "every second.", "over a hundred started", "while you watched this."],
+  ["so, was your guess", "higher or lower?", "comment higher", "or lower."]];
+const HOT = new Set(["video game of all time.", "it's minecraft.", "comment your number.", "came out fifteen years ago", "four million copies.", "fifty million.", "twenty-five million.", "a hundred times", "every single day.", "every second.", "higher or lower?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>
