@@ -1,5 +1,5 @@
 {
- "uploaded_count": 30,
+ "uploaded_count": 32,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -241,6 +241,22 @@
    "mode": "scheduled 2026-11-20T10:30:00Z",
    "publish_at": "2026-11-20T11:30:00+01:00",
    "uploaded_at": "2026-11-19T14:52:55+00:00"
+  },
+  {
+   "tag": "video-20261120-slot1",
+   "video_id": "XS26HfUd8dQ",
+   "title": "The Earliest Sunset Isn't on the Shortest Day \ud83c\udf07 #shorts",
+   "mode": "scheduled 2026-11-20T05:00:00Z",
+   "publish_at": "2026-11-20T06:00:00+01:00",
+   "uploaded_at": "2026-11-19T19:54:40+00:00"
+  },
+  {
+   "tag": "video-20261120-slot5",
+   "video_id": "c_2naMM4YCI",
+   "title": "What If Everyone Worked a 4-Day Week? \ud83d\udcc5 #shorts",
+   "mode": "scheduled 2026-11-20T17:30:00Z",
+   "publish_at": "2026-11-20T18:30:00+01:00",
+   "uploaded_at": "2026-11-19T19:54:40+00:00"
   }
  ]
 }
