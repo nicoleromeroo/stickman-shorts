@@ -1,5 +1,5 @@
 {
- "uploaded_count": 27,
+ "uploaded_count": 30,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -217,6 +217,30 @@
    "mode": "scheduled 2026-11-19T17:30:00Z",
    "publish_at": "2026-11-19T18:30:00+01:00",
    "uploaded_at": "2026-11-18T19:53:01+00:00"
+  },
+  {
+   "tag": "video-20261120-slot2",
+   "video_id": "x9W7ovUbUkw",
+   "title": "Is an 80 \u20ac Game Worth It? Game vs Cinema \ud83c\udfae #shorts",
+   "mode": "scheduled 2026-11-20T15:00:00Z",
+   "publish_at": "2026-11-20T16:00:00+01:00",
+   "uploaded_at": "2026-11-19T14:52:55+00:00"
+  },
+  {
+   "tag": "video-20261120-slot3",
+   "video_id": "8JoBRWN6f4c",
+   "title": "RESPAWN (Part 6) #shorts",
+   "mode": "scheduled 2026-11-20T19:00:00Z",
+   "publish_at": "2026-11-20T20:00:00+01:00",
+   "uploaded_at": "2026-11-19T14:52:55+00:00"
+  },
+  {
+   "tag": "video-20261120-slot4",
+   "video_id": "rIwB_MwV3KE",
+   "title": "Guess How Many Copies Minecraft Sold \ud83c\udfae #shorts",
+   "mode": "scheduled 2026-11-20T10:30:00Z",
+   "publish_at": "2026-11-20T11:30:00+01:00",
+   "uploaded_at": "2026-11-19T14:52:55+00:00"
   }
  ]
 }
