@@ -1,0 +1,114 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { pay: wt(0, 'same pay'), fall: wt(0, 'would'), guess: at(1, 0), yn: wt(1, 'yes'), y22: at(2, 0), c61: wt(2, 'sixty'), w29: wt(2, 'about'),
+  hrs: at(3, 0), pay100: wt(3, 'one hundred'), six: at(4, 0), p71: wt(4, 'seventy'), sick: at(5, 0), p65: wt(5, 'sixty'),
+  money: at(6, 0), bar: wt(6, 'barely'), up: wt(6, 'on average'), kept: at(7, 0), perm: wt(7, 'eighteen'),
+  catch: at(8, 0), job: wt(8, 'and not'), end: at(9, 0), ad: wt(9, 'agree') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840) { txt(s, 540, y, 30, '#475569', { stroke: false, font: 'Nun', weight: '900 ' }); }
+const DAYS = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
+function week(y, t, freeT) { for (let i = 0; i < 7; i++) { const x = 70 + i * 136; const free = i >= 5 || (i === 4 && t > freeT); let fl = 0; if (i === 4 && t > freeT) fl = Math.sin(clamp((t - freeT) / .4) * Math.PI);
+  ctx.save(); ctx.translate(x + 62, y + 80); ctx.scale(1, 1 - fl * .9 + .0001); box(-62, -80, 124, 160, free ? '#22c55e' : '#e2e8f0', 20, 7); txt(DAYS[i], 0, -30, 46, free ? '#fff' : INK, { stroke: false }); txt(free ? 'FREE' : 'WORK', 0, 36, 30, free ? '#fff' : '#64748b', { stroke: false }); ctx.restore(); } }
+function coin(x, y, r) { circ(x, y, r, '#facc15', INK, 6); txt('€', x, y + 3, r * 1.1, '#a16207', { stroke: false }); }
+function bed(x, y, s, who) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-120, -20, 240, 60, '#93c5fd', 14, 7); box(-130, -70, 30, 130, '#78350f', 8, 6); box(100, -40, 30, 100, '#78350f', 8, 6); if (who) { circ(-70, -45, 30, '#fff', INK, 6); box(-40, -45, 140, 40, '#f472b6', 14, 6); } ctx.restore(); }
+function office(x, y, s, col) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-60, -160, 120, 160, col, 8, 6); for (let r = 0; r < 3; r++) for (let c = 0; c < 2; c++) box(-40 + c * 46, -140 + r * 46, 34, 30, '#fef9c3', 4, 4); ctx.restore(); }
+function sHook(lt, t) {
+  bgFill('#fde68a'); floor('#d6a26b', 1440);
+  const k = eob(inv(0, .2, t));
+  if (t < T.guess) { txt('3-DAY WEEKEND', 540, 210, 120 * Math.max(.8, k), '#fff', { lw: 22 }); txt('EVERY WEEK', 540, 345, 100 * Math.max(.8, k), '#16a34a', { lw: 18 }); }
+  else { txt('WOULD EVERYTHING', 540, 210, 100, '#fff', { lw: 18 }); txt('FALL APART?', 540, 340, 110, '#dc2626', { lw: 20 }); }
+  week(470, t, .5);
+  badge(540, 720, 520, 110, '#1e3a8a', ['SAME PAY'], [70], T.pay, t, -.03);
+  if (t > T.pay) for (let i = 0; i < 6; i++) { const ty = ((t - T.pay) * 500 + i * 160) % 700; coin(150 + i * 160, 860 + ty, 36); }
+  const j = Math.abs(Math.sin(t * 6));
+  hero({ x: 540, y: 1480 - j * 50, s: 1.0, pose: { lt: .3, ls: .6, rt: -.3, rs: .6, la: -2.5, le: -.2, ra: 2.5, re: .2 }, eyes: t > T.guess ? 'huge' : 'norm', mouth: t > T.guess ? 'o' : 'grin', shadow: false });
+  if (t > T.guess) { badge(190, 1100, 260, 130, '#16a34a', ['YES'], [90], T.yn, t, -.05); badge(890, 1100, 260, 130, '#dc2626', ['NO'], [90], T.yn + .3, t, .05); badge(540, 860, 600, 100, '#fff', ['GUESS, THEN COMMENT'], [56], T.guess, t, 0, INK); }
+}
+function sTrial(lt, t) {
+  bgFill('#e0f2fe'); floor('#94a3b8', 1440);
+  if (t < T.hrs) {
+    txt('REAL TRIAL: 2022', 540, 200, 110, '#fff', { lw: 20 });
+    for (let i = 0; i < 12; i++) { const c = i % 6, r = Math.floor(i / 6); const t0 = T.c61 + i * .05; if (t < t0) continue; const k = pop(t0, t); ctx.save(); ctx.translate(140 + c * 160, 640 + r * 240); ctx.scale(k, k); office(0, 0, 1, ['#60a5fa', '#f472b6', '#34d399', '#fbbf24'][i % 4]); ctx.restore(); }
+    badge(540, 380, 660, 120, '#1e3a8a', ['61 UK COMPANIES'], [72], T.c61, t, -.02);
+    if (t > T.w29) { badge(540, 1010, 640, 110, '#16a34a', ['~2,900 WORKERS'], [70], T.w29, t, .02); for (let i = 0; i < 5; i++) stick({ x: 140 + i * 200, y: 1480, s: .6, shirt: ['#3b82f6', '#f97316', '#a855f7', '#16a34a', '#ef4444'][i], pants: '#334155', pose: STAND, eyes: 'norm', mouth: 'smile' }); }
+  } else {
+    txt('THE DEAL', 540, 200, 130, '#fff', { lw: 22 });
+    const k1 = eo(inv(T.hrs, T.hrs + .8, t)); box(140, 420, 340, 700, '#fff', 24, 8); ctx.fillStyle = '#f97316'; rr(160, 1100 - 660 * .8 * k1, 300, 660 * .8 * k1, 16); ctx.fill(); txt('HOURS', 310, 1180, 64, '#fff', { lw: 12 }); txt(Math.round(80 * k1) + '%', 310, 1100 - 660 * .8 * k1 - 60, 90, '#f97316', { lw: 14 });
+    if (t > T.pay100) { const k2 = eo(inv(T.pay100, T.pay100 + .8, t)); box(600, 420, 340, 700, '#fff', 24, 8); ctx.fillStyle = '#22c55e'; rr(620, 1100 - 660 * k2, 300, 660 * k2, 16); ctx.fill(); txt('PAY', 770, 1180, 64, '#fff', { lw: 12 }); txt(Math.round(100 * k2) + '%', 770, 1100 - 660 * k2 - 60, 90, '#16a34a', { lw: 14 }); }
+    hero({ x: 540, y: 1480, s: .75, pose: STAND, eyes: 'huge', mouth: 'o', look: t > T.pay100 ? 1 : -1 });
+  }
+  foot('UK pilot, Jun-Dec 2022 (Univ. of Cambridge, 4 Day Week Global)');
+}
+function sResults(lt, t) {
+  bgFill('#dcfce7'); floor('#86efac', 1440);
+  txt('AFTER 6 MONTHS', 540, 200, 110, '#fff', { lw: 20 });
+  if (t < T.sick) {
+    // burnout meter
+    box(140, 420, 800, 120, '#fff', 30, 8); const k = eo(inv(T.p71, T.p71 + 1, t)); ctx.fillStyle = '#22c55e'; rr(152, 432, 776 * .71 * k, 96, 22); ctx.fill(); txt(Math.round(71 * k) + '%', 540, 486, 80, '#fff', { lw: 14 });
+    txt('LESS BURNED OUT', 540, 640, 84, '#16a34a', { lw: 16 });
+    const relax = t > T.p71 + .5;
+    hero({ x: 540, y: 1480, s: 1.15, pose: relax ? { lt: .05, ls: 0, rt: -.05, rs: 0, la: -2.5, le: -.8, ra: 2.5, re: .8 } : STAND, eyes: relax ? 'closed' : 'norm', mouth: relax ? 'smile' : 'flat' });
+    if (relax) { sparkle(330, 1000, 40, 1); sparkle(760, 940, 34, 1); }
+  } else {
+    const k = eo(inv(T.p65, T.p65 + .6, t));
+    for (let i = 0; i < 6; i++) { const gone = i >= 2 && k > (i - 1) / 5; ctx.save(); ctx.globalAlpha = gone ? .18 : 1; bed(200 + (i % 3) * 340, 640 + Math.floor(i / 3) * 260, .9, true); ctx.restore(); }
+    badge(540, 1090, 660, 150, '#dc2626', ['-65% SICK DAYS'], [86], T.p65, t, -.03);
+    stick({ x: 900, y: 1480, s: .6, shirt: '#3b82f6', pants: '#334155', pose: STAND, eyes: 'norm', mouth: 'grin', shadow: true });
+  }
+  foot('UK pilot 2022. Source: Univ. of Cambridge via ScienceDaily');
+}
+function sMoney(lt, t) {
+  bgFill('#fef3c7'); floor('#d6a26b', 1440);
+  if (t < T.kept) {
+    txt('AND THE MONEY?', 540, 200, 120, '#fff', { lw: 20 });
+    box(110, 420, 860, 600, '#fff', 30, 8); line(170, 960, 920, 960, 7); line(170, 960, 170, 480, 7);
+    const k = eo(inv(T.bar, T.bar + 1.4, t)); const pts = [[170, 760], [320, 765], [470, 752], [620, 760], [770, 748], [920, 742]];
+    ctx.strokeStyle = '#16a34a'; ctx.lineWidth = 12; ctx.lineJoin = 'round'; ctx.beginPath(); const n = Math.max(1, Math.floor(k * 5)); for (let i = 0; i <= n; i++) i ? ctx.lineTo(pts[i][0], pts[i][1]) : ctx.moveTo(...pts[0]); ctx.stroke();
+    ctx.save(); ctx.setLineDash([16, 12]); line(170, 760, 920, 760, 4, '#94a3b8'); ctx.restore();
+    txt('REVENUE', 540, 900, 56, '#64748b', { stroke: false });
+    if (t > T.bar) badge(540, 560, 560, 100, '#1e3a8a', ['BARELY CHANGED'], [62], T.bar, t, -.02);
+    if (t > T.up) badge(800, 700, 280, 96, '#16a34a', ['+1.4%'], [76], T.up, t, .05);
+    hero({ x: 540, y: 1480, s: 1, pose: STAND, eyes: 'huge', mouth: t > T.up ? 'grin' : 'o' });
+  } else {
+    txt('KEEP IT?', 540, 200, 130, '#fff', { lw: 22 });
+    for (let i = 0; i < 61; i++) { const c = i % 11, r = Math.floor(i / 11); const x = 110 + c * 86, y = 450 + r * 100; const t0 = T.kept + i * .02; if (t < t0) continue; const yes = i < 56; const perm = i < 18 && t > T.perm;
+      circ(x, y, 34, perm ? '#facc15' : yes ? '#22c55e' : '#cbd5e1', INK, 5); if (yes) { line(x - 14, y + 2, x - 3, y + 13, 7); line(x - 3, y + 13, x + 15, y - 12, 7); } else { line(x - 12, y - 12, x + 12, y + 12, 7); line(x + 12, y - 12, x - 12, y + 12, 7); } }
+    badge(540, 1110, 620, 110, '#16a34a', ['56 OF 61 KEPT GOING'], [62], T.kept + .6, t, -.02);
+    badge(540, 1260, 620, 110, '#facc15', ['18 PERMANENT'], [70], T.perm, t, .02, INK);
+    stick({ x: 960, y: 1480, s: .6, shirt: '#3b82f6', pants: '#334155', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: -2.5, le: -.2, ra: 2.5, re: .2 }, eyes: 'norm', mouth: 'grin' });
+  }
+  foot('Revenue = average change. Sources: ScienceDaily, WEF');
+}
+function sCatch(lt, t) {
+  bgFill('#1e293b'); floor('#475569', 1440);
+  txt('THE CATCH', 540, 200, 130, '#facc15', { lw: 22 });
+  badge(540, 420, 760, 150, '#fff', ['THEY CHOSE', 'TO TRY IT'], [70, 70], T.catch + .2, t, -.02, INK);
+  if (t > T.job) { // shop + bus + help desk: open every day
+    const k = pop(T.job, t); ctx.save(); ctx.translate(540, 760); ctx.scale(k, k);
+    box(-420, -150, 260, 260, '#f472b6', 20, 8); txt('SHOP', -290, -60, 54, '#fff', { lw: 10 }); box(-340, -10, 100, 120, '#fef9c3', 8, 6);
+    box(-110, -100, 260, 180, '#facc15', 26, 8); txt('BUS', 20, -30, 54, INK, { stroke: false }); circ(-50, 90, 34, '#334155', INK, 6); circ(90, 90, 34, '#334155', INK, 6);
+    box(200, -150, 220, 260, '#e2e8f0', 20, 8); box(285, -110, 50, 120, '#2563eb', 6, 0); box(250, -75, 120, 50, '#2563eb', 6, 0);
+    ctx.restore(); badge(540, 1000, 820, 110, '#dc2626', ['NOT EVERY JOB CAN SKIP A DAY'], [62], T.job + .3, t, .02);
+  }
+  hero({ x: 540, y: 1480, s: .8, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.2, re: -1.2 }, eyes: 'norm', mouth: 'flat', look: 1 });
+}
+function sEnd(lt, t) {
+  bgFill('#fde68a'); floor('#d6a26b', 1440);
+  const k = pop(T.end, t); txt('4-DAY WEEK', 540, 210, 130 * k, '#fff', { lw: 22 }); txt('FOR EVERYONE?', 540, 350, 100 * k, '#16a34a', { lw: 18 });
+  const p1 = t > T.ad && t < T.ad + .4, p2 = t > T.ad + .5 && t < T.ad + .9;
+  box(90, 500 + (p1 ? 12 : 0), 430, 260, '#16a34a', 46, 9); txt('AGREE', 305, 640 + (p1 ? 12 : 0), 90, '#fff', { lw: 14 });
+  box(560, 500 + (p2 ? 12 : 0), 430, 260, '#dc2626', 46, 9); txt('DISAGREE', 775, 640 + (p2 ? 12 : 0), 74, '#fff', { lw: 12 });
+  badge(540, 900, 560, 100, '#fff', ['COMMENT IT'], [62], T.ad, t, .02, INK);
+  const look = Math.sin(t * 3);
+  hero({ x: 540, y: 1480, s: 1.1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.5 - look * .4, re: -.3 }, look: look > 0 ? 1 : -1, eyes: 'norm', mouth: 'smirk' });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(1, 2), fn: sTrial, push: .04, flash: 1 }, { t0: mid(3, 4), fn: sResults, push: .04, flash: .8 }, { t0: mid(5, 6), fn: sMoney, push: .04, flash: .8 }, { t0: mid(7, 8), fn: sCatch, push: .05, flash: 1 }, { t0: mid(8, 9), fn: sEnd, push: .05, flash: 1 }];
+const CAP = [["every weekend", "is 3 days long.", "same pay.", "would everything", "fall apart?"], ["guess:", "yes or no?", "comment", "before the end."], ["in 2022,", "61 british companies", "tried it.", "about 2,900 workers."], ["20% fewer hours.", "100% of the pay."], ["after 6 months,", "71% said", "they felt", "less burned out."], ["sick days", "dropped by 65%."], ["the money?", "revenue", "barely changed.", "on average,", "it even went up", "a little."], ["56 of the 61", "companies", "kept going.", "18 made it", "permanent."], ["the catch:", "these companies", "chose to try it.", "and not every job", "can skip a day."], ["so, a 4-day week", "for everyone?", "agree or disagree?"]];
+const HOT = new Set(["is 3 days long.", "same pay.", "fall apart?", "yes or no?", "61 british companies", "20% fewer hours.", "100% of the pay.", "71% said", "dropped by 65%.", "barely changed.", "it even went up", "kept going.", "permanent.", "the catch:", "chose to try it.", "for everyone?", "agree or disagree?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

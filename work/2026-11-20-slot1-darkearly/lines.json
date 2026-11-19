@@ -1,0 +1,21 @@
+[
+ "The earliest sunset of the year is on the shortest day, right? Wrong.",
+ "Guess the real date. Comment it.",
+ "Why is it dark at four PM? Earth is tilted, about twenty-three degrees.",
+ "Our half of the planet now leans away from the Sun. So it stays low and sets early.",
+ "Berlin starts November with nine and a half hours of daylight. It ends with about eight.",
+ {
+  "text": "That's three minutes gone. Every single day.",
+  "gap": 0.6
+ },
+ "The twist: Earth's oval orbit plus the tilt push sunset a bit later each day in December.",
+ {
+  "text": "So Berlin's earliest sunset is around December thirteenth. The latest sunrise? Around New Year.",
+  "gap": 0.6
+ },
+ "The shortest day is still the twenty-first. But evenings already get longer before it.",
+ {
+  "text": "Did you know? Yes or no?",
+  "gap": 0.6
+ }
+]

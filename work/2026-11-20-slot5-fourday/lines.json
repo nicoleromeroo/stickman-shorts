@@ -1,0 +1,21 @@
+[
+ "Every weekend is three days long. Same pay. Would everything fall apart?",
+ "Guess: yes or no? Comment before the end.",
+ "In twenty twenty-two, sixty-one British companies tried it. About twenty-nine hundred workers.",
+ "Twenty percent fewer hours. One hundred percent of the pay.",
+ "After six months, seventy-one percent said they felt less burned out.",
+ {
+  "text": "Sick days dropped by sixty-five percent.",
+  "gap": 0.5
+ },
+ "The money? Revenue barely changed. On average, it even went up a little.",
+ {
+  "text": "Fifty-six of the sixty-one companies kept going. Eighteen made it permanent.",
+  "gap": 0.6
+ },
+ "The catch: these companies chose to try it. And not every job can skip a day.",
+ {
+  "text": "So, a four-day week for everyone? Agree or disagree?",
+  "gap": 0.6
+ }
+]

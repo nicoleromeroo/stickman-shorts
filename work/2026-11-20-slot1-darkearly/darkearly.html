@@ -1,0 +1,141 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+// Berlin 2026/27 sun times (minutes after midnight), daily from 25 Nov 2026 (computed with astral, matches timeanddate.com)
+const SS = [960.8, 959.8, 958.9, 958.0, 957.2, 956.5, 955.7, 955.1, 954.5, 953.9, 953.5, 953.0, 952.6, 952.3, 952.1, 951.9, 951.7, 951.6, 951.6, 951.6, 951.8, 951.9, 952.1, 952.4, 952.7, 953.1, 953.6, 954.1, 954.7, 955.3, 956.0, 956.7, 957.5, 958.3, 959.2, 960.2, 961.2, 962.2, 963.3, 964.5, 965.7, 966.9, 968.2, 969.5, 970.9, 972.2, 973.7, 975.1, 976.7, 978.2, 979.8, 981.4];
+const SR = [465.4, 467.1, 468.6, 470.2, 471.7, 473.2, 474.7, 476.1, 477.5, 478.9, 480.2, 481.5, 482.7, 483.9, 485.1, 486.2, 487.3, 488.3, 489.3, 490.2, 491.1, 491.9, 492.7, 493.4, 494.1, 494.7, 495.3, 495.8, 496.2, 496.6, 496.9, 497.2, 497.4, 497.6, 497.6, 497.7, 497.6, 497.6, 497.4, 497.2, 497.0, 496.6, 496.3, 495.8, 495.4, 494.8, 494.2, 493.6, 492.9, 492.1, 491.3, 490.4];
+const I_SET = 18, I_RISE = 35, I_SHORT = 26; // 13 Dec, 30 Dec, 21 Dec
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { wrong: wt(0, 'wrong'), guess: at(1, 0), why: at(2, 0), tilt: wt(2, 'earth'), deg: wt(2, 'twenty'), lean: at(3, 0), low: wt(3, 'so it'),
+  ber: at(4, 0), n1: wt(4, 'nine'), n30: wt(4, 'it ends'), three: at(5, 0), every: wt(5, 'every'),
+  twist: at(6, 0), oval: wt(6, 'oval'), push: wt(6, 'push'), so: at(7, 0), set: wt(7, 'earliest'), rise: wt(7, 'the latest'), ny: wt(7, 'around new'),
+  sh: at(8, 0), longer: wt(8, 'but'), end: at(9, 0), yn: wt(9, 'yes') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840) { txt(s, 540, y, 30, '#cbd5e1', { stroke: false, font: 'Nun', weight: '900 ' }); }
+function stars(n = 40, a = 1) { ctx.save(); ctx.globalAlpha = a; for (let i = 0; i < n; i++) circ(rnd(i) * W, rnd(i + 9) * 1500, 3 + rnd(i + 2) * 4, '#fff'); ctx.restore(); }
+function sunIcon(x, y, r, t) { ctx.save(); ctx.translate(x, y); ctx.rotate(t * .4); for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; line(Math.cos(a) * r * 1.2, Math.sin(a) * r * 1.2, Math.cos(a) * r * 1.5, Math.sin(a) * r * 1.5, r * .12, '#f59e0b'); } ctx.restore(); circ(x, y, r, '#fbbf24', INK, 9); }
+function moon(x, y, r) { circ(x, y, r, '#fef9c3', INK, 7); circ(x + r * .45, y - r * .2, r * .85, '#1e1b4b'); }
+function clockFace(x, y, r, hh, mm) { circ(x, y, r, '#fff', INK, 9); for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; line(x + Math.cos(a) * r * .8, y + Math.sin(a) * r * .8, x + Math.cos(a) * r * .9, y + Math.sin(a) * r * .9, 6); }
+  const ah = (hh % 12 + mm / 60) / 12 * Math.PI * 2 - Math.PI / 2, am = mm / 60 * Math.PI * 2 - Math.PI / 2; line(x, y, x + Math.cos(ah) * r * .5, y + Math.sin(ah) * r * .5, 12); line(x, y, x + Math.cos(am) * r * .75, y + Math.sin(am) * r * .75, 8); circ(x, y, 10, INK); }
+function calendar(x, y, s, head, big, col = '#dc2626') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-150, -150, 300, 300, '#fff', 24, 9); ctx.save(); rr(-150, -150, 300, 300, 24); ctx.clip(); ctx.fillStyle = col; ctx.fillRect(-150, -150, 300, 90); ctx.restore(); rr(-150, -150, 300, 300, 24); ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.stroke();
+  txt(head, 0, -102, 44, '#fff', { stroke: false }); txt(big, 0, 50, 88, INK, { stroke: false }); ctx.restore(); }
+function sHook(lt, t) {
+  bgFill('#1e293b');
+  // window with dark sky
+  box(90, 560, 560, 700, '#1e1b4b', 14, 10); ctx.save(); rr(90, 560, 560, 700, 14); ctx.clip(); for (let i = 0; i < 18; i++) circ(110 + rnd(i) * 520, 580 + rnd(i + 5) * 380, 4 + rnd(i + 1) * 3, '#fff'); moon(470, 700, 70);
+  ctx.fillStyle = '#0f172a'; for (let i = 0; i < 6; i++) ctx.fillRect(90 + i * 95, 1060 - rnd(i + 3) * 160, 80, 300); ctx.fillStyle = '#facc15'; for (let i = 0; i < 6; i++) ctx.fillRect(115 + i * 95, 1100 - rnd(i + 3) * 120, 22, 26); ctx.restore();
+  line(370, 560, 370, 1260, 10); line(90, 910, 650, 910, 10);
+  floor('#475569', 1440);
+  clockFace(860, 660, 120, 4, 0); txt('4:00 PM', 860, 840, 60, '#fff', { lw: 12 });
+  const p = Math.sin(t * 5);
+  hero({ x: 560, y: 1480, s: 1.1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: -2.2 + p * .15, le: -.2, ra: -.3, re: -.2 }, look: -1, eyes: 'huge', mouth: t > T.wrong ? 'o' : 'wavy', bob: Math.abs(Math.sin(t * 6)) * 6 });
+  if (t < T.guess) {
+    const k = eob(inv(0, .2, t)); txt('EARLIEST SUNSET', 540, 210, 112 * Math.max(.8, k), '#fbbf24', { lw: 20 }); txt('= SHORTEST DAY?', 540, 350, 100 * Math.max(.8, k), '#fff', { lw: 18 });
+    calendar(850, 1110, .9, 'SHORTEST', '21 DEC');
+    if (t > T.wrong) { const k2 = pop(T.wrong, t); ctx.save(); ctx.translate(850, 1110); ctx.scale(k2, k2); line(-130, -130, 130, 130, 30, '#dc2626'); line(130, -130, -130, 130, 30, '#dc2626'); ctx.restore(); badge(540, 470, 520, 130, '#dc2626', ['WRONG!'], [100], T.wrong, t, -.04); }
+  } else {
+    txt('GUESS THE DATE', 540, 230, 120, '#fbbf24', { lw: 20 }); badge(540, 400, 600, 110, '#fff', ['COMMENT IT'], [64], T.guess + .3, t, .02, INK);
+    calendar(850, 1110, .9, 'SUNSET', '?? DEC');
+  }
+}
+function earth(x, y, r, tilt, t, night) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(tilt);
+  circ(0, 0, r, '#3b82f6', INK, 10);
+  ctx.save(); ctx.beginPath(); ctx.arc(0, 0, r - 5, 0, 7); ctx.clip(); ctx.fillStyle = '#22c55e';
+  for (let i = 0; i < 5; i++) { const ox = ((i * 170 + t * 60) % (r * 3)) - r * 1.5; ctx.beginPath(); ctx.ellipse(ox, -r * .4 + i * 40 - 60, 70, 50, .4, 0, 7); ctx.fill(); }
+  if (night) { ctx.fillStyle = 'rgba(10,12,40,.62)'; ctx.fillRect(0, -r, r, r * 2); }
+  ctx.restore();
+  ctx.setLineDash([16, 14]); line(-r * 1.05, 0, r * 1.05, 0, 5, '#fff'); ctx.setLineDash([]);
+  line(0, -r - 90, 0, r + 90, 10, '#e2e8f0'); circ(0, -r - 90, 12, '#e2e8f0');
+  ctx.restore();
+}
+function sTilt(lt, t) {
+  bgFill('#0b1026'); stars(50);
+  const sx = 40, sy = 820; sunIcon(sx, sy, 170, t);
+  const tilt = lerp(0, .41, eo(inv(T.tilt, T.tilt + .8, t)));
+  for (let i = 0; i < 6; i++) { const y = 650 + i * 70; ctx.save(); ctx.globalAlpha = .5; ctx.setLineDash([20, 18]); line(260, y, 470, y, 6, '#fde68a'); ctx.restore(); }
+  earth(720, 820, 220, tilt, t, t > T.lean);
+  if (t < T.lean) {
+    txt('DARK AT 4 PM?', 540, 210, 120, '#fff', { lw: 20 });
+    if (t > T.tilt) txt('EARTH IS TILTED', 540, 350, 90, '#fbbf24', { lw: 16 });
+    if (t > T.deg) { ctx.save(); ctx.translate(720, 820); ctx.strokeStyle = '#facc15'; ctx.lineWidth = 9; ctx.beginPath(); ctx.arc(0, 0, 330, -Math.PI / 2, -Math.PI / 2 + tilt); ctx.stroke(); ctx.restore(); badge(870, 430, 260, 110, '#facc15', ['~23°'], [80], T.deg, t, .04, INK); }
+  } else {
+    txt('OUR HALF LEANS', 540, 200, 100, '#fff', { lw: 18 }); txt('AWAY FROM THE SUN', 540, 320, 84, '#fbbf24', { lw: 16 });
+    // arrow to northern half
+    badge(560, 520, 300, 100, '#fff', ['US'], [70], T.lean + .2, t, -.05, INK);
+    if (t > T.lean + .2) line(640, 560, 700, 650, 12, '#fff');
+    if (t > T.low) { // low sun arc panel
+      const k = pop(T.low, t); ctx.save(); ctx.translate(540, 1290); ctx.scale(k, k);
+      box(-420, -170, 840, 300, '#1e3a8a', 30, 9); ctx.fillStyle = '#334155'; ctx.fillRect(-412, 60, 824, 62); line(-412, 60, 412, 60, 7);
+      ctx.save(); ctx.globalAlpha = .45; ctx.setLineDash([14, 12]); ctx.strokeStyle = '#fde68a'; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(0, 60, 320, 200, 0, Math.PI, 2 * Math.PI); ctx.stroke(); ctx.restore();
+      ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 9; ctx.beginPath(); ctx.ellipse(0, 60, 220, 80, 0, Math.PI, 2 * Math.PI); ctx.stroke();
+      const f = ((t - T.low) * .35) % 1; const a = Math.PI + f * Math.PI; circ(Math.cos(a) * 220, 60 + Math.sin(a) * 80, 30, '#fbbf24', INK, 6);
+      txt('SUMMER', -250, -120, 40, '#fde68a', { stroke: false }); txt('NOW: LOW + SHORT', 180, -120, 44, '#fff', { stroke: false });
+      ctx.restore();
+    }
+  }
+}
+function dayBar(y, label, hrs, txtv, col, t0, t) { if (t < t0) return; const k = eo(inv(t0, t0 + .8, t)); txt(label, 120, y - 80, 64, '#fff', { align: 'left', lw: 12 });
+  box(110, y - 40, 860, 110, '#1e293b', 24, 8); ctx.save(); rr(118, y - 32, 844, 94, 18); ctx.clip(); ctx.fillStyle = col; ctx.fillRect(118, y - 32, 844 * hrs / 24 * k, 94); ctx.restore();
+  txt(txtv, 118 + 844 * hrs / 24 * k + 20, y + 16, 60, '#fff', { align: 'left', lw: 12 }); }
+function sDay(lt, t) {
+  bgFill('#0f172a'); floor('#334155', 1440);
+  txt('BERLIN DAYLIGHT', 540, 200, 110, '#fbbf24', { lw: 18 });
+  txt('(out of 24 hours)', 540, 300, 44, '#cbd5e1', { stroke: false, font: 'Nun', weight: '900 ' });
+  dayBar(500, '1 NOV', 9.56, '9.5 H', '#fbbf24', T.n1, t);
+  dayBar(760, '30 NOV', 8.05, '~8 H', '#f97316', T.n30, t);
+  const sad = t > T.three;
+  hero({ x: 330, y: 1480, s: 1.05, pose: sad ? { lt: .05, ls: 0, rt: -.05, rs: 0, la: .5, le: .3, ra: -.5, re: -.3 } : { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.3, re: -.2 }, look: 1, eyes: sad ? 'norm' : 'huge', mouth: sad ? 'frown' : 'o' });
+  if (t > T.three) { badge(760, 1020, 420, 150, '#dc2626', ['-3 MIN'], [110], T.three, t, .05); }
+  if (t > T.every) { badge(760, 1210, 420, 100, '#fff', ['EVERY DAY'], [64], T.every, t, -.03, INK); }
+  foot('Berlin 2026. Sources: timeanddate.com, weatherspark.com');
+}
+function sTwist(lt, t) {
+  bgFill('#0b1026'); stars(50);
+  txt('THE TWIST', 540, 200, 130, '#fbbf24', { lw: 22 });
+  ctx.save(); ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 7; ctx.setLineDash([18, 14]); ctx.beginPath(); ctx.ellipse(540, 860, 430, 270, 0, 0, 7); ctx.stroke(); ctx.restore();
+  sunIcon(470, 860, 95, t);
+  const a = (t - T.twist) * 1.1; earth(540 + Math.cos(a) * 430, 860 + Math.sin(a) * 270, 70, .41, t, false);
+  if (t > T.oval) badge(540, 400, 640, 110, '#fff', ['OVAL ORBIT + TILT'], [62], T.oval, t, -.02, INK);
+  if (t > T.push) { badge(540, 1300, 820, 190, '#f97316', ['SUNSET A BIT LATER', 'EACH DAY IN DEC'], [70, 70], T.push, t, .02); }
+  foot('Simplified: the "equation of time" (explained by wetterdienst.de)');
+}
+function chart(y0, h, data, col, lbl, mark, markTxt, t0, t, hiMin) {
+  const x0 = 110, w = 860, n = data.length; const mn = Math.min(...data), mx = Math.max(...data); const pad = (mx - mn) * .25;
+  const X = i => x0 + i / (n - 1) * w, Y = v => y0 + h - (v - mn + pad) / (mx - mn + 2 * pad) * h;
+  box(x0 - 20, y0 - 20, w + 40, h + 40, '#1e293b', 24, 8);
+  txt(lbl, x0, y0 - 60, 56, col, { align: 'left', lw: 10 });
+  ctx.save(); ctx.setLineDash([12, 10]); line(X(I_SHORT), y0, X(I_SHORT), y0 + h, 5, '#94a3b8'); ctx.restore();
+  const k = eo(inv(t0, t0 + 1, t)); const m = Math.max(2, Math.floor(n * k));
+  ctx.strokeStyle = col; ctx.lineWidth = 11; ctx.lineJoin = 'round'; ctx.beginPath(); for (let i = 0; i < m; i++) { i ? ctx.lineTo(X(i), Y(data[i])) : ctx.moveTo(X(i), Y(data[i])); } ctx.stroke();
+  if (k >= 1) { const px = X(mark), py = Y(data[mark]); circ(px, py, 22, '#fff', INK, 7); const bx = clamp(px, 300, 780); badge(bx, hiMin ? py + 90 : py - 90, 470, 90, '#fff', [markTxt], [50], t0 + 1, t, 0, INK); }
+  txt('25 NOV', x0 + 10, y0 + h + 50, 36, '#94a3b8', { align: 'left', stroke: false }); txt('15 JAN', x0 + w - 10, y0 + h + 50, 36, '#94a3b8', { align: 'right', stroke: false });
+  return { X, Y };
+}
+function sCharts(lt, t) {
+  bgFill('#0f172a');
+  txt(t < T.sh ? 'BERLIN 2026' : 'SHORTEST DAY: 21 DEC', 540, 170, t < T.sh ? 110 : 84, '#fff', { lw: 18 });
+  const c1 = chart(380, 360, SS, '#f97316', 'SUNSET', I_SET, 'EARLIEST ~13 DEC', T.set, t, false);
+  if (t > T.rise) chart(960, 360, SR, '#38bdf8', 'SUNRISE', I_RISE, 'LATEST ~30 DEC', T.rise, t, true);
+  if (t > T.sh) { const k = pop(T.sh, t); txt('21 DEC', c1.X(I_SHORT), 360, 40 * k, '#e2e8f0', { stroke: false }); }
+  if (t > T.longer) { const xa = c1.X(I_SET), xb = c1.X(I_SHORT); ctx.save(); ctx.globalAlpha = .3; ctx.fillStyle = '#fbbf24'; ctx.fillRect(xa, 380, xb - xa, 360); ctx.restore(); badge(540, 1470, 860, 120, '#16a34a', ['EVENINGS GROW BEFORE IT'], [62], T.longer, t, -.02); }
+  foot('Berlin sun times 2026/27. Source: timeanddate.com');
+}
+function sEnd(lt, t) {
+  bgFill('#1e293b'); floor('#475569', 1440); stars(20, .6);
+  const k = pop(T.end, t); txt('DID YOU KNOW?', 540, 230, 130 * k, '#fbbf24', { lw: 22 });
+  const press = t > T.yn && t < T.yn + .4;
+  box(110, 470, 400, 260, '#16a34a', 46, 9); txt('YES', 310, 600 + (press ? 10 : 0), 110, '#fff', { lw: 16 });
+  box(570, 470, 400, 260, '#dc2626', 46, 9); txt('NO', 770, 600, 110, '#fff', { lw: 16 });
+  sunIcon(860, 1050, 80, t); badge(540, 870, 560, 100, '#fff', ['COMMENT IT'], [62], T.yn, t, .02, INK);
+  const p = Math.sin(t * 4);
+  hero({ x: 420, y: 1480, s: 1.1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: -2.4 + p * .2, le: -.2, ra: 2.4 - p * .2, re: .2 }, eyes: 'norm', mouth: 'grin', bob: Math.abs(p) * 8 });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(1, 2), fn: sTilt, push: .04, flash: 1 }, { t0: mid(3, 4), fn: sDay, push: .04, flash: .8 }, { t0: mid(5, 6), fn: sTwist, push: .05, flash: 1 }, { t0: mid(6, 7), fn: sCharts, push: .03, xfade: .25 }, { t0: mid(8, 9), fn: sEnd, push: .05, flash: 1 }];
+const CAP = [["the earliest sunset", "of the year", "is on the", "shortest day,", "right?", "wrong."], ["guess the real date.", "comment it."], ["why is it dark", "at 4 pm?", "earth is tilted,", "about 23 degrees."], ["our half", "of the planet", "now leans away", "from the sun.", "so it stays low", "and sets early."], ["berlin starts", "november", "with 9.5 hours", "of daylight.", "it ends", "with about 8."], ["that's 3 minutes", "gone.", "every single day."], ["the twist:", "earth's oval orbit", "plus the tilt", "push sunset", "a bit later", "each day", "in december."], ["so berlin's", "earliest sunset", "is around", "december 13th.", "the latest sunrise?", "around new year."], ["the shortest day", "is still", "the 21st.", "but evenings", "already get longer", "before it."], ["did you know?", "yes or no?"]];
+const HOT = new Set(["shortest day,", "wrong.", "comment it.", "earth is tilted,", "about 23 degrees.", "now leans away", "with 9.5 hours", "with about 8.", "that's 3 minutes", "every single day.", "the twist:", "earth's oval orbit", "december 13th.", "around new year.", "already get longer", "yes or no?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>
