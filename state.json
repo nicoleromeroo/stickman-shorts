@@ -1,5 +1,5 @@
 {
- "uploaded_count": 35,
+ "uploaded_count": 37,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -281,6 +281,22 @@
    "mode": "scheduled 2026-11-21T10:30:00Z",
    "publish_at": "2026-11-21T11:30:00+01:00",
    "uploaded_at": "2026-11-20T14:56:38+00:00"
+  },
+  {
+   "tag": "video-20261121-slot1",
+   "video_id": "o8Mut87K7As",
+   "title": "Do Carrots Help You See in the Dark? \ud83e\udd55 #shorts",
+   "mode": "scheduled 2026-11-21T05:00:00Z",
+   "publish_at": "2026-11-21T06:00:00+01:00",
+   "uploaded_at": "2026-11-20T19:52:45+00:00"
+  },
+  {
+   "tag": "video-20261121-slot5",
+   "video_id": "0VrBmAYn63Y",
+   "title": "What If the Moon Disappeared Tonight? \ud83c\udf19 #shorts",
+   "mode": "scheduled 2026-11-21T17:30:00Z",
+   "publish_at": "2026-11-21T18:30:00+01:00",
+   "uploaded_at": "2026-11-20T19:52:45+00:00"
   }
  ]
 }
