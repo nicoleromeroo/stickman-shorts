@@ -1,0 +1,121 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function footnote(a, b, c = '#e2e8f0') { txt(a, 540, 1830, 30, c, { stroke: false, font: 'Nun' }); if (b) txt(b, 540, 1870, 30, c, { stroke: false, font: 'Nun' }); }
+function bigTop(s, y, size, col, t0, t) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); txt(s, 540, y, size * k, col, { lw: size * .17 }); }
+function priceTag(x, y, s, label, col = '#ef4444', rot = -.12) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); box(-150, -60, 300, 120, col, 22, 8); circ(-118, 0, 12, '#fff', INK, 4); txt(label, 15, 10, 70, '#fff', { lw: 10 }); ctx.restore(); }
+function bigPhone(x, y, s, draw) { phoneDev(x, y, s, 'on', { c1: '#38bdf8', c2: '#818cf8', draw }); }
+function gameCase(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); box(-120, -160, 240, 320, '#e5e7eb', 16, 8); box(-98, -136, 196, 272, '#7c3aed', 8, 0); txt('NEW', 0, -20, 60, '#fff', { lw: 8 }); txt('GAME', 0, 50, 60, '#fde047', { lw: 8 }); ctx.restore(); }
+function coin(x, y, r, label) { circ(x, y, r, '#fbbf24', INK, 8); circ(x, y, r * .75, null, '#d97706', 5); if (label) txt(label, x, y + 4, r * .7, '#92400e', { stroke: false }); }
+function envelope(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); box(-220, -140, 440, 280, '#fef3c7', 14, 9); ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-220, -140); ctx.lineTo(0, 30); ctx.lineTo(220, -140); ctx.stroke(); ctx.restore(); }
+function stamp(x, y, s, label, col = '#dc2626', rot = -.2) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); ctx.strokeStyle = col; ctx.lineWidth = 12; ctx.font = '80px Lucky'; const w = ctx.measureText(label).width + 80; rr(-w / 2, -75, w, 150, 20); ctx.stroke(); txt(label, 0, 8, 80, col, { stroke: false }); ctx.restore(); }
+function room(c1 = '#0e7490', c2 = '#164e63') { bgFill(c1); floor(c2, 1400); spot(540, 900, 800, .25, '186,230,253'); }
+const T = { zero: wt(0, 'zero'), free: wt(0, 'sounds'), bnpl: at(1, 0), guess: wt(1, 'guess'), comment: wt(1, 'comment'), o1: at(2, 0), parts: wt(2, 'or in three'), ontime: wt(2, 'on time'),
+  miss: at(3, 0), fee: wt(3, 'adds'), three: at(4, 0), debt: wt(4, 'it goes'), o2: at(5, 0), ten: wt(5, 'about'), tiny: at(6, 0), pct: wt(6, 'but at'), total: wt(6, 'you pay'),
+  extra: at(7, 0), game: wt(7, 'a whole'), rules: at(8, 0), check: wt(8, 'lenders'), q: at(9, 0) };
+// ---------- hook ----------
+function sHook(lt, t) {
+  room();
+  bigPhone(560, 820, 1.7, (x, y, w, h) => { txt('BUY', x + w / 2, y + 90, 40, '#fff', { lw: 7 }); });
+  priceTag(300, 1060, 1.0, '300 €');
+  hero({ x: 830, y: 1560, s: 1.0, eyes: 'huge', mouth: 'grin', pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: 2.6, le: .3, ra: -2.6, re: -.3 }, bob: Math.abs(Math.sin(t * 8)) * 14, flip: true });
+  txt('0 € TODAY', 540, 230, 150, '#fde047', { lw: 24 });
+  if (t > T.free) bigTop('FREE?', 400, 120, '#fff', T.free, t);
+}
+function sGuess(lt, t) {
+  bgFill('#1e1b4b'); spot(540, 850, 750, .3, '196,181,253');
+  bigTop('BUY NOW', 200, 130, '#fff', mid(0, 1), t); bigTop('PAY LATER', 340, 130, '#fde047', mid(0, 1) + .15, t);
+  bigPhone(300, 820, 1.2); txt('=', 560, 820, 130, '#fff', { lw: 16 });
+  if (t > T.guess) popIn(t, T.guess, 800, 820, () => { box(-170, -110, 340, 220, '#fff', 30, 9); txt('? €', 0, 10, 130, '#ef4444', { stroke: false }); });
+  if (t > T.guess) txt('AFTER 3 YEARS', 800, 990, 50, '#fff', { lw: 9 });
+  hero({ x: 540, y: 1580, s: .95, eyes: 'norm', mouth: 'flat', lookY: -1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.4, re: -.6 } });
+  qmark(780, 1180, t, T.guess, '#fde047', 130);
+  if (t > T.comment) popIn(t, T.comment, 540, 520, () => { box(-280, -55, 560, 110, '#22c55e', 28, 8); txt('COMMENT A NUMBER', 0, 8, 52, '#fff', { lw: 9 }); });
+}
+// ---------- option one ----------
+function sOpt1(lt, t) {
+  room('#166534', '#14532d');
+  bigTop('OPTION 1', 200, 140, '#fff', mid(1, 2), t);
+  popIn(t, T.o1 + .3, 270, 680, () => { box(-190, -150, 380, 300, '#fff', 26, 9); txt('30', 0, -20, 130, '#16a34a', { stroke: false }); txt('DAYS', 0, 90, 60, INK, { stroke: false }); });
+  if (t > T.parts) { txt('OR', 540, 680, 80, '#fff', { lw: 12 }); popIn(t, T.parts, 810, 680, () => { box(-190, -150, 380, 300, '#fff', 26, 9); for (let i = 0; i < 3; i++) coin(-120 + i * 120, -30, 52, '100'); txt('3 PARTS', 0, 95, 60, INK, { stroke: false }); }); }
+  if (t > T.ontime) popIn(t, T.ontime, 540, 1000, () => { box(-330, -70, 660, 140, '#22c55e', 30, 9); txt('ON TIME = 0 € EXTRA', 0, 10, 62, '#fff', { lw: 10 }); });
+  hero({ x: 540, y: 1580, s: .9, eyes: 'norm', mouth: 'smile', pose: STAND });
+  footnote('No interest or fees if you pay on time (provider terms)');
+}
+// ---------- miss a payment ----------
+function sMiss(lt, t) {
+  room('#7f1d1d', '#450a0a');
+  bigTop('MISS A PAYMENT', 200, 120, '#fff', mid(2, 3), t);
+  box(300, 450, 480, 380, '#fff', 22, 9); ctx.fillStyle = '#ef4444'; rr(300, 450, 480, 90, 22); ctx.fill(); ctx.stroke(); txt('DUE', 540, 497, 54, '#fff', { lw: 8 });
+  for (let i = 0; i < 12; i++) { const cx = 360 + (i % 4) * 120, cy = 600 + Math.floor(i / 4) * 80; box(cx - 40, cy - 30, 80, 60, '#f1f5f9', 8, 4); }
+  if (t > T.miss + .4) { const k = eob(inv(T.miss + .4, T.miss + .65, t)); ctx.save(); ctx.translate(600, 680); ctx.scale(k, k); line(-60, -60, 60, 60, 20, '#dc2626'); line(60, -60, -60, 60, 20, '#dc2626'); ctx.restore(); }
+  if (t > T.fee) popIn(t, T.fee, 540, 1000, () => { box(-330, -80, 660, 160, '#ef4444', 30, 9); txt('FEE: UP TO 7 €', 0, 10, 80, '#fff', { lw: 11 }); });
+  hero({ x: 540, y: 1600, s: .9, eyes: 'huge', mouth: 'o', pose: STAND }); sweat(620, 1210, .5 + .5 * Math.sin(t * 6));
+  footnote('Late fee of up to 7 € per missed payment (Klarna FAQ)');
+}
+function sDebt(lt, t) {
+  bgFill('#1f2937'); spot(540, 800, 700, .3, '254,202,202');
+  bigTop('3 IN A ROW?', 210, 140, '#fde047', mid(3, 4) + .05, t);
+  envelope(540, 720, 1.3, -.05 + .03 * Math.sin(t * 3));
+  if (t > T.debt) stamp(540, 760, 1.0, 'DEBT COLLECTOR');
+  hero({ x: 540, y: 1600, s: 1.0, eyes: 'huge', mouth: 'scream', pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: 2.2, le: 1.2, ra: -2.2, re: -1.2 } });
+  footnote('After 3 failed payments in a row the purchase goes', 'to a debt collection agency (Klarna FAQ)');
+}
+// ---------- option two ----------
+function sOpt2(lt, t) {
+  room('#1e3a8a', '#172554');
+  bigTop('OPTION 2', 200, 140, '#fff', mid(4, 5), t);
+  const n = Math.floor(36 * eo(inv(T.o2 + .3, T.ten, t)));
+  for (let i = 0; i < n; i++) { const cx = 200 + (i % 9) * 85, cy = 420 + Math.floor(i / 9) * 95; coin(cx, cy, 36, ''); }
+  if (t > T.ten) popIn(t, T.ten, 540, 910, () => { box(-360, -75, 720, 150, '#fff', 30, 9); txt('36 x ~10 €', 0, 10, 96, '#2563eb', { stroke: false }); });
+  hero({ x: 540, y: 1600, s: .9, eyes: 'norm', mouth: 'smile', pose: STAND });
+  footnote('36 monthly rates of 10.04 €');
+}
+function bar(x, y, w, h, col, v, label, val) { box(x - w / 2, y - h * v, w, h * v, col, 16, 8); txt(label, x, y + 60, 56, '#fff', { lw: 9 }); if (v > .95) txt(val, x, y - h * v - 60, 80, '#fff', { lw: 12 }); }
+function sTotal(lt, t) {
+  bgFill('#0f172a'); spot(540, 900, 700, .25);
+  bigTop('SOUNDS TINY.', 200, 120, '#fff', mid(5, 6), t);
+  const base = 1300, H0 = 600;
+  bar(330, base, 260, H0 * 300 / 361.43, '#22c55e', eo(inv(T.tiny + .3, T.tiny + 1, t)) * 1, 'PRICE', '300 €');
+  bar(750, base, 260, H0, '#ef4444', eo(inv(T.total, T.total + 1, t)), 'YOU PAY', '361 €');
+  if (t > T.pct) bigTop('13 % A YEAR', 360, 90, '#fde047', T.pct, t);
+  footnote('Example: 300 €, 36 rates, 13.27 % effective a year, from one', "big provider's price example. Total 361.43 €");
+}
+function sExtra(lt, t) {
+  room('#581c87', '#3b0764');
+  bigTop('+61 € EXTRA', 220, 150, '#fde047', mid(6, 7), t);
+  if (t > T.game) { gameCase(540, 760, 1.4 * eob(inv(T.game, T.game + .3, t)), -.05); bigTop('= A NEW GAME', 1060, 100, '#fff', T.game + .1, t); }
+  hero({ x: 540, y: 1600, s: .9, eyes: 'huge', mouth: 'o', pose: STAND, lookY: -1 });
+  footnote('Just for paying later. Example maths, not financial advice.');
+}
+function sRules(lt, t) {
+  bgFill('#f1f5f9'); floor('#cbd5e1', 1400);
+  bigTop('NEW RULES', 200, 140, '#1d4ed8', mid(7, 8), t); bigTop('SINCE 20 NOV', 340, 90, '#ef4444', mid(7, 8) + .2, t);
+  box(250, 470, 580, 520, '#fff', 22, 9); txt('CHECK', 540, 540, 70, INK, { stroke: false });
+  for (let i = 0; i < 3; i++) { const y = 650 + i * 110; box(300, y - 35, 70, 70, '#fff', 10, 6); if (t > T.check + i * .35) line(312, y, 335, y + 22, 9, '#16a34a'), line(335, y + 22, 362, y - 22, 9, '#16a34a'); box(400, y - 12, 360 - i * 60, 24, '#cbd5e1', 12, 0); }
+  if (t > T.check) popIn(t, T.check + .9, 540, 1080, () => { box(-400, -60, 800, 120, '#1d4ed8', 30, 9); txt('CAN YOU PAY IT BACK?', 0, 8, 60, '#fff', { lw: 9 }); });
+  hero({ x: 880, y: 1620, s: .85, eyes: 'norm', mouth: 'flat', look: -1, pose: STAND });
+  footnote('New German credit law from 20 Nov 2026 (EU directive)', '(Verbraucherzentrale)', '#334155');
+}
+function sEnd(lt, t) {
+  room();
+  bigPhone(540, 950, 1.1);
+  hero({ x: 220, y: 1600, s: .85, eyes: 'norm', mouth: 'smirk', look: 1, pose: STAND });
+  popIn(t, T.q + .1, 540, 460, () => { box(-470, -200, 940, 400, 'rgba(15,23,42,.95)', 30, 9); txt('WOULD YOU USE', 0, -120, 68, '#fff', { stroke: false }); txt('PAY LATER?', 0, -40, 76, '#fde047', { stroke: false });
+    box(-420, 30, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 105, 80, '#fff', { lw: 10 }); box(40, 30, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 105, 80, '#fff', { lw: 10 }); });
+  footnote('Example maths, not financial advice.');
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .04 }, { t0: mid(0, 1), fn: sGuess, push: .04, flash: .8 }, { t0: mid(1, 2), fn: sOpt1, push: .04, flash: .7 }, { t0: mid(2, 3), fn: sMiss, push: .04, flash: .9 },
+  { t0: mid(3, 4), fn: sDebt, push: .05, flash: 1 }, { t0: mid(4, 5), fn: sOpt2, push: .04, flash: .7 }, { t0: mid(5, 6), fn: sTotal, push: .04, flash: .7 }, { t0: mid(6, 7), fn: sExtra, push: .04, flash: .9 },
+  { t0: mid(7, 8), fn: sRules, push: .04, flash: .7 }, { t0: mid(8, 9), fn: sEnd, push: .03, xfade: .25 }];
+const CAP = [["three hundred euro phone.", "zero euros today.", "sounds free, right?"], ["buy now, pay later.", "guess the real price", "over three years.", "comment a number."], ["option one:", "pay in thirty days,", "or in three parts.", "on time, it's free."],
+  ["miss a payment,", "and one big provider", "adds a fee", "of up to seven euros."], ["miss three in a row?", "it goes to", "a debt collector."], ["option two:", "monthly rates", "for three years.", "about ten euros a month."],
+  ["sounds tiny.", "but at thirteen percent", "a year, you pay", "three hundred", "sixty one euros."], ["sixty one euros extra.", "a whole new game,", "just for waiting."],
+  ["since yesterday,", "new rules in germany", "cover many", "pay later deals:", "lenders must check", "you can pay."], ["would you use", "buy now, pay later?", "yes or no."]];
+const HOT = new Set(["zero euros today.", "guess the real price", "comment a number.", "on time, it's free.", "of up to seven euros.", "a debt collector.", "about ten euros a month.", "sixty one euros.", "sixty one euros extra.", "lenders must check", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

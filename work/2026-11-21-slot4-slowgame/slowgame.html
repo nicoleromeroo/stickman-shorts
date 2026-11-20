@@ -1,0 +1,114 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function controller(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); ctx.fillStyle = '#1f2937'; ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.ellipse(-55, 10, 45, 40, 0, 0, 7); ctx.ellipse(55, 10, 45, 40, 0, 0, 7); ctx.fill(); ctx.stroke(); box(-70, -30, 140, 60, '#1f2937', 24, 7); box(-62, -8, 30, 10, '#e5e7eb', 3, 0); box(-52, -18, 10, 30, '#e5e7eb', 3, 0); circ(45, -10, 7, '#ef4444', INK, 3); circ(62, 4, 7, '#22c55e', INK, 3); ctx.restore(); }
+const GAMER = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .9, le: -1.9, ra: -.9, re: 1.9 };
+const CHEER = { lt: .1, ls: 0, rt: -.1, rs: 0, la: 2.6, le: .3, ra: -2.6, re: -.3 };
+function gamer(x, y, s, o = {}) { hero(Object.assign({ x, y, s, pose: GAMER, hold: (hx, hy) => controller(hx - 32, hy + 4, .9) }, o)); }
+function footnote(a, b, c = '#e2e8f0') { txt(a, 540, 1830, 30, c, { stroke: false, font: 'Nun' }); if (b) txt(b, 540, 1870, 30, c, { stroke: false, font: 'Nun' }); }
+function bigTop(s, y, size, col, t0, t) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); txt(s, 540, y, size * k, col, { lw: size * .17 }); }
+function calendar(x, y, s, year, col = '#ef4444') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-170, -150, 340, 300, '#fff', 22, 9); ctx.fillStyle = col; rr(-170, -150, 340, 90, 22); ctx.fill(); ctx.stroke(); circ(-90, -150, 16, '#cbd5e1', INK, 6); circ(90, -150, 16, '#cbd5e1', INK, 6); txt('YEAR', 0, -102, 50, '#fff', { lw: 8 }); txt(String(year), 0, 50, 120, INK, { stroke: false }); ctx.restore(); }
+function trophy(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#fbbf24'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-110, -150); ctx.lineTo(110, -150); ctx.quadraticCurveTo(110, 40, 0, 60); ctx.quadraticCurveTo(-110, 40, -110, -150); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.lineWidth = 12; ctx.beginPath(); ctx.arc(-120, -80, 45, Math.PI * .5, Math.PI * 1.5); ctx.stroke(); ctx.beginPath(); ctx.arc(120, -80, 45, -Math.PI * .5, Math.PI * .5); ctx.stroke(); box(-25, 55, 50, 60, '#f59e0b', 6, 8); box(-90, 110, 180, 50, '#92400e', 10, 8); ctx.restore(); }
+function handheld(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); box(-240, -150, 480, 300, '#475569', 60, 9); box(-150, -110, 300, 200, '#0f172a', 14, 8); box(-130, -90, 260, 160, '#4b5563', 6, 5);
+  txt('OLD', 0, -30, 50, '#cbd5e1', { stroke: false }); txt('HANDHELD', 0, 25, 44, '#cbd5e1', { stroke: false }); circ(-195, 0, 18, '#1e293b', INK, 5); circ(195, 0, 18, '#1e293b', INK, 5); ctx.restore(); }
+function loadBar(x, y, w, v, col = '#22c55e', label = '') { box(x - w / 2, y - 45, w, 90, '#1e293b', 45, 8); ctx.fillStyle = col; rr(x - w / 2 + 12, y - 33, (w - 24) * clamp(v), 66, 33); ctx.fill(); if (label) txt(label, x, y + 4, 52, '#fff', { lw: 9 }); }
+function cobweb(x, y, s, a = 1) { ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y); ctx.scale(s, s); ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 4; for (let i = 0; i < 5; i++) { const an = i * Math.PI / 8; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(an) * 200, Math.sin(an) * 200); ctx.stroke(); } for (let r = 50; r <= 200; r += 50) { ctx.beginPath(); for (let i = 0; i < 5; i++) { const an = i * Math.PI / 8; const px = Math.cos(an) * r, py = Math.sin(an) * r; i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); } ctx.stroke(); } ctx.restore(); }
+function beard(x, y, s, len) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#e5e7eb'; ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(-50, 0); ctx.quadraticCurveTo(0, len * 1.2, 50, 0); ctx.quadraticCurveTo(0, 30, -50, 0); ctx.fill(); ctx.stroke(); ctx.restore(); }
+function room(c1 = '#312e81', c2 = '#1e1b4b') { bgFill(c1); floor(c2, 1400); spot(540, 900, 800, .25, '196,181,253'); }
+const T = { guess: wt(0, 'comment'), gta: at(1, 0), long: wt(1, 'fans'), duke: at(2, 0), y97: wt(2, 'nineteen'), y11: at(3, 0), f14: wt(3, 'fourteen years'), baby: wt(3, 'a baby'),
+  kien: at(4, 0), name: wt(4, "it's called"), y02: at(5, 0), y24: wt(5, 'released'), r22: at(6, 0), gwr: wt(6, 'the official'), gba: at(7, 0), disc: wt(7, 'long'), bge: at(8, 0), y08: wt(8, 'announced'), works: wt(8, 'reportedly'), q: at(9, 0) };
+// ---------- hook ----------
+function sHook(lt, t) {
+  room();
+  loadBar(540, 760, 820, .08 + .02 * Math.sin(t * 2), '#22c55e', 'LOADING...');
+  cobweb(-20, 420, 1.2, .8);
+  gamer(540, 1520, 1.15, { eyes: 'huge', mouth: 'o', bob: Math.abs(Math.sin(t * 6)) * 8, lookY: -1 });
+  sweat(640, 1010, .5 + .5 * Math.sin(t * 5));
+  txt('HOW MANY', 540, 200, 130, '#fff', { lw: 20 }); txt('YEARS?', 540, 345, 160, '#fde047', { lw: 24 });
+  if (t > T.guess) popIn(t, T.guess, 540, 960, () => { box(-280, -55, 560, 110, '#ef4444', 28, 8); txt('COMMENT A NUMBER', 0, 8, 54, '#fff', { lw: 9 }); });
+}
+// ---------- GTA 6 ----------
+function sGta(lt, t) {
+  room('#0f766e', '#134e4a');
+  calendar(290, 760, .85, 2023, '#64748b'); calendar(790, 760, .85, 2026, '#22c55e'); txt('-', 540, 760, 120, '#fff', { lw: 16 });
+  txt('ANNOUNCED', 290, 950, 54, '#fff', { lw: 9 }); txt('OUT NOW', 790, 950, 54, '#fde047', { lw: 9 });
+  hero({ x: 540, y: 1540, s: 1.05, pose: CHEER, eyes: 'huge', mouth: 'grin', bob: Math.abs(Math.sin(t * 8)) * 18 });
+  bigTop('GTA 6', 240, 170, '#fff', mid(0, 1), t);
+  if (t > T.long) bigTop('A LONG WAIT?', 410, 90, '#fde047', T.long, t);
+  footnote('GTA VI: officially announced 2023, released 19 Nov 2026');
+}
+// ---------- the old record ----------
+function sDuke(lt, t) {
+  room('#7c2d12', '#431407');
+  const yr = t < T.y11 ? 1997 : Math.round(lerp(1997, 2011, eio(inv(T.y11, T.y11 + 1.4, t))));
+  calendar(540, 720, 1.25, yr, yr === 2011 ? '#22c55e' : '#ef4444');
+  bigTop('THE OLD RECORD', 220, 110, '#fde047', mid(1, 2), t); bigTop('DUKE NUKEM FOREVER', 360, 80, '#fff', T.duke + .2, t);
+  if (t > T.f14) popIn(t, T.f14, 540, 1010, () => { box(-260, -65, 520, 130, '#ef4444', 28, 9); txt('14 YEARS', 0, 10, 90, '#fff', { lw: 12 }); });
+  // a baby grows up
+  if (t > T.baby) { const k = eio(inv(T.baby, T.baby + 2.2, t)); const s = lerp(.45, 1.0, k); hero({ x: 540, y: 1560, s, eyes: k < .5 ? 'closed' : 'huge', mouth: k < .5 ? 'smile' : 'o', pose: STAND });
+    txt('AGE ' + Math.round(lerp(0, 14, k)), 840, 1300, 70, '#fff', { lw: 12 }); }
+  else hero({ x: 540, y: 1560, s: 1.0, eyes: 'norm', mouth: 'flat', pose: STAND, lookY: -1 });
+  footnote('Announced 1997, released 10 June 2011', '(Guinness World Records)');
+}
+// ---------- Kien ----------
+function sKien(lt, t) {
+  room('#1e3a8a', '#172554');
+  // tiny dev at a desk
+  box(560, 1180, 420, 40, '#92400e', 8, 8); box(640, 1000, 260, 180, '#0f172a', 12, 8); txt('CODE', 770, 1090, 50, '#22c55e', { stroke: false });
+  hero({ x: 420, y: 1540, s: .95, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.6, re: -.6 }, eyes: 'norm', mouth: 'smile', look: 1 });
+  bigTop('A TINY INDIE GAME', 220, 96, '#fff', mid(3, 4), t);
+  if (t > T.name) bigTop('KIEN', 380, 170, '#fde047', T.name, t);
+  if (t > T.y02) { const yr = t < T.y24 ? 2002 : Math.round(lerp(2002, 2024, eio(inv(T.y24, T.y24 + 1.4, t)))); popIn(t, T.y02, 300, 760, () => calendar(0, 0, .95, yr, yr === 2024 ? '#22c55e' : '#ef4444')); }
+  if (t > T.y24 + .6) txt('JUNE 2024', 300, 940, 60, '#fff', { lw: 10 });
+  footnote('Kien: announced 2002, released 14 June 2024', '(Guinness World Records)');
+}
+function sRecord(lt, t) {
+  bgFill('#0f172a'); spot(540, 800, 700, .45);
+  for (let i = 0; i < 10; i++) sparkle(150 + rnd(i) * 780, 450 + rnd(i + 4) * 700, 22 + rnd(i + 9) * 20, .5 + .5 * Math.sin(t * 6 + i));
+  trophy(540, 700, 1.4 * eob(inv(T.r22, T.r22 + .3, t)));
+  bigTop('22 YEARS', 260, 190, '#fde047', T.r22, t);
+  if (t > T.gwr) bigTop('WORLD RECORD', 1040, 110, '#fff', T.gwr, t);
+  hero({ x: 540, y: 1560, s: .8, pose: CHEER, eyes: 'huge', mouth: 'grin', bob: Math.abs(Math.sin(t * 8)) * 12 });
+  footnote('Guinness World Records:', 'longest development period for a videogame');
+}
+// ---------- handheld ----------
+function sGba(lt, t) {
+  room('#475569', '#334155');
+  handheld(540, 820, 1.25, -.05);
+  bigTop('MADE FOR', 200, 100, '#fff', mid(6, 7), t); bigTop('GAME BOY ADVANCE', 330, 84, '#fde047', mid(6, 7) + .2, t);
+  if (t > T.disc) { const k = eob(inv(T.disc, T.disc + .25, t)); ctx.save(); ctx.translate(540, 830); ctx.rotate(-.25); ctx.scale(k, k); ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 12; rr(-360, -80, 720, 160, 20); ctx.stroke(); txt('DISCONTINUED', 0, 10, 90, '#dc2626', { stroke: false }); ctx.restore(); }
+  hero({ x: 900, y: 1580, s: .75, eyes: 'huge', mouth: 'o', look: -1, pose: STAND });
+  footnote('A Nintendo handheld from 2001 (Guinness World Records)');
+}
+// ---------- next to watch ----------
+function sBge(lt, t) {
+  room('#14532d', '#052e16');
+  bigTop('NEXT TO WATCH', 210, 110, '#fde047', mid(7, 8), t); bigTop('BEYOND GOOD & EVIL 2', 350, 76, '#fff', T.bge + .2, t);
+  if (t > T.y08) popIn(t, T.y08, 540, 700, () => calendar(0, 0, .9, 2008, '#ef4444'));
+  const v = .62 + .03 * Math.sin(t * 1.5); loadBar(540, 1000, 860, v, '#facc15', t > T.works ? 'STILL IN THE WORKS' : 'IN DEVELOPMENT');
+  hero({ x: 540, y: 1560, s: .95, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.4, re: -.6 }, eyes: 'norm', mouth: 'flat', lookY: -1 });
+  qmark(740, 1150, t, T.works, '#fde047', 130);
+  footnote('Announced 2008. In Sep 2026 a Ubisoft writer said', 'he is working on it (Vandal)');
+}
+// ---------- end ----------
+function sEnd(lt, t) {
+  room();
+  gamer(540, 1520, 1.15, { eyes: 'closed', mouth: 'smile' }); beard(540, 1143, 1.15, 80 + 40 * eo(inv(T.q, T.q + 2, t)));
+  cobweb(1100, 420, 1.2, .8);
+  popIn(t, T.q + .1, 540, 470, () => { box(-470, -200, 940, 400, 'rgba(15,23,42,.95)', 30, 9); txt('WOULD YOU WAIT', 0, -120, 68, '#fff', { stroke: false }); txt('22 YEARS?', 0, -40, 76, '#fde047', { stroke: false });
+    box(-420, 30, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 105, 80, '#fff', { lw: 10 }); box(40, 30, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 105, 80, '#fff', { lw: 10 }); });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .04 }, { t0: mid(0, 1), fn: sGta, push: .04, flash: .8 }, { t0: mid(1, 2), fn: sDuke, push: .04, flash: .8 }, { t0: mid(3, 4), fn: sKien, push: .04, flash: .7 },
+  { t0: mid(5, 6), fn: sRecord, push: .05, flash: 1 }, { t0: mid(6, 7), fn: sGba, push: .04, flash: .7 }, { t0: mid(7, 8), fn: sBge, push: .04, flash: .7 }, { t0: mid(8, 9), fn: sEnd, push: .03, xfade: .25 }];
+const CAP = [["guess how many years", "the slowest video game", "ever took to make.", "comment a number."], ["gta six", "just came out.", "fans thought", "that wait was long."], ["the old record:", "duke nukem forever,", "announced in", "nineteen ninety seven."],
+  ["released in twenty eleven.", "fourteen years.", "a baby born that day", "would be fourteen."], ["then a tiny indie game", "smashed it.", "it's called kien."], ["announced in", "two thousand two.", "released in june", "twenty twenty four."],
+  ["twenty two years.", "the official", "guinness record."], ["it came out for", "the game boy advance,", "a handheld that was", "long discontinued."], ["next to watch:", "beyond good and evil two.", "announced in", "two thousand eight,", "and reportedly", "still in the works."],
+  ["would you wait", "twenty two years", "for a game?", "yes or no."]];
+const HOT = new Set(["guess how many years", "comment a number.", "that wait was long.", "nineteen ninety seven.", "fourteen years.", "it's called kien.", "two thousand two.", "twenty two years.", "long discontinued.", "still in the works.", "twenty two years"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

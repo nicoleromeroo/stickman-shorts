@@ -1,0 +1,9 @@
+["Your phone is at five percent. And you just got a text from your own number.",
+ "Don't open the door at midnight.",
+ "You laugh. Must be a glitch. It's eleven fifty eight.",
+ "Second text. Same number. They'll knock three times.",
+ {"text":"Eleven fifty nine. Four percent. The whole house goes quiet.","gap":0.5},
+ {"text":"Midnight. Knock. Knock. Knock.","gap":0.7},
+ "Then a voice behind the door whispers your name. It sounds exactly like you.",
+ {"text":"Your phone buzzes one last time. That's not me.","gap":0.8},
+ {"text":"Would you open the door? Comment yes or no.","gap":1.6}]

@@ -1,0 +1,10 @@
+["Three hundred euro phone. Zero euros today. Sounds free, right?",
+ "Buy now, pay later. Guess the real price over three years. Comment a number.",
+ "Option one: pay in thirty days, or in three parts. On time, it's free.",
+ "Miss a payment, and one big provider adds a fee of up to seven euros.",
+ {"text":"Miss three in a row? It goes to a debt collector.","gap":0.5},
+ "Option two: monthly rates for three years. About ten euros a month.",
+ {"text":"Sounds tiny. But at thirteen percent a year, you pay three hundred sixty one euros.","gap":0.6},
+ "Sixty one euros extra. A whole new game, just for waiting.",
+ "Since yesterday, new rules in Germany cover many pay later deals: lenders must check you can pay.",
+ {"text":"Would you use buy now, pay later? Yes or no.","gap":1.4}]

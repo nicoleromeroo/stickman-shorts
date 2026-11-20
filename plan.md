@@ -80,6 +80,7 @@ Notes
 - 1 cent doubled for 30 days: moved to the backlog (good "pick 1 or 2" finance video for later).
 
 ## Done
+- 21 Nov 11:30 changed: no official GTA 6 sales yet (only Sensor Tower estimates) → "The game that took 22 years to make" · 16:00 Buy now, pay later: 300 € phone · 20:00 LOW BATTERY Part 1 (made 20 Nov)
 - 20 Nov 20:00 RESPAWN Part 6 FINALE · 11:30 Minecraft copies sold · 16:00 Is an 80 € game worth it? (game vs cinema) (made 19 Nov)
 - 17 Nov 11:30 GTA 6 countdown · 16:00 start at 16 vs 26 · 20:00 RESPAWN Part 3
 - 18 Nov 16:00 4 siblings parable (made 16 Nov on Nicole's request)

@@ -1,0 +1,94 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const T = { own: wt(0, 'from your'), m1: at(1, 0), laugh: at(2, 0), t58: wt(2, "it's"), m2: at(3, 0), knock3: wt(3, "they'll"), t59: at(4, 0), p4: wt(4, 'four'), quiet: wt(4, 'the whole'),
+  midn: at(5, 0), k1: wt(5, 'knock'), voice: at(6, 0), like: wt(6, 'it sounds'), buzz: at(7, 0), notme: wt(7, "that's"), q: at(8, 0) };
+const K = [T.k1, (T.k1 + L[5].end) / 2 - .05, L[5].end - .35];
+// battery icon
+function battery(x, y, s, pct) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-90, -40, 170, 80, '#0f172a', 14, 8); box(80, -16, 16, 32, INK, 4, 0); const col = pct <= 5 ? '#ef4444' : '#22c55e'; ctx.fillStyle = col; rr(-80, -30, 150 * Math.max(.06, pct / 100), 60, 8); ctx.fill(); ctx.restore(); }
+function clockTxt(x, y, s, label, col = '#ef4444') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-190, -80, 380, 160, '#0f172a', 20, 8); txt(label, 0, 8, 110, col, { stroke: false }); ctx.restore(); }
+// big phone screen with messages
+function phoneBig(x, y, s, msgs, pct, glow = 0) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  if (glow) spot(0, 0, 520, glow, '239,68,68');
+  box(-300, -520, 600, 1040, '#111827', 60, 10); ctx.fillStyle = '#0b1020'; rr(-270, -490, 540, 980, 40); ctx.fill();
+  txt('ME', 0, -420, 56, '#fff', { stroke: false }); txt(pct + ' %', 170, -420, 40, pct <= 5 ? '#ef4444' : '#fff', { stroke: false, font: 'Nun', weight: '900 ' });
+  line(-250, -370, 250, -370, 4, '#334155');
+  let yy = -300; for (const m of msgs) { if (!m.show) continue; const k = eob(inv(m.t0, m.t0 + .25, m.t)); ctx.save(); ctx.translate(-240, yy); ctx.scale(k, k);
+    const lines = m.text; const h = 30 + lines.length * 62; box(0, 0, 470, h, m.col || '#22c55e', 30, 6); lines.forEach((l, i) => txt(l, 235, 45 + i * 62, 50, '#fff', { lw: 7 })); ctx.restore(); yy += h + 30; }
+  ctx.restore();
+}
+function bedroom(d = 0) { bgFill('#1e1b4b'); floor('#111133', 1400); // window with moon
+  box(80, 360, 300, 360, '#0b1020', 10, 8); circ(260, 450, 50, '#f8fafc'); line(230, 360, 230, 720, 8); line(80, 540, 380, 540, 8);
+  dark(d); }
+function doorFront(x, y, s, shake, under = 0) { ctx.save(); ctx.translate(x + shake, y); ctx.scale(s, s); box(-210, -560, 420, 1120, '#0b1020', 6, 10); box(-190, -540, 380, 1080, '#6b3f1d', 6, 8);
+  box(-150, -480, 300, 380, '#5a3417', 6, 6); box(-150, -40, 300, 420, '#5a3417', 6, 6); circ(140, 20, 20, '#fbbf24', INK, 6);
+  if (under > 0) { ctx.fillStyle = `rgba(255,230,160,${under})`; ctx.fillRect(-190, 540, 380, 22); ctx.fillStyle = INK; ctx.fillRect(-110, 540, 70, 22); ctx.fillRect(40, 540, 70, 22); }
+  ctx.restore(); }
+const HOLD = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.6, re: -1.5 };
+// ---------- scenes ----------
+function sText(lt, t) { // lines 0-1
+  bedroom(.15);
+  spot(300, 1050, 300, .3, '147,197,253');
+  hero({ x: 250, y: 1600, s: 1.2, pose: HOLD, eyes: t > T.own ? 'huge' : 'norm', mouth: t > T.m1 ? 'o' : 'flat', look: 1, bob: Math.abs(Math.sin(t * 3)) * 6, lean: .03 * Math.sin(t * 2), hold: holdPhone('on', { c1: '#1e293b', c2: '#0b1020' }) });
+  phoneBig(710, 850, .82, [{ show: true, t0: -1, t, text: ['NEW TEXT', 'FROM: ME'], col: '#334155' }, { show: t > T.m1 - .1, t0: T.m1 - .1, t, text: ["DON'T OPEN", 'THE DOOR AT', 'MIDNIGHT.'] }], 5);
+  battery(540, 150, 1.4, 5); txt('5 %', 540, 290, 120, '#ef4444', { lw: 18 });
+}
+function sLaugh(lt, t) {
+  bedroom(.1);
+  clockTxt(760, 520, 1.1, '23:58');
+  hero({ x: 420, y: 1560, s: 1.25, pose: HOLD, eyes: 'closed', mouth: 'grin', bob: Math.abs(Math.sin(t * 14)) * 10, hold: holdPhone('on', { c1: '#1e293b', c2: '#0b1020' }) });
+  if (t > T.laugh + .3) txt('HA HA', 760, 820, 90, '#fff', { lw: 14 });
+  txt('A GLITCH?', 540, 230, 130, '#fde047', { lw: 20 });
+}
+function sText2(lt, t) {
+  bgFill('#0b1020'); spot(540, 900, 700, .15, '147,197,253');
+  phoneBig(540, 960, 1.15, [{ show: true, t0: -9, t, text: ["DON'T OPEN", 'THE DOOR AT', 'MIDNIGHT.'] }, { show: t > T.knock3 - .2, t0: T.knock3 - .2, t, text: ["THEY'LL KNOCK", '3 TIMES.'] }], 5);
+}
+function sQuiet(lt, t) {
+  bedroom(.35 + .25 * inv(T.quiet, T.quiet + 1.5, t));
+  doorFront(820, 1000, .7, 0);
+  hero({ x: 330, y: 1580, s: 1.2, pose: HOLD, eyes: 'huge', mouth: 'flat', look: 1, hold: holdPhone('on', { c1: '#1e293b', c2: '#0b1020' }) });
+  clockTxt(300, 280, .9, '23:59');
+  battery(780, 260, 1.0, t > T.p4 ? 4 : 5); txt(t > T.p4 ? '4 %' : '5 %', 780, 370, 80, '#ef4444', { lw: 12 });
+}
+function sKnock(lt, t) {
+  bgFill('#120f2e'); floor('#0b0a1f', 1560);
+  let sh = 0; for (const k of K) { const d = t - k; if (d > 0 && d < .25) sh = Math.sin(d * 90) * 22 * (1 - d / .25); }
+  doorFront(540, 990, 1.0, sh);
+  K.forEach((k, i) => { if (t > k) { const a = 1 - inv(k + .6, k + 1.2, t) * .0; impact(300 + i * 240, 700 + (i % 2) * 140, 120, a); txt('KNOCK', 300 + i * 240, 700 + (i % 2) * 140 - 130, 70, '#fff', { lw: 12 }); } });
+  clockTxt(540, 260, .9, '00:00');
+}
+function sVoice(lt, t) {
+  bgFill('#120f2e'); floor('#0b0a1f', 1560);
+  doorFront(760, 990, .9, 0, .9);
+  hero({ x: 290, y: 1600, s: 1.3, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: 1.6, le: 1.4, ra: -1.6, re: -1.4 }, eyes: 'huge', mouth: 'scream', look: 1 });
+  sweat(400, 1020, .5 + .5 * Math.sin(t * 7));
+  if (t > T.voice + .3) { const k = .5 + .5 * Math.sin(t * 5); ctx.save(); ctx.globalAlpha = .8; for (let i = 0; i < 3; i++) { ctx.strokeStyle = '#c4b5fd'; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(560, 860, 60 + i * 45 + k * 10, Math.PI * .7, Math.PI * 1.3); ctx.stroke(); } ctx.restore(); popIn(t, T.voice + .3, 700, 330, () => bubble(0, 0, '"...PSST. IT\'S ME."', 64)); }
+  if (t > T.like) txt('YOUR VOICE?!', 540, 560, 110, '#fde047', { lw: 18 });
+}
+function sNotMe(lt, t) {
+  bgFill('#0b1020');
+  const sh = t > T.buzz && t < T.buzz + .5 ? Math.sin(t * 80) * 10 : 0;
+  ctx.save(); ctx.translate(sh, 0);
+  phoneBig(540, 960, 1.15, [{ show: true, t0: -9, t, text: ["DON'T OPEN", 'THE DOOR AT', 'MIDNIGHT.'] }, { show: true, t0: -9, t, text: ["THEY'LL KNOCK", '3 TIMES.'] }, { show: t > T.notme - .1, t0: T.notme - .1, t, text: ["THAT'S NOT ME."], col: '#dc2626' }], 4, t > T.notme ? .35 : 0);
+  ctx.restore();
+}
+function sEnd(lt, t) {
+  bgFill('#120f2e'); floor('#0b0a1f', 1560);
+  doorFront(540, 990, .95, 0, .9);
+  popIn(t, T.q + .1, 540, 330, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('OPEN THE DOOR?', 0, -100, 76, '#fff', { stroke: false });
+    box(-420, -10, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 70, 80, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 70, 80, '#fff', { lw: 10 }); });
+  if (t > L[8].end + .2) { const k = eob(inv(L[8].end + .2, L[8].end + .45, t)); ctx.save(); ctx.translate(540, 1480); ctx.scale(k, k); box(-430, -80, 860, 160, '#facc15', 30, 9); txt('PART 2 TOMORROW', 0, 10, 86, INK, { stroke: false }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sText, push: .05 }, { t0: mid(1, 2), fn: sLaugh, push: .04, flash: .6 }, { t0: mid(2, 3), fn: sText2, push: .06, flash: .5 }, { t0: mid(3, 4), fn: sQuiet, push: .08, xfade: .3 },
+  { t0: mid(4, 5), fn: sKnock, push: .05, flash: .3 }, { t0: mid(5, 6), fn: sVoice, push: .06, flash: .4 }, { t0: mid(6, 7), fn: sNotMe, push: .08, flash: .6 }, { t0: mid(7, 8), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["your phone is", "at five percent.", "and you just got a text", "from your own number."], ["don't open the door", "at midnight."], ["you laugh.", "must be a glitch.", "it's eleven fifty eight."], ["second text.", "same number.", "they'll knock", "three times."],
+  ["eleven fifty nine.", "four percent.", "the whole house", "goes quiet."], ["midnight.", "knock.", "knock.", "knock."], ["then a voice", "behind the door", "whispers your name.", "it sounds", "exactly like you."], ["your phone buzzes", "one last time.", "that's not me."], ["would you open", "the door?", "comment yes or no."]];
+const HOT = new Set(["from your own number.", "at midnight.", "three times.", "four percent.", "knock.", "exactly like you.", "that's not me.", "comment yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => { if (!(t > mid(1, 2) && t < mid(2, 3)) || true) captions(t, CAP, HOT, 1720); } });
+</script></body></html>
