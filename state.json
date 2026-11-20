@@ -1,5 +1,5 @@
 {
- "uploaded_count": 32,
+ "uploaded_count": 35,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -257,6 +257,30 @@
    "mode": "scheduled 2026-11-20T17:30:00Z",
    "publish_at": "2026-11-20T18:30:00+01:00",
    "uploaded_at": "2026-11-19T19:54:40+00:00"
+  },
+  {
+   "tag": "video-20261121-slot2",
+   "video_id": "vARbUoW7Yck",
+   "title": "What a 300 \u20ac Phone Really Costs With Pay Later \ud83d\udcf1 #shorts",
+   "mode": "scheduled 2026-11-21T15:00:00Z",
+   "publish_at": "2026-11-21T16:00:00+01:00",
+   "uploaded_at": "2026-11-20T14:56:38+00:00"
+  },
+  {
+   "tag": "video-20261121-slot3",
+   "video_id": "Xq4_1NKqUsg",
+   "title": "LOW BATTERY (Part 1) #shorts",
+   "mode": "scheduled 2026-11-21T19:00:00Z",
+   "publish_at": "2026-11-21T20:00:00+01:00",
+   "uploaded_at": "2026-11-20T14:56:38+00:00"
+  },
+  {
+   "tag": "video-20261121-slot4",
+   "video_id": "p8zhMMRTpiY",
+   "title": "The Game That Took 22 Years to Make \ud83c\udfae #shorts",
+   "mode": "scheduled 2026-11-21T10:30:00Z",
+   "publish_at": "2026-11-21T11:30:00+01:00",
+   "uploaded_at": "2026-11-20T14:56:38+00:00"
   }
  ]
 }
