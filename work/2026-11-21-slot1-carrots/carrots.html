@@ -1,0 +1,105 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { exc: wt(0, 'except'), trick: wt(0, 'war trick'), yn: at(1, 0), y40: at(2, 0), off: wt(2, 'turns off'), bomb: wt(2, 'so bombers'), pilot: at(3, 0), cat: wt(3, 'they call'),
+  secret: at(4, 0), radar: wt(4, 'brand new'), poster: at(5, 0), blk: wt(5, 'carrots'), hist: at(6, 0), else: wt(6, 'but everyone'), truth: at(7, 0), vita: wt(7, 'vitamin'), nb: wt(7, 'too little'),
+  enough: at(8, 0), nv: wt(8, 'extra'), end: at(9, 0), yn2: wt(9, 'yes') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#475569') { txt(s, 540, y, 30, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+function carrot(x, y, s, a = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(a); ctx.scale(s, s); ctx.fillStyle = '#16a34a'; ctx.strokeStyle = INK; ctx.lineWidth = 5; for (const r of [-.5, 0, .5]) { ctx.save(); ctx.rotate(r); ctx.beginPath(); ctx.ellipse(0, -70, 12, 34, 0, 0, 7); ctx.fill(); ctx.stroke(); ctx.restore(); }
+  ctx.fillStyle = '#f97316'; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(-34, -40); ctx.quadraticCurveTo(0, -56, 34, -40); ctx.lineTo(4, 120); ctx.quadraticCurveTo(0, 128, -4, 120); ctx.closePath(); ctx.fill(); ctx.stroke(); line(-18, 0, 0, 0, 5); line(6, 40, 18, 40, 5); ctx.restore(); }
+function plane(x, y, s, col = '#94a3b8', pilot = false, t = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 7;
+  ctx.beginPath(); ctx.moveTo(-170, 0); ctx.lineTo(-175, -100); ctx.lineTo(-120, -100); ctx.lineTo(-90, -10); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(0, 0, 170, 38, 0, 0, 7); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(-10, 0); ctx.lineTo(60, 0); ctx.lineTo(-30, 110); ctx.lineTo(-90, 110); ctx.closePath(); ctx.fill(); ctx.stroke();
+  if (pilot) { circ(30, -40, 30, '#bae6fd', INK, 6); circ(30, -40, 18, '#fff', INK, 5); }
+  line(172, -46 * Math.cos(t * 30), 172, 46 * Math.cos(t * 30), 8); ctx.restore(); }
+function city(y, lit) { const bs = [[40, 260], [190, 380], [330, 300], [470, 440], [630, 330], [770, 400], [910, 280]]; for (const [x, h] of bs) { box(x, y - h, 130, h + 40, '#1e293b', 6, 6); for (let r = 0; r < Math.floor(h / 70); r++) for (let c = 0; c < 2; c++) { const on = rnd(x + r * 7 + c) < lit; box(x + 20 + c * 56, y - h + 24 + r * 70, 34, 40, on ? '#fde047' : '#0f172a', 4, 0); } } }
+function eye(x, y, s, open) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#fff'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-120, 0); ctx.quadraticCurveTo(0, -100 * open, 120, 0); ctx.quadraticCurveTo(0, 100 * open, -120, 0); ctx.fill(); ctx.stroke(); if (open > .3) { circ(0, 0, 44 * open, '#16a34a', INK, 6); circ(0, 0, 18 * open, INK); } ctx.restore(); }
+function sHook(lt, t) {
+  bgFill('#1e1b4b'); floor('#312e81', 1440);
+  const k = eob(inv(0, .2, t));
+  txt('CARROTS =', 540, 200, 120 * Math.max(.85, k), '#fff', { lw: 20 }); txt('NIGHT VISION?', 540, 335, 120 * Math.max(.85, k), '#f97316', { lw: 20 });
+  const b = Math.sin(t * 6) * .3;
+  hero({ x: 540, y: 1480, s: 1.1, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .3, ra: -2.2 + b, re: -.6 }, eyes: t > T.exc ? 'huge' : 'norm', mouth: t > T.exc ? 'o' : 'grin', look: 1 });
+  carrot(700, 880 + Math.sin(t * 6) * 20, 1.4, .3);
+  if (t > T.trick) { const kk = pop(T.trick, t); ctx.save(); ctx.translate(540, 560); ctx.rotate(-.12); ctx.scale(kk, kk); box(-330, -80, 660, 160, 'rgba(220,38,38,.92)', 20, 10); txt('WAR TRICK', 0, 8, 110, '#fff', { stroke: false }); ctx.restore(); }
+  if (t > T.yn) { badge(220, 1080, 260, 130, '#16a34a', ['YES'], [90], T.yn + .3, t, -.05); badge(860, 1080, 260, 130, '#dc2626', ['NO'], [90], T.yn + .6, t, .05); }
+}
+function sBlackout(lt, t) {
+  bgFill('#0f172a'); 
+  const k = inv(T.off, T.off + .8, t);
+  txt('1940', 540, 200, 160, '#facc15', { lw: 24 });
+  txt(k > .5 ? 'LIGHTS OUT' : 'BRITAIN', 540, 360, 100, '#fff', { lw: 18 });
+  city(1440, 1 - k); floor('#020617', 1440);
+  if (t > T.bomb) { for (let i = 0; i < 3; i++) { const x = ((t - T.bomb) * 160 + i * 300) % 1400 - 200; plane(x, 560 + i * 90, .55, '#475569'); } qmark(540, 820, t, T.bomb + .5, '#facc15', 140); }
+  hero({ x: 880, y: 1600, s: .5, pose: STAND, eyes: 'huge', mouth: 'o', look: -1 });
+  foot('The blackout: no lights so night bombers could not find targets', 1840, '#94a3b8');
+}
+function sPilot(lt, t) {
+  bgFill('#020617'); for (let i = 0; i < 30; i++) circ(rnd(i) * W, rnd(i + 4) * 1300, 4, 'rgba(255,255,255,.6)');
+  if (t < T.secret) {
+    txt('IN THE DARK', 540, 200, 120, '#fff', { lw: 20 });
+    plane(540, 820 + Math.sin(t * 2) * 20, 1.6, '#64748b', true, t);
+    if (t > T.cat) { badge(540, 470, 700, 140, '#facc15', ['"CAT\'S EYES"'], [96], T.cat, t, -.03, INK); spot(588, 755, 120, .8, '255,255,120'); }
+  } else {
+    txt('THE REAL SECRET', 540, 200, 110, '#facc15', { lw: 20 });
+    // radar screen
+    circ(540, 800, 330, '#052e16', INK, 12); ctx.save(); ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 4; for (const r of [110, 220, 320]) { ctx.beginPath(); ctx.arc(540, 800, r, 0, 7); ctx.stroke(); } ctx.restore();
+    const a = t * 2.5; line(540, 800, 540 + Math.cos(a) * 320, 800 + Math.sin(a) * 320, 8, '#4ade80');
+    if (t > T.radar) { const bl = .5 + .5 * Math.sin(t * 8); circ(680, 680, 22, `rgba(74,222,128,${bl})`); circ(420, 900, 18, `rgba(74,222,128,${1 - bl})`); badge(540, 1240, 520, 130, '#16a34a', ['RADAR'], [100], T.radar, t, -.03); }
+  }
+  foot('Pilot: John "Cat\'s Eyes" Cunningham, RAF (Smithsonian)', 1840, '#94a3b8');
+}
+function sPoster(lt, t) {
+  if (t < T.hist) {
+    bgFill('#fef3c7'); floor('#d6a26b', 1440);
+    txt('THE COVER STORY', 540, 200, 106, '#fff', { lw: 18 });
+    const k = pop(mid(4, 5), t); ctx.save(); ctx.translate(540, 760); ctx.scale(k, k); ctx.rotate(-.03); box(-340, -400, 680, 800, '#fffbeb', 16, 10); box(-310, -370, 620, 740, '#0f172a', 10, 0);
+    carrot(0, -100, 1.8); txt('CARROTS HELP', 0, 190, 70, '#f97316', { lw: 10 }); txt('YOU SEE IN', 0, 260, 70, '#fff', { lw: 10 }); txt('THE BLACKOUT', 0, 330, 70, '#facc15', { lw: 10 }); ctx.restore();
+    hero({ x: 900, y: 1480, s: .7, pose: STAND, eyes: t > T.blk ? 'huge' : 'norm', mouth: t > T.blk ? 'o' : 'smile', look: -1 });
+    foot('Wording from British wartime posters (Today I Found Out)');
+  } else {
+    bgFill('#e0f2fe'); floor('#94a3b8', 1440);
+    txt('WHO WAS FOOLED?', 540, 200, 110, '#fff', { lw: 20 });
+    badge(540, 440, 720, 120, '#1e3a8a', ['THE ENEMY: PROBABLY NOT'], [58], T.hist + .3, t, -.02);
+    if (t < T.else) hero({ x: 540, y: 1480, s: 1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: -.9, le: -1.6, ra: .9, re: 1.6 }, eyes: 'norm', mouth: 'flat' });
+    if (t > T.else) { badge(540, 620, 720, 120, '#f97316', ['EVERYONE ELSE: YES'], [64], T.else, t, .02);
+      for (let i = 0; i < 5; i++) { const x = 140 + i * 200; const ch = Math.sin(t * 10 + i) * .2; stick({ x, y: 1480, s: .75, shirt: ['#3b82f6', '#f472b6', '#a855f7', '#16a34a', '#ef4444'][i], pants: '#334155', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.6 + ch, re: -1.6 }, eyes: 'norm', mouth: 'o' }); carrot(x + 40, 1080, .5, -.6); } }
+    foot('Historians via Smithsonian, Live Science');
+  }
+}
+function sTruth(lt, t) {
+  bgFill('#dcfce7'); floor('#86efac', 1440);
+  if (t < T.enough) {
+    txt('THE TRUE PART', 540, 200, 120, '#fff', { lw: 20 });
+    carrot(200, 640, 1.1); if (t > T.vita) { line(320, 640, 420, 640, 10); txt('VITAMIN A', 640, 650, 86, '#16a34a', { lw: 14 }); }
+    if (t > T.nb) { eye(540, 940, 1.2, .55); badge(540, 1170, 860, 130, '#dc2626', ['TOO LITTLE = NIGHT BLINDNESS'], [56], T.nb, t, -.02); }
+    hero({ x: 900, y: 1480, s: .6, pose: STAND, eyes: 'norm', mouth: 'flat', look: -1 });
+  } else {
+    txt('BUT EXTRA?', 540, 200, 130, '#fff', { lw: 22 });
+    for (let i = 0; i < 9; i++) carrot(160 + (i % 5) * 190, 560 + Math.floor(i / 5) * 200, .8, (i % 3 - 1) * .3);
+    if (t > T.nv) { badge(540, 1050, 760, 140, '#1e3a8a', ['NO NIGHT VISION'], [80], T.nv, t, -.02); }
+    hero({ x: 540, y: 1480, s: .8, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .4, le: .2, ra: -.4, re: -.2 }, eyes: 'norm', mouth: t > T.nv ? 'flat' : 'smile' });
+  }
+  foot('Source: Live Science (National Eye Institute), Smithsonian');
+}
+function sEnd(lt, t) {
+  bgFill('#1e1b4b'); floor('#312e81', 1440);
+  const k = pop(mid(8, 9), t); txt('DID YOU', 540, 200, 130 * k, '#fff', { lw: 22 }); txt('BELIEVE IT?', 540, 340, 130 * k, '#f97316', { lw: 22 });
+  const p1 = t > T.yn2 && t < T.yn2 + .4, p2 = t > T.yn2 + .5 && t < T.yn2 + .9;
+  box(110, 500 + (p1 ? 12 : 0), 400, 260, '#16a34a', 46, 9); txt('YES', 310, 640 + (p1 ? 12 : 0), 120, '#fff', { lw: 16 });
+  box(570, 500 + (p2 ? 12 : 0), 400, 260, '#dc2626', 46, 9); txt('NO', 770, 640 + (p2 ? 12 : 0), 120, '#fff', { lw: 16 });
+  badge(540, 900, 500, 100, '#facc15', ['COMMENT IT'], [62], mid(8, 9) + .3, t, .02, INK);
+  const look = Math.sin(t * 3);
+  hero({ x: 540, y: 1480, s: 1.0, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.5 - look * .4, re: -.3 }, look: look > 0 ? 1 : -1, eyes: 'norm', mouth: 'smirk' });
+  carrot(760, 1150, .7, .5);
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(1, 2), fn: sBlackout, push: .04, flash: 1 }, { t0: mid(2, 3), fn: sPilot, push: .04, flash: .8 }, { t0: mid(4, 5), fn: sPoster, push: .04, flash: 1 }, { t0: mid(6, 7), fn: sTruth, push: .04, flash: .8 }, { t0: mid(8, 9), fn: sEnd, push: .05, flash: 1 }];
+const CAP = [["eat your carrots,", "you'll see", "in the dark!", "except,", "that was", "a war trick."], ["did you", "believe it?", "yes or no?", "comment."], ["1940.", "britain turns off", "its lights at night,", "so bombers", "can't find", "the cities."], ["yet one pilot", "keeps finding", "planes in the dark.", "they call him", "cat's eyes."], ["his real secret?", "a brand new radar", "in his plane."], ["to hide it,", "posters told", "everyone:", "carrots help you see", "in the blackout."], ["historians think", "the enemy", "wasn't fooled.", "but everyone", "else was."], ["the true part:", "carrots give you", "vitamin a,", "and too little of it", "can cause", "night blindness."], ["but if you", "already get enough,", "extra carrots", "won't give you", "night vision."], ["so, did you", "believe it?", "yes or no?"]];
+const HOT = new Set(["in the dark!", "a war trick.", "yes or no?", "1940.", "planes in the dark.", "cat's eyes.", "a brand new radar", "carrots help you see", "wasn't fooled.", "else was.", "vitamin a,", "night blindness.", "night vision.", "believe it?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

@@ -1,0 +1,12 @@
+[
+ "Look up tonight. The Moon is gone. Good or bad for us?",
+ "Guess now, comment before the end.",
+ "First, the beach. Tides shrink to about a third.",
+ "Crabs and snails that live between the tides lose their home.",
+ {"text": "Nights get way darker. Baby sea turtles use moonlight to find the ocean.", "gap": 0.5},
+ "Now the scary part: the Moon keeps Earth's tilt steady.",
+ {"text": "Without it, the tilt could swing wildly. From no seasons, to extreme ones.", "gap": 0.6},
+ "But slowly. You wouldn't notice it in your lifetime.",
+ {"text": "Twist: the Moon is already leaving. Almost four centimeters a year. As fast as your fingernails grow.", "gap": 0.6},
+ {"text": "So: slowly, mostly bad. Did you guess right? Yes or no?", "gap": 0.6}
+]

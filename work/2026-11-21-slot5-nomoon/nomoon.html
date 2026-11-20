@@ -1,0 +1,102 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { gone: wt(0, 'gone'), gb: wt(0, 'good'), guess: at(1, 0), beach: at(2, 0), third: wt(2, 'shrink'), crab: at(3, 0), home: wt(3, 'lose'),
+  dark: at(4, 0), turtle: wt(4, 'baby'), ocean: wt(4, 'find'), scary: at(5, 0), steady: wt(5, 'steady'), swing: at(6, 0), noS: wt(6, 'from no'), ext: wt(6, 'to extreme'),
+  slow: at(7, 0), life: wt(7, 'notice'), leave: at(8, 0), cm: wt(8, 'almost'), nail: wt(8, 'as fast'), end: at(9, 0), yn: wt(9, 'did you') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#475569') { txt(s, 540, y, 30, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+function stars(t, n = 40) { for (let i = 0; i < n; i++) { const tw = .5 + .5 * Math.sin(t * 3 + i); circ(rnd(i) * W, rnd(i + 5) * 1200, 3 + rnd(i + 9) * 4, `rgba(255,255,255,${.4 + .6 * tw})`); } }
+function moon(x, y, r) { circ(x, y, r, '#f1f5f9', INK, 8); circ(x - r * .3, y - r * .2, r * .18, '#cbd5e1'); circ(x + r * .25, y + r * .3, r * .13, '#cbd5e1'); circ(x + r * .35, y - r * .35, r * .09, '#cbd5e1'); }
+function earth(x, y, r, tilt) { ctx.save(); ctx.translate(x, y); circ(0, 0, r, '#3b82f6', INK, 8); ctx.fillStyle = '#22c55e'; ctx.beginPath(); ctx.ellipse(-r * .3, -r * .2, r * .35, r * .25, .5, 0, 7); ctx.fill(); ctx.beginPath(); ctx.ellipse(r * .35, r * .3, r * .25, r * .35, -.3, 0, 7); ctx.fill(); ctx.rotate(tilt); line(0, -r * 1.45, 0, r * 1.45, 9, '#dc2626'); ctx.restore(); }
+function crab(x, y, s, sad) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); for (let i = -1; i <= 1; i += 2) { line(i * 40, 0, i * 80, 30, 8); line(i * 50, -10, i * 85, -60, 8); circ(i * 92, -72, 20, '#ef4444', INK, 6); } ctx.fillStyle = '#ef4444'; ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.ellipse(0, 0, 62, 40, 0, 0, 7); ctx.fill(); ctx.stroke(); line(-18, -36, -18, -60, 6); line(18, -36, 18, -60, 6); circ(-18, -66, 10, '#fff', INK, 5); circ(18, -66, 10, '#fff', INK, 5);
+  ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); if (sad) ctx.arc(0, 18, 16, Math.PI * 1.15, Math.PI * 1.85); else ctx.arc(0, 2, 16, .2, Math.PI - .2); ctx.stroke(); ctx.restore(); }
+function snail(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-70, -14, 140, 34, '#fcd34d', 17, 6); circ(-5, -48, 48, '#a16207', INK, 7); ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(-5, -48, 24, 0, 5); ctx.stroke(); line(56, -10, 66, -50, 5); circ(66, -54, 8, '#fff', INK, 4); ctx.restore(); }
+function turtle(x, y, s, a) { ctx.save(); ctx.translate(x, y); ctx.rotate(a); ctx.scale(s, s); circ(0, -38, 14, '#4ade80', INK, 5); for (const [dx, dy] of [[-26, -14], [26, -14], [-22, 22], [22, 22]]) circ(dx, dy, 10, '#4ade80', INK, 4); ctx.fillStyle = '#15803d'; ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(0, 4, 26, 32, 0, 0, 7); ctx.fill(); ctx.stroke(); ctx.restore(); }
+function sHook(lt, t) {
+  bgFill('#0f172a'); stars(t); floor('#1e293b', 1440);
+  const k = eob(inv(0, .2, t));
+  if (t < T.guess) { txt('THE MOON', 540, 200, 130 * Math.max(.85, k), '#fff', { lw: 22 }); txt('IS GONE', 540, 340, 130 * Math.max(.85, k), '#facc15', { lw: 22 }); }
+  else { txt('GOOD OR BAD', 540, 200, 120, '#fff', { lw: 20 }); txt('FOR US?', 540, 330, 120, '#facc15', { lw: 20 }); }
+  const mx = 760, my = 660;
+  if (t < T.gone) moon(mx, my, 150);
+  else { const g = inv(T.gone, T.gone + .4, t); if (g < 1) { ctx.save(); ctx.globalAlpha = 1 - g; moon(mx, my, 150 * (1 + g * .4)); ctx.restore(); impact(mx, my, 260, 1 - g); }
+    ctx.save(); ctx.setLineDash([22, 18]); ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(mx, my, 150, 0, 7); ctx.stroke(); ctx.restore(); qmark(mx, my + 50, t, T.gone + .2, '#facc15', 170); }
+  const b = Math.sin(t * 5) * .25;
+  hero({ x: 540, y: 1480, s: 1.05, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .4, le: .3, ra: -2.6 + b, re: -.2 }, look: 1, lookY: -1, eyes: t > T.gone ? 'huge' : 'norm', mouth: t > T.gone ? 'o' : 'smile' });
+  if (t > T.guess) { badge(200, 1060, 270, 130, '#16a34a', ['GOOD'], [84], T.guess + .2, t, -.05); badge(880, 1060, 270, 130, '#dc2626', ['BAD'], [84], T.guess + .5, t, .05); badge(540, 900, 640, 100, '#fff', ['GUESS, THEN COMMENT'], [56], T.guess, t, 0, INK); }
+}
+function sTides(lt, t) {
+  bgFill('#bae6fd'); 
+  if (t < T.crab) {
+    txt('TIDES SHRINK', 540, 200, 120, '#fff', { lw: 20 });
+    const k = eo(inv(T.third, T.third + 1, t));
+    // two wave bars
+    const bars = [[300, 'WITH MOON', 1], [780, 'NO MOON', 1 - k * 2 / 3]];
+    for (const [x, lab, h] of bars) { box(x - 150, 460, 300, 700, '#fff', 24, 8); ctx.fillStyle = '#0ea5e9'; rr(x - 136, 1146 - 672 * h, 272, 672 * h, 16); ctx.fill(); for (let i = 0; i < 4; i++) circ(x - 102 + i * 68, 1146 - 672 * h, 26, '#38bdf8'); txt(lab, x, 1230, 56, INK, { stroke: false }); }
+    if (t > T.third) badge(780, 400, 380, 110, '#1e3a8a', ['ABOUT 1/3'], [70], T.third + .6, t, .04);
+    hero({ x: 540, y: 1520, s: .6, pose: STAND, eyes: 'huge', mouth: 'o', look: 1 });
+  } else {
+    txt('BETWEEN THE TIDES', 540, 200, 100, '#fff', { lw: 18 });
+    floor('#fde68a', 900); const dry = t > T.home; for (let i = 0; i < 9; i++) circ(80 + i * 120, 1480 + (i % 2) * 30, 22, '#e7e5e4', INK, 5);
+    crab(290, 1360, 1.3, dry); snail(780, 1390, 1.3);
+    const wb = lerp(1520, 900, eo(inv(T.home - .3, T.home + .7, t))); ctx.save(); ctx.globalAlpha = .55; ctx.fillStyle = '#0ea5e9'; ctx.fillRect(-300, 900, W + 600, wb - 900); ctx.restore(); line(-300, wb, W + 300, wb, 7, '#0369a1');
+    if (dry) { sweat(420, 1180, 1); sweat(900, 1200, 1); badge(540, 450, 700, 120, '#dc2626', ['THEY LOSE THEIR HOME'], [64], T.home, t, -.02); }
+  }
+  foot('Tides from the Sun only: about one-third (Royal Museums Greenwich)', 1840, '#334155');
+}
+function sNight(lt, t) {
+  bgFill('#020617'); stars(t, 20); ctx.fillStyle = '#0c4a6e'; ctx.fillRect(-300, 700, W + 600, 300); floor('#57534e', 1000);
+  txt('WAY DARKER', 540, 200, 130, '#fff', { lw: 22 });
+  if (t > T.turtle) { for (let i = 0; i < 7; i++) { const lost = t > T.ocean + .3; const p = clamp((t - T.turtle) / (T.ocean + .3 - T.turtle)); const x = 120 + i * 140 + (lost ? Math.sin(t * 4 + i) * 40 : 0); const y = 1450 - p * 280 - (i % 2) * 60 + (lost ? Math.sin(t * 2 + i) * 30 : 0); turtle(x, y, 2, lost ? Math.sin(t * 3 + i * 2) * 1.6 : 0); }
+    badge(540, 470, 760, 120, '#16a34a', ['TURTLES NEED MOONLIGHT'], [58], T.turtle, t, -.02);
+    if (t > T.ocean + .3) { qmark(300, 1020, t, T.ocean + .3, '#facc15', 130); qmark(780, 1000, t, T.ocean + .5, '#facc15', 130); } }
+  hero({ x: 900, y: 1560, s: .55, pose: STAND, eyes: 'huge', mouth: 'flat', look: -1 });
+  foot('Hatchlings use moonlight to find the sea (Astronomy.com)', 1840, '#94a3b8');
+}
+function sTilt(lt, t) {
+  bgFill('#0f172a'); stars(t, 30);
+  const tilt0 = 23.4 * Math.PI / 180;
+  let tilt = tilt0;
+  if (t > T.swing && t < T.slow) { const s = eio(inv(T.swing, T.noS, t)); tilt = t < T.ext ? lerp(tilt0, 0, s) : lerp(0, 1.2, eio(inv(T.ext, T.ext + 1.2, t))); }
+  if (t >= T.slow) tilt = tilt0 + Math.sin((t - T.slow) * .8) * .08;
+  if (t < T.slow) { txt(t < T.swing ? 'THE SCARY PART' : 'IT COULD SWING', 540, 200, 110, '#fff', { lw: 20 }); }
+  else { txt('BUT SLOWLY', 540, 200, 130, '#facc15', { lw: 22 }); }
+  earth(540, 760, 250, tilt);
+  if (t < T.swing) { if (t > T.steady) { badge(540, 1170, 600, 120, '#1e3a8a', ['TILT: ~23 DEGREES'], [64], T.steady, t, -.02); moon(880, 460, 70); } }
+  else if (t < T.slow) { if (t > T.noS) badge(450, 1170, 520, 120, '#16a34a', ['NO SEASONS'], [70], T.noS, t, -.03); if (t > T.ext) badge(450, 1320, 620, 120, '#dc2626', ['EXTREME SEASONS'], [66], T.ext, t, .03); }
+  else { badge(540, 1200, 760, 130, '#16a34a', ['NOT IN YOUR LIFETIME'], [66], T.life, t, -.02); }
+  const scared = t > T.swing && t < T.slow;
+  hero({ x: 920, y: 1520, s: .65, pose: scared ? { lt: .3, ls: .3, rt: -.3, rs: .3, la: -2.6, le: -.6, ra: 2.6, re: .6 } : STAND, eyes: scared ? 'huge' : 'norm', mouth: scared ? 'o' : t > T.life ? 'smile' : 'flat', look: -1 });
+  if (scared) sweat(980, 1220, 1);
+  foot('Tilt change: very slow (RMG, Astronomy.com)', 1840, '#94a3b8');
+}
+function sLeave(lt, t) {
+  bgFill('#0f172a'); stars(t, 30);
+  txt('IT\'S ALREADY LEAVING', 540, 200, 96, '#fff', { lw: 18 });
+  earth(220, 700, 150, .41);
+  const d = eo(inv(T.leave, T.leave + 2, t)); moon(700 + d * 140, 700, 80);
+  ctx.save(); ctx.setLineDash([14, 12]); line(380, 700, 610 + d * 140, 700, 5, '#64748b'); ctx.restore();
+  if (t > T.cm) badge(540, 1000, 700, 140, '#facc15', ['~3.8 CM A YEAR'], [80], T.cm, t, -.02, INK);
+  if (t > T.nail) { const k = pop(T.nail, t); ctx.save(); ctx.translate(300, 1300); ctx.scale(k, k); box(-60, -160, 120, 300, '#fcd9b6', 50, 8); box(-40, -150, 80, 90, '#fecdd3', 30, 6); ctx.restore(); badge(700, 1260, 480, 160, '#fff', ['FINGERNAIL', 'SPEED'], [64, 64], T.nail + .2, t, .03, INK); }
+  foot('Laser mirrors from Apollo, measured 50+ years (Live Science, NASA)', 1840, '#94a3b8');
+}
+function sEnd(lt, t) {
+  bgFill('#0f172a'); stars(t); floor('#1e293b', 1440);
+  const k = pop(mid(8, 9), t); txt('SLOWLY,', 540, 200, 120 * k, '#fff', { lw: 20 }); txt('MOSTLY BAD', 540, 340, 120 * k, '#dc2626', { lw: 20 });
+  const p1 = t > T.yn + .6 && t < T.yn + 1, p2 = t > T.yn + 1.1 && t < T.yn + 1.5;
+  if (t > T.yn) { badge(540, 520, 760, 110, '#fff', ['DID YOU GUESS RIGHT?'], [62], T.yn, t, 0, INK);
+    box(110, 640 + (p1 ? 12 : 0), 400, 240, '#16a34a', 46, 9); txt('YES', 310, 770 + (p1 ? 12 : 0), 110, '#fff', { lw: 16 });
+    box(570, 640 + (p2 ? 12 : 0), 400, 240, '#dc2626', 46, 9); txt('NO', 770, 770 + (p2 ? 12 : 0), 110, '#fff', { lw: 16 }); badge(540, 1000, 500, 100, '#facc15', ['COMMENT IT'], [62], T.yn + .4, t, .02, INK); }
+  const look = Math.sin(t * 3);
+  hero({ x: 540, y: 1480, s: 1.0, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.5 - look * .4, re: -.3 }, look: look > 0 ? 1 : -1, eyes: 'norm', mouth: 'smirk' });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(1, 2), fn: sTides, push: .04, flash: 1 }, { t0: mid(3, 4), fn: sNight, push: .04, flash: .8 }, { t0: mid(4, 5), fn: sTilt, push: .04, flash: .8 }, { t0: mid(7, 8), fn: sLeave, push: .04, flash: 1 }, { t0: mid(8, 9), fn: sEnd, push: .05, flash: 1 }];
+const CAP = [["look up tonight.", "the moon is gone.", "good or bad", "for us?"], ["guess now,", "comment", "before the end."], ["first, the beach.", "tides shrink", "to about a third."], ["crabs and snails", "that live", "between the tides", "lose their home."], ["nights get", "way darker.", "baby sea turtles", "use moonlight", "to find the ocean."], ["now the scary part:", "the moon keeps", "earth's tilt", "steady."], ["without it,", "the tilt could", "swing wildly.", "from no seasons,", "to extreme ones."], ["but slowly.", "you wouldn't", "notice it", "in your lifetime."], ["twist:", "the moon is", "already leaving.", "almost 4 cm", "a year.", "as fast as", "your fingernails", "grow."], ["so: slowly,", "mostly bad.", "did you", "guess right?", "yes or no?"]];
+const HOT = new Set(["the moon is gone.", "for us?", "to about a third.", "lose their home.", "way darker.", "use moonlight", "steady.", "swing wildly.", "to extreme ones.", "in your lifetime.", "already leaving.", "almost 4 cm", "your fingernails", "mostly bad.", "yes or no?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>
