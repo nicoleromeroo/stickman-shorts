@@ -1,6 +1,17 @@
 """Reusable audio for stickman shorts: voice + music preset + sfx events -> mix.wav"""
 import json, numpy as np, soundfile as sf
 SR = 48000
+# chord progressions (MIDI notes) per new preset; one is picked at random per video
+PROGRESSIONS = {
+    "chiptune": [[[60, 64, 67], [57, 60, 64], [53, 57, 60], [55, 59, 62]], [[62, 65, 69], [58, 62, 65], [60, 64, 67], [57, 60, 64]]],
+    "funky":    [[[57, 60, 64, 67], [62, 65, 69, 72]], [[55, 58, 62, 65], [60, 64, 67, 70]]],
+    "dreamy":   [[[53, 57, 60, 64], [55, 59, 62, 65], [52, 55, 59, 62], [57, 60, 64, 67]], [[60, 64, 67, 71], [57, 60, 64, 67], [53, 57, 60, 64], [55, 59, 62, 65]]],
+    "hype":     [[[57, 60, 64], [53, 57, 60], [48, 52, 55], [55, 59, 62]], [[52, 55, 59], [48, 52, 55], [55, 59, 62], [50, 53, 57]]],
+    "cozy":     [[[60, 64, 67, 71], [57, 60, 64, 67], [62, 65, 69, 72], [55, 59, 62, 65]], [[53, 57, 60, 64], [52, 55, 59, 62], [50, 53, 57, 60], [55, 59, 62, 65]]],
+    "spooky":   [[[57, 60, 64], [56, 59, 64], [53, 57, 60], [52, 56, 59]], [[50, 53, 57], [49, 53, 56], [46, 50, 53], [45, 49, 52]]],
+}
+NEW_PRESETS = tuple(PROGRESSIONS)
+ALL_PRESETS = ("upbeat", "lofi", "mystery", "tense") + NEW_PRESETS
 
 class Mix:
     def __init__(self, d, seed=1):
@@ -101,9 +112,68 @@ class Mix:
             while t < dur - 1.5:
                 bpm = 70 + 45 * min(1, t / dur)
                 self._add(self.mus, self.sfx_wave("heart"), t, .55); self._add(self.mus, self.sfx_wave("heart"), t + .22, .35); t += 60 / bpm
+        elif preset in NEW_PRESETS:
+            self._music_new(preset)
+        else:
+            raise ValueError(f"unknown music preset {preset!r}; use one of {ALL_PRESETS}")
         for a, b in quiet:
             m = (self.tt >= a) & (self.tt < b); self.mus[m] *= .2
         self.mus /= np.abs(self.mus).max() + 1e-9
+    # ---------- extra synthesized presets (100 % generated here, so no copyright claims possible) ----------
+    def _sq(self, f, dur, dec, duty=.5):  # square/pulse wave (chiptune)
+        t = np.arange(int(dur * SR)) / SR; ph = (f * t) % 1.0
+        return np.where(ph < duty, 1.0, -1.0) * np.exp(-t * dec) * .5
+    def _saw(self, f, dur, dec):
+        t = np.arange(int(dur * SR)) / SR; return (2 * ((f * t) % 1.0) - 1) * np.exp(-t * dec) * .5
+    def _pad(self, f, dur):  # soft detuned pad with slow attack/release
+        t = np.arange(int(dur * SR)) / SR; a = np.clip(t / (dur * .3), 0, 1) * np.clip((dur - t) / (dur * .3), 0, 1)
+        return (np.sin(2 * np.pi * f * t) + .5 * np.sin(2 * np.pi * f * 1.004 * t) + .3 * np.sin(2 * np.pi * f * 2.002 * t)) * a * .3
+    def _kick(self):
+        t = np.arange(int(.25 * SR)) / SR; return np.sin(2 * np.pi * (50 + 90 * np.exp(-t * 30)) * t) * np.exp(-t * 14)
+    def _hat(self, l=.04): return self.lp(self.noise(l), .9) * self.env(int(l * SR), 90) * .25 - self.lp(self.noise(l), .2) * .1
+    def _clap(self): return self.lp(self.noise(.15), .6) * self.env(int(.15 * SR), 25) * .6
+    def _music_new(self, preset):
+        note = lambda m: 440 * 2 ** ((m - 69) / 12); dur = self.N / SR
+        key = int(self.rng.integers(-3, 4))  # random key per video -> same preset never sounds identical
+        P = PROGRESSIONS[preset]; prog = P[int(self.rng.integers(0, len(P)))]
+        chords = [[n + key for n in c] for c in prog]
+        bpm = {"chiptune": 132, "funky": 104, "dreamy": 76, "hype": 140, "cozy": 92, "spooky": 64}[preset]
+        beat = 60 / bpm; t = 0.0; bar = 0; A = self._add; M = self.mus
+        while t < dur:
+            ch = chords[bar % len(chords)]; root = ch[0]
+            if preset == "chiptune":
+                arp = [ch[0], ch[1], ch[2], ch[1] + 12, ch[2], ch[1], ch[0] + 12, ch[2]]
+                for i in range(16): A(M, self._sq(note(arp[i % 8] + 12), .12, 18, .25) * .22, t + i * beat / 4)
+                for b in range(4): A(M, self._sq(note(root - 12), beat * .45, 6) * .6, t + b * beat); A(M, self._hat(), t + b * beat + beat / 2, 1.2)
+                for b in (0, 2): A(M, self._kick(), t + b * beat, .9)
+            elif preset == "funky":
+                bass = [0, 0, 12, 0, 7, 0, 10, 12]
+                for i, o in enumerate(bass): A(M, self._saw(note(root - 12 + o), .18, 10) * .7, t + i * beat / 2)
+                for b in (1, 3): A(M, self._clap(), t + b * beat, .9)
+                for b in range(4): A(M, self._kick(), t + b * beat, .8); A(M, self._hat(), t + b * beat + beat / 2, 1.3)
+                for b in (.5, 1.75, 2.5, 3.75):
+                    for j, mm in enumerate(ch[1:]): A(M, self.tone(note(mm + 12), .15, 20) * .18, t + b * beat + j * .005)
+            elif preset == "dreamy":
+                for mm in ch: A(M, self._pad(note(mm), 4 * beat + .6), t, .5)
+                for i in range(8): A(M, self.tone(note(ch[i % len(ch)] + 24), 1.0, 4) * .18, t + i * beat / 2)
+                A(M, self.tone(note(root - 12), 4 * beat, 1.0) * .45, t)
+            elif preset == "hype":
+                for b in range(4): A(M, self._kick(), t + b * beat, 1.0)
+                for i in range(8): A(M, self._hat(.03), t + i * beat / 2, 1.0 if i % 2 else .6)
+                for i in (13, 14, 15): A(M, self._hat(.02), t + i * beat / 4, .8)
+                for b in (1, 3): A(M, self._clap(), t + b * beat, .8)
+                for i in range(8): A(M, self._saw(note(ch[i % 3] + 12), .1, 16) * .3, t + i * beat / 2)
+                A(M, self._saw(note(root - 12), 4 * beat, 1.2) * .5, t)
+            elif preset == "cozy":
+                A(M, self.tone(note(root - 12), 1.8, 1.5) * .5, t); A(M, self.tone(note(ch[2] - 12), 1.2, 2) * .3, t + 2 * beat)
+                for b, j in ((1, 1), (1.5, 2), (2.5, 1), (3, 3), (3.5, 2)):
+                    mm = ch[j % len(ch)]; A(M, self.tone(note(mm + 12), .9, 4) * .25 + self.tone(note(mm + 24), .9, 8) * .06, t + b * beat)
+                for b in (0, 2): A(M, self.lp(self.noise(.08), .3) * self.env(int(.08 * SR), 40) * .4, t + b * beat)
+            elif preset == "spooky":
+                for mm in ch[:3]: A(M, self._pad(note(mm - 12), 4 * beat + .8), t, .45)
+                for i, b in enumerate((0, 1.5, 3)): A(M, self.tone(note(ch[(i * 2) % len(ch)] + 24 + (1 if i == 2 else 0)), 2.0, 2) * .12, t + b * beat)
+                A(M, self.sfx_wave("heart"), t, .4)
+            t += 4 * beat; bar += 1
     def write(self, mvol=.08, svol=.30):
         v = np.zeros(self.N, np.float32); v[:len(self.vo)] = self.vo
         e = np.convolve(np.abs(v), np.ones(int(.08 * SR)) / int(.08 * SR), mode="same")

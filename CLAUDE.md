@@ -179,8 +179,15 @@ bash engine/setup.sh
   Repeat until clean.
 
 ## Step 5 — audio + build
-- `audio.py` uses `from shortaudio import Mix` (see examples). Music presets: `upbeat`, `lofi`,
-  `mystery`, `tense`. Music stays quiet (mvol ≤ 0.09). Only synthesized audio — never download music.
+- `audio.py` uses `from shortaudio import Mix` (see examples). Music stays quiet (mvol ≤ 0.09). Only synthesized
+  audio — never download music (all presets are generated in code, so there can be no copyright claims).
+- **Music presets (Nicole, 21 Nov: wants more variety):** `upbeat`, `lofi`, `mystery`, `tense` (originals) plus
+  `chiptune` (8-bit, gaming), `funky` (bass + claps, finance/what-if), `dreamy` (soft pads + bells, facts/science),
+  `hype` (fast beat, records/big numbers), `cozy` (light piano groove, everyday/finance), `spooky` (dark pads, mystery
+  stories). Each new preset picks a random key and chord progression from the Mix seed, so give every video its own
+  seed. **Rotate:** never use the same preset twice in one day's 5 videos (the series keeps its fixed preset), and use
+  `upbeat` at most once a day. Suggested fits: gaming → chiptune/hype, finance → funky/cozy, facts → dreamy/lofi,
+  what-if → funky/dreamy/tense.
 - `bash engine/build.sh work/<dir> <page>.html` → `work/<dir>/final.mp4`.
 - Check: duration 28–50 s, 1080×1920, audio present, a final contact sheet looks right.
 
