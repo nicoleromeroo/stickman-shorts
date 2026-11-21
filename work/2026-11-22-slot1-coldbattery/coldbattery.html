@@ -1,0 +1,100 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { nope: wt(0, 'nope'), gh: at(1, 0), hide: wt(1, 'or hiding'), ions: wt(2, 'lithium'), power: wt(2, "that's"), cold: at(3, 0), honey: wt(3, 'like honey'),
+  slow: at(4, 0), drain: wt(4, 'so the'), made: at(5, 0), off: wt(5, 'colder'), m20: at(6, 0), half: wt(6, 'only'), tw: at(7, 0), warm: wt(7, 'warm'),
+  chg: at(8, 0), dmg: wt(8, 'that can'), end: at(9, 0), yn: wt(9, 'yes') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#475569') { txt(s, 540, y, 30, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+function batt(x, y, w, h, lvl, col) { box(x - w / 2, y - h / 2, w, h, '#fff', 22, 10); box(x + w / 2, y - h * .18, w * .07, h * .36, INK, 6, 0); const c = col || (lvl > .5 ? '#22c55e' : lvl > .2 ? '#facc15' : '#ef4444'); if (lvl > .01) box(x - w / 2 + 14, y - h / 2 + 14, (w - 28) * clamp(lvl), h - 28, c, 12, 0); }
+function flake(x, y, r, a = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(a); for (let i = 0; i < 6; i++) { ctx.rotate(Math.PI / 3); line(0, 0, 0, -r, r * .16, '#e0f2fe'); line(0, -r * .6, r * .25, -r * .8, r * .1, '#e0f2fe'); line(0, -r * .6, -r * .25, -r * .8, r * .1, '#e0f2fe'); } ctx.restore(); }
+function ion(x, y, r = 34) { circ(x, y, r, '#f472b6', INK, 6); line(x - r * .45, y, x + r * .45, y, 7, '#fff'); line(x, y - r * .45, x, y + r * .45, 7, '#fff'); }
+function cell(t, speed, thick) { // big battery cross-section with swimming ions
+  box(90, 520, 900, 620, '#1e293b', 40, 12); box(990, 720, 50, 220, INK, 8, 0);
+  box(120, 550, 120, 560, '#64748b', 16, 7); box(840, 550, 120, 560, '#f59e0b', 16, 7);
+  ctx.fillStyle = thick > 0 ? `rgba(234,179,8,${.25 + thick * .55})` : 'rgba(96,165,250,.35)'; ctx.fillRect(250, 560, 580, 540);
+  for (let i = 0; i < 7; i++) { const ph = (t * speed * (0.7 + rnd(i) * .5) + rnd(i + 3)) % 2; const f = ph < 1 ? ph : 2 - ph; ion(300 + f * 480, 600 + i * 72 + Math.sin(t * 3 + i) * 10 * speed); }
+}
+function thermo(x, y, lvl, col) { box(x - 40, y - 420, 80, 440, '#fff', 40, 8); circ(x, y + 40, 70, col, INK, 8); box(x - 22, y - 400 + 380 * (1 - lvl), 44, 380 * lvl + 30, col, 20, 0); }
+function sHook(lt, t) {
+  bgFill('#bae6fd'); floor('#f1f5f9', 1440); snow(t, 50);
+  txt('COLD WEATHER', 540, 190, 112, '#fff', { lw: 20 }); txt('BREAKS IT?', 540, 320, 130, '#38bdf8', { lw: 22 });
+  const lvl = lerp(.9, .06, eio(inv(0, T.nope - .2, t)));
+  batt(540, 580, 520, 220, lvl); txt(Math.round(lvl * 100) + '%', 540, 585, 100, INK, { stroke: false });
+  const sh = Math.sin(t * 40) * 4;
+  hero({ x: 540 + sh, y: 1480, s: 1.05, scarf: '#ef4444', pose: PHONE_POSE, eyes: t > T.nope ? 'huge' : 'norm', mouth: t > T.nope ? 'o' : 'flat', hold: holdPhone('on', { c1: '#ef4444', c2: '#7f1d1d' }) });
+  if (t > T.nope && t < T.gh) badge(540, 860, 560, 170, '#dc2626', ['NOPE'], [140], T.nope, t, -.1);
+  if (t > T.gh) { badge(250, 860, 360, 150, '#475569', ['GONE?'], [90], T.gh, t, -.05); badge(830, 860, 380, 150, '#7c3aed', ['HIDING?'], [86], T.hide, t, .05); }
+}
+function sCell(lt, t) {
+  const cold = t > T.cold; bgFill(cold ? '#0c4a6e' : '#fef3c7'); if (cold) { snow(t, 30, .6); }
+  txt(cold ? 'GETS THICK' : 'INSIDE YOUR', 540, 190, 120, '#fff', { lw: 20 }); txt(cold ? 'LIKE HONEY' : 'BATTERY', 540, 330, 120, cold ? '#facc15' : '#f472b6', { lw: 20 });
+  const sp = cold ? lerp(1, .25, inv(T.cold, T.honey, t)) : 1;
+  cell(t, sp, cold ? inv(T.cold, T.honey, t) : 0);
+  if (t > T.ions && !cold) badge(540, 1250, 620, 120, '#f472b6', ['LITHIUM IONS'], [76], T.ions, t, -.02);
+  if (t > T.power && !cold) { const k = .5 + .5 * Math.sin(t * 10); line(950, 460, 900, 380, 10, `rgba(250,204,21,${k})`); txt('POWER!', 860, 440, 64, '#facc15', { lw: 12 }); }
+  if (cold) { flake(170, 470, 60, t); flake(910, 470, 60, -t); }
+  if (t > T.honey) { ctx.fillStyle = '#eab308'; ctx.strokeStyle = INK; ctx.lineWidth = 6; const d = 60 + Math.sin(t * 2) * 20; ctx.beginPath(); ctx.moveTo(520, 1100); ctx.quadraticCurveTo(510, 1100 + d, 540, 1120 + d); ctx.quadraticCurveTo(570, 1100 + d, 560, 1100); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  hero({ x: 900, y: 1560, s: .55, pose: STAND, scarf: cold ? '#ef4444' : undefined, eyes: 'norm', mouth: cold ? 'o' : 'smile', look: -1 });
+  foot('Sources: LG Energy Solution, BGR', 1840, cold ? '#bae6fd' : '#92400e');
+}
+function sDrain(lt, t) {
+  bgFill('#e0f2fe'); floor('#cbd5e1', 1440); snow(t, 25, .5);
+  if (t < T.made) {
+    txt('IONS SLOW', 540, 190, 130, '#fff', { lw: 22 }); txt('= DRAINS FASTER', 540, 330, 104, '#ef4444', { lw: 18 });
+    for (let i = 0; i < 4; i++) ion(200 + ((t * 30 + i * 180) % 700), 640 + Math.sin(i) * 60);
+    const lvl = lerp(.85, .2, inv(T.drain, T.made, t)); batt(540, 960, 600, 240, lvl); txt(Math.round(lvl * 100) + '%', 540, 965, 100, INK, { stroke: false });
+    hero({ x: 540, y: 1560, s: .6, pose: STAND, scarf: '#ef4444', eyes: t > T.drain ? 'huge' : 'norm', mouth: 'o' });
+  } else if (t < T.m20) {
+    txt('MADE FOR', 540, 190, 120, '#fff', { lw: 20 }); txt('0 TO 35 °C', 540, 330, 120, '#16a34a', { lw: 20 });
+    const lv = t > T.off ? lerp(.45, .12, inv(T.off, T.off + 1, t)) : .45; thermo(300, 1060, lv, t > T.off ? '#38bdf8' : '#22c55e');
+    txt('35 °C', 470, 760, 60, '#16a34a', { lw: 10, align: 'left' }); txt('0 °C', 470, 1000, 60, '#16a34a', { lw: 10, align: 'left' });
+    box(380, 730, 60, 300, 'rgba(34,197,94,.5)', 10, 0);
+    phoneDev(800, 960, 1.1, t > T.off + .8 ? 'dead' : 'on', { c1: '#60a5fa', c2: '#a78bfa' });
+    if (t > T.off + .8) badge(800, 1260, 400, 110, '#dc2626', ['SWITCHED OFF'], [60], T.off + .8, t, -.03);
+    foot('Apple: iPhone works best at 0 to 35 °C ambient (support.apple.com)');
+  } else {
+    txt('AT MINUS 20 °C', 540, 190, 110, '#fff', { lw: 20 }); txt('ABOUT HALF', 540, 330, 130, '#f97316', { lw: 22 });
+    batt(540, 660, 600, 220, 1, '#22c55e'); txt('WARM', 540, 820, 64, '#16a34a', { lw: 10 });
+    const lv = t > T.half ? lerp(1, .5, eo(inv(T.half, T.half + .8, t))) : 1; batt(540, 1060, 600, 220, lv, '#38bdf8'); txt('MINUS 20 °C', 540, 1220, 64, '#0284c7', { lw: 10 });
+    flake(150, 1060, 70, t);
+    foot('Typical Li-ion: ~50 % performance at -20 °C (Battery University)');
+  }
+}
+function sTwist(lt, t) {
+  if (t < T.chg) {
+    bgFill('#ffedd5'); floor('#c2410c', 1440);
+    txt('NOT GONE!', 540, 190, 140, '#fff', { lw: 22 }); txt('WARM IT UP', 540, 330, 110, '#f97316', { lw: 20 });
+    const lv = t > T.warm ? lerp(.2, .85, eio(inv(T.warm, T.warm + 1.6, t))) : .2; batt(540, 620, 520, 200, lv); txt(Math.round(lv * 100) + '%', 540, 625, 90, INK, { stroke: false });
+    spot(540, 1100, 500, .5, '255,180,90');
+    hero({ x: 540, y: 1480, s: 1, pose: PHONE_POSE, eyes: 'norm', mouth: t > T.warm ? 'grin' : 'smile', hold: holdPhone('on', { c1: '#22c55e', c2: '#15803d' }) });
+    for (let i = 0; i < 3; i++) sparkle(380 + i * 160, 860 + Math.sin(t * 4 + i) * 20, 30, inv(T.warm, T.warm + .4, t));
+    foot('Apple: battery life returns to normal once warm again', 1840, '#fff');
+  } else {
+    bgFill('#0c4a6e'); snow(t, 40, .7);
+    txt("DON'T CHARGE", 540, 190, 120, '#fff', { lw: 20 }); txt('WHEN FREEZING', 540, 330, 110, '#38bdf8', { lw: 20 });
+    phoneDev(540, 820, 1.4, 'on', { c1: '#94a3b8', c2: '#475569' }); line(540, 1060, 540, 1260, 16, '#f8fafc'); box(490, 1260, 100, 90, '#f8fafc', 12, 6);
+    flake(260, 700, 80, t); flake(820, 980, 60, -t);
+    if (t > T.dmg) { const k = pop(T.dmg, t); ctx.save(); ctx.translate(540, 820); ctx.scale(k, k); line(-300, -300, 300, 300, 40, '#dc2626'); line(300, -300, -300, 300, 40, '#dc2626'); ctx.restore(); badge(540, 1440, 460, 120, '#dc2626', ['CAN DAMAGE IT'], [66], T.dmg, t, -.03); }
+    foot('Below 0 °C charging can harm Li-ion cells (BGR, LG Energy Solution)', 1840, '#bae6fd');
+  }
+}
+function sEnd(lt, t) {
+  bgFill('#1e1b4b'); floor('#312e81', 1440); snow(t, 20, .4);
+  const k = pop(T.end - .2, t); txt('HIDING,', 540, 190, 130 * k, '#fff', { lw: 22 }); txt('NOT GONE!', 540, 330, 130 * k, '#a78bfa', { lw: 22 });
+  const p1 = t > T.yn && t < T.yn + .4, p2 = t > T.yn + .5 && t < T.yn + .9;
+  box(110, 500 + (p1 ? 12 : 0), 400, 260, '#16a34a', 46, 9); txt('YES', 310, 640 + (p1 ? 12 : 0), 120, '#fff', { lw: 16 });
+  box(570, 500 + (p2 ? 12 : 0), 400, 260, '#dc2626', 46, 9); txt('NO', 770, 640 + (p2 ? 12 : 0), 120, '#fff', { lw: 16 });
+  badge(540, 900, 640, 100, '#facc15', ['DID YOU GUESS RIGHT?'], [56], T.end + .3, t, .02, INK);
+  const look = Math.sin(t * 3);
+  hero({ x: 540, y: 1480, s: 1.0, scarf: '#ef4444', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.5 - look * .4, re: -.3 }, look: look > 0 ? 1 : -1, eyes: 'norm', mouth: 'smirk' });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(1, 2), fn: sCell, push: .04, flash: 1 }, { t0: mid(3, 4), fn: sDrain, push: .04, flash: .8 }, { t0: mid(6, 7), fn: sTwist, push: .04, flash: 1 }, { t0: mid(8, 9), fn: sEnd, push: .05, flash: 1 }];
+const CAP = [["your phone dies", "in the cold.", "so the cold broke", "your battery?", "nope."], ["guess:", "is the power gone,", "or hiding?", "comment", "before the end."], ["inside,", "tiny lithium ions", "swim from", "side to side.", "that's your power."], ["in the cold,", "the liquid", "they swim in", "gets thick.", "like honey."], ["the ions", "slow down,", "so the battery", "drains faster."], ["phones are made", "for zero to", "thirty-five degrees.", "colder,", "and they can", "switch off."], ["at minus twenty,", "some batteries", "give only", "about half", "their power."], ["twist:", "the power", "isn't gone.", "warm it up,", "and battery life", "comes back."], ["just don't", "charge it", "while it's freezing.", "that can", "damage it."], ["hiding,", "not gone.", "did you", "guess right?", "yes or no?"]];
+const HOT = new Set(["nope.", "or hiding?", "tiny lithium ions", "like honey.", "drains faster.", "switch off.", "about half", "isn't gone.", "comes back.", "while it's freezing.", "damage it.", "yes or no?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

@@ -1,0 +1,12 @@
+[
+ "Your phone dies in the cold. So the cold broke your battery? Nope.",
+ "Guess: is the power gone, or hiding? Comment before the end.",
+ "Inside, tiny lithium ions swim from side to side. That's your power.",
+ {"text": "In the cold, the liquid they swim in gets thick. Like honey.", "gap": 0.5},
+ "The ions slow down, so the battery drains faster.",
+ "Phones are made for zero to thirty-five degrees. Colder, and they can switch off.",
+ {"text": "At minus twenty, some batteries give only about half their power.", "gap": 0.5},
+ {"text": "Twist: the power isn't gone. Warm it up, and battery life comes back.", "gap": 0.6},
+ "Just don't charge it while it's freezing. That can damage it.",
+ {"text": "Hiding, not gone. Did you guess right? Yes or no?", "gap": 0.6}
+]

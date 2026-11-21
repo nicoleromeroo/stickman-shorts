@@ -1,0 +1,12 @@
+[
+ "Everyone on Earth jumps. Same second. Earthquake, or nothing?",
+ "Guess now, comment before the end.",
+ "Spread out across the planet, all our pushes cancel out.",
+ "So let's cheat. Everyone squeezes into one spot, about the size of a giant city.",
+ {"text": "Three, two, one. Jump!", "gap": 0.5},
+ {"text": "Earth moves less than the width of a single atom.", "gap": 0.5},
+ "Why so tiny? Earth is over ten trillion times heavier than all of us.",
+ {"text": "We land, Earth moves back. Total: nothing.", "gap": 0.6},
+ {"text": "Twist: one stadium can do more. In twenty eleven, Seattle football fans cheered so hard, a seismometer a block away picked it up.", "gap": 0.6},
+ {"text": "So: nothing. Did you guess right? Yes or no?", "gap": 0.6}
+]

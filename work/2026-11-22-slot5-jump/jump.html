@@ -1,0 +1,88 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { q: wt(0, 'earthquake'), g: at(1, 0), spread: at(2, 0), cancel: wt(2, 'cancel'), cheat: at(3, 0), city: wt(3, 'about the size'), c3: at(4, 0), c2: wt(4, 'two'), c1: wt(4, 'one.'), jump: wt(4, 'jump'),
+  atom: at(5, 0), why: at(6, 0), tril: wt(6, 'over ten'), land: at(7, 0), nothing: wt(7, 'total'), stad: at(8, 0), y11: wt(8, 'in twenty'), seis: wt(8, 'a seismometer'), end: at(9, 0), yn: wt(9, 'yes') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#475569') { txt(s, 540, y, 30, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+const SH = ['#3b82f6', '#f472b6', '#a855f7', '#16a34a', '#ef4444', '#f59e0b', '#06b6d4'];
+const JUMP = { lt: -.5, ls: .9, rt: .5, rs: .9, la: -2.6, le: -.2, ra: 2.6, re: .2 };
+function crowd(t, y, s, n, jumpT, spacing, x0) { for (let i = 0; i < n; i++) { const ph = t > jumpT ? Math.abs(Math.sin((t - jumpT) * 4 + i * .15)) : 0; stick({ x: x0 + i * spacing, y: y - ph * 120 * s, s, shirt: SH[i % 7], pants: '#334155', pose: ph > .1 ? JUMP : STAND, eyes: 'norm', mouth: ph > .1 ? 'grin' : 'smile', shadow: false }); } }
+function earth(x, y, r) { circ(x, y, r, '#3b82f6', INK, 10); ctx.save(); ctx.beginPath(); ctx.arc(x, y, r - 5, 0, 7); ctx.clip(); ctx.fillStyle = '#22c55e'; for (const [a, b, c] of [[-.4, -.3, .35], [.3, .2, .3], [-.1, .5, .25], [.5, -.5, .2]]) { ctx.beginPath(); ctx.ellipse(x + a * r, y + b * r, c * r, c * r * .7, a, 0, 7); ctx.fill(); } ctx.restore(); }
+function sHook(lt, t) {
+  bgFill('#7dd3fc'); floor('#4ade80', 1440);
+  const k = eob(inv(0, .2, t));
+  txt('EVERYONE JUMPS', 540, 190, 104 * Math.max(.85, k), '#fff', { lw: 18 }); txt('EARTHQUAKE?', 540, 320, 120 * Math.max(.85, k), '#f97316', { lw: 20 });
+  crowd(t, 1500, .5, 5, 0, 200, 140); crowd(t + .3, 1440, .42, 6, 0, 180, 90);
+  hero({ x: 540, y: 1520 - Math.abs(Math.sin(t * 4)) * 140, s: .95, pose: JUMP, eyes: 'huge', mouth: 'grin' });
+  if (t > T.g) { badge(260, 640, 380, 150, '#dc2626', ['QUAKE'], [96], T.g + .2, t, -.05); badge(820, 640, 400, 150, '#475569', ['NOTHING'], [88], T.g + .5, t, .05); }
+}
+function sSpread(lt, t) {
+  bgFill('#0f172a'); for (let i = 0; i < 40; i++) circ(rnd(i) * W, rnd(i + 4) * H, 4, 'rgba(255,255,255,.6)');
+  txt('SPREAD OUT', 540, 190, 130, '#fff', { lw: 22 }); txt('IT CANCELS OUT', 540, 330, 104, '#facc15', { lw: 18 });
+  earth(540, 900, 300);
+  for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2; const hop = Math.abs(Math.sin(t * 4 + i)) * 20; ctx.save(); ctx.translate(540 + Math.cos(a) * (300 + hop), 900 + Math.sin(a) * (300 + hop)); ctx.rotate(a + Math.PI / 2); stick({ x: 0, y: 0, s: .28, shirt: SH[i % 7], pants: '#334155', pose: JUMP, eyes: 'norm', mouth: 'grin', shadow: false }); ctx.restore();
+    if (t > T.cancel) { const d = 200; line(540 + Math.cos(a) * 290, 900 + Math.sin(a) * 290, 540 + Math.cos(a) * d, 900 + Math.sin(a) * d, 10, '#facc15'); } }
+  if (t > T.cancel) badge(540, 1300, 560, 120, '#16a34a', ['NET PUSH: 0'], [76], T.cancel, t, -.03);
+  foot('Live Science: jumping in place everywhere gives zero net force', 1840, '#94a3b8');
+}
+function sSqueeze(lt, t) {
+  bgFill('#fde68a'); floor('#a3a3a3', 1440);
+  txt('EVERYONE IN', 540, 190, 120, '#fff', { lw: 20 }); txt('ONE GIANT CITY', 540, 320, 110, '#ea580c', { lw: 20 });
+  for (let r = 0; r < 3; r++) crowd(t + r, 1100 + r * 160, .36 + r * .06, 9 - r, T.jump, 120 + r * 10, 60 + r * 40);
+  const cd = t < T.c2 ? '3' : t < T.c1 ? '2' : t < T.jump ? '1' : null;
+  if (t > T.c3 && cd) { const t0 = cd === '3' ? T.c3 : cd === '2' ? T.c2 : T.c1; txt(cd, 540, 650, 300 * eob(inv(t0, t0 + .2, t)), '#fff', { lw: 40 }); }
+  if (t > T.jump) badge(540, 650, 560, 220, '#dc2626', ['JUMP!'], [180], T.jump, t, -.06);
+  foot('Packed together, about the area of Los Angeles (HowStuffWorks)');
+}
+function sTiny(lt, t) {
+  if (t < T.why) {
+    bgFill('#0f172a'); for (let i = 0; i < 40; i++) circ(rnd(i) * W, rnd(i + 4) * H, 4, 'rgba(255,255,255,.6)');
+    txt('EARTH MOVES', 540, 190, 120, '#fff', { lw: 20 }); txt('LESS THAN 1 ATOM', 540, 320, 100, '#38bdf8', { lw: 18 });
+    earth(380, 980, 260);
+    const k = pop(T.atom + .6, t); ctx.save(); ctx.translate(780, 820); ctx.scale(k, k); circ(0, 0, 170, '#e0f2fe', INK, 14); line(120, 120, 230, 230, 30); circ(0, 0, 22, '#ef4444', INK, 5); ctx.strokeStyle = '#334155'; ctx.lineWidth = 4; for (const r of [0, 1.05, 2.1]) { ctx.beginPath(); ctx.ellipse(0, 0, 120, 45, r, 0, 7); ctx.stroke(); } circ(Math.cos(t * 5) * 120, Math.sin(t * 5) * 45, 12, '#3b82f6'); ctx.restore();
+    foot('HowStuffWorks, Live Science: less than the width of a hydrogen atom', 1840, '#94a3b8');
+  } else if (t < T.land) {
+    bgFill('#e0f2fe'); 
+    txt('EARTH IS OVER', 540, 190, 110, '#fff', { lw: 20 }); txt('10 TRILLION X', 540, 320, 120, '#dc2626', { lw: 20 }); txt('HEAVIER THAN ALL OF US', 540, 430, 64, '#1e3a8a', { lw: 12 });
+    // seesaw scale
+    line(140, 1180, 940, 1290, 22); ctx.fillStyle = '#64748b'; ctx.beginPath(); ctx.moveTo(540, 1240); ctx.lineTo(470, 1440); ctx.lineTo(610, 1440); ctx.closePath(); ctx.fill(); ctx.stroke();
+    earth(800, 1045, 230);
+    for (let i = 0; i < 3; i++) stick({ x: 200 + i * 50, y: 1180 + i * 6, s: .2, shirt: SH[i], pants: '#334155', pose: STAND, eyes: 'norm', mouth: 'o', shadow: false });
+    if (t > T.tril) sparkle(800, 780, 60, 1);
+    foot('Earth ~6 trillion trillion kg vs all humans ~0.4 trillion kg (Live Science)', 1840, '#334155');
+  } else {
+    bgFill('#7dd3fc'); floor('#4ade80', 1440);
+    txt('WE LAND', 540, 190, 130, '#fff', { lw: 22 }); txt('EARTH MOVES BACK', 540, 320, 100, '#16a34a', { lw: 18 });
+    crowd(t, 1500, .55, 5, 99, 200, 140);
+    if (t > T.nothing) badge(540, 800, 720, 200, '#475569', ['TOTAL: NOTHING'], [96], T.nothing, t, -.04);
+  }
+}
+function sStadium(lt, t) {
+  bgFill('#1e293b');
+  txt('BUT ONE STADIUM', 540, 190, 104, '#fff', { lw: 18 }); txt(t > T.y11 ? '2011, SEATTLE' : 'CAN DO MORE', 540, 320, 110, '#facc15', { lw: 20 });
+  // stands
+  ctx.fillStyle = '#334155'; ctx.beginPath(); ctx.moveTo(-50, 1300); ctx.lineTo(1130, 1300); ctx.lineTo(1130, 520); ctx.lineTo(-50, 520); ctx.fill();
+  for (let r = 0; r < 4; r++) for (let i = 0; i < 11; i++) { const x = 50 + i * 100 + (r % 2) * 50, y = 680 + r * 170, j = Math.abs(Math.sin(t * 7 + i + r)) * 30; stick({ x, y: y - j, s: .28, shirt: SH[(i + r) % 7], pants: '#334155', pose: JUMP, eyes: 'norm', mouth: 'grin', shadow: false }); }
+  box(-20, 1300, 1120, 120, '#16a34a', 0, 8);
+  if (t > T.seis) { const k = pop(T.seis, t); ctx.save(); ctx.translate(540, 1050); ctx.scale(k, k); box(-380, -150, 760, 300, '#fff', 24, 10); ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 6; ctx.beginPath(); for (let x = -340; x <= 340; x += 6) { const a = Math.exp(-Math.pow((x - 0) / 120, 2)) * 100; const y = Math.sin(x * .25 + t * 20) * (6 + a); x === -340 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke(); txt('SEISMOMETER', 0, 120, 44, INK, { stroke: false }); ctx.restore(); }
+  foot('Stadium shaking recorded a block away (USGS, PNSN, Jan 2011)', 1840, '#94a3b8');
+}
+function sEnd(lt, t) {
+  bgFill('#1e1b4b'); floor('#312e81', 1440);
+  const k = pop(T.end - .2, t); txt('DID YOU', 540, 190, 130 * k, '#fff', { lw: 22 }); txt('GUESS RIGHT?', 540, 330, 120 * k, '#f97316', { lw: 22 });
+  const p1 = t > T.yn && t < T.yn + .4, p2 = t > T.yn + .5 && t < T.yn + .9;
+  box(110, 500 + (p1 ? 12 : 0), 400, 260, '#16a34a', 46, 9); txt('YES', 310, 640 + (p1 ? 12 : 0), 120, '#fff', { lw: 16 });
+  box(570, 500 + (p2 ? 12 : 0), 400, 260, '#dc2626', 46, 9); txt('NO', 770, 640 + (p2 ? 12 : 0), 120, '#fff', { lw: 16 });
+  badge(540, 900, 500, 100, '#facc15', ['COMMENT IT'], [62], T.end + .3, t, .02, INK);
+  hero({ x: 540, y: 1480 - Math.abs(Math.sin(t * 3)) * 60, s: 1.0, pose: JUMP, eyes: 'norm', mouth: 'smirk' });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(1, 2), fn: sSpread, push: .04, flash: 1 }, { t0: mid(2, 3), fn: sSqueeze, push: .04, flash: .8 }, { t0: mid(4, 5), fn: sTiny, push: .04, flash: 1 }, { t0: mid(7, 8), fn: sStadium, push: .04, flash: .8 }, { t0: mid(8, 9), fn: sEnd, push: .05, flash: 1 }];
+const CAP = [["everyone on earth", "jumps.", "same second.", "earthquake,", "or nothing?"], ["guess now,", "comment", "before the end."], ["spread out", "across the planet,", "all our pushes", "cancel out."], ["so let's cheat.", "everyone squeezes", "into one spot,", "about the size", "of a giant city."], ["three,", "two,", "one.", "jump!"], ["earth moves", "less than the width", "of a single atom."], ["why so tiny?", "earth is over", "ten trillion times", "heavier", "than all of us."], ["we land,", "earth moves back.", "total:", "nothing."], ["twist:", "one stadium", "can do more.", "in twenty eleven,", "seattle football fans", "cheered so hard,", "a seismometer", "a block away", "picked it up."], ["so: nothing.", "did you", "guess right?", "yes or no?"]];
+const HOT = new Set(["earthquake,", "or nothing?", "cancel out.", "of a giant city.", "jump!", "of a single atom.", "ten trillion times", "nothing.", "one stadium", "picked it up.", "yes or no?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>
