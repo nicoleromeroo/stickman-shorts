@@ -1,5 +1,5 @@
 {
- "uploaded_count": 40,
+ "uploaded_count": 42,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -321,6 +321,22 @@
    "mode": "scheduled 2026-11-22T10:30:00Z",
    "publish_at": "2026-11-22T11:30:00+01:00",
    "uploaded_at": "2026-11-21T15:01:27+00:00"
+  },
+  {
+   "tag": "video-20261122-slot1",
+   "video_id": "itDUEA5183c",
+   "title": "Why Your Phone Dies Faster in the Cold \ud83e\udd76 #shorts",
+   "mode": "scheduled 2026-11-22T05:00:00Z",
+   "publish_at": "2026-11-22T06:00:00+01:00",
+   "uploaded_at": "2026-11-21T19:50:37+00:00"
+  },
+  {
+   "tag": "video-20261122-slot5",
+   "video_id": "sRzLM_AC0kY",
+   "title": "What If Everyone on Earth Jumped at Once? #shorts",
+   "mode": "scheduled 2026-11-22T17:30:00Z",
+   "publish_at": "2026-11-22T18:30:00+01:00",
+   "uploaded_at": "2026-11-21T19:50:37+00:00"
   }
  ]
 }
