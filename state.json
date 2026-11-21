@@ -1,5 +1,5 @@
 {
- "uploaded_count": 37,
+ "uploaded_count": 40,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -297,6 +297,30 @@
    "mode": "scheduled 2026-11-21T17:30:00Z",
    "publish_at": "2026-11-21T18:30:00+01:00",
    "uploaded_at": "2026-11-20T19:52:45+00:00"
+  },
+  {
+   "tag": "video-20261122-slot2",
+   "video_id": "gYxn2DTEytY",
+   "title": "First Apprentice Paycheck: Spend, Save or Invest? \ud83d\udcb6 #shorts",
+   "mode": "scheduled 2026-11-22T15:00:00Z",
+   "publish_at": "2026-11-22T16:00:00+01:00",
+   "uploaded_at": "2026-11-21T15:01:27+00:00"
+  },
+  {
+   "tag": "video-20261122-slot3",
+   "video_id": "DAS0iUSfMHo",
+   "title": "LOW BATTERY (Part 2) #shorts",
+   "mode": "scheduled 2026-11-22T19:00:00Z",
+   "publish_at": "2026-11-22T20:00:00+01:00",
+   "uploaded_at": "2026-11-21T15:01:27+00:00"
+  },
+  {
+   "tag": "video-20261122-slot4",
+   "video_id": "g9HA4b68Siw",
+   "title": "Old vs New Pok\u00e9mon: Which Sold More? \ud83c\udfae #shorts",
+   "mode": "scheduled 2026-11-22T10:30:00Z",
+   "publish_at": "2026-11-22T11:30:00+01:00",
+   "uploaded_at": "2026-11-21T15:01:27+00:00"
   }
  ]
 }
