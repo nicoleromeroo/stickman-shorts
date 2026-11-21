@@ -1,0 +1,121 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const T = { only: wt(0, 'and you'), knocked: wt(1, 'knocked'), hold: wt(2, 'you hold'), stops: wt(2, 'the knocking'), lights: wt(3, 'every'), stuck: wt(4, 'stuck'), blink: wt(4, "he doesn't"),
+  oven: wt(5, 'so does'), tick: wt(5, 'nothing'), text: at(6, 0), find: wt(6, 'find'), who: at(7, 0), p4: wt(7, 'and your'), flash: wt(8, 'a flashlight'), q: at(9, 0) };
+function battery(x, y, s, pct) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-90, -40, 170, 80, '#0f172a', 14, 8); box(80, -16, 16, 32, INK, 4, 0); ctx.fillStyle = pct <= 5 ? '#ef4444' : '#22c55e'; rr(-80, -30, 150 * Math.max(.06, pct / 100), 60, 8); ctx.fill(); ctx.restore(); }
+function clockTxt(x, y, s, label, col = '#ef4444') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-190, -80, 380, 160, '#0f172a', 20, 8); txt(label, 0, 8, 110, col, { stroke: false }); ctx.restore(); }
+function phoneBig(x, y, s, msgs, pct, glow = 0) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  if (glow) spot(0, 0, 520, glow, '34,197,94');
+  box(-300, -520, 600, 1040, '#111827', 60, 10); ctx.fillStyle = '#0b1020'; rr(-270, -490, 540, 980, 40); ctx.fill();
+  txt('ME', 0, -420, 56, '#fff', { stroke: false }); txt(pct + ' %', 170, -420, 40, pct <= 5 ? '#ef4444' : '#fff', { stroke: false, font: 'Nun', weight: '900 ' });
+  line(-250, -370, 250, -370, 4, '#334155');
+  let yy = -300; for (const m of msgs) { if (!m.show) continue; const k = eob(inv(m.t0, m.t0 + .25, m.t)); ctx.save(); ctx.translate(-240, yy); ctx.scale(k, k);
+    const h = 30 + m.text.length * 62; box(0, 0, 470, h, m.col || '#22c55e', 30, 6); m.text.forEach((l, i) => txt(l, 235, 45 + i * 62, 50, '#fff', { lw: 7 })); ctx.restore(); yy += h + 30; }
+  ctx.restore();
+}
+function doorFront(x, y, s, shake, under = 0) { ctx.save(); ctx.translate(x + shake, y); ctx.scale(s, s); box(-210, -560, 420, 1120, '#0b1020', 6, 10); box(-190, -540, 380, 1080, '#6b3f1d', 6, 8);
+  box(-150, -480, 300, 380, '#5a3417', 6, 6); box(-150, -40, 300, 420, '#5a3417', 6, 6); circ(140, 20, 20, '#fbbf24', INK, 6);
+  if (under > 0) { ctx.fillStyle = `rgba(200,200,255,${under})`; ctx.fillRect(-190, 540, 380, 22); }
+  ctx.restore(); }
+// street pieces
+function streetBg() { bgFill('#0b1020'); for (let i = 0; i < 40; i++) circ(rnd(i) * 1080, rnd(i + 50) * 600, 3 + rnd(i + 9) * 3, '#e2e8f0');
+  circ(110, 520, 45, '#f8fafc'); floor('#1e293b', 1420); ctx.fillStyle = '#334155'; ctx.fillRect(0, 1420, 1080, 40); }
+function house(x, y, w, h, col = '#1e1b4b', win = 0) { box(x, y, w, h, col, 4, 8); ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(x - 30, y); ctx.lineTo(x + w / 2, y - h * .45); ctx.lineTo(x + w + 30, y); ctx.closePath(); ctx.fill(); ctx.stroke();
+  box(x + w * .2, y + h * .2, w * .25, h * .25, win ? '#fde68a' : '#0f172a', 4, 6); box(x + w * .55, y + h * .2, w * .25, h * .25, '#0f172a', 4, 6); }
+function lamp(x, y, on) { line(x, y, x, y - 520, 16, INK); line(x, y - 520, x + 90, y - 520, 14, INK); box(x + 50, y - 520, 90, 50, on ? '#fde68a' : '#334155', 10, 6); if (on) spot(x + 95, y - 400, 260, .35); }
+function neighbour(x, y, s, frozen = true, t = 0) { stick({ x, y, s, shirt: '#16a34a', pants: '#1f2937', hair: '#78350f', pose: { lt: .55, ls: .9, rt: -.35, rs: 0, la: -.5, le: .3, ra: .6, re: .3 }, eyes: 'norm', mouth: 'flat', look: -1, lean: .05,
+  hold: (hx, hy) => { box(hx - 25, hy - 10, 50, 60, '#a16207', 6, 5); } }); }
+function wallClock(x, y, r) { circ(x, y, r, '#f8fafc', INK, 9); line(x, y, x, y - r * .75, 9); line(x, y, x + 4, y - r * .55, 13); circ(x, y, 10, INK); }
+// ---------- scenes ----------
+function sCold(lt, t) {
+  streetBg(); house(60, 900, 360, 520); house(660, 940, 360, 480);
+  lamp(500, 1440, false);
+  neighbour(790, 1600, 1.35);
+  const p = t * 9; hero({ x: 220 + Math.min(t, 4) * 35, y: 1640, s: 1.45, pose: walkPose(p, .8), eyes: 'huge', mouth: 'o', look: 1, bob: Math.abs(Math.sin(p)) * 8, hold: holdPhone('on', { c1: '#1e293b', c2: '#0b1020' }) });
+  clockTxt(540, 470, 1.15, '00:00');
+  txt('EVERYTHING FROZE', 540, 230, 112, '#fde047', { lw: 18 });
+  if (t > T.only) popIn(t, T.only, 360, 860, () => box(-120, -60, 240, 120, '#3b82f6', 30, 7) || txt('ONLY YOU', 0, 4, 52, '#fff', { lw: 8 }));
+}
+function sRecap(lt, t) {
+  bgFill('#120f2e'); floor('#0b0a1f', 1560);
+  let sh = 0; for (let i = 0; i < 3; i++) { const d = t - (T.knocked + i * .3); if (d > 0 && d < .25) sh = Math.sin(d * 90) * 20 * (1 - d / .25); }
+  doorFront(540, 990, .95, sh, .6);
+  txt('LAST TIME...', 540, 250, 110, '#c4b5fd', { lw: 16 });
+  for (let i = 0; i < 3; i++) if (t > T.knocked + i * .3) { impact(300 + i * 240, 720 + (i % 2) * 120, 110, 1); txt('KNOCK', 300 + i * 240, 590 + (i % 2) * 120, 64, '#fff', { lw: 11 }); }
+}
+function sHold(lt, t) {
+  bgFill('#120f2e'); floor('#0b0a1f', 1560);
+  doorFront(780, 990, .85, 0, .5);
+  hero({ x: 300, y: 1610, s: 1.3, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.2, re: -2.1 }, eyes: 'huge', mouth: 'flat', look: 1, lean: -.08 * inv(L[2].start, T.hold, t) });
+  txt("DON'T OPEN", 540, 250, 120, '#ef4444', { lw: 18 });
+  if (t > T.hold) { txt('HOLD YOUR', 300, 520, 64, '#fff', { lw: 10 }); txt('BREATH', 300, 590, 64, '#fff', { lw: 10 }); }
+  if (t > T.stops + .4) txt('. . .', 780, 520, 120, '#fff', { lw: 14 });
+}
+function sStreet(lt, t) {
+  streetBg(); house(40, 940, 320, 480); house(700, 940, 340, 480);
+  const off = t > T.lights + .2; lamp(380, 1440, !off); lamp(900, 1440, !off);
+  if (t > T.lights + .2 && t < T.lights + .45) { ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.fillRect(0, 0, W, H); }
+  neighbour(640, 1620, 1.45);
+  if (t > T.stuck) { popIn(t, T.stuck, 640, 700, () => { box(-200, -60, 400, 120, '#0ea5e9', 30, 7); txt('FROZEN', 0, 4, 70, '#fff', { lw: 10 }); }); }
+  if (t > T.blink) { txt("NO BLINK", 640, 840, 64, '#fde047', { lw: 10 }); }
+  // you peeking from your window (left house)
+  hero({ x: 190, y: 1640, s: 1.2, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, hold: holdPhone('on', { c1: '#1e293b', c2: '#0b1020' }) });
+  txt(off ? 'LIGHTS OFF' : 'YOU PEEK OUTSIDE', 540, 240, 106, '#fde047', { lw: 17 });
+}
+const HOLDP = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.6, re: -1.5 };
+function sClocks(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1420);
+  // oven
+  box(640, 900, 380, 520, '#94a3b8', 14, 8); box(680, 1060, 300, 300, '#1f2937', 10, 7); box(700, 930, 260, 100, '#0f172a', 10, 6);
+  if (t > T.oven) txt('00:00', 830, 984, 70, '#ef4444', { stroke: false });
+  wallClock(830, 560, 150);
+  hero({ x: 290, y: 1600, s: 1.25, pose: HOLDP, eyes: 'huge', mouth: 'flat', look: 1, hold: holdPhone('on', { c1: '#1e293b', c2: '#0b1020' }) });
+  clockTxt(300, 600, .9, '00:00');
+  txt(t > T.tick ? 'NOTHING TICKS' : 'STILL MIDNIGHT', 540, 230, 112, '#fde047', { lw: 18 });
+}
+function sText(lt, t) {
+  bgFill('#0b1020');
+  const sh = t > T.text && t < T.text + .4 ? Math.sin(t * 80) * 10 : 0; ctx.save(); ctx.translate(sh, 0);
+  phoneBig(540, 980, 1.12, [{ show: true, t0: -9, t, text: ["THAT'S NOT ME."], col: '#dc2626' }, { show: t > T.find - .1, t0: T.find - .1, t, text: ['FIND MIA.', "SHE'S AWAKE", 'TOO.'] }], 5, t > T.find ? .3 : 0);
+  ctx.restore();
+  txt('NEW TEXT', 540, 240, 110, '#22c55e', { lw: 17 });
+}
+function sWho(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1420);
+  hero({ x: 420, y: 1600, s: 1.35, pose: HOLDP, eyes: 'norm', mouth: 'wavy', look: 1, tilt: .12 * Math.sin(t * 2), hold: holdPhone('on', { c1: '#1e293b', c2: '#0b1020' }) });
+  qmark(720, 820, t, L[7].start + .1, '#ffd23f', 220);
+  txt('WHO IS MIA?', 540, 240, 120, '#fde047', { lw: 18 });
+  const pc = t > T.p4 ? 4 : 5; battery(800, 520, 1.2, pc); txt(pc + ' %', 800, 650, 100, '#ef4444', { lw: 14 });
+  if (t > T.p4 && t < T.p4 + .6) { ctx.fillStyle = `rgba(239,68,68,${.25 * (1 - (t - T.p4) / .6)})`; ctx.fillRect(0, 0, W, H); }
+}
+function sBlink(lt, t) {
+  streetBg(); house(560, 900, 440, 520, '#1e1b4b');
+  lamp(470, 1440, false);
+  const on = t > T.flash && Math.floor((t - T.flash) * 4) % 2 === 0;
+  if (on) { spot(780, 1080, 300, .6, '253,224,71'); circ(780, 1080, 26, '#fef08a', INK, 5); }
+  // you, seen from behind-ish, at your window on the left
+  hero({ x: 250, y: 1660, s: 1.45, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, hold: holdPhone('on', { c1: '#1e293b', c2: '#0b1020' }) });
+  if (on) txt('BLINK', 780, 900, 80, '#fde047', { lw: 12 });
+  txt('SOMEONE IS AWAKE', 540, 240, 100, '#fde047', { lw: 16 });
+}
+function sEnd(lt, t) {
+  streetBg(); house(560, 900, 440, 520); lamp(380, 1440, false);
+  if (Math.floor(t * 4) % 2 === 0) { spot(780, 1080, 260, .5, '253,224,71'); circ(780, 1080, 22, '#fef08a', INK, 5); }
+  popIn(t, T.q + .1, 540, 380, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('GO OUTSIDE?', 0, -100, 80, '#fff', { stroke: false });
+    box(-420, -10, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 70, 80, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 70, 80, '#fff', { lw: 10 }); });
+  if (t > L[9].end + .2) { const k = eob(inv(L[9].end + .2, L[9].end + .45, t)); ctx.save(); ctx.translate(540, 1480); ctx.scale(k, k); box(-430, -80, 860, 160, '#facc15', 30, 9); txt('PART 3 TOMORROW', 0, 10, 86, INK, { stroke: false }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sCold, push: .05 }, { t0: mid(0, 1), fn: sRecap, push: .04, flash: .5 }, { t0: mid(1, 2), fn: sHold, push: .06, xfade: .3 }, { t0: mid(2, 3), fn: sStreet, push: .06, flash: .4 },
+  { t0: mid(4, 5), fn: sClocks, push: .05, flash: .4 }, { t0: mid(5, 6), fn: sText, push: .06, flash: .6 }, { t0: mid(6, 7), fn: sWho, push: .05, flash: .4 }, { t0: mid(7, 8), fn: sBlink, push: .08, xfade: .3 }, { t0: mid(8, 9), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["every clock in town", "just froze", "at midnight.", "and you're the only", "one moving."], ["last time,", "a voice that sounded", "exactly like you", "knocked three times."], ["you don't open.", "you hold your breath.", "the knocking stops."],
+  ["you peek outside.", "every streetlight", "is off."], ["your neighbour", "is stuck mid-step,", "one foot in the air.", "he doesn't blink."], ["your phone says", "midnight.", "so does the oven.", "nothing is ticking."],
+  ["then a new text", "from your own number.", "find mia.", "she's awake too."], ["who is mia?", "and your battery", "just dropped to", "four percent."], ["across the street,", "a flashlight", "blinks back at you."], ["would you", "go outside?", "comment yes or no."]];
+const HOT = new Set(["just froze", "one moving.", "the knocking stops.", "is off.", "he doesn't blink.", "nothing is ticking.", "find mia.", "four percent.", "blinks back at you.", "comment yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1760) });
+</script></body></html>

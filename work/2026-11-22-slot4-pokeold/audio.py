@@ -1,0 +1,12 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 4417)
+m.music("chiptune")
+m.add("pop", .05, .4); m.add("boing", m.wt(0, "which"), .3); m.add("ding", m.wt(0, "guess"), .3)
+m.add("whoosh", m.mid(0, 1) - .12, .25); m.add("pop", m.at(1, .05), .35)
+m.add("whoosh", m.mid(1, 2) - .12, .25); m.add("shing", m.wt(2, "scarlet"), .25)
+m.add("cash", m.at(3, 0), .3); m.add("ding", m.at(3, .9), .3)
+m.add("whoosh", m.mid(3, 4) - .12, .25); m.add("pop", m.wt(4, "nineteen"), .35); m.add("pop", m.at(5, 0), .3)
+m.add("whoosh", m.mid(5, 6) - .12, .25); m.add("chime", m.at(6, .6), .4)
+m.add("whoosh", m.mid(6, 7) - .12, .25); m.add("slide", m.at(7, 0), .3); m.add("slide", m.wt(7, "even"), .3)
+m.add("whoosh", m.mid(7, 8) - .12, .25); m.add("pop", m.at(8, .1), .35)
+m.write(mvol=.08, svol=.30)

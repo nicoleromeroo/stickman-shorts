@@ -64,3 +64,4 @@ top right. Night palette: navy `#0b1020` / `#1e1b4b`, digital clock in red 7-seg
 
 ## Episodes (LOW BATTERY)
 - Part 1 · 2026-11-21 · At 11:58 PM with 5 % battery you get a text from your own number: "Don't open the door at midnight." A second text warns "They'll knock 3 times"; at midnight: knock, knock, knock, and a voice behind the door whispers your name in exactly your voice. Cliffhanger: your phone buzzes one last time: "That's not me." (comment prompt: would you open the door?)
+- Part 2 · 2026-11-22 · Cold open: every clock in town froze at midnight and only you can move. You don't open the door, the knocking stops; outside every streetlight is off, your neighbour is frozen mid-step, and the phone and oven both read 00:00. A text from your own number says "Find Mia. She's awake too." while the battery drops to 4 %. Cliffhanger: across the street, a flashlight blinks back at you (comment prompt: would you go outside?).

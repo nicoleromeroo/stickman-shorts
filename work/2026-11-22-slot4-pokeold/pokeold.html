@@ -1,0 +1,84 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const T = { which: wt(0, 'which'), guess: wt(0, 'guess'), sv: wt(2, 'scarlet'), num1: at(3, 0), gb: wt(4, 'on a'), y96: wt(4, 'nineteen'), jp: at(5, 0), num2: at(6, 0), win: at(7, 0), even: wt(7, 'even'), q: at(8, 0) };
+// generic old handheld (no brand)
+function oldHand(x, y, s, glow = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); if (glow) spot(0, 0, 300, glow);
+  box(-130, -200, 260, 400, '#c7c9c2', 26, 9); box(-100, -170, 200, 150, '#556b2f', 8, 7); box(-84, -156, 168, 122, '#9bbc0f', 4, 4);
+  box(-90, 50, 70, 24, INK, 4, 0); box(-67, 27, 24, 70, INK, 4, 0); circ(50, 70, 20, '#7c3aed', INK, 6); circ(95, 45, 20, '#7c3aed', INK, 6); ctx.restore(); }
+// generic modern console slab (no brand)
+function newCon(x, y, s, glow = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); if (glow) spot(0, 0, 340, glow, '147,197,253');
+  box(-230, -120, 460, 240, '#1f2937', 30, 9); box(-170, -95, 340, 190, '#0ea5e9', 10, 6); sparkle(-90, -40, 26, 1, '#fff'); circ(-200, -30, 14, '#64748b', INK, 4); circ(200, 30, 14, '#64748b', INK, 4); ctx.restore(); }
+function counter(x, y, v, col, size = 150) { txt(v.toFixed(2) + ' M', x, y, size, col, { lw: size * .16 }); }
+function ring(col) { bgFill(col); floor('#0f172a', 1430); ctx.fillStyle = 'rgba(255,255,255,.06)'; for (let i = 0; i < 8; i++) ctx.fillRect(i * 140, 0, 60, 1430); }
+// ---------- scenes ----------
+function sHook(lt, t) {
+  bgFill('#1e1b4b'); ctx.fillStyle = '#065f46'; ctx.fillRect(0, 0, 540, 1430); ctx.fillStyle = '#0c4a6e'; ctx.fillRect(540, 0, 540, 1430); floor('#0f172a', 1430);
+  txt('1996', 270, 470, 110, '#bef264', { lw: 16 }); txt('TODAY', 810, 470, 110, '#7dd3fc', { lw: 16 });
+  oldHand(270, 760, .95, .2 + .1 * Math.sin(t * 5)); newCon(810, 760, .95, .2 + .1 * Math.cos(t * 5));
+  const sw = Math.sin(t * 4); hero({ x: 540, y: 1620, s: 1.25, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: 1.4 + .3 * sw, le: -1, ra: -1.4 + .3 * sw, re: 1 }, eyes: 'huge', mouth: 'o', look: sw > 0 ? 1 : -1, bob: Math.abs(sw) * 10 });
+  txt('OLD OR NEW?', 540, 230, 140, '#fde047', { lw: 22 });
+  qmark(540, 1000, t, T.which, '#ffd23f', 170);
+}
+function sComment(lt, t) {
+  bgFill('#1e1b4b'); floor('#0f172a', 1430);
+  popIn(t, L[1].start, 540, 600, () => { box(-470, -230, 940, 460, '#f8fafc', 34, 9); txt('COMMENT NOW', 0, -130, 90, INK, { stroke: false });
+    box(-420, -20, 380, 170, '#16a34a', 24, 7); txt('OLD', -230, 70, 100, '#fff', { lw: 12 }); box(40, -20, 380, 170, '#0284c7', 24, 7); txt('NEW', 230, 70, 100, '#fff', { lw: 12 }); });
+  hero({ x: 540, y: 1620, s: 1.25, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.4, re: -.3 }, eyes: 'norm', mouth: 'grin', look: 0, bob: Math.abs(Math.sin(t * 6)) * 8 });
+  txt('GUESS FIRST', 540, 230, 120, '#fde047', { lw: 18 });
+}
+function sNew(lt, t) {
+  ring('#0c4a6e');
+  txt('NEW CORNER', 540, 220, 120, '#7dd3fc', { lw: 18 });
+  popIn(t, T.sv, 540, 400, () => { txt('SCARLET', -190, 0, 90, '#ef4444', { lw: 14 }); txt('+', 30, 0, 80, '#fff', { lw: 12 }); txt('VIOLET', 240, 0, 90, '#a78bfa', { lw: 14 }); });
+  newCon(540, 660, 1.1, .3);
+  hero({ x: 540, y: 1660, s: 1.1, pose: { lt: .15, ls: 0, rt: -.15, rs: 0, la: 2.6, le: .2, ra: -2.6, re: -.2 }, eyes: 'norm', mouth: 'grin', bob: Math.abs(Math.sin(t * 8)) * 14 });
+  if (t > T.num1) { const k = eo(inv(T.num1, T.num1 + 1.6, t)); popIn(t, T.num1, 540, 930, () => counter(0, 0, 28.66 * k, '#fff', 150)); txt('COPIES', 540, 1030, 70, '#7dd3fc', { lw: 10 }); }
+}
+function sOld(lt, t) {
+  ring('#065f46');
+  txt('OLD CORNER', 540, 220, 120, '#bef264', { lw: 18 });
+  popIn(t, L[4].start + .3, 540, 400, () => { txt('RED', -170, 0, 100, '#ef4444', { lw: 14 }); txt('+', 0, 0, 80, '#fff', { lw: 12 });
+    txt(t > T.jp ? 'GREEN' : 'BLUE', 190, 0, 100, t > T.jp ? '#22c55e' : '#3b82f6', { lw: 14 }); });
+  if (t > T.jp) popIn(t, T.jp, 540, 520, () => { box(-200, -45, 400, 90, '#f8fafc', 24, 6); txt('IN JAPAN', 0, 4, 60, INK, { stroke: false }); });
+  oldHand(540, 830, 1.05, .25);
+  if (t > T.y96) popIn(t, T.y96, 840, 640, () => { box(-120, -60, 240, 120, '#facc15', 24, 7); txt('1996', 0, 6, 76, INK, { stroke: false }); });
+  hero({ x: 270, y: 1640, s: 1.15, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -1.4, re: -.2 }, eyes: 'huge', mouth: 'o', look: 1 });
+  stick({ x: 820, y: 1640, s: 1.15, shirt: '#f97316', pants: '#334155', hair: '#111827', pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: 1.4, le: .2, ra: -.3, re: -.2 }, eyes: 'norm', mouth: 'smile', look: -1 });
+}
+function sNum(lt, t) {
+  ring('#065f46');
+  oldHand(540, 760, 1.15, .5 + .2 * Math.sin(t * 9));
+  const k = eo(inv(T.num2, T.num2 + 1.3, t)); counter(540, 1130, 31.38 * k, '#fde047', 170);
+  txt('OVER', 540, 230, 110, '#fff', { lw: 16 }); txt('31 MILLION', 540, 360, 130, '#fde047', { lw: 20 });
+  for (let i = 0; i < 6; i++) sparkle(240 + i * 120, 560 + (i % 2) * 400, 30 + 10 * Math.sin(t * 8 + i), 1);
+}
+function sBars(lt, t) {
+  bgFill('#1e1b4b'); floor('#0f172a', 1430);
+  txt('OLD STILL WINS', 540, 220, 125, '#fde047', { lw: 20 });
+  const rows = [['RED / BLUE 1996', 31.38, '#16a34a', L[7].start], ['SCARLET / VIOLET', 28.66, '#0284c7', L[7].start + .2], ['SWORD / SHIELD', 27.36, '#64748b', T.even]];
+  rows.forEach(([lab, v, col, t0], i) => { if (t < t0) return; const k = eo(inv(t0, t0 + .7, t)); const y = 430 + i * 230, w = 820 * v / 31.38 * k;
+    txt(lab, 80, y, 58, '#fff', { align: 'left', lw: 9 }); box(80, y + 45, Math.max(20, w), 100, col, 20, 7); txt((v * k).toFixed(2) + ' M', 80 + Math.max(20, w) - 20, y + 97, 60, '#fff', { align: 'right', lw: 9 }); });
+  hero({ x: 540, y: 1620, s: 1.15, pose: { lt: .15, ls: 0, rt: -.15, rs: 0, la: 2.5, le: .3, ra: -2.5, re: -.3 }, eyes: 'closed', mouth: 'grin', bob: Math.abs(Math.sin(t * 8)) * 12 });
+  txt('Copies sold. Red/Blue: over 31.38 M (Guinness, March 2024).', 540, 1852, 28, '#cbd5e1', { stroke: false, font: 'Nun', weight: '900 ' });
+  txt('Scarlet/Violet, Sword/Shield: Nintendo, 30 Sep 2026.', 540, 1886, 28, '#cbd5e1', { stroke: false, font: 'Nun', weight: '900 ' });
+}
+function sEnd(lt, t) {
+  bgFill('#1e1b4b'); floor('#0f172a', 1430);
+  oldHand(300, 980, .8, .2); newCon(790, 980, .75, .2);
+  popIn(t, T.q + .1, 540, 470, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('DID YOU GUESS RIGHT?', 0, -100, 68, '#fff', { stroke: false });
+    box(-420, -10, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 70, 80, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 70, 80, '#fff', { lw: 10 }); });
+  txt('COMMENT', 540, 220, 120, '#fde047', { lw: 18 });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(0, 1), fn: sComment, push: .04, flash: .5 }, { t0: mid(1, 2), fn: sNew, push: .05, flash: .5 }, { t0: mid(3, 4), fn: sOld, push: .05, flash: .5 },
+  { t0: mid(5, 6), fn: sNum, push: .07, flash: .7 }, { t0: mid(6, 7), fn: sBars, push: .03, flash: .5 }, { t0: mid(7, 8), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["pokémon from", "nineteen ninety six,", "or pokémon today.", "which sold more?", "guess now."], ["comment", "old or new", "before the reveal."], ["in the new corner:", "scarlet and violet,", "on the nintendo switch."], ["twenty eight", "point six six", "million copies."],
+  ["in the old corner:", "red and blue.", "nineteen ninety six.", "on a game boy."], ["in japan", "they started as", "red and green."], ["over thirty one", "million copies."],
+  ["the thirty year old games", "still win.", "even sword and shield", "stopped at", "twenty seven", "point three six million."], ["did you guess right?", "comment yes or no."]];
+const HOT = new Set(["which sold more?", "old or new", "million copies.", "still win.", "red and green.", "comment yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1770) });
+</script></body></html>
