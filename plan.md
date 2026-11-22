@@ -28,7 +28,7 @@ honest and answerable in one word.
 | Fri 20 Nov | done: why it gets dark so early (earliest sunset) | Minecraft: guess how many copies it has sold (Q: "Closest guess wins bragging rights") | Is a 70 € game worth it? Cost per hour vs a cinema ticket (Q: "Which wins for you?") | done: 4-day week | RESPAWN Part 6 FINALE (Q: "NEW GAME+: YES or NO?") |
 | Sat 21 Nov | done: carrots night-vision myth | done: the game that took 22 years (Kien) | done: buy now, pay later 300 € phone | done: Moon disappeared | done: LOW BATTERY Part 1 |
 | Sun 22 Nov | done: why your phone dies in the cold | done: old vs new Pokémon (Red/Blue vs Scarlet/Violet) | done: first apprentice pay, invest 10 % for 3 years | done: everyone jumps at once | done: LOW BATTERY Part 2 |
-| Mon 23 Nov | myth: Do we only have 5 senses? | celebrity/movie: the biggest film or chart record of the week (pick from news) (Q: "Did you know? Yes or no") | Small money, big result: your daily 3 € snack invested instead (Q: "Guess the number after 20 years") | What if there was no money and we traded everything? (Q: "Would it work?") | NEW SERIES Part 3 |
+| Mon 23 Nov | myth: Do we only have 5 senses? | done: longest No. 1 song ever (Choosin' Texas, 26 weeks) | done: daily 3 € snack invested | What if there was no money and we traded everything? (Q: "Would it work?") | done: LOW BATTERY Part 3 |
 
 Notes
 - FACTS alternates myth / why every day. Never more than one seasonal topic per day (seasonal: 20 Nov dark-early,

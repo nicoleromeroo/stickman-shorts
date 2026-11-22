@@ -1,0 +1,89 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const T = { cm: wt(0, 'comment'), twist: at(1, 0), year: wt(1, 'a song'), ella: at(2, .1), feb: wt(2, 'february'), bb: wt(3, 'bad bunny'), ts: wt(3, 'then taylor'), bts: wt(3, 'then b t'),
+  back: at(4, 0), old: at(5, 0), n19: wt(5, 'nineteen'), otr: wt(5, 'old town'), xmas: at(6, 0), n22: wt(6, 'twenty two'), dec: wt(6, 'lots'), nov: at(7, 0), n26: wt(7, 'twenty six'), two: at(8, 0), q: at(9, 0) };
+const SMALL = { stroke: false, font: 'Nun', weight: '900 ' };
+function mic(hx, hy) { ctx.save(); ctx.translate(hx, hy); ctx.rotate(-.4); box(-9, -10, 18, 70, '#334155', 6, 5); circ(0, -26, 24, '#94a3b8', INK, 6); ctx.restore(); }
+function trophy(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#facc15'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-90, -120); ctx.lineTo(90, -120); ctx.quadraticCurveTo(90, 20, 0, 40); ctx.quadraticCurveTo(-90, 20, -90, -120); ctx.fill(); ctx.stroke(); box(-20, 40, 40, 50, '#facc15', 4, 7); box(-70, 90, 140, 40, '#a16207', 8, 7); txt('#1', 0, -40, 80, INK, { stroke: false }); ctx.restore(); }
+function songBlock(x, y, w, label, col, fs = 46) { box(x - w / 2, y - 55, w, 110, col, 22, 7); txt(label, x, y + 4, fs, '#fff', { lw: 7 }); }
+function stage(t) { bgFill('#1e1b4b'); for (let i = 0; i < 3; i++) { ctx.save(); ctx.globalAlpha = .18; ctx.fillStyle = ['#f472b6', '#60a5fa', '#fde047'][i]; ctx.beginPath(); const a = Math.sin(t * 1.5 + i * 2) * .35; ctx.moveTo(200 + i * 340, 0); ctx.lineTo(200 + i * 340 + Math.sin(a) * 900 - 160, 1500); ctx.lineTo(200 + i * 340 + Math.sin(a) * 900 + 160, 1500); ctx.closePath(); ctx.fill(); ctx.restore(); } floor('#3b0764', 1480); ctx.fillStyle = '#581c87'; ctx.fillRect(0, 1480, 1080, 24); }
+// ---------- scenes ----------
+function sGuess(lt, t) {
+  stage(t);
+  txt('HOW MANY WEEKS', 540, 210, 116, '#fde047', { lw: 18 }); txt('AT No. 1?', 540, 340, 130, '#fff', { lw: 20 });
+  trophy(780, 820, 1.4 + .05 * Math.sin(t * 5));
+  qmark(300, 860, t, .15, '#ffd23f', 230);
+  const sw = Math.sin(t * 7); hero({ x: 320, y: 1620, s: 1.35, pose: { lt: .2 * sw, ls: 0, rt: -.2 * sw, rs: 0, la: 2.4, le: .3, ra: -2.4, re: -.3 }, eyes: 'huge', mouth: 'o', bob: Math.abs(sw) * 14, look: 1 });
+  if (t > T.cm) popIn(t, T.cm, 760, 1220, () => { box(-260, -60, 520, 120, '#f8fafc', 30, 7); txt('COMMENT A NUMBER', 0, 4, 48, INK, { stroke: false }); });
+}
+function sTwist(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1440);
+  txt('THE TWIST', 540, 210, 120, '#fde047', { lw: 18 });
+  popIn(t, T.year, 540, 700, () => { box(-260, -230, 520, 460, '#f8fafc', 30, 9); box(-260, -230, 520, 120, '#ef4444', 30, 9); txt('THIS YEAR', 0, -166, 64, '#fff', { lw: 8 }); txt('2026', 0, 80, 170, INK, { stroke: false }); });
+  hero({ x: 540, y: 1640, s: 1.2, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.2, re: -.4 }, eyes: 'huge', mouth: 'o', look: 0 });
+}
+function sSinger(lt, t) {
+  stage(t);
+  txt("CHOOSIN' TEXAS", 540, 200, 120, '#fde047', { lw: 18 }); txt('ELLA LANGLEY', 540, 320, 80, '#fff', { lw: 12 });
+  const sw = Math.sin(t * 4); stick({ x: 540, y: 1460, s: 1.5, shirt: '#ec4899', pants: '#1f2937', pose: { lt: .15 * sw, ls: 0, rt: -.15 * sw, rs: 0, la: .5, le: .4, ra: -1.4, re: -1.6 }, eyes: 'closed', mouth: 'grin', bob: Math.abs(sw) * 8, hold: mic });
+  if (t > T.feb) popIn(t, T.feb, 830, 640, () => { box(-190, -100, 380, 200, '#facc15', 26, 8); txt('No. 1', 0, -20, 80, INK, { stroke: false }); txt('FEB 2026', 0, 60, 52, INK, { stroke: false }); });
+}
+function ladder(t, top, below) {
+  bgFill('#0f172a'); floor('#020617', 1480);
+  for (let i = 0; i < 3; i++) { const y = 600 + i * 260; box(90, y - 80, 140, 160, i === 0 ? '#facc15' : '#334155', 20, 7); txt('#' + (i + 1), 160, y + 6, 76, i === 0 ? INK : '#fff', { stroke: false }); }
+  top(); below();
+}
+function sKnock(lt, t) {
+  const n = t > T.bts ? 3 : t > T.ts ? 2 : t > T.bb ? 1 : 0; const names = [['BAD BUNNY', '#f97316'], ['TAYLOR SWIFT', '#a855f7'], ['BTS', '#0ea5e9']];
+  ladder(t, () => { if (n) { const d = t - [T.bb, T.ts, T.bts][n - 1]; const k = eob(inv(0, .3, d)); songBlock(lerp(1300, 640, k), 600, 700, names[n - 1][0], names[n - 1][1], 60); } else songBlock(640, 600, 700, "CHOOSIN' TEXAS", '#16a34a', 56); },
+    () => { if (n) { const d = t - [T.bb, T.ts, T.bts][n - 1]; const k = eo(inv(0, .3, d)); songBlock(640, lerp(600, 860, k), 700, "CHOOSIN' TEXAS", '#16a34a', 56); if (d < .3) impact(330, 600, 140, 1 - d / .3); } });
+  txt('KNOCKED OFF', 540, 220, 120, '#f87171', { lw: 18 });
+  hero({ x: 900, y: 1720, s: 1.15, pose: STAND, eyes: 'huge', mouth: 'o', look: -1 });
+}
+function sBack(lt, t) {
+  const k = eob(inv(T.back + .3, T.back + .9, t)), k2 = eob(inv(T.back + 1.2, T.back + 1.5, t));
+  ladder(t, () => { songBlock(lerp(640, 1400, k), 600, 700, 'BTS', '#0ea5e9', 60); songBlock(640, lerp(860, 600, k), 700, "CHOOSIN' TEXAS", '#16a34a', 56); }, () => {});
+  txt('BACK TO No. 1', 540, 220, 120, '#22c55e', { lw: 18 });
+  if (k2 > 0) { ctx.save(); ctx.translate(540, 1150); ctx.scale(k2, k2); txt('AGAIN', 0, 0, 120, '#fde047', { lw: 18 }); txt('AND AGAIN', 0, 140, 90, '#fff', { lw: 14 }); ctx.restore(); }
+  sparkle(900, 520, 70, .5 + .5 * Math.sin(t * 9));
+}
+function bar(x, base, h, w, col, num, label, label2) { box(x - w / 2, base - h, w, h, col, 14, 7); txt(num, x, base - h - 60, 90, '#fff', { lw: 13 }); txt(label, x, base + 60, 40, '#e2e8f0', { lw: 6 }); if (label2) txt(label2, x, base + 108, 40, '#e2e8f0', { lw: 6 }); }
+function sRecord(lt, t) {
+  bgFill('#111827'); floor('#030712', 1360);
+  const base = 1360, u = 27;
+  const title = t > T.nov ? 'NEW RECORD' : t > T.xmas ? 'CHRISTMAS HIT' : 'OLD RECORD';
+  txt(title, 540, 210, 120, t > T.nov ? '#22c55e' : '#fde047', { lw: 18 }); txt('WEEKS AT No. 1 (US)', 540, 320, 60, '#cbd5e1', { lw: 9 });
+  const k1 = eo(inv(T.n19 - .2, T.n19 + .6, t)); bar(180, base, 19 * u * k1, 170, '#64748b', '19', 'OLD TOWN', 'ROAD');
+  const k1b = eo(inv(T.otr, T.otr + .6, t)); bar(400, base, 19 * u * k1b, 170, '#64748b', k1b > 0 ? '19' : '', k1b > 0 ? 'A BAR' : '', k1b > 0 ? 'SONG' : '');
+  const k2 = eo(inv(T.n22 - .2, T.n22 + .6, t)); if (k2 > 0) bar(640, base, 22 * u * k2, 170, '#ef4444', '22', 'MARIAH', 'CAREY');
+  const k3 = eo(inv(T.n26 - .2, T.n26 + .9, t)); if (k3 > 0) { bar(890, base, 26 * u * k3, 190, '#16a34a', Math.round(26 * k3) + '', "CHOOSIN'", 'TEXAS'); if (k3 >= 1) sparkle(980, base - 26 * u - 40, 60, .5 + .5 * Math.sin(t * 9)); }
+  if (t > T.dec && t < T.nov) popIn(t, T.dec, 640, 470, () => { box(-260, -55, 520, 110, '#1e293b', 24, 6); txt('MANY DECEMBERS', 0, 4, 52, '#fff', { lw: 7 }); });
+  txt('Billboard Hot 100 (US): total weeks at No. 1, not all in a row,', 540, 1570, 30, '#94a3b8', SMALL); txt('as of the chart dated 7 Nov 2026', 540, 1610, 30, '#94a3b8', SMALL);
+}
+function sCal(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1500);
+  txt('2 OUT OF 3', 540, 210, 130, '#fde047', { lw: 20 }); txt('WEEKS SINCE FEBRUARY', 540, 330, 64, '#fff', { lw: 10 });
+  const on = new Set(); let c = 0; for (let i = 0; i < 39; i++) { if (i % 3 !== 1) on.add(i); } // 26 of 39 (pattern only, not the real order)
+  const k = inv(T.two - .2, T.two + 1.6, t) * 39;
+  for (let i = 0; i < 39; i++) { const x = 130 + (i % 7) * 137, y = 480 + Math.floor(i / 7) * 137; const lit = i < k && on.has(i); box(x - 55, y - 55, 110, 110, i < k ? (lit ? '#16a34a' : '#334155') : '#1e293b', 18, 5); if (lit) txt('1', x, y + 6, 56, '#fff', { stroke: false }); }
+  txt('26 of 39 weekly charts (green = No. 1, pattern only)', 540, 1340, 30, '#94a3b8', SMALL);
+}
+function sEnd(lt, t) {
+  stage(t);
+  txt('DID YOU GUESS', 540, 210, 116, '#fde047', { lw: 18 }); txt('26 OR MORE?', 540, 340, 110, '#fff', { lw: 16 });
+  popIn(t, T.q + .1, 540, 700, () => { box(-420, -80, 380, 160, '#22c55e', 26, 8); txt('YES', -230, 8, 90, '#fff', { lw: 12 }); box(40, -80, 380, 160, '#ef4444', 26, 8); txt('NO', 230, 8, 90, '#fff', { lw: 12 }); });
+  const sw = Math.sin(t * 6); hero({ x: 540, y: 1600, s: 1.3, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.4, re: -.3 }, eyes: 'norm', mouth: 'grin', bob: Math.abs(sw) * 8 });
+}
+const SCENES = [{ t0: 0, fn: sGuess, push: .04 }, { t0: mid(0, 1), fn: sTwist, push: .05, flash: .5 }, { t0: mid(1, 2), fn: sSinger, push: .04, flash: .5 }, { t0: mid(2, 3), fn: sKnock, push: .03, flash: .4 },
+  { t0: mid(3, 4), fn: sBack, push: .04, flash: .4 }, { t0: mid(4, 5), fn: sRecord, push: .02, flash: .5 }, { t0: mid(7, 8), fn: sCal, push: .03, flash: .5 }, { t0: mid(8, 9), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["guess how many weeks", "the longest", "number one song ever", "stayed on top.", "comment a number."], ["here's the twist.", "it's a song", "from this year."], ["choosin' texas", "by ella langley", "hit number one", "in america", "in february."],
+  ["then bad bunny", "knocked it off.", "then taylor swift.", "then bts."], ["and every single time,", "it climbed back", "to the top."], ["the old record", "for a normal song", "was nineteen weeks.", "old town road", "and a bar song."],
+  ["even mariah carey's", "christmas hit", "only has twenty two,", "and it needed", "lots of decembers."], ["by early november,", "choosin' texas had", "twenty six weeks", "at number one."], ["that's two out of", "every three weeks", "since february."], ["did you guess", "that high?", "yes or no."]];
+const HOT = new Set(["comment a number.", "from this year.", "in february.", "knocked it off.", "to the top.", "was nineteen weeks.", "only has twenty two,", "twenty six weeks", "every three weeks", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1760) });
+</script></body></html>

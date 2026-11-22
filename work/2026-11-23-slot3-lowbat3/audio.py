@@ -1,0 +1,17 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 33)
+m.music("mystery")
+m.add("sting", .05, .4); m.add("static", .1, .2); m.add("static", m.wt(0, "in your"), .25)
+m.add("whoosh", m.mid(0, 1) - .12, .25); b = m.wt(1, "blinked"); [m.add("tick", b + i * .25, .45) for i in range(3)]
+m.add("creak", m.at(2, 0), .3); m.add("tick", m.wt(2, "the flashlight") + .5, .6)
+m.ambience("wind", m.at(2, 0), m.L[5]["end"], .07)
+m.steps(m.wt(3, "a girl"), 5, .3, .25)
+m.add("ding", m.wt(3, "mia."), .25)
+m.add("whoosh", m.mid(3, 4) - .12, .25); m.add("notify", m.at(4, .3), .4); m.add("notify", m.wt(4, "texts"), .4)
+m.add("whoosh", m.mid(4, 5) - .12, .25); m.add("pdown", m.wt(5, "everyone"), .2)
+m.add("static", m.wt(6, "crackles"), .4); m.add("static", m.wt(6, "crackles") + .3, .4); m.add("sting", m.wt(6, "a tall"), .45)
+m.add("static", m.at(7, 0), .3); m.add("whoosh", m.wt(7, "mia whispers"), .2)
+m.add("pdown", m.wt(8, "three"), .4)
+m.add("sting", m.at(9, 0), .45); m.add("static", m.wt(9, "it says"), .35); m.add("thump", m.wt(9, "in mia"), .5)
+m.add("whoosh", m.mid(9, 10) - .12, .3); m.add("pop", m.at(10, .1), .35); m.add("tbc", m.L[10]["end"] + .2, .5)
+m.write(mvol=.08, svol=.32)

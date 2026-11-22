@@ -1,0 +1,15 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 5123)
+m.music("hype")
+m.add("pop", .05, .4); m.add("ding", m.wt(0, "comment"), .3)
+m.add("whoosh", m.mid(0, 1) - .12, .25); m.add("sting", m.wt(1, "a song"), .2)
+m.add("whoosh", m.mid(1, 2) - .12, .25); m.add("chime", m.wt(2, "february"), .35)
+m.add("whoosh", m.mid(2, 3) - .12, .25)
+for w in ("bad bunny", "then taylor", "then b t"): m.add("bonk", m.wt(3, w), .35)
+m.add("whoosh", m.mid(3, 4) - .12, .25); m.add("boing", m.at(4, .2), .3); m.add("shing", m.at(4, .5), .3)
+m.add("whoosh", m.mid(4, 5) - .12, .25); m.add("pop", m.wt(5, "nineteen"), .3); m.add("pop", m.wt(5, "old town"), .3)
+m.add("pop", m.wt(6, "twenty two"), .3); m.add("ding", m.wt(6, "lots"), .25)
+m.add("cash", m.wt(7, "twenty six"), .35); m.add("chime", m.wt(7, "twenty six") + .9, .35)
+m.add("whoosh", m.mid(7, 8) - .12, .25); [m.add("tick", m.at(8, 0) + i * .12, .3) for i in range(12)]
+m.add("whoosh", m.mid(8, 9) - .12, .25); m.add("pop", m.at(9, .1), .35)
+m.write(mvol=.08, svol=.30)

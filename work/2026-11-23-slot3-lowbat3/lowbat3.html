@@ -1,0 +1,146 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function battery(x, y, s, pct) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-90, -40, 170, 80, '#0f172a', 14, 8); box(80, -16, 16, 32, INK, 4, 0); ctx.fillStyle = pct <= 5 ? '#ef4444' : '#22c55e'; rr(-80, -30, 150 * Math.max(.06, pct / 100), 60, 8); ctx.fill(); ctx.restore(); }
+function clockTxt(x, y, s, label, col = '#ef4444') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-190, -80, 380, 160, '#0f172a', 20, 8); txt(label, 0, 8, 110, col, { stroke: false }); ctx.restore(); }
+function phoneBig(x, y, s, msgs, pct, glow = 0) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  if (glow) spot(0, 0, 520, glow, '34,197,94');
+  box(-300, -520, 600, 1040, '#111827', 60, 10); ctx.fillStyle = '#0b1020'; rr(-270, -490, 540, 980, 40); ctx.fill();
+  txt('ME', 0, -420, 56, '#fff', { stroke: false }); txt(pct + ' %', 170, -420, 40, pct <= 5 ? '#ef4444' : '#fff', { stroke: false, font: 'Nun', weight: '900 ' });
+  line(-250, -370, 250, -370, 4, '#334155');
+  let yy = -300; for (const m of msgs) { if (!m.show) continue; const k = eob(inv(m.t0, m.t0 + .25, m.t)); ctx.save(); ctx.translate(-240, yy); ctx.scale(k, k);
+    const h = 30 + m.text.length * 62; box(0, 0, 470, h, m.col || '#22c55e', 30, 6); m.text.forEach((l, i) => txt(l, 235, 45 + i * 62, 50, '#fff', { lw: 7 })); ctx.restore(); yy += h + 30; }
+  ctx.restore();
+}
+function doorFront(x, y, s, shake, under = 0) { ctx.save(); ctx.translate(x + shake, y); ctx.scale(s, s); box(-210, -560, 420, 1120, '#0b1020', 6, 10); box(-190, -540, 380, 1080, '#6b3f1d', 6, 8);
+  box(-150, -480, 300, 380, '#5a3417', 6, 6); box(-150, -40, 300, 420, '#5a3417', 6, 6); circ(140, 20, 20, '#fbbf24', INK, 6);
+  if (under > 0) { ctx.fillStyle = `rgba(200,200,255,${under})`; ctx.fillRect(-190, 540, 380, 22); }
+  ctx.restore(); }
+// street pieces
+function streetBg() { bgFill('#0b1020'); for (let i = 0; i < 40; i++) circ(rnd(i) * 1080, rnd(i + 50) * 600, 3 + rnd(i + 9) * 3, '#e2e8f0');
+  circ(110, 520, 45, '#f8fafc'); floor('#1e293b', 1420); ctx.fillStyle = '#334155'; ctx.fillRect(0, 1420, 1080, 40); }
+function house(x, y, w, h, col = '#1e1b4b', win = 0) { box(x, y, w, h, col, 4, 8); ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(x - 30, y); ctx.lineTo(x + w / 2, y - h * .45); ctx.lineTo(x + w + 30, y); ctx.closePath(); ctx.fill(); ctx.stroke();
+  box(x + w * .2, y + h * .2, w * .25, h * .25, win ? '#fde68a' : '#0f172a', 4, 6); box(x + w * .55, y + h * .2, w * .25, h * .25, '#0f172a', 4, 6); }
+function lamp(x, y, on) { line(x, y, x, y - 520, 16, INK); line(x, y - 520, x + 90, y - 520, 14, INK); box(x + 50, y - 520, 90, 50, on ? '#fde68a' : '#334155', 10, 6); if (on) spot(x + 95, y - 400, 260, .35); }
+const T = { voice: wt(0, 'in your'), blinked: wt(1, 'a flashlight'), off: wt(2, 'the flashlight'), girl: wt(3, 'a girl'), mia: wt(3, 'mia.'), holds: at(4, 0), own: wt(4, 'texts'), same: wt(4, 'just like'),
+  frozen: wt(5, 'everyone'), two: wt(5, "it's just"), crack: wt(6, 'crackles'), steps: wt(6, 'a tall'), calls: at(7, 0), whisper: wt(7, 'mia whispers'), dont: wt(7, "don't"), bat: wt(8, 'three'), again: at(9, 0), saysMia: wt(9, 'it says'), miaVoice: wt(9, "in mia"), q: at(10, 0) };
+const HOLDP = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.6, re: -1.5 };
+const PH = () => holdPhone('on', { c1: '#1e293b', c2: '#0b1020' });
+function torch(on) { return (hx, hy) => { ctx.save(); ctx.translate(hx, hy); ctx.rotate(-.5); box(-12, -60, 24, 70, '#334155', 6, 5); box(-18, -78, 36, 24, '#94a3b8', 6, 5); ctx.restore(); if (on) spot(hx - 40, hy - 90, 200, .45, '253,224,71'); }; }
+function mia(o) { return stick(Object.assign({ shirt: '#facc15', pants: '#1f2937', hair: '#111827', hood: true }, o)); }
+function shadow(x, y, s, t, a = 1) {
+  ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = '#0b1020'; ctx.strokeStyle = '#475569'; ctx.lineWidth = 6; rr(-110, -720, 220, 720, 110); ctx.fill(); ctx.stroke();
+  ctx.save(); rr(-110, -720, 220, 720, 110); ctx.clip(); const f = Math.floor(t * 14);
+  for (let i = 0; i < 160; i++) { const r = rnd(i + f * 211), r2 = rnd(i * 3 + f * 97); ctx.fillStyle = `rgba(255,255,255,${.15 + .5 * rnd(i + f)})`; ctx.fillRect(-110 + r * 220, -720 + r2 * 720, 10, 6); }
+  ctx.restore();
+  circ(-34, -600, 13, '#fff'); circ(34, -600, 13, '#fff');
+  ctx.restore();
+}
+function lampDead(x, y) { line(x, y, x, y - 520, 16, INK); line(x, y - 520, x + 90, y - 520, 14, INK); box(x + 50, y - 520, 90, 50, '#334155', 10, 6); }
+function voiceBubble(x, y, label, col = '#fff') { box(x - 230, y - 70, 460, 140, 'rgba(15,23,42,.92)', 30, 7); txt(label, x, y + 6, 66, col, { lw: 9 }); }
+// ---------- scenes ----------
+function sCold(lt, t) {
+  streetBg(); house(60, 940, 330, 480); house(700, 940, 330, 480); lampDead(470, 1440);
+  shadow(820, 1430, .75, t);
+  hero({ x: 250 + Math.sin(t * 3) * 6, y: 1640, s: 1.45, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, lean: -.05 - .04 * Math.sin(t * 5), bob: Math.abs(Math.sin(t * 6)) * 6, hold: PH() });
+  txt('IT KNOWS YOUR NAME', 540, 230, 100, '#fde047', { lw: 17 });
+  if (t > T.voice) popIn(t, T.voice, 640, 560, () => voiceBubble(0, 0, 'IN YOUR VOICE', '#f87171'));
+}
+function sRecap(lt, t) {
+  streetBg(); house(560, 900, 440, 520, '#1e1b4b'); lampDead(380, 1440);
+  const on = Math.floor(t * 4) % 2 === 0;
+  if (on) { spot(780, 1080, 260, .55, '253,224,71'); circ(780, 1080, 24, '#fef08a', INK, 5); }
+  hero({ x: 230, y: 1660, s: 1.35, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, hold: PH() });
+  txt('LAST TIME...', 540, 240, 110, '#c4b5fd', { lw: 16 });
+}
+function sStep(lt, t) {
+  streetBg(); house(-80, 900, 380, 520); house(620, 900, 420, 520, '#1e1b4b'); lampDead(520, 1440);
+  const on = t < T.off; if (on) { spot(800, 1060, 240, .5, '253,224,71'); circ(800, 1060, 22, '#fef08a', INK, 5); }
+  const p = t * 9; hero({ x: 160 + Math.min(lt, 2.2) * 120, y: 1650, s: 1.4, pose: lt < 2.2 ? walkPose(p, .8) : HOLDP, eyes: 'huge', mouth: on ? 'flat' : 'o', look: 1, bob: lt < 2.2 ? Math.abs(Math.sin(p)) * 8 : 0, hold: PH() });
+  txt(on ? 'YOU STEP OUTSIDE' : 'CLICK.', 540, 240, on ? 104 : 140, on ? '#fde047' : '#fff', { lw: 17 });
+  if (!on) darkness(.55, 400, 1300, 700);
+}
+function sMia(lt, t) {
+  streetBg(); house(600, 920, 420, 500, '#1e1b4b'); lampDead(160, 1440);
+  const k = eo(inv(T.girl, T.girl + 1.6, t)); const p = t * 8;
+  mia({ x: lerp(1180, 720, k), y: 1650, s: 1.45, pose: k < 1 ? walkPose(p, .8) : STAND, eyes: 'norm', mouth: 'flat', look: -1, bob: k < 1 ? Math.abs(Math.sin(p)) * 8 : 0, hold: torch(false) });
+  hero({ x: 280, y: 1650, s: 1.4, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, hold: PH() });
+  txt('SOMEONE IS THERE', 540, 240, 100, '#fde047', { lw: 16 });
+  if (t > T.mia) popIn(t, T.mia, 720, 830, () => { box(-150, -65, 300, 130, '#facc15', 30, 7); txt('MIA', 0, 6, 86, INK, { stroke: false }); });
+}
+function sTexts(lt, t) {
+  bgFill('#0b1020');
+  const msgs = [{ show: true, t0: T.holds, t, text: ['GO OUTSIDE.'] }, { show: t > T.own, t0: T.own, t, text: ['FIND THE ONE', 'IN THE BLUE', 'HOODIE.'] }];
+  ctx.save(); ctx.translate(0, 0);
+  phoneBig(540, 1000, 1.05, msgs, 9, t > T.same ? .25 : 0);
+  ctx.restore();
+  box(255, 470, 120, 64, '#facc15', 14, 5); txt("MIA'S", 315, 506, 34, INK, { stroke: false });
+  txt('FROM HER OWN NUMBER', 540, 230, 90, '#22c55e', { lw: 15 });
+  if (t > T.same) popIn(t, T.same, 540, 1530, () => { box(-330, -70, 660, 140, '#22c55e', 30, 7); txt('JUST LIKE YOURS', 0, 6, 70, '#fff', { lw: 9 }); });
+}
+function sFrozen(lt, t) {
+  streetBg(); house(40, 940, 320, 480); house(720, 940, 320, 480);
+  stick({ x: 140, y: 1560, s: 1.0, shirt: '#16a34a', pants: '#1f2937', hair: '#78350f', pose: { lt: .55, ls: .9, rt: -.35, rs: 0, la: -.5, le: .3, ra: .6, re: .3 }, eyes: 'norm', mouth: 'flat', look: 1 });
+  stick({ x: 950, y: 1560, s: 1.0, shirt: '#db2777', pants: '#334155', hair: '#a16207', pose: { lt: -.4, ls: .6, rt: .3, rs: 0, la: .8, le: .4, ra: -.9, re: -.5 }, eyes: 'norm', mouth: 'o', look: -1 });
+  ctx.fillStyle = 'rgba(147,197,253,.18)'; ctx.fillRect(40, 1150, 200, 430); ctx.fillRect(850, 1150, 200, 430);
+  hero({ x: 420, y: 1660, s: 1.4, pose: HOLDP, eyes: 'norm', mouth: 'flat', look: 1, hold: PH() });
+  mia({ x: 660, y: 1660, s: 1.4, pose: STAND, eyes: 'norm', mouth: 'flat', look: -1, hold: torch(true) });
+  txt(t > T.two ? 'JUST YOU TWO' : 'EVERYONE FROZEN', 540, 240, 106, '#fde047', { lw: 17 });
+  if (t > T.frozen) { txt('FROZEN', 140, 1080, 54, '#93c5fd', { lw: 8 }); txt('FROZEN', 950, 1080, 54, '#93c5fd', { lw: 8 }); }
+}
+function sShadow(lt, t) {
+  streetBg(); house(40, 960, 300, 460); house(740, 960, 300, 460);
+  const crack = t > T.crack; const k = eo(inv(T.steps, T.steps + 1.2, t));
+  if (crack) { const f = Math.floor(t * 14); for (let i = 0; i < 90; i++) { ctx.fillStyle = `rgba(255,255,255,${.35 * rnd(i + f * 7)})`; ctx.fillRect(380 + rnd(i * 5 + f) * 320, 700 + rnd(i * 9 + f * 3) * 720, 12, 6); } }
+  if (t > T.steps) shadow(540, 1440, lerp(.45, .9, k), t, k);
+  hero({ x: 210, y: 1700, s: 1.3, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, hold: PH() });
+  mia({ x: 880, y: 1700, s: 1.3, pose: STAND, eyes: 'huge', mouth: 'o', look: -1, hold: torch(true) });
+  txt(t > T.steps ? 'THE STATIC' : 'KSSSHHH...', 540, 240, 120, t > T.steps ? '#f8fafc' : '#94a3b8', { lw: 18 });
+}
+function sCall(lt, t) {
+  streetBg(); shadow(820, 1430, .8, t);
+  hero({ x: 220, y: 1660, s: 1.4, pose: HOLDP, eyes: 'huge', mouth: t > T.whisper ? 'flat' : 'o', look: 1, hold: PH() });
+  mia({ x: 470, y: 1660, s: 1.4, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: -1.2, le: -.2, ra: -.3, re: -.2 }, eyes: 'norm', mouth: 'flat', look: -1, hold: torch(false) });
+  popIn(t, T.calls + .1, 760, 560, () => voiceBubble(0, 0, 'YOUR VOICE', '#f87171'));
+  if (t > T.dont) popIn(t, T.dont, 360, 860, () => { box(-280, -70, 560, 140, '#facc15', 30, 7); txt("DON'T ANSWER", 0, 6, 62, INK, { stroke: false }); });
+  txt('IT CALLS YOU', 540, 240, 120, '#fde047', { lw: 18 });
+}
+function sBat(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1420);
+  hero({ x: 380, y: 1620, s: 1.4, pose: HOLDP, eyes: 'huge', mouth: 'wavy', look: 1, hold: PH() });
+  const pc = t > T.bat ? 3 : 4; battery(760, 640, 1.5, pc); txt(pc + ' %', 760, 820, 140, '#ef4444', { lw: 18 });
+  if (t > T.bat && t < T.bat + .6) { ctx.fillStyle = `rgba(239,68,68,${.3 * (1 - (t - T.bat) / .6)})`; ctx.fillRect(0, 0, W, H); }
+  txt('BATTERY', 540, 240, 120, '#fde047', { lw: 18 });
+}
+function sMiaVoice(lt, t) {
+  streetBg(); shadow(800, 1440, .95, t);
+  const turn = t > T.miaVoice;
+  mia({ x: 440, y: 1660, s: 1.45, pose: STAND, eyes: 'huge', mouth: 'o', look: 1, hold: torch(true) });
+  hero({ x: 220, y: 1660, s: 1.3, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, hold: PH() });
+  if (t > T.saysMia) popIn(t, T.saysMia, 760, 560, () => voiceBubble(0, 0, '"MIA..."', '#facc15'));
+  if (turn) popIn(t, T.miaVoice, 540, 860, () => { box(-330, -70, 660, 140, '#dc2626', 30, 7); txt("IN MIA'S VOICE", 0, 6, 66, '#fff', { lw: 9 }); });
+  txt('IT SPEAKS AGAIN', 540, 240, 110, '#fde047', { lw: 17 });
+}
+function sEnd(lt, t) {
+  streetBg(); shadow(900, 1440, .7, t, .8);
+  popIn(t, T.q + .1, 540, 400, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('WHAT DO YOU DO?', 0, -100, 72, '#fff', { stroke: false });
+    box(-420, -10, 380, 130, '#22c55e', 22, 7); txt('RUN', -230, 70, 80, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#3b82f6', 22, 7); txt('HIDE', 230, 70, 80, '#fff', { lw: 10 }); });
+  hero({ x: 250, y: 1500, s: 1.1, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, hold: PH() }); mia({ x: 470, y: 1500, s: 1.1, pose: STAND, eyes: 'huge', mouth: 'flat', look: 1, hold: torch(true) });
+  if (t > L[10].end + .2) { const k = eob(inv(L[10].end + .2, L[10].end + .45, t)); ctx.save(); ctx.translate(540, 1620); ctx.scale(k, k); box(-430, -80, 860, 160, '#facc15', 30, 9); txt('PART 4 TOMORROW', 0, 10, 86, INK, { stroke: false }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sCold, push: .05 }, { t0: mid(0, 1), fn: sRecap, push: .04, flash: .5 }, { t0: mid(1, 2), fn: sStep, push: .05, xfade: .3 }, { t0: mid(2, 3), fn: sMia, push: .05, xfade: .3 },
+  { t0: mid(3, 4), fn: sTexts, push: .05, flash: .4 }, { t0: mid(4, 5), fn: sFrozen, push: .05, flash: .4 }, { t0: mid(5, 6), fn: sShadow, push: .07, xfade: .3 }, { t0: mid(6, 7), fn: sCall, push: .06, flash: .4 },
+  { t0: mid(7, 8), fn: sBat, push: .05, flash: .4 }, { t0: mid(8, 9), fn: sMiaVoice, push: .08, flash: .6 }, { t0: mid(9, 10), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["something at the end", "of the street", "just called your name.", "in your voice."], ["last time,", "a flashlight", "blinked back at you", "from across the street."], ["you step outside.", "the flashlight", "clicks off."],
+  ["a girl in a", "yellow raincoat", "walks out of the dark.", "mia."], ["she holds up her phone.", "texts from", "her own number.", "just like yours."], ["everyone else", "is frozen.", "it's just", "the two of you."],
+  ["then the air", "at the end of the street", "crackles", "like a broken tv.", "a tall shadow", "steps out."], ["it calls your name", "in your voice.", "mia whispers,", "don't answer it."], ["your battery", "drops to", "three percent."],
+  ["then the shadow", "speaks again.", "it says mia.", "in mia's voice."], ["would you", "run or hide?", "comment one word."]];
+const HOT = new Set(["in your voice.", "clicks off.", "mia.", "just like yours.", "is frozen.", "steps out.", "don't answer it.", "three percent.", "in mia's voice.", "comment one word."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1760) });
+</script></body></html>
