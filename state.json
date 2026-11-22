@@ -1,5 +1,5 @@
 {
- "uploaded_count": 45,
+ "uploaded_count": 47,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -361,6 +361,22 @@
    "mode": "scheduled 2026-11-23T10:30:00Z",
    "publish_at": "2026-11-23T11:30:00+01:00",
    "uploaded_at": "2026-11-22T14:58:18+00:00"
+  },
+  {
+   "tag": "video-20261123-slot1",
+   "video_id": "fQBKEbwzn48",
+   "title": "You Have Way More Than 5 Senses \ud83e\udd2f #shorts",
+   "mode": "scheduled 2026-11-23T05:00:00Z",
+   "publish_at": "2026-11-23T06:00:00+01:00",
+   "uploaded_at": "2026-11-22T19:53:09+00:00"
+  },
+  {
+   "tag": "video-20261123-slot5",
+   "video_id": "EuQJU2X7rtg",
+   "title": "What If Money Disappeared and We Traded Everything? #shorts",
+   "mode": "scheduled 2026-11-23T17:30:00Z",
+   "publish_at": "2026-11-23T18:30:00+01:00",
+   "uploaded_at": "2026-11-22T19:53:09+00:00"
   }
  ]
 }
