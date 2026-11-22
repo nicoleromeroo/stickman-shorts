@@ -1,0 +1,12 @@
+[
+ "Money just vanished. You want pizza. All you've got is your old hoodie.",
+ "Would trading everything work? Guess yes or no.",
+ "Problem one: the pizza guy wants sneakers, not your hoodie.",
+ {"text": "Economists call that the double coincidence of wants.", "gap": 0.5},
+ "Problem two: with money, ten things need ten prices.",
+ {"text": "Trading? Every pair needs its own price. That's forty-five.", "gap": 0.5},
+ {"text": "A thousand products? Almost half a million prices.", "gap": 0.6},
+ "When Argentina's economy crashed around two thousand one, about two and a half million people used barter clubs.",
+ {"text": "Their fix? Paper tickets to trade with. Basically, new money.", "gap": 0.6},
+ {"text": "So would it work? Barely. Did you guess right?", "gap": 0.6}
+]

@@ -1,0 +1,127 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { go: wt(0, 'go on'), used: at(1, 0), five: wt(1, 'famous'), ari: at(2, 0), yrs: wt(2, 'over'), gs: at(3, 0), cm: wt(3, 'comment'),
+  p6: at(4, 0), type: wt(4, "it's how"), bal: at(5, 0), up: wt(5, 'it keeps'), skin: at(6, 0), heat: wt(6, 'heat'), cold: wt(6, 'cold'), pain: wt(6, 'pain'),
+  intero: at(7, 0), hung: wt(7, 'hungry'), full: wt(7, 'full'), heart: wt(7, 'heart'), ox: at(8, 0), num: wt(8, 'twenty'), end: at(9, 0), yn: wt(9, 'yes') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#475569') { txt(s, 540, y, 28, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+// running sense counter (top right)
+function counter(t, n, t0) { const k = t0 ? pop(t0, t) : 1; ctx.save(); ctx.translate(900, 470); ctx.scale(k, k); box(-140, -80, 280, 160, '#facc15', 30, 8); txt('SENSES', 0, -38, 40, INK, { stroke: false }); txt(String(n), 0, 30, 92, INK, { stroke: false }); ctx.restore(); }
+const NOSE = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: 2.6, re: 1.75 };
+function fingerOnNose(x, y, s, P) { const ex = 30 + Math.sin(P.ra) * 72, ey = -272 + Math.cos(P.ra) * 72; const hx = ex + Math.sin(P.ra + P.re) * 68, hy = ey + Math.cos(P.ra + P.re) * 68; line(x + s * ex, y + s * ey, x + s * hx, y + s * hy, 13 * s); circ(x + s * hx, y + s * hy, 14 * s, INK); }
+function poseMix(a, b, k) { const o = {}; for (const key in a) o[key] = lerp(a[key], b[key], k); return o; }
+function icon(kind, x, y, s = 1) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  if (kind === 'eye') { ctx.fillStyle = '#fff'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-60, 0); ctx.quadraticCurveTo(0, -55, 60, 0); ctx.quadraticCurveTo(0, 55, -60, 0); ctx.fill(); ctx.stroke(); circ(0, 0, 20, '#3b82f6', INK, 6); circ(0, 0, 8, INK); }
+  if (kind === 'ear') { ctx.strokeStyle = INK; ctx.lineWidth = 10; ctx.fillStyle = '#fde68a'; ctx.beginPath(); ctx.arc(0, -10, 40, Math.PI * .9, Math.PI * 2.3); ctx.quadraticCurveTo(20, 50, -5, 50); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.arc(2, -8, 16, Math.PI, Math.PI * 2.2); ctx.stroke(); }
+  if (kind === 'nose') { ctx.strokeStyle = INK; ctx.lineWidth = 10; ctx.fillStyle = '#fecaca'; ctx.beginPath(); ctx.moveTo(-5, -50); ctx.quadraticCurveTo(-40, 30, -30, 35); ctx.quadraticCurveTo(0, 50, 30, 35); ctx.quadraticCurveTo(20, 10, -5, -50); ctx.fill(); ctx.stroke(); }
+  if (kind === 'tongue') { box(-40, -30, 80, 80, '#f472b6', 40, 8); line(0, -20, 0, 25, 6); }
+  if (kind === 'hand') { box(-35, -10, 70, 60, '#fde68a', 18, 8); for (let i = 0; i < 4; i++) box(-35 + i * 18, -55, 16, 50, '#fde68a', 8, 6); }
+  if (kind === 'flame') { ctx.fillStyle = '#f97316'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(0, -70); ctx.quadraticCurveTo(55, -10, 40, 25); ctx.quadraticCurveTo(25, 60, 0, 60); ctx.quadraticCurveTo(-25, 60, -40, 25); ctx.quadraticCurveTo(-55, -10, 0, -70); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#fde047'; ctx.beginPath(); ctx.moveTo(0, -10); ctx.quadraticCurveTo(25, 25, 0, 45); ctx.quadraticCurveTo(-25, 25, 0, -10); ctx.fill(); }
+  if (kind === 'flake') { for (let i = 0; i < 6; i++) { ctx.rotate(Math.PI / 3); line(0, 0, 0, -60, 14, INK); line(0, 0, 0, -60, 8, '#e0f2fe'); } }
+  if (kind === 'bolt') { ctx.fillStyle = '#ef4444'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(15, -70); ctx.lineTo(-35, 10); ctx.lineTo(0, 10); ctx.lineTo(-15, 70); ctx.lineTo(35, -10); ctx.lineTo(0, -10); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  if (kind === 'heart') { ctx.fillStyle = '#ef4444'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(0, 50); ctx.bezierCurveTo(-80, -5, -45, -70, 0, -25); ctx.bezierCurveTo(45, -70, 80, -5, 0, 50); ctx.fill(); ctx.stroke(); }
+  ctx.restore(); }
+function sHook(lt, t) {
+  bgFill('#4c1d95'); floor('#6d28d9', 1440); spot(540, 1000, 600, .35, '196,181,253');
+  if (t < T.used) { txt('CLOSE YOUR EYES', 540, 180, 104, '#fff', { lw: 20 }); txt('TOUCH YOUR NOSE', 540, 310, 104, '#facc15', { lw: 20 }); }
+  else { txt('YOU JUST USED', 540, 180, 110, '#fff', { lw: 20 }); txt('A 6TH SENSE', 540, 310, 124, '#facc15', { lw: 22 }); }
+  const k = eio(inv(-1.2, 1.8, t)); const wig = t > 1.8 && t < T.used ? Math.sin(t * 6) * .05 : 0;
+  const pose = poseMix(STAND, NOSE, k); pose.ra += wig;
+  hero({ x: 540, y: 1440, s: 1.55, pose, eyes: 'closed', mouth: t > T.used ? 'grin' : 'flat' }); if (k > .75) fingerOnNose(540, 1440, 1.55, pose);
+  if (t > 1.9 && t < T.used) sparkle(560, 820, 40, inv(1.9, 2.1, t));
+  if (t > T.five) { badge(540, 520, 620, 130, '#dc2626', ['NOT ONE OF THE 5!'], [70], T.five, t, -.03); }
+}
+function sList(lt, t) {
+  bgFill('#fef3c7'); floor('#d6a35c', 1440);
+  if (t < T.gs) {
+    txt('THE FAMOUS 5', 540, 180, 124, '#fff', { lw: 22 }); txt('2,000+ YEARS OLD', 540, 310, 100, '#b45309', { lw: 18 });
+    const names = ['SEE', 'HEAR', 'SMELL', 'TASTE', 'TOUCH'], ic = ['eye', 'ear', 'nose', 'tongue', 'hand'];
+    for (let i = 0; i < 5; i++) { const t0 = T.ari + i * .25; if (t < t0) continue; const kk = pop(t0, t); const x = 130 + i * 205; ctx.save(); ctx.translate(x, 560); ctx.scale(kk, kk); box(-95, -110, 190, 220, '#fff', 30, 8); icon(ic[i], 0, -25, .9); txt(names[i], 0, 72, 40, INK, { stroke: false }); ctx.restore(); }
+    // generic ancient thinker with a scroll
+    stick({ x: 380, y: 1440, s: 1.25, shirt: '#f8fafc', pants: '#f8fafc', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.3, re: -.6 }, eyes: 'norm', mouth: 'smile',
+      hold: (hx, hy) => { box(hx + 10, hy - 90, 150, 180, '#fde68a', 10, 7); for (let j = 0; j < 4; j++) line(hx + 35, hy - 55 + j * 36, hx + 135, hy - 55 + j * 36, 6, '#92400e'); } });
+        if (t > T.yrs) badge(800, 1120, 340, 120, '#b45309', ['ARISTOTLE'], [64], T.yrs, t, .04);
+    foot('Five senses: an idea from Aristotle (JHU Press, WEF)', 1840, '#92400e');
+  } else {
+    bgFill('#1e1b4b');
+    txt('HOW MANY', 540, 180, 130, '#fff', { lw: 22 }); txt('SENSES REALLY?', 540, 310, 110, '#a78bfa', { lw: 20 });
+    qmark(540, 640, t, T.gs, '#facc15', 380);
+    hero({ x: 540, y: 1480, s: 1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.6, re: -.4 }, eyes: 'huge', mouth: 'o', tilt: Math.sin(t * 3) * .08 });
+    if (t > T.cm) badge(540, 950, 640, 120, '#facc15', ['COMMENT A NUMBER'], [62], T.cm, t, -.03, INK);
+  }
+}
+function sProp(lt, t) {
+  bgFill('#dbeafe'); floor('#93c5fd', 1440);
+  txt('SENSE 6:', 540, 180, 124, '#fff', { lw: 22 }); txt('PROPRIOCEPTION', 540, 310, 104, '#2563eb', { lw: 18 });
+  counter(t, 6, T.p6);
+  txt('= your body map', 380, 430, 60, '#1e3a8a', { stroke: false, font: 'Nun', weight: '900 ' });
+  // desk + keyboard
+  box(160, 1180, 760, 40, '#92400e', 10, 7); box(300, 1110, 480, 70, '#334155', 14, 7);
+  for (let r = 0; r < 2; r++) for (let c = 0; c < 9; c++) { const hit = Math.floor(t * 8 + c * 3 + r) % 7 === 0; box(318 + c * 51, 1120 + r * 30, 44, 24, hit ? '#facc15' : '#e2e8f0', 6, 3); }
+  const ty = Math.sin(t * 22) * .12;
+  hero({ x: 540, y: 1440, s: 1.25, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: -.9 + ty, le: -.9, ra: .9 - ty, re: .9 }, eyes: 'norm', look: 1, lookY: -1, mouth: 'smile', tilt: .25 });
+  if (t > T.type) badge(800, 650, 420, 130, '#16a34a', ['NO LOOKING!'], [66], T.type, t, .05);
+  foot('Proprioception: body position without looking (WEF, Vice)');
+}
+function sBal(lt, t) {
+  if (t < T.skin) {
+    bgFill('#dcfce7'); floor('#86efac', 1440);
+    txt('SENSE 7:', 540, 180, 124, '#fff', { lw: 22 }); txt('BALANCE', 540, 310, 124, '#16a34a', { lw: 22 });
+    counter(t, 7, T.bal);
+    const w = Math.sin(t * 2.5) * .12;
+    hero({ x: 540, y: 1440, s: 1.4, lean: w, pose: { lt: .05, ls: 0, rt: -1.2, rs: 1.6, la: 1.6 - w, le: 0, ra: -1.6 - w, re: 0 }, eyes: 'norm', mouth: 'flat', brows: 1 });
+    // inner ear highlight next to head
+    ctx.save(); ctx.translate(540, 1440); ctx.rotate(w); const hx = 1.4 * 62, hy = 1.4 * -368; circ(hx + 8, hy, 34, '#facc15', INK, 7); ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(hx + 8, hy, 16, 0, Math.PI * 1.6); ctx.stroke(); ctx.restore();
+    badge(280, 560, 380, 110, '#facc15', ['INNER EAR'], [62], T.bal + .6, t, -.05, INK);
+    if (t > T.up) badge(800, 760, 360, 110, '#16a34a', ['UPRIGHT!'], [62], T.up, t, .05);
+    foot('Vestibular system in the inner ear (JHU Press)');
+  } else {
+    bgFill('#ffe4e6'); floor('#fda4af', 1440);
+    txt('YOUR SKIN', 540, 180, 124, '#fff', { lw: 22 }); txt('HAS MORE', 540, 310, 124, '#e11d48', { lw: 22 });
+    const n = t > T.pain ? 9 : t > T.heat ? 8 : 7; counter(t, n, n > 7 ? (n === 9 ? T.pain : T.heat) : 0);
+    const items = [['flame', 'HEAT', T.heat, 200], ['flake', 'COLD', T.cold, 540], ['bolt', 'PAIN', T.pain, 880]];
+    for (const [ic, lb, t0, x] of items) { if (t < t0) continue; const kk = pop(t0, t); ctx.save(); ctx.translate(x, 760); ctx.scale(kk, kk); box(-140, -150, 280, 300, '#fff', 34, 8); icon(ic, 0, -30, 1.3); txt(lb, 0, 100, 56, INK, { stroke: false }); ctx.restore(); }
+    hero({ x: 540, y: 1440, s: 1.05, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: -1.2, le: -.4, ra: 1.2, re: .4 }, eyes: t > T.pain ? 'huge' : 'norm', mouth: t > T.pain ? 'o' : 'smile' });
+    foot('Skin receptors: touch, temperature, pain (JHU Press)');
+  }
+}
+function sIntero(lt, t) {
+  bgFill('#fff7ed'); floor('#fdba74', 1440);
+  txt('SENSE 10:', 540, 180, 120, '#fff', { lw: 22 }); txt('INTEROCEPTION', 540, 310, 104, '#ea580c', { lw: 18 });
+  counter(t, 10, T.intero);
+  txt('= your inside signals', 380, 430, 60, '#9a3412', { stroke: false, font: 'Nun', weight: '900 ' });
+  hero({ x: 540, y: 1440, s: 1.35, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: -.6, le: -1.2, ra: .6, re: 1.2 }, eyes: 'norm', mouth: t > T.heart ? 'o' : 'wavy' });
+  if (t > T.hung) bubble(250, 760, 'HUNGRY', 60);
+  if (t > T.full) bubble(830, 760, 'FULL', 60);
+  if (t > T.heart) { const b = 1 + .15 * Math.abs(Math.sin(t * 9)); icon('heart', 540, 1150, .75 * b); }
+  foot('Interoception: heart rate, hunger, fullness (Vice)');
+}
+function sCount(lt, t) {
+  bgFill('#0f172a'); for (let i = 0; i < 40; i++) circ(rnd(i) * W, rnd(i + 9) * 1400, 3 + rnd(i + 4) * 4, '#334155');
+  if (t < T.end) {
+    txt('ONE OXFORD', 540, 180, 124, '#fff', { lw: 22 }); txt('SCIENTIST SAYS', 540, 310, 108, '#38bdf8', { lw: 20 });
+    const k = eo(inv(T.num, T.num + 1.4, t)); const a = Math.round(lerp(5, 22, k)), b = Math.round(lerp(5, 33, k));
+    txt(t > T.num ? `${a} TO ${b}` : '5?', 540, 700, 220, '#facc15', { lw: 30 }); txt('SENSES', 540, 900, 120, '#fff', { lw: 20 });
+    stick({ x: 540, y: 1440, s: 1.1, shirt: '#f8fafc', pants: '#334155', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.4, re: -.3 }, eyes: 'norm', mouth: 'smile' });
+    foot('Prof. Charles Spence, Univ. of Oxford (Vice, Dec 2025)', 1840, '#94a3b8');
+  } else {
+    bgFill('#1e1b4b'); floor('#312e81', 1440);
+    const k = pop(T.end - .2, t); txt('5 WAS NEVER', 540, 180, 124 * k, '#fff', { lw: 22 }); txt('THE FULL LIST', 540, 310, 124 * k, '#a78bfa', { lw: 22 });
+    const p1 = t > T.yn && t < T.yn + .4, p2 = t > T.yn + .5 && t < T.yn + .9;
+    box(110, 500 + (p1 ? 12 : 0), 400, 260, '#16a34a', 46, 9); txt('YES', 310, 640 + (p1 ? 12 : 0), 120, '#fff', { lw: 16 });
+    box(570, 500 + (p2 ? 12 : 0), 400, 260, '#dc2626', 46, 9); txt('NO', 770, 640 + (p2 ? 12 : 0), 120, '#fff', { lw: 16 });
+    badge(540, 900, 640, 100, '#facc15', ['WAS YOUR GUESS CLOSE?'], [54], T.end + .3, t, .02, INK);
+    const look = Math.sin(t * 3);
+    hero({ x: 540, y: 1480, s: 1.0, pose: NOSE, look: look > 0 ? 1 : -1, eyes: 'norm', mouth: 'smirk' }); fingerOnNose(540, 1480, 1, NOSE);
+  }
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(1, 2), fn: sList, push: .04, flash: 1 }, { t0: mid(3, 4), fn: sProp, push: .04, flash: .8 }, { t0: mid(4, 5), fn: sBal, push: .04, flash: .8 }, { t0: mid(6, 7), fn: sIntero, push: .04, flash: .8 }, { t0: mid(7, 8), fn: sCount, push: .05, flash: 1 }];
+const CAP = [["close your eyes", "and touch", "your nose.", "right now.", "go on."], ["you just used", "a sense", "that isn't one", "of the famous five."], ["that list", "comes from", "aristotle,", "over two thousand", "years ago."], ["guess:", "how many senses", "do you really have?", "comment a number."], ["sense six:", "proprioception.", "it's how you type", "without staring", "at the keys."], ["balance", "lives in", "your inner ear.", "it keeps you", "upright."], ["your skin", "has its own", "sensors for", "heat,", "cold", "and pain."], ["interoception", "tells you", "you're hungry,", "full,", "or your heart", "is racing."], ["one oxford", "scientist thinks", "you have", "twenty-two to", "thirty-three senses."], ["five was never", "the full list.", "was your guess", "close?", "yes or no?"]];
+const HOT = new Set(["your nose.", "go on.", "of the famous five.", "aristotle,", "comment a number.", "proprioception.", "your inner ear.", "heat,", "cold", "and pain.", "interoception", "is racing.", "twenty-two to", "thirty-three senses.", "yes or no?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>
