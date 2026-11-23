@@ -80,6 +80,7 @@ Notes
 - 1 cent doubled for 30 days: moved to the backlog (good "pick 1 or 2" finance video for later).
 
 ## Done
+- 24 Nov (no plan row) 11:30 trailer record: guess the views (Spider-Man: Brand New Day 718.6M, Doomsday 18 Dec) · 16:00 1 million now vs 1 cent doubled for 30 days (from backlog) · 20:00 LOW BATTERY Part 4 (made 23 Nov)
 - 21 Nov 06:00 carrots night-vision myth · 18:30 What if the Moon disappeared? (made 20 Nov)
 - 21 Nov 11:30 changed: no official GTA 6 sales yet (only Sensor Tower estimates) → "The game that took 22 years to make" · 16:00 Buy now, pay later: 300 € phone · 20:00 LOW BATTERY Part 1 (made 20 Nov)
 - 20 Nov 20:00 RESPAWN Part 6 FINALE · 11:30 Minecraft copies sold · 16:00 Is an 80 € game worth it? (game vs cinema) (made 19 Nov)

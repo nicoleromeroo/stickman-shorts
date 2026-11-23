@@ -1,0 +1,104 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function trophy(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#facc15'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-90, -120); ctx.lineTo(90, -120); ctx.quadraticCurveTo(90, 20, 0, 40); ctx.quadraticCurveTo(-90, 20, -90, -120); ctx.fill(); ctx.stroke(); box(-20, 40, 40, 50, '#facc15', 4, 7); box(-70, 90, 140, 40, '#a16207', 8, 7); txt('#1', 0, -40, 80, INK, { stroke: false }); ctx.restore(); }
+
+const T = { cm: wt(0, 'comment'), old: at(1, 0), n365: wt(1, 'three'), drop: at(2, 0), name: wt(2, 'spider'), eight: at(3, 0), e8: wt(3, 'eight'), day: at(4, 0), n718: wt(4, 'seven'),
+  sec: at(5, 0), every: wt(5, 'every'), four: at(6, 0), bil: wt(6, 'one billion'), doom: at(7, 0), n503: wt(7, 'five'), second: wt(7, 'second'), dec: wt(8, 'december'), q: at(9, 0) };
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const SMALL = { stroke: false, font: 'Nun', weight: '900 ' };
+function playTri(x, y, r, col = '#fff') { ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(x - r * .5, y - r * .8); ctx.lineTo(x + r * .9, y); ctx.lineTo(x - r * .5, y + r * .8); ctx.closePath(); ctx.fill(); }
+function screen(x, y, w, h, t, label) { box(x - w / 2, y - h / 2, w, h, '#0f172a', 26, 10); const g = ctx.createLinearGradient(0, y - h / 2, 0, y + h / 2); g.addColorStop(0, '#312e81'); g.addColorStop(1, '#0f172a'); ctx.fillStyle = g; rr(x - w / 2 + 16, y - h / 2 + 16, w - 32, h - 32, 18); ctx.fill();
+  circ(x, y - 20, 80, '#ef4444', INK, 7); playTri(x + 6, y - 20, 42); box(x - w / 2 + 40, y + h / 2 - 70, (w - 80) * ((t * .15) % 1), 16, '#ef4444', 8, 0); if (label) txt(label, x, y + h / 2 - 110, 44, '#fff', SMALL); }
+function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
+function counter(x, y, v, size = 120, col = '#fde047') { box(x - 470, y - size * .75, 940, size * 1.5, '#0f172a', 26, 9); txt(fmt(v), x, y + size * .12, size, col, { lw: 14 }); }
+function viewer(x, y, s, t, i, look = 1) { stick({ x, y, s, shirt: ['#3b82f6', '#22c55e', '#f97316', '#a855f7', '#ef4444'][i % 5], pants: '#1f2937', hair: ['#111827', '#7c2d12', '#facc15'][i % 3], pose: PHONE_POSE, eyes: 'huge', mouth: 'o', look, bob: Math.abs(Math.sin(t * 5 + i)) * 6, hold: holdPhone('on') }); }
+function bars(t, list, maxv, y0 = 1400, hmax = 820) { const n = list.length, w = 900 / n; list.forEach((b, i) => { const k = b.t0 === undefined ? 1 : eo(inv(b.t0, b.t0 + .8, t)); if (k <= 0) return; const x = 90 + i * w + w * .12, bw = w * .76, h = hmax * b.v / maxv * k;
+  box(x, y0 - h, bw, h, b.col, 14, 7); txt(b.lab, x + bw / 2, y0 - h - 46, 64, '#fff', { lw: 9 }); b.name.forEach((l, j) => txt(l, x + bw / 2, y0 + 50 + j * 38, list.length > 2 ? 31 : 36, '#e2e8f0', SMALL)); }); }
+function sGuess(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1500);
+  txt('ONE TRAILER.', 540, 200, 118, '#fde047', { lw: 18 }); txt('ONE DAY.', 540, 330, 130, '#fff', { lw: 20 });
+  screen(540, 760, 760, 460, t);
+  txt('??? VIEWS', 540, 1080, 84, '#f87171', { lw: 12 });
+  viewer(190, 1640, 1.3, t, 0); viewer(890, 1640, 1.2, t, 2, -1);
+  if (t > T.cm) popIn(t, T.cm, 540, 1300, () => { box(-215, -60, 430, 120, '#f8fafc', 30, 7); txt('COMMENT A NUMBER', 0, 4, 40, INK, { stroke: false }); });
+}
+function sOld(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1400);
+  txt('THE OLD RECORD', 540, 210, 116, '#fde047', { lw: 18 });
+  bars(t, [{ v: 365, col: '#64748b', lab: '365 M', name: ['DEADPOOL &', 'WOLVERINE', '(2024)'], t0: T.n365 - .3 }], 720, 1400, 760);
+  trophy(780, 820, 1.2);
+  txt('VIEWS IN 24 HOURS', 540, 340, 60, '#e2e8f0', SMALL);
+}
+function sDrop(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1500);
+  txt('MARCH 2026', 540, 200, 110, '#fde047', { lw: 18 });
+  screen(540, 720, 840, 520, t, t > T.name ? 'SPIDER-MAN: BRAND NEW DAY' : 'NEW TRAILER');
+  for (let i = 0; i < 5; i++) viewer(140 + i * 200, 1640 - (i % 2) * 30, 1.0, t, i, i < 2 ? 1 : -1);
+  if (t > T.name) popIn(t, T.name, 540, 1130, () => { box(-260, -55, 520, 110, '#ef4444', 26, 7); txt('FIRST TRAILER', 0, 6, 54, '#fff', { lw: 7 }); });
+}
+function clockFace(x, y, r, frac) { circ(x, y, r, '#f8fafc', INK, 10); for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; line(x + Math.sin(a) * r * .8, y - Math.cos(a) * r * .8, x + Math.sin(a) * r * .9, y - Math.cos(a) * r * .9, 6); }
+  const a = frac * Math.PI * 2; line(x, y, x + Math.sin(a) * r * .7, y - Math.cos(a) * r * .7, 12, '#ef4444'); circ(x, y, 14, INK); }
+function sEight(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1400);
+  const k = eo(inv(T.eight, T.e8 + .6, t));
+  txt('ONLY 8 HOURS', 540, 210, 120, '#fde047', { lw: 18 });
+  clockFace(800, 650, 200, k * 8 / 12);
+  bars(t, [{ v: 365, col: '#64748b', lab: '365 M', name: ['OLD', 'RECORD'] }, { v: 373 * k, col: '#ef4444', lab: Math.round(373 * k) + ' M', name: ['AFTER', '8 HOURS'] }], 720, 1400, 760);
+  if (k >= 1) popIn(t, T.e8 + .6, 540, 1580, () => { box(-280, -60, 560, 120, '#22c55e', 30, 7); txt('RECORD BROKEN', 0, 6, 58, '#fff', { lw: 8 }); });
+}
+function sDay(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1400);
+  const k = eo(inv(T.day, T.n718 + 1.2, t));
+  txt('AFTER 24 HOURS', 540, 200, 116, '#fde047', { lw: 18 });
+  counter(540, 420, 718.6e6 * k, 110);
+  bars(t, [{ v: 365, col: '#64748b', lab: '365 M', name: ['OLD', 'RECORD'] }, { v: 718.6 * k, col: '#ef4444', lab: (718.6 * k).toFixed(1) + ' M', name: ['BRAND', 'NEW DAY'] }], 720, 1400, 760);
+  if (k >= 1) sparkle(990, 760, 50, 1);
+}
+function sSec(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1500);
+  txt('EVERY SECOND', 540, 200, 120, '#fde047', { lw: 18 });
+  const n = Math.floor(lt * 9); for (let i = 0; i < Math.min(n, 30); i++) { const x = 120 + rnd(i) * 840, y = 400 + rnd(i + 40) * 300; ctx.save(); ctx.translate(x, y); ctx.scale(.55, .55); box(-50, -90, 100, 180, '#111827', 16, 6); box(-38, -74, 76, 148, '#3b82f6', 8, 0); playTri(4, 0, 22); ctx.restore(); }
+  popIn(t, T.sec + .3, 540, 860, () => { box(-430, -110, 860, 220, '#f8fafc', 30, 9); txt('~8,300 VIEWS', 0, -10, 100, '#ef4444', { lw: 12 }); txt('PER SECOND', 0, 70, 50, INK, { stroke: false }); });
+  hero({ x: 540, y: 1680, s: 1.15, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: 2.3, le: .3, ra: -2.3, re: -.3 }, eyes: 'huge', mouth: 'o', look: 0, bob: Math.abs(Math.sin(t * 8)) * 10 });
+}
+function sBillion(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1450);
+  txt('4 DAYS LATER', 540, 200, 120, '#fde047', { lw: 18 });
+  const k = eo(inv(T.four, T.bil + .6, t)); counter(540, 560, 1e9 * k, 116, k >= 1 ? '#22c55e' : '#fde047');
+  if (t > T.bil) { popIn(t, T.bil, 540, 900, () => txt('1 BILLION', 0, 0, 150, '#fff', { lw: 20 })); sparkle(200, 820, 60, 1); sparkle(880, 960, 50, 1); }
+  hero({ x: 540, y: 1650, s: 1.25, pose: { lt: .15, ls: 0, rt: -.15, rs: 0, la: 2.5, le: .3, ra: -2.5, re: -.3 }, eyes: 'huge', mouth: 'grin', look: 0, bob: Math.abs(Math.sin(t * 7)) * 18 });
+}
+function sDoom(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1300);
+  txt('TOP TRAILER DAYS', 540, 200, 108, '#fde047', { lw: 17 });
+  bars(t, [{ v: 718.6, col: '#ef4444', lab: '718.6 M', name: ['SPIDER-', 'MAN:', 'BRAND', 'NEW DAY'] }, { v: 503, col: '#a855f7', lab: '503 M', name: ['AVENGERS:', 'DOOMS-', 'DAY'], t0: T.n503 - .2 }, { v: 475, col: '#64748b', lab: '475 M', name: ['GTA 6', '(GAME)'] }, { v: 365, col: '#475569', lab: '365 M', name: ['DEADPOOL', '& WOLVE-', 'RINE'] }], 760, 1300, 820);
+  if (t > T.second) popIn(t, T.second, 330, 520, () => { box(-150, -55, 300, 110, '#facc15', 26, 7); txt('2ND', 0, 6, 70, INK, { stroke: false }); });
+  txt('24-hour views as reported by Variety', 540, 1580, 36, '#94a3b8', SMALL);
+}
+function calendar(x, y, s, top, big) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-200, -200, 400, 400, '#f8fafc', 26, 9); box(-200, -200, 400, 110, '#ef4444', 26, 9); txt(top, 0, -130, 64, '#fff', { lw: 8 }); txt(big, 0, 90, 190, INK, { stroke: false }); ctx.restore(); }
+function sDate(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1500);
+  txt('IN CINEMAS', 540, 200, 120, '#fde047', { lw: 18 }); txt('AVENGERS: DOOMSDAY', 540, 320, 64, '#fff', { lw: 10 });
+  popIn(t, at(8, 0), 540, 760, () => calendar(0, 0, 1.2, 'DECEMBER', '18'));
+  viewer(250, 1640, 1.2, t, 3); viewer(830, 1640, 1.2, t, 1, -1);
+}
+function sEnd(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1500);
+  popIn(t, T.q + .1, 540, 560, () => { box(-470, -230, 940, 460, 'rgba(30,27,75,.95)', 30, 9); txt('1 BILLION VIEWS', 0, -140, 76, '#fde047', { lw: 10 }); txt('IN ONE DAY?', 0, -50, 76, '#fff', { lw: 10 });
+    box(-420, 40, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 120, 80, '#fff', { lw: 10 }); box(40, 40, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 120, 80, '#fff', { lw: 10 }); });
+  viewer(300, 1600, 1.2, t, 0); viewer(780, 1600, 1.2, t, 4, -1);
+}
+const SCENES = [{ t0: 0, fn: sGuess, push: .05 }, { t0: mid(0, 1), fn: sOld, push: .04, flash: .4 }, { t0: mid(1, 2), fn: sDrop, push: .05, xfade: .3 }, { t0: mid(2, 3), fn: sEight, push: .05, flash: .4 },
+  { t0: mid(3, 4), fn: sDay, push: .05, flash: .4 }, { t0: mid(4, 5), fn: sSec, push: .05, xfade: .3 }, { t0: mid(5, 6), fn: sBillion, push: .06, flash: .5 }, { t0: mid(6, 7), fn: sDoom, push: .04, xfade: .3 },
+  { t0: mid(7, 8), fn: sDate, push: .05, flash: .4 }, { t0: mid(8, 9), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["guess how many times", "one movie trailer", "got watched", "in just one day.", "comment a number."], ["the old record was", "three hundred sixty-five", "million views,", "set in twenty twenty-four."],
+  ["then in march,", "the first trailer", "for spider-man:", "brand new day dropped."], ["it beat that record", "in just eight hours."], ["after one day:", "seven hundred eighteen", "million views."], ["that's about", "eight thousand views.", "every single second."],
+  ["four days later,", "it passed one billion."], ["in july,", "the avengers: doomsday", "trailer got", "five hundred and three", "million.", "second place."], ["doomsday hits cinemas", "on december eighteenth."], ["will a trailer ever", "hit one billion", "in one day?", "yes or no."]];
+const HOT = new Set(["comment a number.", "million views,", "brand new day dropped.", "in just eight hours.", "million views.", "every single second.", "it passed one billion.", "second place.", "on december eighteenth.", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1760) });
+</script></body></html>

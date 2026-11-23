@@ -1,0 +1,21 @@
+[
+"One million euros now, or one cent that doubles every day for thirty days? Comment one or two.",
+"Day one: one cent. Day ten: five euros twelve.",
+"Day twenty: just over five thousand euros. The million is winning.",
+{
+"text": "Then it explodes.",
+"gap": 0.5
+},
+"Day twenty-eight: one point three million. Day thirty: five point three seven million.",
+{
+"text": "Half of it arrives on the very last day.",
+"gap": 0.6
+},
+"Real money doesn't double daily. But the same curve works over years.",
+"At an assumed six percent a year, money doubles about every twelve years.",
+"One thousand euros at sixteen: almost eighteen thousand at sixty-four. Not guaranteed, but time does the heavy lifting.",
+{
+"text": "Did you pick the cent? Yes or no.",
+"gap": 1.4
+}
+]

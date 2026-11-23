@@ -1,0 +1,105 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+
+const T = { cm: wt(0, 'comment'), d1: at(1, 0), d10: wt(1, 'day ten'), d20: at(2, 0), win: wt(2, 'the million'), boom: at(3, 0), d28: wt(4, 'one point'), d30: wt(4, 'day thirty'), half: at(5, 0),
+  real: at(6, 0), years: wt(6, 'same curve'), dbl: wt(7, 'doubles'), k16: at(8, 0), k64: wt(8, 'almost'), ng: wt(8, 'not guaranteed'), q: at(9, 0) };
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const SMALL = { stroke: false, font: 'Nun', weight: '900 ' };
+const BG = '#14532d', BG2 = '#052e16';
+function eur(v) { return v >= 1e6 ? (v / 1e6).toFixed(2) + ' M €' : v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'; }
+function coin(x, y, r) { circ(x, y, r, '#d97706', INK, 7); circ(x, y, r * .72, '#f59e0b', '#b45309', 4); txt('1', x, y + r * .25, r * .9, '#fff', { lw: 6 }); }
+function stack(x, y, n, w = 160) { for (let i = 0; i < n; i++) { box(x - w / 2, y - i * 34 - 30, w, 30, i % 2 ? '#22c55e' : '#16a34a', 6, 5); } }
+function card(x, y, num, col, draw, label, sub) { box(x - 220, y - 300, 440, 600, '#f8fafc', 30, 9); circ(x, y - 300, 54, col, INK, 7); txt(num, x, y - 280, 64, '#fff', { lw: 8 }); draw(); txt(label, x, y + 190, 54, INK, { stroke: false }); if (sub) txt(sub, x, y + 250, 36, '#475569', SMALL); }
+function foot(s, y = 1580) { txt(s, 540, y, 34, '#bbf7d0', SMALL); }
+function sPick(lt, t) {
+  bgFill(BG); floor(BG2, 1480);
+  txt('PICK ONE', 540, 200, 140, '#fde047', { lw: 20 });
+  const sw = Math.sin(t * 3);
+  card(290, 730, '1', '#16a34a', () => stack(290, 790, 7), '1,000,000 €', 'RIGHT NOW');
+  card(790, 730, '2', '#d97706', () => { coin(790, 600, 90 + 6 * Math.sin(t * 6)); txt('x2', 790, 790, 90, '#ef4444', { lw: 10 }); }, '1 CENT', 'DOUBLES DAILY');
+  hero({ x: 540, y: 1690, s: 1.05, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.0, re: -1.8 }, eyes: 'huge', mouth: 'o', look: sw > 0 ? 1 : -1, bob: Math.abs(Math.sin(t * 5)) * 10, lean: .05 * sw });
+  if (t > T.cm) popIn(t, T.cm, 540, 1105, () => { box(-260, -55, 520, 110, '#fde047', 30, 7); txt('COMMENT 1 OR 2', 0, 6, 54, INK, { stroke: false }); });
+}
+function calendar(x, y, s, top, big) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-200, -200, 400, 400, '#f8fafc', 26, 9); box(-200, -200, 400, 110, '#ef4444', 26, 9); txt(top, 0, -130, 64, '#fff', { lw: 8 }); txt(big, 0, 90, 190, INK, { stroke: false }); ctx.restore(); }
+function sEarly(lt, t) {
+  bgFill(BG); floor(BG2, 1480);
+  const ten = t > T.d10; txt(ten ? 'DAY 10' : 'DAY 1', 540, 200, 150, '#fde047', { lw: 20 });
+  calendar(300, 640, .9, 'DAY', ten ? '10' : '1');
+  coin(780, 640, ten ? 120 : 70);
+  popIn(t, ten ? T.d10 : T.d1 + .2, 540, 1040, () => { box(-330, -80, 660, 160, '#0f172a', 26, 8); txt(ten ? '5.12 €' : '0.01 €', 0, 10, 110, '#fde047', { lw: 12 }); });
+  hero({ x: 540, y: 1680, s: 1.1, pose: STAND, eyes: 'norm', mouth: 'flat', look: 0 });
+}
+function race(t, pen, ttl) {
+  bgFill(BG); floor(BG2, 1380);
+  txt(ttl, 540, 200, 150, '#fde047', { lw: 20 });
+  const max = 1e6, h1 = 780, h2 = Math.max(6, 780 * Math.min(pen, max * 1.15) / max);
+  box(170, 1380 - h1, 300, h1, '#22c55e', 14, 8); txt('1 M €', 320, 1380 - h1 - 50, 70, '#fff', { lw: 10 }); txt('OPTION 1', 320, 1440, 44, '#bbf7d0', SMALL);
+  box(610, 1380 - h2, 300, h2, '#f59e0b', 14, 8); txt(eur(pen), 760, 1380 - h2 - 50, 64, '#fff', { lw: 10 }); txt('OPTION 2', 760, 1440, 44, '#bbf7d0', SMALL);
+}
+function sTwenty(lt, t) {
+  const pen = 5242.88 * eo(inv(T.d20, T.d20 + 1.2, t)); race(t, pen, 'DAY 20');
+  if (t > T.win) popIn(t, T.win, 320, 420, () => { box(-230, -55, 460, 110, '#16a34a', 26, 7); txt('WINNING', 0, 6, 66, '#fff', { lw: 8 }); });
+}
+function sBoom(lt, t) {
+  bgFill('#7c2d12'); const k = eo(inv(T.boom, T.boom + .5, t)); impact(540, 900, 300 + 150 * k, 1);
+  txt('THEN IT', 540, 260, 130, '#fff', { lw: 18 }); txt('EXPLODES', 540, 1100, 170 * (0.6 + .4 * k), '#fde047', { lw: 22 });
+}
+function curve(t, k, unit, maxDay, labels) {
+  const x0 = 140, y0 = 1350, w = 820, h = 860; line(x0, y0, x0 + w, y0, 8, '#fff'); line(x0, y0, x0, y0 - h, 8, '#fff');
+  txt(unit, x0 + w - 60, y0 + 60, 44, '#bbf7d0', SMALL);
+  ctx.strokeStyle = '#fde047'; ctx.lineWidth = 12; ctx.beginPath(); const N = 120;
+  for (let i = 0; i <= N * k; i++) { const d = i / N * (maxDay - 1) + 1, v = Math.pow(2, d - 1) / Math.pow(2, maxDay - 1); const x = x0 + (d - 1) / (maxDay - 1) * w, y = y0 - v * h; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
+  labels.forEach(l => { if (t > l.t) { const v = Math.pow(2, l.d - 1) / Math.pow(2, maxDay - 1), x = x0 + (l.d - 1) / (maxDay - 1) * w, y = y0 - v * h; circ(x, y, 16, '#ef4444', INK, 5); popIn(t, l.t, x - l.dx, y + l.dy, () => { box(-180, -50, 360, 100, '#0f172a', 20, 6); txt(l.s, 0, 8, 46, '#fde047', SMALL); }); } });
+}
+function sLate(lt, t) {
+  bgFill(BG); txt(t > T.d30 ? 'DAY 30' : 'DAY 28', 540, 200, 150, '#fde047', { lw: 20 });
+  const k = eo(inv(L[4].start - .3, T.d30 + .4, t));
+  const mh = 1350 - 860 * (1e6 / 5368709.12); ctx.setLineDash([20, 14]); line(140, mh, 960, mh, 6, '#86efac'); ctx.setLineDash([]); txt('1 M €', 230, mh - 34, 40, '#86efac', SMALL);
+  curve(t, k, 'DAYS', 30, [{ d: 28, t: T.d28, s: '1.34 M €', dx: 230, dy: -60 }, { d: 30, t: T.d30, s: '5.37 M €', dx: 260, dy: 40 }]);
+}
+function sHalf(lt, t) {
+  bgFill(BG); floor(BG2, 1380); txt('HALF ON', 540, 200, 130, '#fde047', { lw: 18 }); txt('THE LAST DAY', 540, 330, 110, '#fff', { lw: 16 });
+  box(340, 1380 - 400, 400, 400, '#f59e0b', 10, 8); txt('DAY 29', 540, 1170, 64, '#fff', { lw: 8 }); txt('2.68 M €', 540, 1250, 50, '#fff', SMALL);
+  const k = eob(inv(T.half + .3, T.half + .9, t)); if (k > 0) { box(340, 980 - 400 * k, 400, 400 * k, '#ef4444', 10, 8); if (k > .8) { txt('+ 2.68 M €', 540, 780, 64, '#fff', { lw: 9 }); txt('ON DAY 30', 540, 850, 46, '#fff', SMALL); } }
+}
+function sReal(lt, t) {
+  bgFill(BG); txt('REAL LIFE?', 540, 200, 140, '#fde047', { lw: 20 });
+  const y = t > T.years; curve(t, eo(inv(T.years - .2, T.years + 1.5, t)), y ? 'YEARS' : '', 30, []);
+  if (!y) { txt('NOT DAILY', 540, 800, 130, '#ef4444', { lw: 16 }); }
+  else popIn(t, T.years, 420, 620, () => { box(-260, -60, 520, 120, '#0f172a', 26, 7); txt('SAME CURVE', 0, 6, 70, '#fde047', { lw: 8 }); });
+}
+function sDouble(lt, t) {
+  bgFill(BG); floor(BG2, 1400); txt('x2 EVERY', 540, 200, 140, '#fde047', { lw: 20 }); txt('~12 YEARS', 540, 340, 120, '#fff', { lw: 18 });
+  const ys = [0, 12, 24, 36, 48]; ys.forEach((yy, i) => { if (t < T.dbl + i * .45) return; const n = Math.pow(2, i); const hh = Math.min(28 * n, 760);
+    box(120 + i * 180, 1400 - hh, 120, hh, '#22c55e', 8, 6); txt('+' + yy, 180 + i * 180, 1460, 44, '#bbf7d0', SMALL); txt('x' + n, 180 + i * 180, 1400 - hh - 40, 52, '#fff', { lw: 8 }); });
+  txt('YEARS', 540, 1520, 40, '#bbf7d0', SMALL);
+  foot('assumed ~6 % a year, monthly compounding', 1545); foot('(Finanztip planning return), before tax and costs', 1590); foot('not guaranteed: values go up and down', 1635);
+}
+function sResult(lt, t) {
+  bgFill(BG); floor(BG2, 1380); txt('START AT 16', 540, 200, 130, '#fde047', { lw: 18 });
+  box(140, 1380 - 60, 330, 60, '#94a3b8', 10, 7); txt('1,000 €', 305, 1380 - 110, 70, '#fff', { lw: 9 }); txt('PAID IN', 305, 1440, 46, '#bbf7d0', SMALL);
+  const k = eo(inv(T.k64 - .3, T.k64 + 1.2, t)); if (k > 0) { const hh = 60 + 860 * k; box(610, 1380 - hh, 330, hh, '#22c55e', 10, 7); txt(Math.round(1000 + 16687 * k).toLocaleString('en-US') + ' €', 775, 1380 - hh - 50, 70, '#fff', { lw: 9 }); }
+  txt('AT 64', 775, 1440, 46, '#bbf7d0', SMALL);
+  if (t > T.ng) popIn(t, T.ng, 300, 760, () => { box(-200, -55, 400, 110, '#ef4444', 26, 7); txt('NOT GUARANTEED', 0, 6, 40, '#fff', { lw: 6 }); });
+  foot('one-time 1,000 €, assumed ~6 % a year, monthly', 1580); foot('before tax and costs, not guaranteed', 1625);
+}
+function sEnd(lt, t) {
+  bgFill(BG); floor(BG2, 1480);
+  popIn(t, T.q + .1, 540, 560, () => { box(-470, -230, 940, 460, 'rgba(5,46,22,.95)', 30, 9); txt('DID YOU PICK', 0, -140, 80, '#fde047', { lw: 10 }); txt('THE CENT?', 0, -50, 80, '#fff', { lw: 10 });
+    box(-420, 40, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 120, 80, '#fff', { lw: 10 }); box(40, 40, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 120, 80, '#fff', { lw: 10 }); });
+  coin(820, 1100, 90); hero({ x: 380, y: 1640, s: 1.25, pose: { lt: .15, ls: 0, rt: -.15, rs: 0, la: 2.5, le: .3, ra: -2.5, re: -.3 }, eyes: 'huge', mouth: 'grin', look: 1, bob: Math.abs(Math.sin(t * 6)) * 12 });
+}
+const SCENES = [{ t0: 0, fn: sPick, push: .04 }, { t0: mid(0, 1), fn: sEarly, push: .05, flash: .4 }, { t0: mid(1, 2), fn: sTwenty, push: .04, xfade: .3 }, { t0: mid(2, 3), fn: sBoom, push: .1, flash: .7 },
+  { t0: mid(3, 4), fn: sLate, push: .04, flash: .5 }, { t0: mid(4, 5), fn: sHalf, push: .05, xfade: .3 }, { t0: mid(5, 6), fn: sReal, push: .04, flash: .4 }, { t0: mid(6, 7), fn: sDouble, push: .04, xfade: .3 },
+  { t0: mid(7, 8), fn: sResult, push: .04, flash: .4 }, { t0: mid(8, 9), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["one million euros now,", "or one cent", "that doubles every day", "for thirty days?", "comment one or two."], ["day one: one cent.", "day ten:", "five euros twelve."], ["day twenty:", "just over", "five thousand euros.", "the million is winning."],
+  ["then it explodes."], ["day twenty-eight:", "one point three million.", "day thirty:", "five point three seven million."], ["half of it arrives", "on the very last day."], ["real money", "doesn't double daily.", "but the same curve", "works over years."],
+  ["at an assumed", "six percent a year,", "money doubles", "about every twelve years."], ["one thousand euros", "at sixteen:", "almost eighteen thousand", "at sixty-four.", "not guaranteed,", "but time does", "the heavy lifting."], ["did you pick the cent?", "yes or no."]];
+const HOT = new Set(["comment one or two.", "five euros twelve.", "the million is winning.", "then it explodes.", "five point three seven million.", "on the very last day.", "works over years.", "about every twelve years.", "almost eighteen thousand", "the heavy lifting.", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1760) });
+</script></body></html>

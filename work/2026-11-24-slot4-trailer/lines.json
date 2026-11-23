@@ -1,0 +1,21 @@
+[
+"Guess how many times one movie trailer got watched in just one day. Comment a number.",
+"The old record was three hundred sixty-five million views, set in twenty twenty-four.",
+"Then in March, the first trailer for Spider-Man: Brand New Day dropped.",
+{
+"text": "It beat that record in just eight hours.",
+"gap": 0.6
+},
+"After one day: seven hundred eighteen million views.",
+"That's about eight thousand views. Every single second.",
+{
+"text": "Four days later, it passed one billion.",
+"gap": 0.5
+},
+"In July, the Avengers: Doomsday trailer got five hundred and three million. Second place.",
+"Doomsday hits cinemas on December eighteenth.",
+{
+"text": "Will a trailer ever hit one billion in one day? Yes or no.",
+"gap": 1.4
+}
+]

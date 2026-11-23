@@ -1,0 +1,11 @@
+["The only light left in town is a tiny corner shop. And something is standing in its door.",
+ "Last time, the shadow said Mia's name. In Mia's voice.",
+ {"text":"Mia grabs your hand. You run.","gap":0.5},
+ "Past frozen people, to the only lit sign in town. Open twenty-four hours.",
+ "Through the glass you see it. One phone charger, glowing by the till.",
+ "Your battery, two percent. Mia's, one.",
+ "Then the static slides in front of the door. It doesn't move. It just waits.",
+ "Your phone buzzes. A text from your own number. Don't let her phone die.",
+ {"text":"Too late. Mia's screen goes black. Zero percent.","gap":0.6},
+ {"text":"And Mia freezes, mid-step, just like everyone else.","gap":0.8},
+ {"text":"Would you walk past it to reach the charger? Yes or no.","gap":1.6}]

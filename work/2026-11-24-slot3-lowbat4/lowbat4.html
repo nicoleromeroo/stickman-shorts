@@ -1,0 +1,154 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function battery(x, y, s, pct) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-90, -40, 170, 80, '#0f172a', 14, 8); box(80, -16, 16, 32, INK, 4, 0); ctx.fillStyle = pct <= 5 ? '#ef4444' : '#22c55e'; rr(-80, -30, 150 * Math.max(.06, pct / 100), 60, 8); ctx.fill(); ctx.restore(); }
+function clockTxt(x, y, s, label, col = '#ef4444') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-190, -80, 380, 160, '#0f172a', 20, 8); txt(label, 0, 8, 110, col, { stroke: false }); ctx.restore(); }
+function phoneBig(x, y, s, msgs, pct, glow = 0) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  if (glow) spot(0, 0, 520, glow, '34,197,94');
+  box(-300, -520, 600, 1040, '#111827', 60, 10); ctx.fillStyle = '#0b1020'; rr(-270, -490, 540, 980, 40); ctx.fill();
+  txt('ME', 0, -420, 56, '#fff', { stroke: false }); txt(pct + ' %', 170, -420, 40, pct <= 5 ? '#ef4444' : '#fff', { stroke: false, font: 'Nun', weight: '900 ' });
+  line(-250, -370, 250, -370, 4, '#334155');
+  let yy = -300; for (const m of msgs) { if (!m.show) continue; const k = eob(inv(m.t0, m.t0 + .25, m.t)); ctx.save(); ctx.translate(-240, yy); ctx.scale(k, k);
+    const h = 30 + m.text.length * 62; box(0, 0, 470, h, m.col || '#22c55e', 30, 6); m.text.forEach((l, i) => txt(l, 235, 45 + i * 62, 50, '#fff', { lw: 7 })); ctx.restore(); yy += h + 30; }
+  ctx.restore();
+}
+function doorFront(x, y, s, shake, under = 0) { ctx.save(); ctx.translate(x + shake, y); ctx.scale(s, s); box(-210, -560, 420, 1120, '#0b1020', 6, 10); box(-190, -540, 380, 1080, '#6b3f1d', 6, 8);
+  box(-150, -480, 300, 380, '#5a3417', 6, 6); box(-150, -40, 300, 420, '#5a3417', 6, 6); circ(140, 20, 20, '#fbbf24', INK, 6);
+  if (under > 0) { ctx.fillStyle = `rgba(200,200,255,${under})`; ctx.fillRect(-190, 540, 380, 22); }
+  ctx.restore(); }
+// street pieces
+function streetBg() { bgFill('#0b1020'); for (let i = 0; i < 40; i++) circ(rnd(i) * 1080, rnd(i + 50) * 600, 3 + rnd(i + 9) * 3, '#e2e8f0');
+  circ(110, 520, 45, '#f8fafc'); floor('#1e293b', 1420); ctx.fillStyle = '#334155'; ctx.fillRect(0, 1420, 1080, 40); }
+function house(x, y, w, h, col = '#1e1b4b', win = 0) { box(x, y, w, h, col, 4, 8); ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(x - 30, y); ctx.lineTo(x + w / 2, y - h * .45); ctx.lineTo(x + w + 30, y); ctx.closePath(); ctx.fill(); ctx.stroke();
+  box(x + w * .2, y + h * .2, w * .25, h * .25, win ? '#fde68a' : '#0f172a', 4, 6); box(x + w * .55, y + h * .2, w * .25, h * .25, '#0f172a', 4, 6); }
+function lamp(x, y, on) { line(x, y, x, y - 520, 16, INK); line(x, y - 520, x + 90, y - 520, 14, INK); box(x + 50, y - 520, 90, 50, on ? '#fde68a' : '#334155', 10, 6); if (on) spot(x + 95, y - 400, 260, .35); }
+
+const HOLDP = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.6, re: -1.5 };
+const PH = () => holdPhone('on', { c1: '#1e293b', c2: '#0b1020' });
+function torch(on) { return (hx, hy) => { ctx.save(); ctx.translate(hx, hy); ctx.rotate(-.5); box(-12, -60, 24, 70, '#334155', 6, 5); box(-18, -78, 36, 24, '#94a3b8', 6, 5); ctx.restore(); if (on) spot(hx - 40, hy - 90, 200, .45, '253,224,71'); }; }
+function mia(o) { return stick(Object.assign({ shirt: '#facc15', pants: '#1f2937', hair: '#111827', hood: true }, o)); }
+function shadow(x, y, s, t, a = 1) {
+  ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = '#0b1020'; ctx.strokeStyle = '#475569'; ctx.lineWidth = 6; rr(-110, -720, 220, 720, 110); ctx.fill(); ctx.stroke();
+  ctx.save(); rr(-110, -720, 220, 720, 110); ctx.clip(); const f = Math.floor(t * 14);
+  for (let i = 0; i < 160; i++) { const r = rnd(i + f * 211), r2 = rnd(i * 3 + f * 97); ctx.fillStyle = `rgba(255,255,255,${.15 + .5 * rnd(i + f)})`; ctx.fillRect(-110 + r * 220, -720 + r2 * 720, 10, 6); }
+  ctx.restore();
+  circ(-34, -600, 13, '#fff'); circ(34, -600, 13, '#fff');
+  ctx.restore();
+}
+function lampDead(x, y) { line(x, y, x, y - 520, 16, INK); line(x, y - 520, x + 90, y - 520, 14, INK); box(x + 50, y - 520, 90, 50, '#334155', 10, 6); }
+function voiceBubble(x, y, label, col = '#fff') { box(x - 230, y - 70, 460, 140, 'rgba(15,23,42,.92)', 30, 7); txt(label, x, y + 6, 66, col, { lw: 9 }); }
+function shop(x, y, s, lit = 1) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  box(-260, -620, 520, 620, '#334155', 6, 9); box(-280, -680, 560, 90, lit ? '#f59e0b' : '#475569', 10, 8);
+  txt('OPEN 24 H', 0, -618, 58, '#fff', { lw: 8 });
+  box(-230, -560, 250, 380, lit ? '#fef3c7' : '#0f172a', 6, 7); box(60, -560, 170, 560, lit ? '#fde68a' : '#0f172a', 6, 7);
+  if (lit) { spot(0, -300, 420, .35); }
+  ctx.restore(); }
+function mPhone(x, y, s, pct, black, glow = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  box(-230, -420, 460, 840, '#111827', 50, 10); ctx.fillStyle = black ? '#000' : '#0b1020'; rr(-205, -395, 410, 790, 34); ctx.fill();
+  if (!black) { txt('MIA', 0, -320, 52, '#facc15', { stroke: false }); battery(0, -60, 1.6, pct); txt(pct + ' %', 0, 140, 130, '#ef4444', { lw: 16 }); }
+  ctx.restore(); }
+const RUNP = (p) => runPose(p);
+const T = { something: wt(0, 'and something'), recapV: wt(1, 'in mia'), run: wt(2, 'you run'), open: wt(3, 'open'), see: wt(4, 'one phone'),
+  two: wt(5, 'two'), one: wt(5, "mia's"), slides: wt(6, 'slides'), waits: wt(6, 'it just'), buzz: at(7, 0), dont: wt(7, "don't"),
+  black: wt(8, 'goes black'), zero: wt(8, 'zero'), freeze: wt(9, 'freezes'), q: at(10, 0) };
+function sCold(lt, t) {
+  streetBg(); house(-60, 960, 300, 460); lampDead(300, 1440); shop(760, 1420, 1.05, 1);
+  shadow(840, 1420, .62, t, .55 + .45 * eo(inv(T.something - .3, T.something + .5, t)));
+  hero({ x: 260, y: 1660, s: 1.45, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, lean: -.04 * Math.sin(t * 5), bob: Math.abs(Math.sin(t * 6)) * 5, hold: PH() });
+  txt('ONE LIGHT LEFT', 540, 230, 112, '#fde047', { lw: 17 });
+  if (t > T.something) popIn(t, T.something, 560, 470, () => { box(-300, -70, 600, 140, '#dc2626', 30, 7); txt('IN THE DOOR', 0, 6, 72, '#fff', { lw: 9 }); });
+}
+function sRecap(lt, t) {
+  streetBg(); shadow(780, 1440, .9, t);
+  mia({ x: 380, y: 1660, s: 1.4, pose: STAND, eyes: 'huge', mouth: 'o', look: 1, hold: torch(true) });
+  txt('LAST TIME...', 540, 240, 110, '#c4b5fd', { lw: 16 });
+  if (t > T.recapV) popIn(t, T.recapV, 720, 560, () => voiceBubble(0, 0, '"MIA..."', '#facc15'));
+}
+function sRun(lt, t) {
+  streetBg(); const sh = (t * 500) % 1200; house(700 - sh, 960, 300, 460); house(1900 - sh, 960, 300, 460); lampDead(1300 - sh, 1440);
+  const go = t > T.run, p = t * 14;
+  mia({ x: 620, y: 1660, s: 1.4, pose: go ? runPose(p) : STAND, eyes: 'norm', mouth: 'flat', look: -1, bob: go ? Math.abs(Math.sin(p)) * 12 : 0, hold: torch(true) });
+  hero({ x: 380, y: 1660, s: 1.4, pose: go ? runPose(p + 1) : HOLDP, eyes: 'huge', mouth: 'o', look: 1, bob: go ? Math.abs(Math.sin(p + 1)) * 12 : 0, hold: PH() });
+  txt(go ? 'RUN!' : 'MIA GRABS YOUR HAND', 540, 240, go ? 170 : 92, '#fde047', { lw: 18 });
+}
+function sStreet(lt, t) {
+  streetBg(); const k = eo(inv(L[3].start, T.open, t));
+  stick({ x: 140, y: 1560, s: 1.0, shirt: '#16a34a', pants: '#1f2937', hair: '#78350f', pose: { lt: .55, ls: .9, rt: -.35, rs: 0, la: -.5, le: .3, ra: .6, re: .3 }, eyes: 'norm', mouth: 'flat', look: 1 });
+  ctx.fillStyle = 'rgba(147,197,253,.18)'; ctx.fillRect(40, 1150, 200, 430); txt('FROZEN', 140, 1080, 50, '#93c5fd', { lw: 8 });
+  shop(lerp(1300, 790, k), 1420, 1.0, 1);
+  const p = t * 14;
+  hero({ x: 360, y: 1680, s: 1.3, pose: runPose(p), eyes: 'huge', mouth: 'o', look: 1, bob: Math.abs(Math.sin(p)) * 12, hold: PH() });
+  mia({ x: 560, y: 1680, s: 1.3, pose: runPose(p + 1), eyes: 'norm', mouth: 'flat', look: 1, bob: Math.abs(Math.sin(p + 1)) * 12, hold: torch(true) });
+  txt(t > T.open ? 'OPEN 24 HOURS' : 'PAST FROZEN PEOPLE', 540, 240, t > T.open ? 110 : 96, '#fde047', { lw: 17 });
+}
+function sGlass(lt, t) {
+  bgFill('#0b1020'); box(80, 420, 920, 1000, '#fef3c7', 10, 12); spot(540, 900, 520, .25);
+  box(120, 1080, 840, 320, '#92400e', 8, 8); box(640, 900, 220, 180, '#475569', 10, 7); txt('TILL', 750, 1010, 52, '#fff', { lw: 7 });
+  const g = .5 + .3 * Math.sin(t * 6); spot(380, 1040, 200, g, '34,197,94');
+  ctx.strokeStyle = INK; ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(300, 1080); ctx.bezierCurveTo(330, 980, 430, 1000, 440, 1060); ctx.stroke();
+  box(410, 1040, 60, 50, '#e2e8f0', 8, 6); box(280, 1060, 50, 26, '#e2e8f0', 6, 5);
+  ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 14; line(200, 520, 330, 420, 14, 'rgba(255,255,255,.5)'); line(260, 620, 460, 440, 10, 'rgba(255,255,255,.4)');
+  txt('ONE CHARGER', 540, 240, 120, '#fde047', { lw: 18 });
+  if (t > T.see) popIn(t, T.see, 380, 860, () => { box(-200, -60, 400, 120, '#22c55e', 30, 7); txt('CHARGER', 0, 6, 62, '#fff', { lw: 8 }); });
+}
+function sBat(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1500);
+  battery(300, 700, 1.4, 2); txt('YOU', 300, 520, 90, '#93c5fd', { lw: 12 }); if (t > T.two) txt('2 %', 300, 900, 130, '#ef4444', { lw: 16 });
+  battery(780, 700, 1.4, t > T.one ? 1 : 2); txt('MIA', 780, 520, 90, '#facc15', { lw: 12 }); if (t > T.one) popIn(t, T.one, 780, 900, () => txt('1 %', 0, 0, 150, '#ef4444', { lw: 18 }));
+  hero({ x: 300, y: 1700, s: 1.25, pose: HOLDP, eyes: 'huge', mouth: 'wavy', look: 1, hold: PH() });
+  mia({ x: 780, y: 1700, s: 1.25, pose: STAND, eyes: 'huge', mouth: 'o', look: -1, hold: torch(true) });
+  txt('BATTERY', 540, 240, 120, '#fde047', { lw: 18 });
+}
+function sBlock(lt, t) {
+  streetBg(); shop(540, 1420, 1.25, 1);
+  const k = eo(inv(T.slides, T.slides + 1, t)); if (t > T.slides - .1) shadow(lerp(1250, 640, k), 1430, .78, t);
+  hero({ x: 170, y: 1700, s: 1.25, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, hold: PH() });
+  mia({ x: 360, y: 1700, s: 1.25, pose: STAND, eyes: 'huge', mouth: 'o', look: 1, hold: torch(true) });
+  txt(t > T.waits ? 'IT JUST WAITS' : 'IT BLOCKS THE DOOR', 540, 240, t > T.waits ? 116 : 96, '#fde047', { lw: 17 });
+}
+function sText(lt, t) {
+  bgFill('#0b1020');
+  const msgs = [{ show: t > T.dont - .05, t0: T.dont - .05, t, text: ["DON'T LET", 'HER PHONE', 'DIE.'] }];
+  phoneBig(540, 1020, 1.05, msgs, 2, t > T.dont ? .25 : 0);
+  txt('FROM YOUR OWN NUMBER', 540, 230, 86, '#22c55e', { lw: 14 });
+  if (t < T.dont) { const sh = Math.sin(t * 60) * 10; txt('BZZT', 540 + sh, 780, 120, '#fff', { lw: 14 }); }
+}
+function sBlack(lt, t) {
+  bgFill('#1e1b4b');
+  const bl = t > T.black; mPhone(540, 1000, 1.15, bl ? 0 : 1, t > T.zero);
+  if (bl && t < T.black + .5) { ctx.fillStyle = `rgba(0,0,0,${.6 * (1 - (t - T.black) / .5)})`; ctx.fillRect(0, 0, W, H); }
+  txt(t > T.zero ? '0 %' : 'TOO LATE', 540, 240, t > T.zero ? 170 : 130, '#ef4444', { lw: 18 });
+}
+function sFreeze(lt, t) {
+  streetBg(); shop(820, 1420, .85, 1); shadow(900, 1430, .6, t, .9);
+  const fr = t > T.freeze;
+  mia({ x: 560, y: 1680, s: 1.45, pose: { lt: .5, ls: .8, rt: -.4, rs: 0, la: -.6, le: .3, ra: .7, re: .3 }, eyes: 'norm', mouth: 'o', look: -1, hold: torch(!fr) });
+  if (fr) { ctx.fillStyle = 'rgba(147,197,253,.25)'; ctx.fillRect(400, 1000, 320, 700); popIn(t, T.freeze, 480, 760, () => txt('FROZEN', 0, 0, 80, '#93c5fd', { lw: 10 })); }
+  hero({ x: 220, y: 1680, s: 1.4, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, hold: PH() });
+  txt(fr ? 'MIA FREEZES' : 'AND MIA...', 540, 240, 120, '#fde047', { lw: 18 });
+}
+function sEnd(lt, t) {
+  streetBg(); shop(820, 1300, .7, 1); shadow(840, 1310, .5, t, .9);
+  popIn(t, T.q + .1, 540, 470, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('WALK PAST IT?', 0, -100, 76, '#fff', { stroke: false });
+    box(-420, -10, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 70, 80, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 70, 80, '#fff', { lw: 10 }); });
+  hero({ x: 250, y: 1500, s: 1.1, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, hold: PH() });
+  mia({ x: 470, y: 1500, s: 1.1, pose: { lt: .5, ls: .8, rt: -.4, rs: 0, la: -.6, le: .3, ra: .7, re: .3 }, eyes: 'norm', mouth: 'o', look: -1, hold: torch(false) });
+  ctx.fillStyle = 'rgba(147,197,253,.22)'; ctx.fillRect(360, 1080, 220, 440);
+  if (t > L[10].end + .2) { const k = eob(inv(L[10].end + .2, L[10].end + .45, t)); ctx.save(); ctx.translate(540, 1620); ctx.scale(k, k); box(-430, -80, 860, 160, '#facc15', 30, 9); txt('PART 5 TOMORROW', 0, 10, 86, INK, { stroke: false }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sCold, push: .05 }, { t0: mid(0, 1), fn: sRecap, push: .04, flash: .5 }, { t0: mid(1, 2), fn: sRun, push: .05, xfade: .2 }, { t0: mid(2, 3), fn: sStreet, push: .05, xfade: .3 },
+  { t0: mid(3, 4), fn: sGlass, push: .05, xfade: .3 }, { t0: mid(4, 5), fn: sBat, push: .05, flash: .4 }, { t0: mid(5, 6), fn: sBlock, push: .06, xfade: .3 }, { t0: mid(6, 7), fn: sText, push: .05, flash: .4 },
+  { t0: mid(7, 8), fn: sBlack, push: .06, flash: .4 }, { t0: mid(8, 9), fn: sFreeze, push: .08, flash: .6 }, { t0: mid(9, 10), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["the only light", "left in town", "is a tiny corner shop.", "and something", "is standing in its door."], ["last time,", "the shadow", "said mia's name.", "in mia's voice."], ["mia grabs your hand.", "you run."],
+  ["past frozen people,", "to the only lit sign", "in town.", "open twenty-four hours."], ["through the glass", "you see it.", "one phone charger,", "glowing by the till."], ["your battery,", "two percent.", "mia's, one."],
+  ["then the static", "slides in front", "of the door.", "it doesn't move.", "it just waits."], ["your phone buzzes.", "a text from", "your own number.", "don't let", "her phone die."], ["too late.", "mia's screen", "goes black.", "zero percent."],
+  ["and mia freezes,", "mid-step,", "just like everyone else."], ["would you walk past it", "to reach the charger?", "yes or no."]];
+const HOT = new Set(["is standing in its door.", "in mia's voice.", "you run.", "open twenty-four hours.", "one phone charger,", "mia's, one.", "it just waits.", "her phone die.", "zero percent.", "just like everyone else.", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1760) });
+</script></body></html>
