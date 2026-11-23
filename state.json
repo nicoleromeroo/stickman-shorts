@@ -1,5 +1,5 @@
 {
- "uploaded_count": 50,
+ "uploaded_count": 52,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -401,6 +401,22 @@
    "mode": "scheduled 2026-11-24T10:30:00Z",
    "publish_at": "2026-11-24T11:30:00+01:00",
    "uploaded_at": "2026-11-23T15:00:36+00:00"
+  },
+  {
+   "tag": "video-20261124-slot1",
+   "video_id": "b3rrz7EFRTE",
+   "title": "Why Your Body Jumps Just as You Fall Asleep \ud83d\ude34 #shorts",
+   "mode": "scheduled 2026-11-24T05:00:00Z",
+   "publish_at": "2026-11-24T06:00:00+01:00",
+   "uploaded_at": "2026-11-23T19:56:26+00:00"
+  },
+  {
+   "tag": "video-20261124-slot5",
+   "video_id": "ZX2JejbAMpI",
+   "title": "What If You Jumped Into a Hole Through the Earth? #shorts",
+   "mode": "scheduled 2026-11-24T17:30:00Z",
+   "publish_at": "2026-11-24T18:30:00+01:00",
+   "uploaded_at": "2026-11-23T19:56:26+00:00"
   }
  ]
 }
