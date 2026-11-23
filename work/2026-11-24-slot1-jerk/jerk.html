@@ -1,0 +1,101 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { fall: wt(0, 'then you fall'), jump: wt(0, 'jumps'), cm: wt(1, 'comment'), rev: at(2, 0), name: wt(2, "it's called"),
+  loose: at(3, 0), mis: at(4, 0), mfall: wt(4, 'falling'), tree: at(5, 0), drop: wt(5, 'about to drop'), jolt: wt(6, 'jolts'), jic: wt(6, 'just in'),
+  str: wt(7, 'stress'), caf: wt(7, 'caffeine'), tired: wt(7, 'super tired'), ok: at(8, 0), why: wt(8, 'but scientists'), q: at(9, 0), yn: wt(9, 'yes') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#94a3b8') { txt(s, 540, y, 28, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+const LIE = { lt: .02, ls: 0, rt: -.02, rs: 0, la: .15, le: .1, ra: -.15, re: -.1 };
+const STARTLE = { lt: .5, ls: .6, rt: -.5, rs: .6, la: 1.5, le: .5, ra: -1.5, re: -.5 };
+function lying(x, y, s, o = {}) { stick(Object.assign({ shirt: '#3b82f6', pants: '#334155', hood: true, x, y, s, lean: -Math.PI / 2, shadow: false, pose: LIE }, o)); }
+function zzz(x, y, t) { for (let i = 0; i < 3; i++) { const p = (t * .5 + i / 3) % 1; ctx.save(); ctx.globalAlpha = Math.sin(p * Math.PI); txt('Z', x + p * 120, y - p * 220, 50 + p * 50, '#c4b5fd', { lw: 10 }); ctx.restore(); } }
+function room(t, win = true) { bgFill('#1e1b4b'); if (win) { windowFrame(120, 360, 300, 300, '#312e81'); circ(330, 450, 46, '#fef3c7'); circ(350, 435, 40, '#312e81'); for (let i = 0; i < 6; i++) circ(150 + rnd(i) * 240, 390 + rnd(i + 5) * 120, 4, '#fff'); } floor('#3730a3', 1380); }
+function bed(under) { box(200, 1180, 800, 120, '#92400e', 18, 8); box(160, 1060, 60, 300, '#78350f', 14, 8); box(960, 1120, 50, 240, '#78350f', 14, 8); box(220, 1150, 760, 50, '#e0e7ff', 18, 7); box(260, 1085, 210, 80, '#fff', 40, 7); }
+function blanket(dy = 0) { box(600, 1110 + dy, 400, 90, '#a78bfa', 30, 8); line(640, 1140 + dy, 960, 1140 + dy, 5, '#7c3aed'); }
+function big(fn) { ctx.save(); ctx.translate(540, 1300); ctx.scale(1.15, 1.15); ctx.translate(-560, -1250); fn(); ctx.restore(); }
+function sleeper(t, jumpT, o = {}) { // lying hero in bed; jumps at jumpT
+  const d = t - jumpT; const j = d > 0 && d < .9 ? Math.sin(Math.min(1, d / .45) * Math.PI) * (d < .45 ? 1 : 0) : 0;
+  const k = d > 0 ? Math.max(0, 1 - d / .9) : 0; const breathe = Math.sin(t * 2.2) * 4;
+  const pose = poseMix(LIE, STARTLE, d > 0 ? eo(Math.min(1, d / .15)) * (1 - inv(.6, 1.2, d)) : 0);
+  lying(980, 1135 - j * 120 + breathe * .3, 1.12, Object.assign({ pose, eyes: d > 0 && d < 1.5 ? 'huge' : 'closed', mouth: d > 0 && d < 1.5 ? 'o' : 'flat' }, o));
+  blanket(-j * 120); if (d > 0 && d < .5) impact(540, 900 - j * 120, 220, 1 - d / .5);
+}
+function poseMix(a, b, k) { const o = {}; for (const key in a) o[key] = lerp(a[key], b[key], k); return o; }
+function sHook(lt, t) {
+  room(t); big(() => { bed(); sleeper(t, T.jump); if (t < T.jump) zzz(560, 960, t); });
+  if (t < T.fall) { txt('ALMOST', 540, 180, 140, '#fff', { lw: 24 }); txt('ASLEEP...', 540, 320, 140, '#c4b5fd', { lw: 24 }); }
+  else if (t < T.jump) { txt('THEN YOU', 540, 180, 140, '#fff', { lw: 24 }); txt('FALL...', 540, 320, 150, '#facc15', { lw: 24 }); }
+  else { txt('YOUR BODY', 540, 180, 130, '#fff', { lw: 24 }); txt('JUMPS!', 540, 330, 170 * pop(T.jump, t), '#f87171', { lw: 28 }); }
+}
+function sGuess(lt, t) {
+  bgFill('#0f172a'); floor('#1e293b', 1450);
+  const rv = t >= T.rev;
+  if (!rv) { txt('HOW MANY', 540, 180, 140, '#fff', { lw: 24 }); txt('PEOPLE GET IT?', 540, 320, 112, '#38bdf8', { lw: 20 }); }
+  else { txt('UP TO', 540, 180, 120, '#fff', { lw: 22 }); txt('70%', 540, 340, 200 * pop(T.rev, t), '#facc15', { lw: 32 }); }
+  for (let r = 0; r < 2; r++) for (let c = 0; c < 5; c++) {
+    const i = r * 5 + c, on = rv && i < 7 && t > T.rev + i * .08; const hop = on ? Math.abs(Math.sin((t - T.rev) * 6 + i)) * 30 : 0;
+    stick({ x: 140 + c * 200, y: (r ? 1450 : 1060) - hop, s: .58, shirt: on ? '#facc15' : '#64748b', pants: '#334155', pose: on ? STARTLE : STAND, eyes: on ? 'huge' : 'norm', mouth: on ? 'o' : 'flat' });
+  }
+  if (!rv) { qmark(540, 560, t, at(1, 0), '#facc15', 200); if (t > T.cm) badge(540, 560, 680, 130, '#facc15', ['COMMENT A NUMBER'], [66], T.cm, t, -.03, INK); }
+  else if (t > T.name) badge(540, 560, 600, 130, '#dc2626', ['HYPNIC JERK'], [80], T.name, t, -.03);
+  foot('Sleep Foundation: up to 70%. McGill: 70%. Live Science: 60-70%');
+}
+function sBrain(lt, t) {
+  room(t); big(() => { bed(); sleeper(t, 1e9); });
+  if (t < T.mis) { txt('MUSCLES', 540, 180, 140, '#fff', { lw: 24 }); txt('GO LOOSE', 540, 320, 140, '#a7f3d0', { lw: 24 }); }
+  else { txt('BRAIN:', 540, 180, 140, '#fff', { lw: 24 }); txt('FALLING?!', 540, 320, 140, '#f87171', { lw: 24 }); }
+  const v = 1 - .92 * eio(inv(T.loose + .3, T.loose + 2.4, t)); meter(900, 920, 'MUSCLES', v, v > .5 ? '#22c55e' : '#f97316');
+  if (t > T.mis) { const k = pop(T.mis, t); const wob = t > T.mfall ? Math.sin(t * 18) * .06 : 0; brainChar(580, 720, .85 * k, { eyes: t > T.mfall ? 'huge' : 'norm', mouth: t > T.mfall ? 'o' : 'flat', tilt: wob, legs: false, armL: t > T.mfall ? [-40, -110] : null, armR: t > T.mfall ? [40, -110] : null }); }
+  foot('One theory, not proven (Sleep Foundation)');
+}
+function sTree(lt, t) {
+  bgFill('#1e1b4b'); for (let i = 0; i < 30; i++) circ(rnd(i) * W, rnd(i + 3) * 900 + 380, 3 + rnd(i + 9) * 3, '#e0e7ff'); floor('#166534', 1450);
+  box(760, 560, 120, 900, '#78350f', 20, 8); circ(820, 520, 230, '#15803d', INK, 8); circ(640, 600, 150, '#16a34a', INK, 8);
+  box(120, 990, 700, 50, '#92400e', 25, 8);
+  const slip = eio(inv(T.drop - .4, T.jolt, t)); const d = t - T.jolt; const jolt = d > 0 && d < .45 ? Math.sin(d / .45 * Math.PI) : 0;
+  const pose = d > 0 ? STARTLE : LIE; const roll = d > 0 ? 0 : slip * .35;
+  stick({ x: 720, y: 965 - jolt * 90 + slip * 40 * (d > 0 ? 0 : 1), s: .95, lean: -Math.PI / 2 + roll, shadow: false, shirt: '#a16207', pants: '#713f12', pose, eyes: d > 0 ? 'huge' : 'closed', mouth: d > 0 ? 'o' : 'flat' });
+  if (d > 0 && d < .5) impact(450, 900, 230, 1 - d / .5);
+  if (t < T.jolt) { txt('OLD TREE', 540, 180, 140, '#fff', { lw: 24 }); txt('REFLEX?', 540, 320, 140, '#86efac', { lw: 24 }); if (t < T.drop) zzz(300, 880, t); else excl(300, 800, t, T.drop, 160); }
+  else { txt('JOLT!', 540, 220, 210 * pop(T.jolt, t), '#facc15', { lw: 34 }); if (t > T.jic) badge(540, 420, 560, 110, '#dc2626', ['JUST IN CASE'], [70], T.jic, t, .03); }
+  foot('"Ancient primate reflex": a popular idea, not proven (Live Science, McGill)');
+}
+function cup(x, y, s = 1) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-45, -50, 90, 100, '#fff', 14, 8); ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(52, 0, 22, -1.4, 1.4); ctx.stroke(); box(-45, -50, 90, 20, '#7c2d12', 8, 6); for (let i = 0; i < 2; i++) { ctx.beginPath(); ctx.moveTo(-12 + i * 24, -65); ctx.quadraticCurveTo(-2 + i * 24, -85, -12 + i * 24, -105); ctx.stroke(); } ctx.restore(); }
+function batt(x, y, s = 1) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-70, -40, 140, 80, '#fff', 14, 8); box(70, -16, 16, 32, INK, 4, 0); box(-60, -30, 30, 60, '#ef4444', 6, 0); ctx.restore(); }
+function bolt(x, y, s = 1) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#facc15'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(15, -70); ctx.lineTo(-35, 10); ctx.lineTo(0, 10); ctx.lineTo(-15, 70); ctx.lineTo(35, -10); ctx.lineTo(0, -10); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+function sTrig(lt, t) {
+  bgFill('#fff7ed'); floor('#fdba74', 1440);
+  txt('MORE JERKS', 540, 180, 140, '#fff', { lw: 24 }); txt('WHEN YOU ARE...', 540, 320, 100, '#ea580c', { lw: 20 });
+  const items = [[bolt, 'STRESSED', T.str, 200], [cup, 'CAFFEINE', T.caf, 540], [batt, 'TIRED', T.tired, 880]];
+  for (const [fn, lb, t0, x] of items) { if (t < t0) continue; const k = pop(t0, t); ctx.save(); ctx.translate(x, 680); ctx.scale(k, k); box(-150, -150, 300, 300, '#fff', 34, 8); fn(0, -30, 1.1); txt(lb, 0, 100, 50, INK, { stroke: false }); ctx.restore(); }
+  const sh = Math.sin(t * 30) * (t > T.caf ? .04 : 0);
+  hero({ x: 540, y: 1440, s: 1.1, lean: sh, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: -2.4, le: -.6, ra: 2.4, re: .6 }, eyes: 'huge', mouth: 'wavy' });
+  if (t > T.str) sweat(640, 940, 1);
+  foot('Triggers: stress, caffeine, tiredness (Sleep Foundation, McGill OSS)', 1840, '#9a3412');
+}
+function sEnd(lt, t) {
+  if (t < T.q) {
+    bgFill('#052e16'); floor('#14532d', 1440);
+    if (t < T.why) { txt('NORMAL', 540, 180, 150, '#fff', { lw: 26 }); txt('& HARMLESS', 540, 320, 120, '#4ade80', { lw: 22 });
+      const k = pop(T.ok + .2, t); ctx.save(); ctx.translate(540, 700); ctx.scale(k, k); circ(0, 0, 170, '#22c55e', INK, 10); ctx.strokeStyle = INK; ctx.lineWidth = 34; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(-75, 5); ctx.lineTo(-20, 65); ctx.lineTo(85, -60); ctx.stroke(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 18; ctx.stroke(); ctx.restore(); }
+    else { txt('BUT WHY?', 540, 180, 150, '#fff', { lw: 26 }); txt('STILL UNSURE', 540, 320, 120, '#facc15', { lw: 22 }); qmark(540, 720, t, T.why, '#facc15', 360); }
+    hero({ x: 540, y: 1440, s: 1.05, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.5, re: -.3 }, eyes: 'norm', mouth: t < T.why ? 'grin' : 'flat', tilt: t > T.why ? Math.sin(t * 3) * .1 : 0 });
+    foot('"Generally harmless"; cause not known for certain (Sleep Foundation)', 1840, '#86efac');
+  } else {
+    room(t, false); big(() => { bed(); sleeper(t, T.yn + .3); if (t < T.yn + .3) zzz(560, 960, t); });
+    const k = pop(T.q, t); txt('HAPPENED', 540, 180, 140 * k, '#fff', { lw: 24 }); txt('THIS WEEK?', 540, 320, 130 * k, '#facc15', { lw: 24 });
+    const p1 = t > T.yn && t < T.yn + .4, p2 = t > T.yn + .5 && t < T.yn + .9;
+    box(130, 480 + (p1 ? 12 : 0), 380, 220, '#16a34a', 46, 9); txt('YES', 320, 600 + (p1 ? 12 : 0), 120, '#fff', { lw: 16 });
+    box(570, 480 + (p2 ? 12 : 0), 380, 220, '#dc2626', 46, 9); txt('NO', 760, 600 + (p2 ? 12 : 0), 120, '#fff', { lw: 16 });
+  }
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(0, 1), fn: sGuess, push: .04, flash: 1 }, { t0: mid(2, 3), fn: sBrain, push: .04, flash: .8 }, { t0: mid(4, 5), fn: sTree, push: .05, flash: .8 }, { t0: mid(6, 7), fn: sTrig, push: .04, flash: .8 }, { t0: mid(7, 8), fn: sEnd, push: .04, flash: .8 }];
+const CAP = [["you're almost", "asleep.", "then you fall,", "and your whole body", "jumps."], ["guess:", "how many people", "get this?", "comment a number."], ["up to", "seventy percent", "of people!", "it's called", "a hypnic jerk."], ["as you drift off,", "your muscles", "go totally loose."], ["one idea:", "your brain", "misreads that", "as falling."], ["like a primate", "sleeping in a tree,", "about to drop."], ["so it jolts", "your muscles awake.", "just in case."], ["stress,", "caffeine", "and being", "super tired", "can make it", "happen more."], ["it's normal", "and harmless,", "but scientists", "still aren't sure", "why it happens."], ["did it happen", "to you", "this week?", "yes or no?"]];
+const HOT = new Set(["jumps.", "comment a number.", "seventy percent", "a hypnic jerk.", "go totally loose.", "as falling.", "about to drop.", "just in case.", "stress,", "caffeine", "super tired", "and harmless,", "why it happens.", "yes or no?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

@@ -1,0 +1,27 @@
+[
+ "You jump into a hole straight through the Earth. How long until you pop out the other side?",
+ "Guess: four minutes, forty minutes, or four hours? Comment one, two or three.",
+ {
+  "text": "Ignore the heat: the core is about as hot as the Sun's surface.",
+  "gap": 0.5
+ },
+ "You fall faster and faster.",
+ {
+  "text": "In the middle, you're going over eight kilometers per second!",
+  "gap": 0.5
+ },
+ "Then gravity starts pulling you back, and you slow down.",
+ {
+  "text": "You pop out on the other side after about thirty-eight minutes. Answer two!",
+  "gap": 0.6
+ },
+ "The old textbook answer was forty-two. But Earth's heavy core pulls you faster.",
+ {
+  "text": "And with no air to stop you, you fall back. Again and again. Forever.",
+  "gap": 0.6
+ },
+ {
+  "text": "Would you take the jump? Yes or no?",
+  "gap": 0.6
+ }
+]
