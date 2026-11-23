@@ -1,5 +1,5 @@
 {
- "uploaded_count": 47,
+ "uploaded_count": 50,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -377,6 +377,30 @@
    "mode": "scheduled 2026-11-23T17:30:00Z",
    "publish_at": "2026-11-23T18:30:00+01:00",
    "uploaded_at": "2026-11-22T19:53:09+00:00"
+  },
+  {
+   "tag": "video-20261124-slot2",
+   "video_id": "r4x6jCkl6BE",
+   "title": "1 Million Now or 1 Cent Doubled for 30 Days? \ud83d\udcb6 #shorts",
+   "mode": "scheduled 2026-11-24T15:00:00Z",
+   "publish_at": "2026-11-24T16:00:00+01:00",
+   "uploaded_at": "2026-11-23T15:00:36+00:00"
+  },
+  {
+   "tag": "video-20261124-slot3",
+   "video_id": "2me5FdVNP_Q",
+   "title": "LOW BATTERY (Part 4) #shorts",
+   "mode": "scheduled 2026-11-24T19:00:00Z",
+   "publish_at": "2026-11-24T20:00:00+01:00",
+   "uploaded_at": "2026-11-23T15:00:36+00:00"
+  },
+  {
+   "tag": "video-20261124-slot4",
+   "video_id": "mqk6BM9c5bE",
+   "title": "Guess How Many Views One Trailer Got in a Day \ud83c\udfac #shorts",
+   "mode": "scheduled 2026-11-24T10:30:00Z",
+   "publish_at": "2026-11-24T11:30:00+01:00",
+   "uploaded_at": "2026-11-23T15:00:36+00:00"
   }
  ]
 }
