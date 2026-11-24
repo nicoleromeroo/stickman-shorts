@@ -1,0 +1,11 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 2521)
+m.music("funky")
+m.add("pop", .05, .4); m.add("ding", m.wt(0, "guess"), .3)
+m.add("whoosh", m.mid(0, 1) - .12, .25); m.add("thump", m.wt(1, "no."), .45); m.add("pop", m.wt(1, "contract"), .3)
+m.add("whoosh", m.mid(1, 2) - .12, .25); m.add("sting", m.wt(2, "twist"), .3); m.add("shing", m.wt(2, "tax-free"), .4)
+m.add("whoosh", m.mid(2, 3) - .12, .25); m.add("pop", m.wt(3, "eight hours"), .3)
+m.add("whoosh", m.mid(3, 4) - .12, .25); m.add("cash", m.wt(4, "fifty-five"), .4); m.add("ding", m.wt(4, "no tax"), .3)
+m.add("whoosh", m.mid(4, 5) - .12, .25); m.add("pop", m.wt(5, "up to"), .3); m.add("cash", m.wt(5, "the first"), .35)
+m.add("whoosh", m.mid(5, 6) - .12, .25); m.add("pop", m.at(6, .1), .35)
+m.write(mvol=.08, svol=.30)

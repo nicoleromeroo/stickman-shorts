@@ -1,0 +1,92 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const SMALL = { stroke: false, font: 'Nun', weight: '900 ' };
+const BG = '#7c2d12', BG2 = '#431407';
+function foot(s, y = 1590) { txt(s, 540, y, 32, '#fed7aa', SMALL); }
+function calendar(x, y, s, top, big, bs = 150) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-200, -200, 400, 400, '#f8fafc', 26, 9); box(-200, -200, 400, 110, '#ef4444', 26, 9); txt(top, 0, -130, 64, '#fff', { lw: 8 }); txt(big, 0, 90, bs, INK, { stroke: false }); ctx.restore(); }
+function counter(x, y, w) { box(x - w / 2, y, w, 200, '#92400e', 10, 9); box(x - w / 2 - 20, y - 30, w + 40, 40, '#a16207', 8, 8); }
+function cup(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-40, -70, 80, 80, '#f8fafc', 12, 6); ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(46, -30, 22, -1.3, 1.3); ctx.stroke(); for (let i = 0; i < 2; i++) line(-14 + i * 28, -90, -8 + i * 28, -130, 5, '#e5e7eb'); ctx.restore(); }
+function barista(x, y, s, t, o = {}) { hero(Object.assign({ x, y, s, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .5, le: .4, ra: -1.4, re: -1.2 }, eyes: 'huge', mouth: 'o', look: 1, bob: Math.abs(Math.sin(t * 5)) * 6, hold: (hx, hy) => cup(hx, hy + 10, .9) }, o));
+  ctx.fillStyle = '#16a34a'; ctx.strokeStyle = INK; ctx.lineWidth = 6; rr(x - 52 * s, y - 300 * s, 104 * s, 150 * s, 14); ctx.fill(); ctx.stroke(); }
+function stamp(x, y, label, col, rot = -.15, size = 80) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.strokeStyle = col; ctx.lineWidth = 12; rr(-size * 3.4, -size * .85, size * 6.8, size * 1.7, 20); ctx.stroke(); txt(label, 0, size * .3, size, col, { stroke: false }); ctx.restore(); }
+function law(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-150, -190, 300, 380, '#1e3a8a', 14, 9); box(-120, -160, 240, 320, '#1d4ed8', 8, 0); txt('LAW', 0, 0, 90, '#fde047', { lw: 10 }); txt('§', 0, 110, 80, '#fff', { lw: 8 }); ctx.restore(); }
+function paper(x, y, s, title, rows, t, t0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-210, -270, 420, 540, '#f8fafc', 16, 9); txt(title, 0, -190, 56, INK, { stroke: false });
+  rows.forEach((r, i) => { box(-170, -110 + i * 110, 60, 60, '#fff', 8, 6); txt(r, 40, -65 + i * 110, 42, INK, { stroke: false }); if (t > t0 + i * .3) { line(-160, -80 + i * 110, -140, -60 + i * 110, 10, '#16a34a'); line(-140, -60 + i * 110, -100, -120 + i * 110, 10, '#16a34a'); } }); ctx.restore(); }
+function bars(t, list, maxv, y0 = 1380, hmax = 760) { const n = list.length, w = 900 / n; list.forEach((b, i) => { const k = b.t0 === undefined ? 1 : eo(inv(b.t0, b.t0 + .7, t)); if (k <= 0) return; const x = 90 + i * w + w * .14, bw = w * .72, h = hmax * b.v / maxv * k;
+  box(x, y0 - h, bw, h, b.col, 14, 7); txt(b.lab, x + bw / 2, y0 - h - 46, 64, '#fff', { lw: 9 }); b.name.forEach((l, j) => txt(l, x + bw / 2, y0 + 50 + j * 42, 38, '#ffedd5', SMALL)); }); }
+const T = { guess: wt(0, 'guess'), no: wt(1, 'no.'), right: wt(1, 'you only'), contract: wt(1, 'contract'), twist: wt(2, 'twist'), fifty: wt(2, 'if your'), free: wt(2, 'tax-free'),
+  wage: wt(3, 'minimum'), base: wt(3, 'eight hours'), bonus: wt(4, 'fifty-five'), notax: wt(4, 'no tax'), hol: wt(5, 'up to'), may: wt(5, 'the first'), q: at(6, 0) };
+function sHook(lt, t) {
+  bgFill(BG); floor(BG2, 1420);
+  calendar(800, 560, .9, 'TODAY', 'SUN', 130); txt('8 HOURS', 300, 470, 96, '#fde047', { lw: 14 });
+  txt('EXTRA PAY?', 540, 210, 140, '#fff', { lw: 20 });
+  counter(540, 1420, 980); barista(380, 1420, 1.45, t);
+  if (t > T.guess) popIn(t, T.guess, 300, 650, () => { box(-230, -60, 460, 120, '#fde047', 30, 7); txt('YES OR NO?', 0, 6, 62, INK, { stroke: false }); });
+}
+function sNo(lt, t) {
+  bgFill('#1e293b'); floor('#0f172a', 1450);
+  txt('GERMANY', 540, 200, 120, '#fde047', { lw: 18 });
+  if (t < T.right + .6) { law(540, 700, 1.4); if (t > T.no) popIn(t, T.no, 540, 1080, () => stamp(0, 0, 'NO', '#ef4444', -.12, 110)); txt('NO LEGAL RIGHT', 540, 330, 80, '#fff', { lw: 11 }); }
+  else { txt('ONLY IF IT SAYS SO', 540, 330, 80, '#fff', { lw: 11 }); paper(560, 800, 1.3, 'CONTRACT', ['SUNDAY BONUS', 'PAY AGREEMENT'], t, T.contract); }
+  hero({ x: 170, y: 1690, s: 1.2, pose: STAND, eyes: 'huge', mouth: 'o', look: 1 });
+}
+function sContract(lt, t) {
+  bgFill(BG); floor(BG2, 1450);
+  txt('ONLY IF IT SAYS SO', 540, 200, 96, '#fde047', { lw: 16 });
+  paper(540, 760, 1.3, 'CONTRACT', ['SUNDAY BONUS', 'PAY AGREEMENT'], t, T.contract);
+  hero({ x: 200, y: 1690, s: 1.2, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -1.9, re: -.3 }, eyes: 'norm', mouth: 'flat', look: 1 });
+  foot('contract, collective agreement or works agreement', 1180);
+}
+function sTwist(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1480);
+  txt('THE TWIST', 540, 220, 150, '#fde047', { lw: 20 });
+  qmark && qmark(540, 750, 1.6, t);
+  hero({ x: 540, y: 1700, s: 1.4, pose: { lt: .15, ls: 0, rt: -.15, rs: 0, la: .4, le: 2.2, ra: -.4, re: -2.2 }, eyes: 'huge', mouth: 'grin', look: 0, bob: Math.abs(Math.sin(t * 6)) * 10 });
+}
+function sFree(lt, t) {
+  bgFill(BG); floor(BG2, 1450);
+  if (t < T.fifty) { txt('THE TWIST', 540, 260, 160, '#fde047', { lw: 20 }); qmark(540, 640, t, at(3, 0), '#ffd23f', 260); } else { txt('+50 %', 540, 260, 200, '#fde047', { lw: 22 }); txt('ON SUNDAYS', 540, 400, 80, '#fff', { lw: 11 }); }
+  if (t > T.free) popIn(t, T.free, 540, 700, () => stamp(0, 0, 'TAX-FREE', '#22c55e', -.1, 100));
+  barista(540, 1550, 1.15, t, { mouth: 'grin' }); counter(540, 1550, 700);
+  if (t > T.fifty) foot('§3b EStG: tax-free up to 50 % of base pay (base max. 50 €/h)', 1000);
+}
+function sBase(lt, t) {
+  bgFill('#14532d'); floor('#052e16', 1380);
+  txt('MINIMUM WAGE', 540, 200, 116, '#fde047', { lw: 18 }); txt('13.90 € x 8 HOURS', 540, 330, 80, '#fff', { lw: 11 });
+  bars(t, [{ v: 111.2, col: '#3b82f6', lab: '111.20 €', name: ['BASE PAY'], t0: T.base - .2 }], 180, 1380, 700);
+  calendar(840, 520, .6, 'SUNDAY', '8 H', 120);
+}
+function sBonus(lt, t) {
+  bgFill('#14532d'); floor('#052e16', 1380);
+  txt('+55.60 €', 540, 210, 160, '#fde047', { lw: 20 });
+  bars(t, [{ v: 111.2, col: '#3b82f6', lab: '111.20 €', name: ['BASE PAY'] }, { v: 55.6, col: '#22c55e', lab: '+55.60 €', name: ['SUNDAY', 'BONUS'], t0: T.bonus - .2 }], 180, 1380, 700);
+  if (t > T.notax) popIn(t, T.notax, 540, 450, () => { box(-400, -60, 800, 120, '#f8fafc', 30, 7); txt('YOU KEEP ALL OF IT', 0, 8, 64, '#15803d', { stroke: false }); });
+  foot('no tax + no social contributions on the bonus', 1560); foot('(if base pay is up to 25 €/h)', 1600);
+}
+function sHol(lt, t) {
+  bgFill(BG); floor(BG2, 1380);
+  txt('TAX-FREE MAX', 540, 200, 120, '#fde047', { lw: 18 });
+  bars(t, [{ v: 50, col: '#3b82f6', lab: '50 %', name: ['SUNDAY'] }, { v: 125, col: '#a855f7', lab: '125 %', name: ['PUBLIC', 'HOLIDAY'], t0: T.hol - .2 }, { v: 150, col: '#ef4444', lab: '150 %', name: ['1 MAY'], t0: T.may - .1 }], 160, 1380, 820);
+  foot('§3b EStG (also 150 % on 25/26 Dec, 24 Dec from 2 pm)', 1590);
+}
+function sEnd(lt, t) {
+  bgFill(BG); floor(BG2, 1420);
+  popIn(t, T.q + .1, 540, 470, () => { box(-470, -200, 940, 400, 'rgba(67,20,7,.95)', 30, 9); txt('SUNDAYS FOR +50 %?', 0, -100, 72, '#fde047', { lw: 10 });
+    box(-420, 10, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 90, 80, '#fff', { lw: 10 }); box(40, 10, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 90, 80, '#fff', { lw: 10 }); });
+  counter(540, 1420, 980); barista(380, 1420, 1.3, t, { mouth: 'grin' });
+  foot('Not financial advice.', 730); foot('Bonus only if your contract or agreement grants it.', 772);
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(0, 1), fn: sNo, push: .05, flash: .5 },
+  { t0: mid(1, 2), fn: sFree, push: .05, flash: .4 }, { t0: mid(2, 3), fn: sBase, push: .04, xfade: .3 }, { t0: mid(3, 4), fn: sBonus, push: .05, flash: .4 }, { t0: mid(4, 5), fn: sHol, push: .04, xfade: .3 }, { t0: mid(5, 6), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["sunday shift", "at the café.", "eight hours.", "extra pay by law?", "guess: yes or no."], ["in germany,", "no.", "you only get one", "if your contract", "or a pay agreement", "says so."],
+  ["but here's the twist.", "if your boss pays one,", "up to fifty percent extra", "is tax-free", "on sundays."],
+  ["say you earn", "minimum wage,", "thirteen euros ninety.", "eight hours is", "one hundred eleven", "euros twenty."], ["a fifty percent bonus", "adds fifty-five", "euros sixty.", "no tax", "and no social contributions", "taken off."],
+  ["public holidays?", "up to a hundred", "twenty-five percent", "tax-free.", "the first of may,", "a hundred fifty."], ["would you work sundays", "for fifty percent more?", "yes or no."]];
+const HOT = new Set(["guess: yes or no.", "no.", "says so.", "but here's the twist.", "is tax-free", "thirteen euros ninety.", "euros sixty.", "taken off.", "a hundred fifty.", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1760) });
+</script></body></html>

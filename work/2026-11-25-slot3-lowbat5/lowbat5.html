@@ -1,0 +1,157 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function battery(x, y, s, pct) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-90, -40, 170, 80, '#0f172a', 14, 8); box(80, -16, 16, 32, INK, 4, 0); ctx.fillStyle = pct <= 5 ? '#ef4444' : '#22c55e'; rr(-80, -30, 150 * Math.max(.06, pct / 100), 60, 8); ctx.fill(); ctx.restore(); }
+function clockTxt(x, y, s, label, col = '#ef4444') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-190, -80, 380, 160, '#0f172a', 20, 8); txt(label, 0, 8, 110, col, { stroke: false }); ctx.restore(); }
+function phoneBig(x, y, s, msgs, pct, glow = 0) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  if (glow) spot(0, 0, 520, glow, '34,197,94');
+  box(-300, -520, 600, 1040, '#111827', 60, 10); ctx.fillStyle = '#0b1020'; rr(-270, -490, 540, 980, 40); ctx.fill();
+  txt('ME', 0, -420, 56, '#fff', { stroke: false }); txt(pct + ' %', 170, -420, 40, pct <= 5 ? '#ef4444' : '#fff', { stroke: false, font: 'Nun', weight: '900 ' });
+  line(-250, -370, 250, -370, 4, '#334155');
+  let yy = -300; for (const m of msgs) { if (!m.show) continue; const k = eob(inv(m.t0, m.t0 + .25, m.t)); ctx.save(); ctx.translate(-240, yy); ctx.scale(k, k);
+    const h = 30 + m.text.length * 62; box(0, 0, 470, h, m.col || '#22c55e', 30, 6); m.text.forEach((l, i) => txt(l, 235, 45 + i * 62, 50, '#fff', { lw: 7 })); ctx.restore(); yy += h + 30; }
+  ctx.restore();
+}
+function doorFront(x, y, s, shake, under = 0) { ctx.save(); ctx.translate(x + shake, y); ctx.scale(s, s); box(-210, -560, 420, 1120, '#0b1020', 6, 10); box(-190, -540, 380, 1080, '#6b3f1d', 6, 8);
+  box(-150, -480, 300, 380, '#5a3417', 6, 6); box(-150, -40, 300, 420, '#5a3417', 6, 6); circ(140, 20, 20, '#fbbf24', INK, 6);
+  if (under > 0) { ctx.fillStyle = `rgba(200,200,255,${under})`; ctx.fillRect(-190, 540, 380, 22); }
+  ctx.restore(); }
+// street pieces
+function streetBg() { bgFill('#0b1020'); for (let i = 0; i < 40; i++) circ(rnd(i) * 1080, rnd(i + 50) * 600, 3 + rnd(i + 9) * 3, '#e2e8f0');
+  circ(110, 520, 45, '#f8fafc'); floor('#1e293b', 1420); ctx.fillStyle = '#334155'; ctx.fillRect(0, 1420, 1080, 40); }
+function house(x, y, w, h, col = '#1e1b4b', win = 0) { box(x, y, w, h, col, 4, 8); ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(x - 30, y); ctx.lineTo(x + w / 2, y - h * .45); ctx.lineTo(x + w + 30, y); ctx.closePath(); ctx.fill(); ctx.stroke();
+  box(x + w * .2, y + h * .2, w * .25, h * .25, win ? '#fde68a' : '#0f172a', 4, 6); box(x + w * .55, y + h * .2, w * .25, h * .25, '#0f172a', 4, 6); }
+function lamp(x, y, on) { line(x, y, x, y - 520, 16, INK); line(x, y - 520, x + 90, y - 520, 14, INK); box(x + 50, y - 520, 90, 50, on ? '#fde68a' : '#334155', 10, 6); if (on) spot(x + 95, y - 400, 260, .35); }
+
+const HOLDP = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.6, re: -1.5 };
+const PH = () => holdPhone('on', { c1: '#1e293b', c2: '#0b1020' });
+function torch(on) { return (hx, hy) => { ctx.save(); ctx.translate(hx, hy); ctx.rotate(-.5); box(-12, -60, 24, 70, '#334155', 6, 5); box(-18, -78, 36, 24, '#94a3b8', 6, 5); ctx.restore(); if (on) spot(hx - 40, hy - 90, 200, .45, '253,224,71'); }; }
+function mia(o) { return stick(Object.assign({ shirt: '#facc15', pants: '#1f2937', hair: '#111827', hood: true }, o)); }
+function shadow(x, y, s, t, a = 1) {
+  ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = '#0b1020'; ctx.strokeStyle = '#475569'; ctx.lineWidth = 6; rr(-110, -720, 220, 720, 110); ctx.fill(); ctx.stroke();
+  ctx.save(); rr(-110, -720, 220, 720, 110); ctx.clip(); const f = Math.floor(t * 14);
+  for (let i = 0; i < 160; i++) { const r = rnd(i + f * 211), r2 = rnd(i * 3 + f * 97); ctx.fillStyle = `rgba(255,255,255,${.15 + .5 * rnd(i + f)})`; ctx.fillRect(-110 + r * 220, -720 + r2 * 720, 10, 6); }
+  ctx.restore();
+  circ(-34, -600, 13, '#fff'); circ(34, -600, 13, '#fff');
+  ctx.restore();
+}
+function lampDead(x, y) { line(x, y, x, y - 520, 16, INK); line(x, y - 520, x + 90, y - 520, 14, INK); box(x + 50, y - 520, 90, 50, '#334155', 10, 6); }
+function voiceBubble(x, y, label, col = '#fff') { box(x - 230, y - 70, 460, 140, 'rgba(15,23,42,.92)', 30, 7); txt(label, x, y + 6, 66, col, { lw: 9 }); }
+function shop(x, y, s, lit = 1) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  box(-260, -620, 520, 620, '#334155', 6, 9); box(-280, -680, 560, 90, lit ? '#f59e0b' : '#475569', 10, 8);
+  txt('OPEN 24 H', 0, -618, 58, '#fff', { lw: 8 });
+  box(-230, -560, 250, 380, lit ? '#fef3c7' : '#0f172a', 6, 7); box(60, -560, 170, 560, lit ? '#fde68a' : '#0f172a', 6, 7);
+  if (lit) { spot(0, -300, 420, .35); }
+  ctx.restore(); }
+function mPhone(x, y, s, pct, black, glow = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  box(-230, -420, 460, 840, '#111827', 50, 10); ctx.fillStyle = black ? '#000' : '#0b1020'; rr(-205, -395, 410, 790, 34); ctx.fill();
+  if (!black) { txt('MIA', 0, -320, 52, '#facc15', { stroke: false }); battery(0, -60, 1.6, pct); txt(pct + ' %', 0, 140, 130, '#ef4444', { lw: 16 }); }
+  ctx.restore(); }
+const RUNP = (p) => runPose(p);
+function ghost(x, y, s) { ctx.save(); ctx.setLineDash([22, 18]); ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 8; ctx.translate(x, y); ctx.scale(s, s);
+  ctx.beginPath(); ctx.arc(0, -430, 62, 0, 7); ctx.stroke(); line(0, -368, 0, -150, 8, '#94a3b8'); line(0, -150, -40, 0, 8, '#94a3b8'); line(0, -150, 40, 0, 8, '#94a3b8'); line(0, -330, -70, -220, 8, '#94a3b8'); line(0, -330, 70, -220, 8, '#94a3b8');
+  ctx.setLineDash([]); ctx.restore(); }
+function torchGround(x, y) { ctx.save(); ctx.translate(x, y); ctx.rotate(1.4); box(-14, -70, 28, 80, '#334155', 6, 5); box(-20, -90, 40, 26, '#94a3b8', 6, 5); ctx.restore(); }
+function msgList(x, y, s, t, msgs, pct, title = 'ME') {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  box(-300, -520, 600, 1040, '#111827', 60, 10); ctx.fillStyle = '#0b1020'; rr(-270, -490, 540, 980, 40); ctx.fill();
+  txt(title, 0, -420, 56, '#fff', { stroke: false }); txt(pct + ' %', 170, -420, 40, '#ef4444', { stroke: false, font: 'Nun', weight: '900 ' });
+  line(-250, -370, 250, -370, 4, '#334155');
+  let yy = -330; for (const m of msgs) { if (t < m.t0) continue; const k = eob(inv(m.t0, m.t0 + .25, t)); ctx.save(); ctx.translate(-240, yy); ctx.scale(k, k);
+    const h = 26 + m.text.length * 56; box(0, 0, 470, h, '#22c55e', 30, 6); m.text.forEach((l, i) => txt(l, 235, 42 + i * 56, 46, '#fff', { lw: 7 }));
+    if (m.stamp && t > m.ts) { const k2 = eob(inv(m.ts, m.ts + .2, t)); ctx.save(); ctx.translate(470, h - 10); ctx.scale(k2, k2); box(-120, -40, 150, 64, '#dc2626', 20, 5); txt(m.stamp, -45, 4, 40, '#fff', { stroke: false }); ctx.restore(); }
+    ctx.restore(); yy += h + 34; }
+  ctx.restore();
+}
+const FRZ = { lt: .5, ls: .8, rt: -.4, rs: 0, la: -.6, le: .3, ra: .7, re: .3 };
+const T = { gone: wt(0, 'gone.'), empty: wt(0, 'her spot'), froze: wt(1, 'she froze'), blink: wt(2, 'you blink'), notThere: wt(2, "isn't"), buzz: at(3, 0), back: wt(3, "she's back"),
+  scroll: wt(4, 'you scroll'), sent: wt(4, 'every text'), future: wt(4, 'at times'), step: wt(5, 'one step'), one: wt(5, 'one percent'),
+  m1: wt(6, 'when a'), m2: wt(6, 'i know'), shake: at(7, 0), you: wt(8, 'from you'), nobody: wt(8, 'nobody'), q: at(9, 0) };
+function sCold(lt, t) {
+  streetBg(); house(-60, 960, 300, 460); lampDead(880, 1440); shop(760, 1420, .7, 1);
+  ghost(640, 1660, 1.35); torchGround(700, 1640);
+  hero({ x: 280, y: 1680, s: 1.45, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, lean: -.04 * Math.sin(t * 5), hold: PH() });
+  txt(t > T.gone ? 'NOT FROZEN. GONE.' : 'MIA IS GONE', 540, 230, t > T.gone ? 96 : 130, '#fde047', { lw: 17 });
+  if (t > T.empty) popIn(t, T.empty, 640, 980, () => { box(-210, -60, 420, 120, '#dc2626', 30, 7); txt('EMPTY', 0, 6, 72, '#fff', { lw: 9 }); });
+}
+function sRecap(lt, t) {
+  streetBg(); shop(820, 1420, .85, 1); shadow(900, 1430, .6, t, .9);
+  mia({ x: 540, y: 1680, s: 1.45, pose: FRZ, eyes: 'norm', mouth: 'o', look: -1, hold: torch(false) });
+  ctx.fillStyle = 'rgba(147,197,253,.25)'; ctx.fillRect(380, 1000, 320, 700);
+  txt('LAST TIME...', 540, 240, 110, '#c4b5fd', { lw: 16 });
+  if (t > T.froze - .3) popIn(t, T.froze - .3, 540, 520, () => { box(-200, -70, 400, 140, '#0f172a', 30, 7); txt('0 %', 0, 10, 100, '#ef4444', { lw: 12 }); });
+}
+function sBlink(lt, t) {
+  streetBg(); shop(820, 1420, .85, 1); shadow(900, 1430, .6, t, .9);
+  const a = 1 - eo(inv(T.notThere - .3, T.notThere + .3, t));
+  if (a > 0) { ctx.save(); ctx.globalAlpha = a; mia({ x: 560, y: 1680, s: 1.45, pose: FRZ, eyes: 'norm', mouth: 'o', look: -1, hold: torch(false) }); ctx.restore(); }
+  else ghost(560, 1680, 1.45);
+  hero({ x: 220, y: 1680, s: 1.4, pose: HOLDP, eyes: a > 0 ? 'norm' : 'huge', mouth: 'o', look: 1, hold: PH() });
+  if (t > T.blink && t < T.blink + .18) { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); }
+  txt(a > 0 ? 'YOU BLINK...' : 'SHE VANISHED', 540, 240, 120, '#fde047', { lw: 18 });
+}
+function sText1(lt, t) {
+  bgFill('#0b1020');
+  msgList(540, 1020, 1.05, t, [{ t0: T.back - .05, text: ["SHE'S BACK", 'AT 11:58.'] }], 2);
+  txt('YOUR OWN NUMBER', 540, 230, 100, '#22c55e', { lw: 15 });
+  if (t < T.back) { const sh = Math.sin(t * 60) * 10; txt('BZZT', 540 + sh, 780, 120, '#fff', { lw: 14 }); }
+}
+function sScroll(lt, t) {
+  bgFill('#0b1020');
+  const s0 = T.sent, f = T.future;
+  msgList(540, 1020, 1.05, t, [{ t0: s0, text: ["DON'T OPEN", 'THE DOOR.'], stamp: '00:07', ts: f }, { t0: s0 + .25, text: ['FIND MIA.'], stamp: '00:12', ts: f + .3 }, { t0: s0 + .5, text: ["DON'T LET HER", 'PHONE DIE.'], stamp: '00:21', ts: f + .6 }], 2);
+  txt(t > f ? 'SENT FROM THE FUTURE' : 'YOU SCROLL UP', 540, 230, t > f ? 84 : 110, '#fde047', { lw: 15 });
+  if (t > f) popIn(t, f, 540, 380, () => { box(-280, -50, 560, 100, '#dc2626', 26, 6); txt('CLOCK SAYS 00:00', 0, 6, 50, '#fff', { lw: 6 }); });
+}
+function sStep(lt, t) {
+  streetBg(); const k = eo(inv(T.step, T.step + .8, t));
+  shadow(lerp(880, 720, k), 1440, lerp(.7, .95, k), t);
+  hero({ x: 260, y: 1680, s: 1.4, pose: HOLDP, eyes: 'huge', mouth: 'wavy', look: 1, lean: -.06 * k, hold: PH() });
+  battery(320, 560, 1.4, 1);
+  txt(t > T.one ? 'ONE PERCENT' : 'ONE STEP CLOSER', 540, 240, 110, t > T.one ? '#ef4444' : '#fde047', { lw: 17 });
+  if (t > T.one) popIn(t, T.one, 320, 760, () => txt('1 %', 0, 0, 150, '#ef4444', { lw: 18 }));
+}
+function sText2(lt, t) {
+  bgFill('#0b1020');
+  msgList(540, 1020, 1.05, t, [{ t0: T.m1 - .05, text: ['WHEN A PHONE', 'DIES, YOU', 'START AGAIN.'] }, { t0: T.m2 - .05, text: ['I KNOW.', "I'M YOU."] }], 1, t > T.m2 ? 'ME (YOU)' : 'ME');
+  txt('ONE MORE TEXT', 540, 230, 110, '#22c55e', { lw: 16 });
+}
+function sShake(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1500);
+  const sh = Math.sin(t * 45) * 6;
+  hero({ x: 540 + sh, y: 1720, s: 1.9, pose: HOLDP, eyes: 'huge', mouth: 'wavy', look: 1, hold: PH() });
+  txt('NOT A STRANGER', 540, 240, 116, '#fde047', { lw: 18 });
+}
+function sYou(lt, t) {
+  bgFill('#0b1020');
+  hero({ x: 280, y: 1700, s: 1.35, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, hold: PH() });
+  // reflection: a second "you" in a phone frame = future you
+  box(560, 760, 400, 700, '#111827', 40, 10); ctx.fillStyle = '#0b1020'; rr(580, 780, 360, 660, 30); ctx.fill();
+  ctx.save(); ctx.beginPath(); rr(580, 780, 360, 660, 30); ctx.clip(); hero({ x: 760, y: 1430, s: 1.0, pose: HOLDP, eyes: 'norm', mouth: 'flat', look: -1, hold: PH() }); ctx.restore();
+  txt('FUTURE YOU', 760, 730, 54, '#22c55e', { lw: 8 });
+  txt('FROM YOU', 540, 240, 140, '#fde047', { lw: 18 });
+  if (t > T.nobody) popIn(t, T.nobody, 540, 480, () => { box(-440, -70, 880, 140, '#dc2626', 30, 7); txt('YOU HAVE TO SEND THEM', 0, 6, 62, '#fff', { lw: 8 }); });
+}
+function sEnd(lt, t) {
+  streetBg(); shop(820, 1300, .7, 1); shadow(760, 1310, .6, t, .9);
+  popIn(t, T.q + .1, 540, 470, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('TRUST YOURSELF?', 0, -100, 76, '#fff', { stroke: false });
+    box(-420, -10, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 70, 80, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 70, 80, '#fff', { lw: 10 }); });
+  hero({ x: 300, y: 1500, s: 1.2, pose: HOLDP, eyes: 'huge', mouth: 'o', look: 1, hold: PH() }); battery(300, 900, .8, 1);
+  if (t > L[9].end + .2) { const k = eob(inv(L[9].end + .2, L[9].end + .45, t)); ctx.save(); ctx.translate(540, 1620); ctx.scale(k, k); box(-430, -80, 860, 160, '#facc15', 30, 9); txt('PART 6 TOMORROW', 0, 10, 86, INK, { stroke: false }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sCold, push: .05 }, { t0: mid(0, 1), fn: sRecap, push: .04, flash: .5 }, { t0: mid(1, 2), fn: sBlink, push: .05, xfade: .2 }, { t0: mid(2, 3), fn: sText1, push: .05, flash: .4 },
+  { t0: mid(3, 4), fn: sScroll, push: .04, xfade: .3 }, { t0: mid(4, 5), fn: sStep, push: .06, flash: .4 }, { t0: mid(5, 6), fn: sText2, push: .05, flash: .4 }, { t0: mid(6, 7), fn: sShake, push: .08, xfade: .3 },
+  { t0: mid(7, 8), fn: sYou, push: .06, flash: .5 }, { t0: mid(8, 9), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["mia is gone.", "not frozen.", "gone.", "her spot on the street", "is empty."], ["last time,", "mia's phone died,", "and she froze."], ["you blink,", "and she just", "isn't there anymore."],
+  ["your phone buzzes.", "your own number", "again.", "she's back", "at eleven fifty-eight."], ["you scroll up.", "every text was sent", "from your phone.", "at times that", "haven't happened yet."],
+  ["the static", "takes one step closer.", "your battery,", "one percent."], ["one more text.", "when a phone dies,", "you start again.", "i know.", "i'm you."], ["your hands shake.", "the texts were never", "from a stranger."],
+  ["they were from you.", "and if you", "don't send them,", "nobody will."], ["would you trust", "a text from yourself?", "yes or no."]];
+const HOT = new Set(["gone.", "is empty.", "and she froze.", "isn't there anymore.", "at eleven fifty-eight.", "haven't happened yet.", "one percent.", "i'm you.", "from a stranger.", "they were from you.", "nobody will.", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1760) });
+</script></body></html>

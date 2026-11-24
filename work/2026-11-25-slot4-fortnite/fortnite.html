@@ -1,0 +1,97 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const SMALL = { stroke: false, font: 'Nun', weight: '900 ' };
+function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
+function counter(x, y, v, size = 120, col = '#fde047') { box(x - 470, y - size * .75, 940, size * 1.5, '#0f172a', 26, 9); txt(fmt(v), x, y + size * .12, size, col, { lw: 14 }); }
+function trophy(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#facc15'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-90, -120); ctx.lineTo(90, -120); ctx.quadraticCurveTo(90, 20, 0, 40); ctx.quadraticCurveTo(-90, 20, -90, -120); ctx.fill(); ctx.stroke(); box(-20, 40, 40, 50, '#facc15', 4, 7); box(-70, 90, 140, 40, '#a16207', 8, 7); txt('#1', 0, -40, 80, INK, { stroke: false }); ctx.restore(); }
+const PADP = { lt: .1, ls: 0, rt: -.1, rs: 0, la: .9, le: -1.9, ra: -.9, re: 1.9 };
+function pad(hx, hy) { box(hx - 70, hy - 30, 140, 60, '#1f2937', 26, 6); circ(hx - 34, hy, 9, '#94a3b8'); circ(hx + 34, hy - 8, 7, '#22c55e'); circ(hx + 48, hy + 8, 7, '#ef4444'); }
+function gamer(x, y, s, t, i, look = 1, cheer = 0) { const P = cheer ? { lt: .15, ls: 0, rt: -.15, rs: 0, la: 2.5, le: .3, ra: -2.5, re: -.3 } : null;
+  stick({ x, y, s, shirt: ['#3b82f6', '#22c55e', '#f97316', '#a855f7', '#ef4444'][i % 5], pants: '#1f2937', hair: ['#111827', '#7c2d12', '#facc15'][i % 3], pose: P || STAND, eyes: 'huge', mouth: cheer ? 'grin' : 'o', look, bob: Math.abs(Math.sin(t * 6 + i)) * (cheer ? 16 : 5) });
+  if (!cheer) pad(x, y - 300 * s); }
+function crowd(t, n, y0, y1, k = 1) { for (let i = 0; i < n * k; i++) { const x = 60 + rnd(i) * 960, y = y0 + rnd(i + 99) * (y1 - y0), sc = .18 + (y - y0) / (y1 - y0) * .12; ctx.save(); ctx.translate(x, y + Math.abs(Math.sin(t * 7 + i)) * -8); ctx.scale(sc, sc);
+  circ(0, -380, 60, '#fff', INK, 10); line(0, -320, 0, -150, 14); line(0, -150, -40, 0, 14); line(0, -150, 40, 0, 14); line(0, -290, -80, -420, 12); line(0, -290, 80, -420, 12); ctx.restore(); } }
+function stage(t, y = 900) { box(140, y - 360, 800, 380, '#312e81', 20, 9); for (let i = 0; i < 4; i++) { const a = Math.sin(t * 3 + i) * .4; ctx.save(); ctx.translate(250 + i * 190, y - 360); ctx.rotate(a); ctx.fillStyle = `rgba(${['250,204,21', '236,72,153', '56,189,248', '34,197,94'][i]},.25)`; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-120, 700); ctx.lineTo(120, 700); ctx.closePath(); ctx.fill(); ctx.restore(); }
+  stick({ x: 540, y: y - 20, s: .75, shirt: '#ec4899', pants: '#1f2937', hair: '#111827', pose: { lt: .2, ls: 0, rt: -.2, rs: 0, la: .3, le: .2, ra: -2.6, re: -.4 }, eyes: 'norm', mouth: 'grin', look: 0, bob: Math.abs(Math.sin(t * 8)) * 10 });
+  box(495, y - 470, 30, 70, '#94a3b8', 10, 5); }
+function bars(t, list, maxv, y0 = 1400, hmax = 820) { const n = list.length, w = 900 / n; list.forEach((b, i) => { const k = b.t0 === undefined ? 1 : eo(inv(b.t0, b.t0 + .8, t)); if (k <= 0) return; const x = 90 + i * w + w * .12, bw = w * .76, h = hmax * b.v / maxv * k;
+  box(x, y0 - h, bw, h, b.col, 14, 7); txt(b.lab, x + bw / 2, y0 - h - 46, 60, '#fff', { lw: 9 }); b.name.forEach((l, j) => txt(l, x + bw / 2, y0 + 50 + j * 40, 36, '#e2e8f0', SMALL)); }); }
+const T = { cm: wt(0, 'comment'), conc: wt(1, 'a concert'), n12: wt(1, 'twelve'), rec: wt(2, 'epic'), dec: wt(2, 'it lasted'),
+  ev: wt(3, 'a giant'), n15: wt(3, 'fifteen'), same: wt(3, 'all at'), n14: wt(4, 'over fourteen'), close: wt(4, 'close'), n10: wt(5, 'ten point'), stand: wt(6, 'that record'), q: at(7, 0) };
+function sGuess(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1500);
+  txt('ONE EVENT.', 540, 200, 124, '#fde047', { lw: 18 }); txt('SAME MINUTE.', 540, 335, 110, '#fff', { lw: 17 });
+  txt('FORTNITE', 540, 470, 64, '#c4b5fd', { lw: 9 });
+  box(240, 580, 600, 340, '#0f172a', 30, 9); txt('??? PLAYERS', 540, 770, 90, '#f87171', { lw: 12 });
+  gamer(250, 1640, 1.35, t, 0); gamer(830, 1640, 1.35, t, 3, -1);
+  if (t > T.cm) popIn(t, T.cm, 540, 1080, () => { box(-260, -60, 520, 120, '#f8fafc', 30, 7); txt('COMMENT A NUMBER', 0, 4, 46, INK, { stroke: false }); });
+}
+function sConcert(lt, t) {
+  bgFill('#0f172a'); stage(t, 900); crowd(t, 90, 1000, 1500, Math.min(1, lt / 1.5));
+  txt('APRIL 2020', 540, 200, 116, '#fde047', { lw: 18 }); txt('A CONCERT IN THE GAME', 540, 320, 66, '#fff', { lw: 10 });
+  if (t > T.n12) popIn(t, T.n12, 540, 1330 - 40, () => { box(-360, -80, 720, 160, '#ef4444', 30, 8); txt('12.3 MILLION', 0, 10, 96, '#fff', { lw: 12 }); });
+}
+function sFive(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1500);
+  txt('5 SHOWS', 540, 200, 130, '#fde047', { lw: 18 });
+  for (let i = 0; i < 5; i++) { const k = eob(inv(T.five + i * .2, T.five + i * .2 + .25, t)); if (k <= 0) continue; ctx.save(); ctx.translate(150 + i * 195, 520); ctx.scale(k, k); box(-80, -80, 160, 160, '#312e81', 20, 7); txt(String(i + 1), 0, 25, 100, '#fff', { lw: 10 }); ctx.restore(); }
+  const k = eo(inv(T.n27 - .2, T.n27 + 1, t)); counter(540, 820, 27.7e6 * k, 104);
+  txt('DIFFERENT PLAYERS', 540, 990, 58, '#e2e8f0', SMALL);
+  gamer(250, 1660, 1.3, t, 1, 1, 1); gamer(830, 1660, 1.3, t, 4, -1, 1);
+}
+function sRec(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1450);
+  const dec = t > T.dec;
+  txt('ALL-TIME RECORD', 540, 210, 112, '#fde047', { lw: 18 });
+  trophy(540, 760, 1.8);
+  if (dec) popIn(t, T.dec, 540, 1160, () => { box(-320, -70, 640, 140, '#ef4444', 30, 8); txt('FOR 7 MONTHS', 0, 8, 76, '#fff', { lw: 10 }); });
+  gamer(200, 1680, 1.2, t, 2); gamer(880, 1680, 1.2, t, 0, -1);
+}
+function sBig(lt, t) {
+  bgFill('#1e1b4b'); crowd(t, 140, 820, 1500, Math.min(1, lt / 1.2));
+  txt('DECEMBER 2020', 540, 200, 110, '#fde047', { lw: 16 }); if (t > T.ev) txt('END-OF-SEASON EVENT', 540, 640, 60, '#fff', { lw: 9 });
+  const k = eo(inv(T.n15 - .2, T.n15 + 1.2, t)); counter(540, 420, 15.3e6 * k, 120, k >= 1 ? '#22c55e' : '#fde047');
+  if (t > T.same) popIn(t, T.same, 540, 760, () => { box(-330, -60, 660, 120, '#f8fafc', 30, 7); txt('AT THE SAME TIME', 0, 6, 62, INK, { stroke: false }); });
+  if (k >= 1) { sparkle(150, 420, 50, 1); sparkle(930, 420, 50, 1); }
+}
+function screenBox(x, y, w, h, label, col) { box(x - w / 2, y - h / 2, w, h, '#0f172a', 26, 9); ctx.fillStyle = col; rr(x - w / 2 + 16, y - h / 2 + 16, w - 32, h - 32, 18); ctx.fill(); circ(x, y - 10, 60, '#fff', INK, 6);
+  ctx.fillStyle = INK; ctx.beginPath(); ctx.moveTo(x - 18, y - 40); ctx.lineTo(x + 30, y - 10); ctx.lineTo(x - 18, y + 20); ctx.closePath(); ctx.fill(); txt(label, x, y + h / 2 - 50, 44, '#fff', { lw: 7 }); }
+function sWatch(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1500);
+  txt('+3.4 MILLION', 540, 200, 120, '#fde047', { lw: 18 }); txt('JUST WATCHING', 540, 325, 76, '#fff', { lw: 11 });
+  screenBox(300, 650, 420, 300, 'YOUTUBE', '#b91c1c'); screenBox(780, 650, 420, 300, 'TWITCH', '#6d28d9');
+  for (let i = 0; i < 4; i++) stick({ x: 160 + i * 250, y: 1650, s: 1.0, shirt: ['#3b82f6', '#22c55e', '#f97316', '#a855f7'][i], pants: '#1f2937', hair: '#111827', pose: PHONE_POSE, eyes: 'huge', mouth: 'o', look: 0, hold: holdPhone('on') });
+}
+function sSince(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1380);
+  txt('ANYONE BEAT IT?', 540, 200, 112, '#fde047', { lw: 18 });
+  bars(t, [{ v: 15.3, col: '#22c55e', lab: '15.3 M', name: ['DEC', '2020'] }, { v: 14, col: '#3b82f6', lab: '14 M+', name: ['2024', 'CONCERT'], t0: T.n14 - .3 }, { v: 10.5, col: '#64748b', lab: '10.5 M', name: ['2025', 'EVENT'], t0: T.n10 - .3 }], 16, 1380, 880);
+  if (t > T.close && t < at(5, 0) + .1) popIn(t, T.close, 540, 400, () => { box(-260, -55, 520, 110, '#ef4444', 26, 7); txt('CLOSE, BUT NO', 0, 6, 60, '#fff', { lw: 8 }); });
+  txt('figures announced by Epic', 540, 1560, 38, '#94a3b8', SMALL);
+}
+function sStand(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1500);
+  txt('STILL THE RECORD', 540, 210, 112, '#fde047', { lw: 18 });
+  trophy(540, 720, 1.7); popIn(t, T.stand, 540, 1050, () => { box(-260, -70, 520, 140, '#22c55e', 30, 8); txt('15.3 M', 0, 10, 96, '#fff', { lw: 12 }); });
+  gamer(220, 1680, 1.25, t, 1, 1, 1); gamer(860, 1680, 1.25, t, 2, -1, 1);
+  txt('as of Nov 2026', 540, 1220, 38, '#c4b5fd', SMALL);
+}
+function sEnd(lt, t) {
+  bgFill('#0f172a'); stage(t, 1000); crowd(t, 60, 1100, 1500);
+  popIn(t, T.q + .1, 540, 400, () => { box(-470, -200, 940, 400, 'rgba(30,27,75,.95)', 30, 9); txt('CONCERT IN A GAME?', 0, -100, 72, '#fde047', { lw: 10 });
+    box(-420, 10, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 90, 80, '#fff', { lw: 10 }); box(40, 10, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 90, 80, '#fff', { lw: 10 }); });
+}
+const SCENES = [{ t0: 0, fn: sGuess, push: .05 }, { t0: mid(0, 1), fn: sConcert, push: .05, flash: .4 }, { t0: mid(1, 2), fn: sRec, push: .05, xfade: .3 },
+  { t0: mid(2, 3), fn: sBig, push: .06, flash: .5 }, { t0: mid(3, 4), fn: sSince, push: .04, flash: .4 }, { t0: mid(5, 6), fn: sStand, push: .06, flash: .5 }, { t0: mid(6, 7), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["guess how many people", "played one", "fortnite event", "at the same time.", "comment a number."], ["april twenty twenty.", "a concert", "inside the game.", "twelve point three", "million players", "at once."],
+  ["epic called it", "an all-time record.", "it lasted", "seven months."], ["december twenty twenty.", "a giant", "end-of-season event.", "fifteen point three", "million,", "all at the same time."],
+  ["since then,", "a twenty twenty-four", "concert got", "over fourteen million.", "close, but no."], ["the big", "twenty twenty-five event?", "ten point five million."],
+  ["almost six years later,", "as far as epic has said,", "that record", "still stands."], ["would you go", "to a concert", "inside a game?", "yes or no."]];
+const HOT = new Set(["comment a number.", "million players", "an all-time record.", "seven months.", "all at the same time.", "close, but no.", "ten point five million.", "still stands.", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1760) });
+</script></body></html>

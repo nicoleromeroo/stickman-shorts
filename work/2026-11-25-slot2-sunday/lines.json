@@ -1,0 +1,21 @@
+[
+"Sunday shift at the café. Eight hours. Extra pay by law? Guess: yes or no.",
+{
+"text": "In Germany, no. You only get one if your contract or a pay agreement says so.",
+"gap": 0.6
+},
+{
+"text": "But here's the twist. If your boss pays one, up to fifty percent extra is tax-free on Sundays.",
+"gap": 0.5
+},
+"Say you earn minimum wage, thirteen euros ninety. Eight hours is one hundred eleven euros twenty.",
+{
+"text": "A fifty percent bonus adds fifty-five euros sixty. No tax and no social contributions taken off.",
+"gap": 0.6
+},
+"Public holidays? Up to a hundred twenty-five percent tax-free. The first of May, a hundred fifty.",
+{
+"text": "Would you work Sundays for fifty percent more? Yes or no.",
+"gap": 1.2
+}
+]
