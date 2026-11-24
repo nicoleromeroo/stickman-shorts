@@ -1,0 +1,98 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { go: wt(0, 'go on'), img: at(1, 0), one: wt(1, 'just one'), g: at(2, 0), cm: wt(2, 'comment'), rev: at(3, 0), ex: wt(3, 'about seven'),
+  good: at(4, 0), sub: wt(4, 'no subtitles'), chat: wt(4, 'chat with'), end: at(5, 0), endw: wt(5, 'endangered'), thou: wt(5, 'under a thousand'),
+  songs: wt(6, 'songs'), jokes: wt(6, 'jokes'), stories: wt(6, 'stories'), sil: wt(6, 'silent'), yr: wt(7, 'eighteen'), esp: wt(7, 'esperanto'),
+  two: wt(8, 'two million'), outof: wt(8, 'out of'), q: at(9, 0), yn: wt(9, 'yes') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#94a3b8') { txt(s, 540, y, 28, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+const WAVE = (t) => ({ lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.6 + Math.sin(t * 8) * .3, re: -.5 });
+function sbub(x, y, s, col, k = 1, tail = 1) { if (k <= 0) return; ctx.save(); ctx.translate(x, y); ctx.scale(k, k); ctx.font = '64px Lucky'; const w = ctx.measureText(s).width + 70; box(-w / 2, -55, w, 110, col, 40, 8); ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-20 * tail, 50); ctx.lineTo(-45 * tail, 95); ctx.lineTo(15 * tail, 52); ctx.fill(); ctx.stroke(); txt(s, 0, 12, 64, INK, { stroke: false }); ctx.restore(); }
+function globe(x, y, r, t) { circ(x, y, r, '#38bdf8', INK, 10); ctx.save(); ctx.beginPath(); ctx.arc(x, y, r - 5, 0, 7); ctx.clip(); const o = (t * 30) % (r * 2);
+  for (let k = -1; k <= 1; k++) { const dx = x - r + o + k * r * 2; ctx.fillStyle = '#4ade80'; ctx.beginPath(); ctx.ellipse(dx - r * .3, y - r * .35, r * .35, r * .25, .4, 0, 7); ctx.fill(); ctx.beginPath(); ctx.ellipse(dx + r * .4, y + r * .2, r * .3, r * .4, -.3, 0, 7); ctx.fill(); ctx.beginPath(); ctx.ellipse(dx - r * .5, y + r * .5, r * .2, r * .15, 0, 0, 7); ctx.fill(); }
+  ctx.restore(); circ(x, y, r, null, INK, 10); }
+const HELLOS = ['HOLA!', 'BONJOUR!', 'CIAO!', 'HALLO!', 'OLA!', 'MERHABA!', 'SALUT!', 'HEJ!'];
+function sHook(lt, t) {
+  bgFill('#fef3c7'); floor('#fcd34d', 1440);
+  if (t < T.img) {
+    txt('SAY HELLO IN', 540, 180, 120, '#fff', { lw: 22 }); txt('ANOTHER LANGUAGE!', 540, 320, 96, '#ea580c', { lw: 20 });
+    hero({ x: 540, y: 1440, s: 1.25, pose: WAVE(t), eyes: 'norm', mouth: 'grin' });
+    const i = Math.floor(t / .45) % HELLOS.length; sbub(560, 720, HELLOS[i], '#fff', 1.5 + .15 * eob(inv(0, .15, t % .45)));
+    if (t > T.go) badge(540, 520, 380, 110, '#16a34a', ['GO ON!'], [76], T.go, t, -.05);
+  } else {
+    txt('8 BILLION PEOPLE', 540, 180, 110, '#fff', { lw: 22 }); txt(t < T.one ? '...' : 'ONE LANGUAGE?', 540, 320, 120, '#2563eb', { lw: 22 });
+    globe(540, 900, 300, t);
+    const same = t > T.one; for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2 + .3; const bx = 540 + Math.cos(a) * 400, by = 900 + Math.sin(a) * 400;
+      sbub(bx, by, same ? 'HI!' : HELLOS[i], same ? '#fde047' : '#fff', .75 * (same ? .9 + .2 * eob(inv(T.one, T.one + .3, t)) : 1)); }
+  }
+}
+function sGuess(lt, t) {
+  bgFill('#0f172a'); floor('#1e293b', 1450);
+  const rv = t >= T.rev;
+  if (!rv) { txt('HOW MANY', 540, 180, 140, '#fff', { lw: 24 }); txt('LANGUAGES?', 540, 320, 140, '#38bdf8', { lw: 24 }); qmark(540, 820, t, T.g + .2, '#facc15', 260); if (t > T.cm) badge(540, 560, 680, 130, '#facc15', ['COMMENT A NUMBER'], [66], T.cm, t, -.03, INK); }
+  else { const n = Math.round(7164 * eo(inv(T.rev, T.rev + 1.4, t))); txt('OVER', 540, 180, 120, '#fff', { lw: 22 }); txt(n.toLocaleString('en-US'), 540, 380, 220, '#facc15', { lw: 34 });
+    for (let i = 0; i < 24; i++) { const k = inv(T.rev + i * .03, T.rev + i * .03 + .2, t); if (k <= 0) continue; const x = 140 + (i % 8) * 114, y = 620 + Math.floor(i / 8) * 140; ctx.save(); ctx.globalAlpha = k; box(x - 45, y - 38, 90, 76, ['#f87171', '#60a5fa', '#4ade80', '#facc15', '#c084fc'][i % 5], 22, 6); ctx.restore(); } }
+  hero({ x: 540, y: 1450, s: .8, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.5, re: -.4 }, eyes: rv ? 'huge' : 'norm', mouth: rv ? 'o' : 'flat', tilt: rv ? 0 : Math.sin(t * 3) * .1 });
+  foot('7,164 languages in use today (Ethnologue)');
+}
+function tv(x, y, t, cross) { box(x - 170, y - 120, 340, 230, '#1e293b', 20, 9); box(x - 150, y - 100, 300, 190, '#93c5fd', 10, 6); box(x - 120, y + 40, 240, 34, '#fff', 8, 4); line(x - 100, y + 57, x + 100, y + 57, 6, '#334155');
+  if (cross > 0) { ctx.save(); ctx.globalAlpha = cross; line(x - 150, y - 100, x + 150, y + 90, 16, '#dc2626'); line(x + 150, y - 100, x - 150, y + 90, 16, '#dc2626'); ctx.restore(); } }
+function sGood(lt, t) {
+  bgFill('#ecfccb'); floor('#a3e635', 1440);
+  txt('THE GOOD', 540, 180, 140, '#fff', { lw: 24 }); txt('PART', 540, 320, 140, '#16a34a', { lw: 24 });
+  if (t < T.chat) { ctx.save(); ctx.translate(540, 720); ctx.scale(1.6, 1.6); ctx.translate(-540, -720); tv(540, 720, t, inv(T.sub, T.sub + .3, t)); ctx.restore(); if (t > T.sub) badge(540, 480, 560, 110, '#dc2626', ['NO SUBTITLES'], [70], T.sub, t, -.03); }
+  else { const k = pop(T.chat, t); sbub(330, 780, 'HI!', '#fde047', 1.5 * k); sbub(760, 740, 'HEY!', '#fff', 1.5 * k, -1); badge(540, 560, 600, 110, '#16a34a', ['TALK TO ANYONE'], [66], T.chat, t, .03); }
+  hero({ x: 300, y: 1440, s: 1.1, pose: WAVE(t), mouth: 'grin' });
+  stick({ x: 780, y: 1440, s: 1.1, flip: true, shirt: '#f97316', pants: '#1f2937', hair: '#111827', pose: WAVE(t + 1), mouth: 'grin' });
+}
+function sLose(lt, t) {
+  bgFill('#1c1917'); floor('#292524', 1450);
+  if (t < T.songs) {
+    txt('ENDANGERED:', 540, 180, 120, '#fff', { lw: 22 }); txt('ABOUT 40%', 540, 330, 150 * pop(T.endw, t), '#f87171', { lw: 28 });
+    for (let i = 0; i < 10; i++) { const x = 150 + (i % 5) * 195, y = 620 + Math.floor(i / 5) * 230; const red = t > T.endw + i * .06 && i < 4; sbub(x, y, red ? '...' : 'ABC', red ? '#fca5a5' : '#fff', .95, 1); }
+    if (t > T.thou) badge(540, 1100, 760, 120, '#dc2626', ['MANY: UNDER 1,000 SPEAKERS'], [52], T.thou, t, -.02);
+    foot('About 40% endangered, often under 1,000 users (Ethnologue)');
+  } else {
+    txt('SONGS, JOKES,', 540, 180, 120, '#fff', { lw: 22 }); txt(t < T.sil ? 'STORIES...' : 'GONE SILENT', 540, 320, 130, t < T.sil ? '#facc15' : '#94a3b8', { lw: 24 });
+    const fade = 1 - .85 * inv(T.sil, T.sil + .8, t);
+    ctx.save(); ctx.globalAlpha = fade;
+    if (t > T.songs) { const k = pop(T.songs, t); ctx.save(); ctx.translate(220, 740); ctx.scale(1.6 * k, 1.6 * k); line(0, 60, 0, -60, 12, '#facc15'); line(0, -60, 50, -30, 12, '#facc15'); circ(-22, 62, 30, '#facc15', INK, 6); ctx.restore(); }
+    if (t > T.jokes) sbub(540, 700, 'HA HA!', '#fde047', 1.3 * pop(T.jokes, t));
+    if (t > T.stories) { const k = pop(T.stories, t); ctx.save(); ctx.translate(860, 730); ctx.scale(1.3 * k, 1.3 * k); box(-90, -70, 180, 140, '#60a5fa', 12, 8); line(0, -70, 0, 70, 7); ctx.restore(); }
+    ctx.restore();
+    stick({ x: 540, y: 1450, s: 1.05, shirt: '#a855f7', pants: '#1f2937', hair: '#111827', pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .2, le: .1, ra: -.2, re: -.1 }, eyes: 'norm', mouth: t > T.sil ? 'frown' : 'smile' });
+  }
+}
+function sEsp(lt, t) {
+  bgFill('#eff6ff'); floor('#93c5fd', 1440);
+  if (t < T.two) {
+    txt('MADE-UP LANGUAGE', 540, 180, 100, '#fff', { lw: 20 }); txt(t < T.esp ? 'IN 1887' : 'ESPERANTO', 540, 320, 140, '#16a34a', { lw: 24 });
+    if (t > T.yr) { const k = pop(T.yr, t); ctx.save(); ctx.translate(540, 720); ctx.scale(k, k); box(-200, -170, 400, 340, '#fff', 24, 9); box(-200, -170, 400, 90, '#dc2626', 24, 9); txt('YEAR', 0, -110, 56, '#fff', { stroke: false }); txt('1887', 0, 70, 150, INK, { stroke: false }); ctx.restore(); }
+    hero({ x: 880, y: 1440, s: .95, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.4, re: -.6 }, mouth: 'grin' });
+    foot('Created by L. L. Zamenhof in 1887 (Wikipedia: Esperanto)', 1840, '#1e3a8a');
+  } else {
+    txt('UP TO 2 MILLION', 540, 180, 110, '#fff', { lw: 22 }); txt(t < T.outof ? 'SPEAKERS' : 'OUT OF 8 BILLION', 540, 320, t < T.outof ? 130 : 100, '#2563eb', { lw: 22 });
+    const k = eo(inv(T.outof, T.outof + .8, t));
+    circ(560, 860, 20 + 360 * k, '#bfdbfe', INK, 8); if (k > .5) txt('8 BILLION', 560, 880, 80, '#1e3a8a', { stroke: false });
+    circ(160, 620, 14, '#16a34a', INK, 5); txt('2 MILLION', 200, 560, 64, '#16a34a', { lw: 12 });
+    foot('"Up to two million speakers" (Wikipedia: Esperanto)', 1840, '#1e3a8a');
+  }
+}
+function sEnd(lt, t) {
+  bgFill('#0f172a'); floor('#1e293b', 1450);
+  const k = pop(T.q, t); txt('ONE LANGUAGE', 540, 180, 120 * k, '#fff', { lw: 22 }); txt('FOR THE WORLD?', 540, 320, 110 * k, '#facc15', { lw: 22 });
+  globe(540, 900, 230, t);
+  const p1 = t > T.yn && t < T.yn + .4, p2 = t > T.yn + .5 && t < T.yn + .9;
+  box(130, 1200 + (p1 ? 12 : 0), 380, 180, '#16a34a', 46, 9); txt('YES', 320, 1300 + (p1 ? 12 : 0), 110, '#fff', { lw: 16 });
+  box(570, 1200 + (p2 ? 12 : 0), 380, 180, '#dc2626', 46, 9); txt('NO', 760, 1300 + (p2 ? 12 : 0), 110, '#fff', { lw: 16 });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(1, 2), fn: sGuess, push: .04, flash: 1 }, { t0: mid(3, 4), fn: sGood, push: .04, flash: .8 }, { t0: mid(4, 5), fn: sLose, push: .04, flash: .8 }, { t0: mid(6, 7), fn: sEsp, push: .05, flash: .8 }, { t0: mid(8, 9), fn: sEnd, push: .04, flash: .8 }];
+const CAP = [["say hello", "in another", "language.", "go on."], ["now imagine", "all eight billion", "of us spoke", "just one language."], ["guess first:", "how many languages", "exist today?", "comment a number."], ["over", "seven thousand!", "about", "seven thousand", "one hundred", "sixty four."], ["one language", "means", "no subtitles,", "and you could", "chat with anyone", "on earth."], ["but about", "forty percent", "are already", "endangered,", "many with under", "a thousand speakers."], ["each one has", "its own songs,", "jokes", "and stories.", "they would", "go silent."], ["people tried this", "in eighteen", "eighty seven,", "with a made up", "language:", "esperanto."], ["today,", "up to two million", "people speak it.", "out of", "eight billion."], ["one language", "for the", "whole world:", "yes or no?"]];
+const HOT = new Set(["go on.", "just one language.", "comment a number.", "seven thousand!", "no subtitles,", "chat with anyone", "forty percent", "endangered,", "go silent.", "esperanto.", "up to two million", "eight billion.", "yes or no?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

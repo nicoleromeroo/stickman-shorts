@@ -1,0 +1,139 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { exc: wt(0, 'except'), cm: wt(1, 'comment'), rev: at(2, 0), sci: wt(2, 'science'),
+  cave: wt(3, 'cozy cave'), giant: wt(3, 'giant'), hot: wt(3, 'hot,'), noisy: wt(3, 'noisy'),
+  heart: wt(4, 'heartbeat'), breath: wt(4, 'breathing'), snore: wt(4, 'snoring'), vib: wt(4, 'vibrations'),
+  dang: wt(5, 'danger'), air: at(6, 0), nope: wt(6, 'nope'), face: at(7, 0), wake: wt(7, 'wake up'),
+  exp: at(8, 0), num: wt(8, 'eight spiders'), q: at(9, 0), yn: wt(9, 'yes') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#94a3b8') { txt(s, 540, y, 28, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+const LIE = { lt: .02, ls: 0, rt: -.02, rs: 0, la: .15, le: .1, ra: -.15, re: -.1 };
+const STARTLE = { lt: .5, ls: .6, rt: -.5, rs: .6, la: 1.5, le: .5, ra: -1.5, re: -.5 };
+function lying(x, y, s, o = {}) { stick(Object.assign({ shirt: '#3b82f6', pants: '#334155', hood: true, x, y, s, lean: -Math.PI / 2, shadow: false, pose: LIE }, o)); }
+function zzz(x, y, t) { for (let i = 0; i < 3; i++) { const p = (t * .5 + i / 3) % 1; ctx.save(); ctx.globalAlpha = Math.sin(p * Math.PI); txt('Z', x + p * 120, y - p * 220, 50 + p * 50, '#c4b5fd', { lw: 10 }); ctx.restore(); } }
+function room(t) { bgFill('#1e1b4b'); windowFrame(640, 400, 300, 280, '#312e81'); circ(850, 490, 46, '#fef3c7'); circ(870, 475, 40, '#312e81'); floor('#3730a3', 1380); }
+function bed() { box(200, 1180, 800, 120, '#92400e', 18, 8); box(160, 1060, 60, 300, '#78350f', 14, 8); box(960, 1120, 50, 240, '#78350f', 14, 8); box(220, 1150, 760, 50, '#e0e7ff', 18, 7); box(260, 1085, 210, 80, '#fff', 40, 7); }
+function blanket() { box(600, 1110, 400, 90, '#a78bfa', 30, 8); line(640, 1140, 960, 1140, 5, '#7c3aed'); }
+function big(fn) { ctx.save(); ctx.translate(540, 1300); ctx.scale(1.15, 1.15); ctx.translate(-560, -1250); fn(); ctx.restore(); }
+// generic cartoon spider: round body, 8 legs, 2 eyes
+function spider(x, y, s, t, o = {}) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s * (o.flip ? -1 : 1), s); ctx.rotate(o.rot || 0);
+  const wig = o.run ? 14 : 5, sp = o.run ? 22 : 6;
+  for (const sd of [-1, 1]) for (let i = 0; i < 4; i++) {
+    const a = (-.75 + i * .5), ph = Math.sin(t * sp + i * 1.7 + (sd > 0 ? 1 : 0)) * wig;
+    const kx = sd * (48 + 18 * Math.cos(a)), ky = -26 + i * 18 + ph * .3, fx = sd * (90 + 10 * Math.cos(a)), fy = 18 + i * 22 + ph;
+    ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(sd * 20, -4 + i * 8); ctx.lineTo(kx, ky - 30); ctx.lineTo(fx, fy); ctx.stroke();
+  }
+  ctx.fillStyle = '#1f2937'; ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.ellipse(0, 18, 46, 50, 0, 0, 7); ctx.fill(); ctx.stroke();
+  circ(0, -34, 28, '#374151', INK, 6);
+  const er = o.scared ? 15 : 11; for (const sx of [-1, 1]) { circ(sx * 13, -38, er, '#fff', INK, 4); circ(sx * 13, -36 + (o.lookUp ? -4 : 0), 5, INK); }
+  if (o.scared) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(0, -16, 7, Math.PI, 0, false); ctx.stroke(); }
+  ctx.restore();
+}
+function sleeperBig(t, o = {}) { room(t); big(() => { bed(); lying(980, 1135 + Math.sin(t * 2.2) * 1.5, 1.12, Object.assign({ eyes: 'closed', mouth: 'o' }, o)); blanket(); }); }
+const MOUTH = [600, 1150];
+function sHook(lt, t) {
+  sleeperBig(t); zzz(330, 1000, t);
+  // spider dangles down on a thread toward the mouth, then stops and climbs back at "except"
+  const down = eio(inv(0, 2.4, t)), back = eio(inv(T.exc, T.exc + .9, t)); const sy = 560 + down * 400 - back * 420;
+  line(MOUTH[0] + 10, 0, MOUTH[0] + 10, sy - 40, 3, '#e5e7eb'); spider(MOUTH[0] + 10, sy, 1.3, t, { lookUp: false, scared: t > T.exc, run: t > T.exc });
+  if (t < T.exc) { txt('8 SPIDERS', 540, 180, 150, '#fff', { lw: 26 }); txt('A YEAR?!', 540, 330, 150, '#f87171', { lw: 26 }); }
+  else { txt('EXCEPT...', 540, 180, 130, '#fff', { lw: 24 }); badge(540, 340, 560, 150, '#dc2626', ['MYTH!'], [120], T.exc, t, -.05); }
+}
+function sGuess(lt, t) {
+  bgFill('#0f172a'); floor('#1e293b', 1450);
+  const rv = t >= T.rev;
+  if (!rv) { txt('HOW MANY CASES', 540, 180, 115, '#fff', { lw: 22 }); txt('ON RECORD?', 540, 320, 130, '#38bdf8', { lw: 22 }); }
+  else { txt('CASES', 540, 180, 130, '#fff', { lw: 22 }); txt('ZERO', 540, 340, 190 * pop(T.rev, t), '#facc15', { lw: 32 }); }
+  // folder
+  const fx = 540, fy = 860, k = .7 + .3 * eob(inv(at(1, 0), at(1, 0) + .3, t));
+  ctx.save(); ctx.translate(fx, fy); ctx.scale(k, k); box(-260, -230, 200, 70, '#f59e0b', 18, 8); box(-260, -190, 520, 360, '#fbbf24', 26, 9);
+  txt('SPIDER CASES', 0, -110, 56, INK, { stroke: false });
+  if (rv) { box(-170, -60, 340, 190, '#fff', 14, 7); txt('0', 0, 70, 170 * pop(T.rev, t), '#dc2626', { lw: 20 }); }
+  ctx.restore();
+  if (!rv) { qmark(540, 860, t, at(1, 0) + .2, '#fff', 180); if (t > T.cm) badge(540, 560, 680, 130, '#facc15', ['COMMENT A NUMBER'], [66], T.cm, t, -.03, INK); }
+  else if (t > T.sci) badge(540, 560, 720, 120, '#16a34a', ['NOT ONE CASE'], [72], T.sci, t, -.03);
+  hero({ x: 880, y: 1450, s: .85, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.5, re: -.4 }, eyes: rv ? 'huge' : 'norm', mouth: rv ? 'o' : 'flat', tilt: rv ? 0 : Math.sin(t * 3) * .1 });
+  foot('"No such case is on formal record" (Burke Museum)');
+}
+function sMonster(lt, t) {
+  bgFill('#334155'); floor('#475569', 1450);
+  // giant sleeper from the spider's view (big face on the right), tiny spider bottom-left
+  ctx.save(); ctx.translate(700, 1050); ctx.scale(2.2, 2.2);
+  circ(0, 0, 150, '#fff', INK, 9); for (const sx of [-1, 1]) { ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(sx * 55, -25, 25, Math.PI * .1, Math.PI * .9); ctx.stroke(); }
+  circ(0, 70, 30 + Math.sin(t * 2.4) * 4, '#7a1f1f', INK, 7); ctx.restore();
+  const s = .7 + .2 * Math.sin(t * 2);
+  spider(200, 1390, 1.25, t, { scared: t > T.giant, flip: false });
+  if (t < T.giant) { txt('NOT A', 540, 180, 140, '#fff', { lw: 24 }); txt('COZY CAVE', 540, 320, 140, '#a7f3d0', { lw: 24 }); }
+  else { txt('YOU ARE A', 540, 180, 130, '#fff', { lw: 24 }); txt('MONSTER', 540, 320, 160 * pop(T.giant, t), '#f87171', { lw: 28 }); }
+  badge(250, 560, 340, 110, '#7c3aed', ['GIANT'], [70], T.giant, t, -.06);
+  badge(560, 500, 300, 110, '#ea580c', ['HOT'], [70], T.hot, t, .05);
+  badge(860, 580, 340, 110, '#0891b2', ['NOISY'], [70], T.noisy, t, -.04);
+  if (t > T.hot) { ctx.save(); ctx.globalAlpha = .5; for (let i = 0; i < 4; i++) { const p = (t * .6 + i / 4) % 1; ctx.strokeStyle = '#fb923c'; ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(400 + i * 100, 720 - p * 60); ctx.quadraticCurveTo(420 + i * 100, 690 - p * 60, 400 + i * 100, 660 - p * 60); ctx.stroke(); } ctx.restore(); }
+  foot('To spiders, humans are "noisy, hot, large" (Discover)');
+}
+function waves(x, y, t, col, n = 3, r0 = 60) { ctx.save(); for (let i = 0; i < n; i++) { const p = (t * 1.2 + i / n) % 1; ctx.globalAlpha = 1 - p; ctx.strokeStyle = col; ctx.lineWidth = 10; ctx.beginPath(); ctx.arc(x, y, r0 + p * 260, -.6, .6); ctx.stroke(); ctx.beginPath(); ctx.arc(x, y, r0 + p * 260, Math.PI - .6, Math.PI + .6); ctx.stroke(); } ctx.restore(); }
+function heartShape(x, y, s, col) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(0, 30); ctx.bezierCurveTo(-60, -10, -30, -60, 0, -28); ctx.bezierCurveTo(30, -60, 60, -10, 0, 30); ctx.fill(); ctx.stroke(); ctx.restore(); }
+function sVib(lt, t) {
+  sleeperBig(t);
+  const icons = [[T.heart, 'HEARTBEAT', '#ef4444'], [T.breath, 'BREATHING', '#38bdf8'], [T.snore, 'SNORING', '#c4b5fd']];
+  icons.forEach(([t0, lb, c], i) => { if (t > t0) badge(200 + i * 340, 560, 320, 100, c, [lb], [52], t0, t, (i - 1) * .04); });
+  if (t > T.heart) { const b = 1 + .15 * Math.abs(Math.sin(t * 6)); heartShape(200, 720, 1.3 * b, '#ef4444'); }
+  if (t > T.snore) zzz(330, 1000, t);
+  if (t > T.vib) waves(MOUTH[0], 1150, t, '#facc15', 4);
+  if (t < T.vib) { txt('YOU MAKE', 540, 180, 140, '#fff', { lw: 24 }); txt('NOISE', 540, 320, 150, '#facc15', { lw: 24 }); }
+  else if (t < T.dang) { txt('BUZZ BUZZ', 540, 180, 140, '#fff', { lw: 24 }); txt('VIBRATIONS', 540, 320, 130, '#facc15', { lw: 24 }); }
+  else { txt('SPIDER SENSE:', 540, 180, 120, '#fff', { lw: 22 }); txt('DANGER!', 540, 320, 160 * pop(T.dang, t), '#f87171', { lw: 28 }); }
+  // spider on the floor feels it and runs away
+  const run = eio(inv(T.dang, T.dang + 1.6, t)); spider(860 + run * 400, 1470, 1.0, t, { scared: t > T.vib, run: t > T.dang });
+  if (t > T.vib && t < T.dang + .5) excl(860, 1290, t, T.vib, 120);
+  foot('Breathing, heartbeat, snoring: vibrations warn spiders (Scientific American)');
+}
+function sBreath(lt, t) {
+  sleeperBig(t, { eyes: t > T.wake ? 'huge' : 'closed', mouth: t > T.wake ? 'o' : 'o' });
+  if (t < T.face) {
+    // gusts of breath blow the spider away
+    ctx.save(); for (let i = 0; i < 4; i++) { const p = (t * .9 + i / 4) % 1; ctx.globalAlpha = 1 - p; ctx.strokeStyle = '#bae6fd'; ctx.lineWidth = 12; ctx.lineCap = 'round'; const yy = 1080 - p * 380; ctx.beginPath(); ctx.moveTo(MOUTH[0] - 60 + i * 30, yy); ctx.quadraticCurveTo(MOUTH[0] + i * 30, yy - 30, MOUTH[0] + 60 + i * 30, yy); ctx.stroke(); } ctx.restore();
+    const blow = t > T.nope ? eio(inv(T.nope, T.nope + .7, t)) : 0; const wob = Math.sin(t * 9) * 14;
+    line(MOUTH[0], 0, MOUTH[0] + wob + blow * 300, 700 - blow * 300, 3, '#e5e7eb'); spider(MOUTH[0] + wob + blow * 300, 760 - blow * 300, 1.1, t, { scared: true, run: true, rot: wob * .01 + blow });
+    txt('WARM, WET', 540, 180, 140, '#fff', { lw: 24 }); txt('WIND!', 540, 320, 160, '#7dd3fc', { lw: 26 });
+    if (t > T.nope) badge(540, 470, 420, 120, '#dc2626', ['NOPE!'], [90], T.nope, t, -.05);
+    foot('Your breath "would more than likely scare them away" (Discover, FGCU)');
+  } else {
+    // spider tiptoes across the face -> you wake up
+    const p = inv(T.face + .3, T.wake, t); const sx = lerp(820, 500, p);
+    spider(sx, 1050, .75, t, { run: t < T.wake, scared: t > T.wake, rot: Math.sin(t * 10) * .05 });
+    if (t > T.wake) { excl(560, 880, t, T.wake, 150); impact(560, 1100, 200, 1 - inv(T.wake, T.wake + .6, t)); }
+    if (t < T.wake) { txt('TICKLE', 540, 180, 140, '#fff', { lw: 24 }); txt('TICKLE...', 540, 320, 140, '#facc15', { lw: 24 }); }
+    else { txt('YOU', 540, 180, 140, '#fff', { lw: 24 }); txt('WAKE UP!', 540, 320, 160 * pop(T.wake, t), '#4ade80', { lw: 28 }); }
+    foot('You "would likely be awakened" (Scientific American)');
+  }
+}
+function sEnd(lt, t) {
+  if (t < T.q) {
+    bgFill('#0f172a'); floor('#1e293b', 1450);
+    txt('WHO SAID', 540, 180, 140, '#fff', { lw: 24 }); txt('8 SPIDERS?', 540, 320, 140, '#facc15', { lw: 24 });
+    qmark(300, 800, t, T.exp + .2, '#facc15', 260); qmark(780, 760, t, T.num, '#38bdf8', 220);
+    badge(540, 560, 640, 120, '#dc2626', ['ORIGIN: UNKNOWN'], [62], T.num, t, -.03);
+    hero({ x: 540, y: 1450, s: 1.05, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: 2.2, le: .6, ra: -2.2, re: -.6 }, eyes: 'norm', mouth: 'flat', tilt: Math.sin(t * 3) * .1 });
+    foot('"Its absolute origin is unknown" (Discover, Southern Utah Univ.)');
+  } else {
+    sleeperBig(t, { mouth: 'smile' }); zzz(470, 1000, t);
+    spider(880, 1470, .95, t, { flip: true });
+    const k = pop(T.q, t); txt('DID YOU', 540, 180, 140 * k, '#fff', { lw: 24 }); txt('BELIEVE IT?', 540, 320, 130 * k, '#facc15', { lw: 24 });
+    const p1 = t > T.yn && t < T.yn + .4, p2 = t > T.yn + .5 && t < T.yn + .9;
+    box(130, 480 + (p1 ? 12 : 0), 380, 200, '#16a34a', 46, 9); txt('YES', 320, 590 + (p1 ? 12 : 0), 120, '#fff', { lw: 16 });
+    box(570, 480 + (p2 ? 12 : 0), 380, 200, '#dc2626', 46, 9); txt('NO', 760, 590 + (p2 ? 12 : 0), 120, '#fff', { lw: 16 });
+  }
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(0, 1), fn: sGuess, push: .04, flash: 1 }, { t0: mid(2, 3), fn: sMonster, push: .04, flash: .8 }, { t0: mid(3, 4), fn: sVib, push: .04, flash: .8 }, { t0: mid(5, 6), fn: sBreath, push: .05, flash: .8 }, { t0: mid(7, 8), fn: sEnd, push: .04, flash: .8 }];
+const CAP = [["you swallow", "eight spiders", "a year", "in your sleep.", "except,", "you don't."], ["guess first:", "how many", "real cases", "are on record?", "comment a number."], ["zero.", "not one case", "in science", "or medicine."], ["to a spider,", "you're not", "a cozy cave.", "you're a giant,", "hot,", "noisy monster."], ["your heartbeat,", "your breathing,", "your snoring:", "they all make", "vibrations."], ["and to a spider,", "vibrations", "mean danger."], ["your mouth blows", "warm, wet air", "at it.", "nope!"], ["and if one did", "walk across", "your face,", "you'd probably", "wake up."], ["experts say", "nobody even knows", "where the", "eight spiders", "number came from."], ["did you", "believe it?", "yes or no?"]];
+const HOT = new Set(["eight spiders", "you don't.", "comment a number.", "zero.", "you're a giant,", "hot,", "noisy monster.", "vibrations.", "mean danger.", "nope!", "wake up.", "nobody even knows", "yes or no?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

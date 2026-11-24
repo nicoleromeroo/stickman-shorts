@@ -1,0 +1,24 @@
+[
+ "Say hello in another language. Go on.",
+ "Now imagine all eight billion of us spoke just one language.",
+ "Guess first: how many languages exist today? Comment a number.",
+ {
+  "text": "Over seven thousand! About seven thousand one hundred sixty four.",
+  "gap": 0.5
+ },
+ "One language means no subtitles, and you could chat with anyone on Earth.",
+ "But about forty percent are already endangered, many with under a thousand speakers.",
+ {
+  "text": "Each one has its own songs, jokes and stories. They would go silent.",
+  "gap": 0.5
+ },
+ "People tried this in eighteen eighty seven, with a made up language: Esperanto.",
+ {
+  "text": "Today, up to two million people speak it. Out of eight billion.",
+  "gap": 0.6
+ },
+ {
+  "text": "One language for the whole world: yes or no?",
+  "gap": 0.6
+ }
+]
