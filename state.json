@@ -1,5 +1,5 @@
 {
- "uploaded_count": 55,
+ "uploaded_count": 57,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -441,6 +441,22 @@
    "mode": "scheduled 2026-11-25T10:30:00Z",
    "publish_at": "2026-11-25T11:30:00+01:00",
    "uploaded_at": "2026-11-24T15:02:50+00:00"
+  },
+  {
+   "tag": "video-20261125-slot1",
+   "video_id": "WSik_0CQiBc",
+   "title": "Do You Really Swallow 8 Spiders a Year in Your Sleep? \ud83d\udd77\ufe0f #shorts",
+   "mode": "scheduled 2026-11-25T05:00:00Z",
+   "publish_at": "2026-11-25T06:00:00+01:00",
+   "uploaded_at": "2026-11-24T19:55:02+00:00"
+  },
+  {
+   "tag": "video-20261125-slot5",
+   "video_id": "2r5Sox5Z13g",
+   "title": "What If Everyone Spoke the Same Language? \ud83c\udf0d #shorts",
+   "mode": "scheduled 2026-11-25T17:30:00Z",
+   "publish_at": "2026-11-25T18:30:00+01:00",
+   "uploaded_at": "2026-11-24T19:55:02+00:00"
   }
  ]
 }
