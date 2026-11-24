@@ -1,5 +1,5 @@
 {
- "uploaded_count": 52,
+ "uploaded_count": 55,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -417,6 +417,30 @@
    "mode": "scheduled 2026-11-24T17:30:00Z",
    "publish_at": "2026-11-24T18:30:00+01:00",
    "uploaded_at": "2026-11-23T19:56:26+00:00"
+  },
+  {
+   "tag": "video-20261125-slot2",
+   "video_id": "EYR5d7vH-gs",
+   "title": "Do You Get Extra Pay for Working Sundays? \ud83d\udcb6 #shorts",
+   "mode": "scheduled 2026-11-25T15:00:00Z",
+   "publish_at": "2026-11-25T16:00:00+01:00",
+   "uploaded_at": "2026-11-24T15:02:50+00:00"
+  },
+  {
+   "tag": "video-20261125-slot3",
+   "video_id": "QqjtblOwWMA",
+   "title": "LOW BATTERY (Part 5) #shorts",
+   "mode": "scheduled 2026-11-25T19:00:00Z",
+   "publish_at": "2026-11-25T20:00:00+01:00",
+   "uploaded_at": "2026-11-24T15:02:50+00:00"
+  },
+  {
+   "tag": "video-20261125-slot4",
+   "video_id": "KGmAoRpyaqM",
+   "title": "Guess How Many Played One Fortnite Event at Once \ud83c\udfae #shorts",
+   "mode": "scheduled 2026-11-25T10:30:00Z",
+   "publish_at": "2026-11-25T11:30:00+01:00",
+   "uploaded_at": "2026-11-24T15:02:50+00:00"
   }
  ]
 }
