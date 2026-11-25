@@ -1,0 +1,13 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 2611)
+m.music("dreamy")
+m.add("chime", m.at(0, 0) + .1, .3); m.add("ding", m.wt(0, "go on"), .3)
+m.add("whoosh", m.mid(0, 1) - .12, .3); m.add("pdown", m.wt(1, "nothing"), .3); m.add("pop", m.wt(1, "guess"), .3); m.add("ding", m.wt(1, "comment"), .3)
+m.add("whoosh", m.mid(1, 2) - .12, .3); m.add("sting", m.wt(2, "two to four"), .25); m.add("pop", m.wt(2, "infantile"), .3)
+m.add("whoosh", m.mid(2, 3) - .12, .3); m.add("pop", m.wt(3, "yale"), .3); m.add("ding", m.wt(3, "twenty six"), .3)
+m.add("chime", m.wt(4, "lit up"), .3); m.add("shing", m.wt(4, "recognized"), .25)
+m.add("whoosh", m.mid(4, 5) - .12, .3); m.add("slide", m.wt(5, "lost the key"), .3)
+m.add("whoosh", m.mid(5, 6) - .12, .3); m.add("pop", m.wt(6, "mice"), .3); m.add("shing", m.wt(6, "with light"), .25)
+m.add("whoosh", m.mid(6, 7) - .12, .3); m.add("thump", m.wt(7, "locked"), .35)
+m.add("whoosh", m.mid(7, 8) - .12, .3); m.add("pop", m.wt(8, "before"), .3); m.add("pop", m.wt(8, "after"), .3); m.add("ding", m.wt(8, "comment"), .3)
+m.write(mvol=.08, svol=.3)

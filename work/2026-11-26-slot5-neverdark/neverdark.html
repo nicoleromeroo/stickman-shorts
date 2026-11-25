@@ -1,0 +1,111 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { img: wt(0, 'imagine'), never: wt(0, 'never'), guess: at(1, 0), cm: wt(1, 'comment'), rev: at(2, 0), glow: wt(2, 'city lights'),
+  mw: at(3, 0), mel: at(4, 0), melw: wt(4, 'melatonin'), every: wt(4, 'every animal'), bird: at(5, 0), tree: wt(5, 'trees'), ins: wt(5, 'insects'),
+  life: at(6, 0), tro: at(7, 0), may: wt(7, 'late may'), opp: at(8, 0), nosun: wt(8, 'no sunrise'), q: at(9, 0), dn: wt(9, 'comment') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#94a3b8') { txt(s, 540, y, 28, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+function top2(a, b, cb = '#facc15', k = 1, s1 = 140, s2 = 150) { txt(a, 540, 180, s1 * k, '#fff', { lw: 24 }); if (b) txt(b, 540, 330, s2 * k, cb, { lw: 26 }); }
+function stars(n, a, y1 = 1100, t = 0) { ctx.save(); for (let i = 0; i < n; i++) { ctx.globalAlpha = a * (.5 + .5 * Math.sin(t * 2 + i)); circ(rnd(i) * W, rnd(i + 40) * y1, 3 + rnd(i + 9) * 4, '#fff'); } ctx.restore(); }
+function sun(x, y, r, t) { ctx.save(); ctx.translate(x, y); ctx.rotate(t * .4); for (let i = 0; i < 10; i++) { const a = i * Math.PI / 5; line(Math.cos(a) * r * 1.2, Math.sin(a) * r * 1.2, Math.cos(a) * r * 1.55, Math.sin(a) * r * 1.55, 12, '#fbbf24'); } ctx.restore(); circ(x, y, r, '#fde047', INK, 8); }
+function moon(x, y, r, bg) { circ(x, y, r, '#fef3c7', INK, 6); circ(x + r * .45, y - r * .25, r * .9, bg); }
+function city(y0, col = '#1e293b', lit = 1) { const bs = [[0, 360], [140, 520], [260, 300], [380, 620], [520, 420], [640, 700], [780, 380], [900, 540], [1000, 300]]; for (const [x, h] of bs) { box(x - 20, y0 - h, 150, h + 40, col, 6, 7); for (let r = 0; r < Math.floor(h / 90); r++) for (let c = 0; c < 3; c++) if (rnd(x + r * 7 + c) < .6) { ctx.fillStyle = lit ? '#fde68a' : '#334155'; ctx.fillRect(x + c * 40, y0 - h + 30 + r * 90, 24, 36); } } }
+function glowDome(a, y0 = 1300) { const g = ctx.createRadialGradient(540, y0, 100, 540, y0, 1100); g.addColorStop(0, `rgba(251,146,60,${a})`); g.addColorStop(1, 'rgba(251,146,60,0)'); ctx.fillStyle = g; ctx.fillRect(-300, -300, W + 600, H + 600); }
+function lamp(x, y, on, t) { line(x, y, x, y - 620, 18, '#475569'); line(x, y - 620, x + 120, y - 620, 14, '#475569'); box(x + 70, y - 640, 110, 60, '#334155', 14, 7); if (on) { ctx.save(); ctx.globalAlpha = .45; ctx.fillStyle = '#fde68a'; ctx.beginPath(); ctx.moveTo(x + 90, y - 585); ctx.lineTo(x + 160, y - 585); ctx.lineTo(x + 320, y); ctx.lineTo(x - 70, y); ctx.closePath(); ctx.fill(); ctx.restore(); circ(x + 125, y - 580, 22, '#fef08a', INK, 5); } }
+function bird(x, y, s, t, sing) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#60a5fa'; ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.ellipse(0, 0, 70, 52, 0, 0, 7); ctx.fill(); ctx.stroke(); circ(55, -45, 38, '#60a5fa', INK, 7); circ(66, -52, 9, INK);
+  ctx.fillStyle = '#f59e0b'; ctx.beginPath(); ctx.moveTo(88, -48); ctx.lineTo(128, -38 + (sing ? Math.sin(t * 20) * 6 : 0)); ctx.lineTo(88, -30); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#3b82f6'; ctx.beginPath(); ctx.ellipse(-10, 0, 40, 24, -.3 + Math.sin(t * 8) * .2, 0, 7); ctx.fill(); ctx.stroke(); line(-10, 50, -14, 80, 6); line(14, 50, 18, 80, 6); ctx.restore();
+  if (sing) for (let i = 0; i < 3; i++) { const p = (t * .7 + i / 3) % 1; ctx.save(); ctx.globalAlpha = Math.sin(p * Math.PI); circ(x + 80 + p * 160, y - 80 - p * 160, 14, '#fff', INK, 5); line(x + 92 + p * 160, y - 80 - p * 160, x + 92 + p * 160, y - 140 - p * 160, 6, '#fff'); ctx.restore(); } }
+function tree(x, y, s, buds) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); line(0, 0, 0, -320, 30, '#78350f'); for (const [a, l] of [[-.7, 180], [.6, 200], [-.2, 160], [1.1, 140], [-1.1, 140]]) { const ex = Math.sin(a) * l, ey = -260 - Math.cos(a) * l; line(0, -240, ex, ey, 16, '#78350f'); if (buds > 0) circ(ex, ey, 26 * buds, '#4ade80', INK, 5); } ctx.restore(); }
+function moth(cx, cy, t, i) { const a = t * 4 + i * 2.1, x = cx + Math.cos(a) * (90 + i * 20), y = cy + Math.sin(a * 1.3) * 60; ctx.save(); ctx.translate(x, y); const f = Math.abs(Math.sin(t * 25 + i)); ctx.fillStyle = '#e7e5e4'; ctx.strokeStyle = INK; ctx.lineWidth = 4; ctx.beginPath(); ctx.ellipse(-14, 0, 18, 12 * f + 3, 0, 0, 7); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.ellipse(14, 0, 18, 12 * f + 3, 0, 0, 7); ctx.fill(); ctx.stroke(); ctx.restore(); }
+
+function sHook(lt, t) {
+  const day = eio(inv(T.never, T.never + .8, t));
+  const night = '#0f172a', sky = day > .5 ? '#7dd3fc' : '#0b1020';
+  bgFill(day > .5 ? '#fef3c7' : '#1e1b4b'); floor(day > .5 ? '#d6b98c' : '#312e81', 1450);
+  box(240, 520, 600, 560, sky, 14, 10);
+  ctx.save(); rr(240, 520, 600, 560, 14); ctx.clip();
+  if (day < .5) { stars(25, 1, 1080, t); moon(700, 680, 70, sky); } else { sun(560, 1080 - day * 380, 90, t); }
+  ctx.restore(); line(540, 520, 540, 1080, 10); line(240, 800, 840, 800, 10); box(240, 520, 600, 560, 'rgba(0,0,0,0)', 14, 10);
+  const wx = lerp(140, 300, eo(inv(0, 1.2, t)));
+  hero({ x: wx, y: 1450, s: 1.05, pose: t < 1.2 ? walkPose(t * 8) : { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.2, re: -.4 }, eyes: day > .5 ? 'huge' : 'norm', mouth: day > .5 ? 'o' : 'smile', look: 1, flip: false });
+  if (day < .5) top2('NEVER DARK', 'AGAIN?', '#c4b5fd', 1, 140, 160);
+  else { top2('NO NIGHT.', 'EVER.', '#f97316', pop(T.never + .3, t), 150, 170); }
+}
+function sGuess(lt, t) {
+  bgFill('#0b1020'); const rv = t >= T.rev; stars(30, rv ? .25 : .7, 900, t);
+  glowDome(rv ? .75 : .35); city(1450, '#1e293b'); floor('#0f172a', 1450);
+  if (!rv) { top2('HOW MANY', 'OF US?', '#38bdf8', 1); qmark(540, 760, t, T.guess + .3, '#facc15', 220); badge(540, 470, 700, 120, '#facc15', ['COMMENT A PERCENT'], [62], T.cm, t, -.03, INK); }
+  else { top2('OVER', '80%', '#fb923c', pop(T.rev, t), 130, 230); badge(540, 520, 760, 120, '#ea580c', ['GLOWING NIGHT SKY'], [66], T.glow, t, -.03); }
+  foot('Over 80% of people live under light-polluted skies (Science Advances 2016)');
+}
+function sMilky(lt, t) {
+  bgFill('#020617');
+  // Milky Way band: bright at top-left, swallowed by city glow lower right
+  ctx.save(); ctx.translate(540, 760); ctx.rotate(-.5); const bg = ctx.createLinearGradient(0, -170, 0, 170); bg.addColorStop(0, 'rgba(196,181,253,0)'); bg.addColorStop(.5, 'rgba(196,181,253,.45)'); bg.addColorStop(1, 'rgba(196,181,253,0)'); ctx.fillStyle = bg; ctx.fillRect(-1000, -170, 2000, 340); for (let i = 0; i < 600; i++) { const x = (rnd(i) - .5) * 1800, y = (rnd(i + 99) - .5) * 200 * (1 + rnd(i + 5)); ctx.globalAlpha = .5 + rnd(i + 3) * .5; circ(x, y, 2 + rnd(i + 7) * 5, '#f5f3ff'); } ctx.restore();
+  const g = eo(inv(T.mw + .6, T.mw + 2.2, t)); glowDome(.25 + .7 * g, 1500); city(1450, '#1e293b'); floor('#0f172a', 1450);
+  for (let i = 0; i < 3; i++) hero({ x: 280 + i * 260, y: 1450, s: .75, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -.3, re: -.2 }, eyes: 'norm', mouth: i === 1 ? 'frown' : 'flat', lookY: -1, shirt: ['#3b82f6', '#ef4444', '#22c55e'][i] });
+  if (g > .3) qmark(540, 940, t, T.mw + 1.2, '#facc15', 140);
+  top2('OVER 1 IN 3', 'NO MILKY WAY', '#c4b5fd', pop(T.mw, t), 120, 120);
+  foot('Milky Way hidden from over a third of humanity (CU Boulder, 2016)');
+}
+function sLife(lt, t) {
+  const off = t > T.life + .3; bgFill(off ? '#020617' : '#111827'); if (off) stars(40, eo(inv(T.life + .3, T.life + 1, t)), 1300, t);
+  floor('#1f2937', 1450); lamp(760, 1450, !off, t);
+  if (t < T.bird) {
+    const k = 1 - .75 * eio(inv(T.melw, T.melw + 1.4, t));
+    ctx.save(); ctx.translate(250, 1250); ctx.scale(1.3, 1.3); meter(0, 0, '', k, k > .5 ? '#a78bfa' : '#ef4444'); ctx.restore();
+    txt('MELATONIN', 250, 1360, 52, '#fff', { lw: 10 });
+    top2('100+ STUDIES', 'SLEEP HORMONE', '#a78bfa', pop(T.mel, t), 120, 110);
+    badge(540, 520, 760, 120, '#dc2626', ['DOWN IN EVERY SPECIES'], [58], T.every, t, -.03);
+    moth(885, 870, t, 0);
+  } else {
+    if (!off) { moth(885, 870, t, 0); moth(885, 870, t, 1); moth(885, 870, t, 2); }
+    bird(220, 760, 1.1, t, !off); line(80, 840, 420, 840, 14, '#78350f');
+    tree(300, 1450, 1.0, eob(inv(T.tree, T.tree + .4, t)));
+    if (!off) {
+      if (t < T.tree) top2('BIRDS SING', 'EARLIER', '#60a5fa', pop(T.bird, t), 130, 150);
+      else if (t < T.ins) top2('TREES BUD', 'EARLIER', '#4ade80', pop(T.tree, t), 130, 150);
+      else top2('INSECTS', 'POLLINATE LESS', '#facc15', pop(T.ins, t), 140, 110);
+    } else top2('LIFE NEEDS', 'THE DARK', '#c4b5fd', pop(T.life + .3, t), 140, 160);
+    foot('Exeter review of 100+ studies (Nature Ecology & Evolution, 2020)');
+  }
+  if (t < T.bird) foot('Exeter review of 100+ studies (Nature Ecology & Evolution, 2020)');
+}
+function sNorway(lt, t) {
+  const night = t >= T.opp; const hz = 1250;
+  bgFill(night ? '#0b1530' : '#7dd3fc'); if (night) stars(40, .9, 1200, t);
+  // mountains + horizon
+  ctx.fillStyle = night ? '#1e293b' : '#64748b'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-50, hz); ctx.lineTo(180, 980); ctx.lineTo(380, hz); ctx.lineTo(600, 900); ctx.lineTo(860, hz); ctx.lineTo(1000, 1060); ctx.lineTo(1150, hz); ctx.closePath(); ctx.fill(); ctx.stroke();
+  for (const [x, y] of [[180, 980], [600, 900]]) { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - 60, y + 80); ctx.lineTo(x + 60, y + 80); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  floor(night ? '#e2e8f0' : '#86efac', hz);
+  if (!night) { const a = t * 1.3; sun(540 + Math.cos(a) * 330, 860 + Math.sin(a) * 120, 70, t); }
+  else { snow(t, 50, .8); }
+  // clock showing midnight
+  circ(880, 1060, 90, '#fff', INK, 9); line(880, 1060, 880, 990, 10); line(880, 1060, 880, 1000, 14); circ(880, 1060, 12, INK); txt('00:00', 880, 1200, 56, '#fff', { lw: 10 });
+  hero({ x: 260, y: 1460, s: .95, pose: night ? { lt: .1, ls: 0, rt: -.1, rs: 0, la: .9, le: 1.6, ra: -.9, re: -1.6 } : { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.6, re: -.4 }, eyes: night ? 'norm' : 'huge', mouth: night ? 'wavy' : 'o', scarf: '#ef4444', lookY: night ? 0 : -1 });
+  if (!night) { top2('TROMSØ, NORWAY', 'SUN NEVER SETS', '#fde047', pop(T.tro, t), 100, 110); badge(540, 500, 680, 120, '#0284c7', ['LATE MAY - LATE JULY'], [58], T.may, t, -.03); }
+  else { top2('RIGHT NOW:', 'NO SUNRISE', '#93c5fd', pop(T.opp, t), 130, 140); badge(540, 500, 620, 120, '#1d4ed8', ['UNTIL MID JANUARY'], [58], T.nosun, t, -.03); }
+  foot('Midnight sun ~20 May-22 Jul, polar night ~27 Nov-15 Jan (Visit Tromsø)', 1840, night ? '#334155' : '#166534');
+}
+function sEnd(lt, t) {
+  ctx.fillStyle = '#7dd3fc'; ctx.fillRect(-300, -300, 840, H + 600); ctx.fillStyle = '#0b1020'; ctx.fillRect(540, -300, 840, H + 600);
+  ctx.save(); ctx.beginPath(); ctx.rect(540, 0, 800, H); ctx.clip(); stars(40, 1, 1400, t); ctx.restore();
+  sun(270, 900, 100, t); moon(810, 900, 100, '#0b1020'); line(540, 450, 540, 1450, 10);
+  floor('#334155', 1450);
+  top2('ENDLESS', 'DAY OR NIGHT?', '#facc15', pop(T.q, t), 140, 120);
+  const p1 = t > T.dn && t < T.dn + .4, p2 = t > T.dn + .5 && t < T.dn + .9;
+  box(90, 1140 + (p1 ? 12 : 0), 380, 170, '#f59e0b', 46, 9); txt('DAY', 280, 1230 + (p1 ? 12 : 0), 100, '#fff', { lw: 16 });
+  box(610, 1140 + (p2 ? 12 : 0), 380, 170, '#4338ca', 46, 9); txt('NIGHT', 800, 1230 + (p2 ? 12 : 0), 100, '#fff', { lw: 16 });
+  qmark(540, 640, t, T.q + .2, '#fff', 160);
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(0, 1), fn: sGuess, push: .04, flash: 1 }, { t0: mid(2, 3), fn: sMilky, push: .04, flash: .8 }, { t0: mid(3, 4), fn: sLife, push: .04, flash: .8 }, { t0: mid(6, 7), fn: sNorway, push: .04, flash: .8 }, { t0: mid(8, 9), fn: sEnd, push: .04, flash: .8 }];
+const CAP = [["look outside.", "dark, right?", "imagine", "it never got", "dark again."], ["guess first:", "how many people", "live under skies", "that never get", "truly dark?", "comment a percent."], ["over", "eighty percent!", "city lights", "keep the night", "glowing."], ["over a third", "of us", "can't even see", "the milky way", "anymore."], ["night light", "lowered", "the sleep hormone", "melatonin", "in every", "animal species", "studied."], ["birds sang earlier.", "trees budded earlier.", "insects", "pollinated less."], ["life needs", "the dark."], ["in tromsø,", "norway,", "the sun", "doesn't set", "from late may", "to late july."], ["and right now,", "the opposite", "starts there:", "no sunrise", "until mid january."], ["endless day", "or endless night?", "comment", "day or night."]];
+const HOT = new Set(["dark again.", "comment a percent.", "eighty percent!", "the milky way", "melatonin", "animal species", "pollinated less.", "the dark.", "doesn't set", "no sunrise", "day or night."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

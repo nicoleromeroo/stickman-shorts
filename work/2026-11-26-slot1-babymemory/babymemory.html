@@ -1,0 +1,137 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { goon: wt(0, 'go on'), noth: at(1, 0), guess: wt(1, 'guess'), cm: wt(1, 'comment'), rev: at(2, 0), amn: wt(2, 'infantile'),
+  yale: at(3, 0), yl: wt(3, 'yale'), n26: wt(3, 'twenty six'), hip: at(4, 0), rec: wt(4, 'recognized'),
+  key: at(5, 0), lost: wt(5, 'lost the key'), mice: at(6, 0), light: wt(6, 'with light'), lock: at(7, 0), lk: wt(7, 'locked'), q: at(8, 0), ba: wt(8, 'comment') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#94a3b8') { txt(s, 540, y, 28, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+function top2(a, b, cb = '#facc15', k = 1, s1 = 140, s2 = 150) { txt(a, 540, 180, s1 * k, '#fff', { lw: 24 }); txt(b, 540, 330, s2 * k, cb, { lw: 26 }); }
+// cake with one candle
+function cake(x, y, s, t, fog = 0) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.globalAlpha = 1 - fog * .85;
+  box(-130, -40, 260, 110, '#f9a8d4', 24, 8); box(-130, -60, 260, 50, '#fff', 24, 8);
+  for (let i = 0; i < 5; i++) circ(-100 + i * 50, -14, 9, '#ef4444', INK, 4);
+  box(-12, -150, 24, 90, '#60a5fa', 6, 6); const f = Math.sin(t * 14) * 4; ctx.fillStyle = '#fbbf24'; ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(f * .3, -172, 14, 24 + f, 0, 0, 7); ctx.fill(); ctx.stroke();
+  txt('1', 0, 30, 70, '#fff', { lw: 12 }); ctx.restore();
+}
+function thought(x, y, w, h) { circ(x - 160, y + h / 2 + 70, 22, '#fff', INK, 6); circ(x - 120, y + h / 2 + 30, 32, '#fff', INK, 6); box(x - w / 2, y - h / 2, w, h, '#fff', 120, 8); }
+function fogOver(x, y, r, a, t) { ctx.save(); ctx.globalAlpha = a; for (let i = 0; i < 9; i++) { const ox = Math.cos(i * 1.3 + t * .7) * r * .5, oy = Math.sin(i * 2.1 + t * .5) * r * .3; circ(x + ox, y + oy, r * .42, '#cbd5e1'); } ctx.restore(); }
+// generic baby: big head, small onesie body
+function baby(x, y, s, o = {}) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  line(-30, -40, -50, 0, 16); line(30, -40, 50, 0, 16);
+  box(-60, -150, 120, 120, o.col || '#fde68a', 50, 8);
+  line(-60, -120, -100, -80 + (o.wave ? Math.sin(o.t * 6) * 20 : 0), 14); line(60, -120, 100, -80 - (o.wave ? Math.sin(o.t * 6) * 20 : 0), 14);
+  circ(0, -230, 90, '#fff', INK, 9);
+  ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(0, -318, 16, Math.PI * .9, Math.PI * 2.1); ctx.stroke();
+  const er = o.eyes === 'huge' ? 22 : 15; for (const sx of [-1, 1]) { circ(sx * 32, -240, er, '#fff', INK, 5); circ(sx * 32 + (o.look || 0) * 6, -236, 8, INK); }
+  if (o.mouth === 'o') circ(0, -190, 13, '#7a1f1f', INK, 5); else { ctx.beginPath(); ctx.arc(0, -205, 18, .15 * Math.PI, .85 * Math.PI); ctx.stroke(); }
+  ctx.restore();
+}
+// simple side-view brain with a highlighted hippocampus spot
+function brainBig(x, y, s, glow, o = {}) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = '#f9a8d4'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath();
+  for (let i = 0; i <= 12; i++) { const a = Math.PI + i * Math.PI / 12; const r = 200 + (i % 2) * 22; ctx.lineTo(Math.cos(a) * r * 1.15, Math.sin(a) * r * .85); }
+  ctx.quadraticCurveTo(230, 140, 0, 150); ctx.quadraticCurveTo(-240, 140, -230, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.lineWidth = 6; for (const [a, b] of [[-130, -80], [100, -100], [-40, -150], [140, 20], [-150, 50]]) { ctx.beginPath(); ctx.arc(a, b, 34, .3, 2.6); ctx.stroke(); }
+  if (glow > 0) { ctx.save(); ctx.globalAlpha = glow; spot(20, 60, 160, .9, '255,230,80'); ctx.restore(); }
+  ctx.fillStyle = glow > 0 ? '#fde047' : '#ec4899'; ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(-40, 50); ctx.quadraticCurveTo(20, 20, 70, 60); ctx.quadraticCurveTo(80, 90, 50, 90); ctx.quadraticCurveTo(10, 60, -30, 80); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.restore();
+}
+function chest(x, y, s, open, lockA = 1) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  box(-110, -40, 220, 120, '#b45309', 14, 8); line(-110, 10, 110, 10, 6);
+  ctx.save(); ctx.translate(-110, -40); ctx.rotate(-open * 1.2); box(0, -60, 220, 60, '#d97706', 18, 8); ctx.restore();
+  if (lockA > 0) { ctx.globalAlpha = lockA; ctx.strokeStyle = INK; ctx.lineWidth = 10; ctx.beginPath(); ctx.arc(0, -10, 24, Math.PI, 0); ctx.stroke(); box(-34, -10, 68, 60, '#facc15', 10, 7); circ(0, 15, 8, INK); }
+  ctx.restore();
+}
+function keyIcon(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); circ(-50, 0, 34, '#facc15', INK, 8); circ(-50, 0, 12, '#fef3c7', INK, 5); box(-20, -12, 120, 24, '#facc15', 8, 7); box(70, 8, 18, 30, '#facc15', 4, 6); box(40, 8, 18, 22, '#facc15', 4, 6); ctx.restore(); }
+function mouse(x, y, s, t) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.strokeStyle = INK; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(90, 20); ctx.quadraticCurveTo(170, 40 + Math.sin(t * 5) * 15, 200, -20); ctx.stroke();
+  ctx.fillStyle = '#d1d5db'; ctx.beginPath(); ctx.ellipse(0, 0, 110, 70, 0, 0, 7); ctx.fill(); ctx.stroke(); circ(-90, -50, 40, '#f9a8d4', INK, 7); circ(-20, -70, 40, '#f9a8d4', INK, 7);
+  circ(-70, -10, 12, INK); circ(-118, 14, 12, '#f472b6', INK, 4); ctx.restore(); }
+
+function sHook(lt, t) {
+  bgFill('#1e3a8a'); floor('#1e293b', 1450);
+  const fog = inv(T.goon + .6, T.noth + 1.0, t);
+  thought(620, 760, 560, 440); cake(640, 820, 1.1, t, fog);
+  if (fog > 0) fogOver(640, 760, 420, fog * .95, t);
+  if (t > T.noth) qmark(640, 760, t, T.noth + .3, '#475569', 230);
+  hero({ x: 260, y: 1450, s: 1.0, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.6, re: -.9 }, eyes: t > T.noth ? 'huge' : 'closed', mouth: t > T.noth ? 'o' : 'flat', tilt: -.12 + Math.sin(t * 3) * .05 });
+  if (t < T.noth) top2('YOUR 1ST', 'BIRTHDAY?', '#f9a8d4', 1, 150, 160);
+  else if (t < T.guess) top2('NOTHING?', '', '#fff', pop(T.noth, t), 160);
+  else { top2('ALL GONE', 'BEFORE AGE...?', '#38bdf8', 1, 140, 120); badge(540, 470, 680, 120, '#facc15', ['COMMENT A NUMBER'], [64], T.cm, t, -.03, INK); }
+}
+function sReveal(lt, t) {
+  bgFill('#0f172a'); floor('#1e293b', 1450);
+  top2('AGE', '2 TO 4', '#facc15', pop(T.rev, t), 130, 190);
+  badge(540, 500, 760, 130, '#7c3aed', ['INFANTILE AMNESIA'], [70], T.amn, t, -.03);
+  // timeline 0..6 years, fog over 0..3
+  const x0 = 120, x1 = 960, y = 900; line(x0, y, x1, y, 14, '#fff');
+  for (let a = 0; a <= 6; a++) { const x = lerp(x0, x1, a / 6); line(x, y - 26, x, y + 26, 8, '#fff'); txt(String(a), x, y + 80, 60, '#fff', { lw: 10 }); }
+  txt('AGE', 540, y + 170, 56, '#94a3b8', { stroke: false });
+  const g = eo(inv(T.rev, T.rev + 1.2, t)); fogOver(lerp(x0, x1, 1.5 / 6), y - 150, 300 * g, .9 * g, t);
+  baby(lerp(x0, x1, 1 / 6), 1450, .7, { t, wave: true });
+  hero({ x: lerp(x0, x1, 5 / 6), y: 1450, s: .95, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.4, re: -.3 }, eyes: 'norm', mouth: 'smile' });
+  foot('Memories usually start at age 2 to 4 (Live Science, The Conversation)');
+}
+function sYale(lt, t) {
+  bgFill('#134e4a'); floor('#115e59', 1450);
+  // scanner ring + screen with a picture (generic star)
+  ctx.save(); ctx.globalAlpha = .95; circ(380, 1060, 260, '#e5e7eb', INK, 10); circ(380, 1060, 170, '#134e4a', INK, 8); ctx.restore();
+  baby(380, 1300, .85, { t, eyes: t > T.rec ? 'huge' : 'norm', look: 1, mouth: t > T.rec ? 'o' : 'smile' });
+  box(700, 820, 300, 240, '#111827', 18, 8); ctx.fillStyle = '#fef3c7'; ctx.fillRect(720, 840, 260, 200); sparkle(850, 940, 80, 1, '#f59e0b');
+  line(850, 1060, 850, 1440, 12);
+  if (t < T.hip) { top2('YALE STUDY', '26 BABIES', '#5eead4', pop(T.yale, t), 130, 160); badge(540, 500, 620, 120, '#0d9488', ['BRAIN SCANNER'], [66], T.n26, t, -.03); }
+  else {
+    const gl = inv(T.hip + .3, T.hip + .9, t); ctx.save(); ctx.translate(380, 760); ctx.scale(.55, .55); brainBig(0, 0, 1, gl); ctx.restore();
+    if (t < T.rec) top2('HIPPOCAMPUS', 'LIGHTS UP', '#fde047', 1, 110, 140);
+    else { top2('THEY', 'RECOGNIZED IT!', '#4ade80', pop(T.rec, t), 140, 120); for (let i = 0; i < 4; i++) sparkle(700 + i * 100, 780 + (i % 2) * 40, 30, Math.sin(t * 8 + i) * .5 + .5); }
+  }
+  foot('Yale study (Science, 2025): 26 babies, aged 4 months to 2 years, in fMRI');
+}
+function sKey(lt, t) {
+  bgFill('#3b0764'); floor('#2e1065', 1450);
+  if (t < T.mice) {
+    brainBig(540, 1000, 1.4, 0);
+    chest(540, 1010, 1.05, 0); cake(540, 900, .35, t);
+    const k = eo(inv(T.lost - .2, T.lost + .8, t)); keyIcon(lerp(820, 1300, k), lerp(1380, 1100, k), 1, k * 3);
+    if (t < T.lost) top2('STILL IN', 'THERE?', '#c4b5fd', pop(T.key, t)); else top2('WE LOST', 'THE KEY', '#facc15', pop(T.lost, t));
+    hero({ x: 170, y: 1450, s: .8, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.4, re: -.6 }, eyes: 'norm', mouth: 'flat', tilt: Math.sin(t * 3) * .1 });
+    foot('Yale researcher: memories may still be there, "we just can\'t access them"');
+  } else {
+    mouse(640, 1300, 1.7, t);
+    // flashlight beam onto mouse head
+    const on = t > T.light - .4; box(80, 820, 200, 90, '#475569', 18, 8); box(270, 800, 50, 130, '#94a3b8', 10, 7);
+    if (on) { ctx.save(); ctx.globalAlpha = .55; ctx.fillStyle = '#fde68a'; ctx.beginPath(); ctx.moveTo(320, 820); ctx.lineTo(560, 1120); ctx.lineTo(470, 1280); ctx.lineTo(320, 910); ctx.closePath(); ctx.fill(); ctx.restore(); }
+    thought(760, 900, 360, 260); const mk = eob(inv(T.light, T.light + .4, t)); if (on) { ctx.save(); ctx.translate(760, 900); ctx.scale(mk, mk); circ(0, 0, 70, '#fcd34d', INK, 7); txt('!', 0, 6, 100, '#fff', { lw: 14 }); ctx.restore(); }
+    if (t < T.light) top2('MOUSE', 'STUDY', '#f9a8d4', pop(T.mice, t)); else top2('MEMORY', 'BACK!', '#4ade80', pop(T.light, t), 140, 170);
+    badge(540, 500, 600, 120, '#be185d', ['WITH LIGHT'], [70], T.light, t, -.03);
+    foot('Mouse study, 2023 (via Live Science). Not yet shown in humans');
+  }
+}
+function sEnd(lt, t) {
+  bgFill('#1e3a8a'); floor('#1e293b', 1450);
+  if (t < T.q) {
+    brainBig(540, 1000, 1.4, 0); chest(540, 1010, 1.05, 0); cake(540, 900, .35, t);
+    if (t > T.lk) impact(540, 990, 220, 1 - inv(T.lk, T.lk + .5, t));
+    if (t < T.lk) top2('STILL IN', 'YOUR BRAIN', '#f9a8d4'); else top2('JUST', 'LOCKED', '#facc15', pop(T.lk, t), 140, 180);
+  } else {
+    top2('EARLIEST', 'MEMORY?', '#facc15', pop(T.q, t));
+    const p1 = t > T.ba && t < T.ba + .4, p2 = t > T.ba + .5 && t < T.ba + .9;
+    box(100, 500 + (p1 ? 12 : 0), 420, 220, '#16a34a', 46, 9); txt('BEFORE', 310, 580 + (p1 ? 12 : 0), 86, '#fff', { lw: 14 }); txt('AGE 3', 310, 670 + (p1 ? 12 : 0), 64, '#fff', { lw: 10 });
+    box(560, 500 + (p2 ? 12 : 0), 420, 220, '#dc2626', 46, 9); txt('AFTER', 770, 580 + (p2 ? 12 : 0), 86, '#fff', { lw: 14 }); txt('AGE 3', 770, 670 + (p2 ? 12 : 0), 64, '#fff', { lw: 10 });
+    thought(640, 1010, 400, 300); qmark(640, 1040, t, T.q + .2, '#475569', 200);
+    hero({ x: 260, y: 1450, s: 1.0, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.6, re: -.9 }, eyes: 'norm', mouth: 'smile', tilt: -.12 + Math.sin(t * 3) * .05 });
+  }
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(1, 2), fn: sReveal, push: .04, flash: 1 }, { t0: mid(2, 3), fn: sYale, push: .04, flash: .8 }, { t0: mid(4, 5), fn: sKey, push: .04, flash: .8 }, { t0: mid(6, 7), fn: sEnd, push: .04, flash: .8 }];
+const CAP = [["try to remember", "your first", "birthday.", "go on."], ["nothing?", "guess first:", "until what age", "is almost", "everything gone?", "comment a number."], ["around", "two to four.", "it's called", "infantile amnesia."], ["but babies", "do make memories.", "yale scanned", "the brains of", "twenty six babies."], ["when their", "hippocampus", "lit up,", "they later", "recognized", "the same picture."], ["so those memories", "might still", "be in there.", "we just", "lost the key."], ["in mice,", "scientists brought", "lost baby memories", "back,", "with light."], ["your first birthday", "could still be", "in your brain.", "locked."], ["your earliest memory:", "before age three,", "or after?", "comment", "before or after."]];
+const HOT = new Set(["go on.", "nothing?", "comment a number.", "two to four.", "infantile amnesia.", "do make memories.", "twenty six babies.", "hippocampus", "recognized", "lost the key.", "with light.", "locked.", "before or after."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

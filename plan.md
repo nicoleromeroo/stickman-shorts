@@ -38,13 +38,13 @@ Notes
 - Black Friday is Fri 27 Nov 2026: Black Friday topics only from Fri 20 Nov.
 
 ## Backlog (more topics with built-in questions)
-- Facts: Why yawning is contagious exists; new: "Why can't you remember being a baby?", "Is every snowflake really
+- Facts: Why yawning is contagious exists; "Is every snowflake really
   unique?" (myth, seasonal: only with first snow), "Why do onions make you cry?", "Do we swallow spiders in our sleep?" (myth).
 - Gaming / pop culture: "Most-watched trailer ever: guess the views", "Fortnite's biggest live event: guess the
   players", "This singer got rejected X times before…", next big movie release within 3 weeks.
 - Finance: "Start at 20 vs 30" (different numbers than 16 vs 26), "Werkstudent vs minijob: which pays more per
   hour?", "Sunday/night shift: how much extra?", "Skip one delivery order a week…".
-- What if: "What if it never got dark?", "What if we only slept 4 hours?", "What if AI did all homework?",
+- What if: "What if we only slept 4 hours?", "What if AI did all homework?",
   "What if everyone spoke the same language?".
 - Series: end every episode with a yes/no question about what YOU would do.
 
@@ -80,7 +80,7 @@ Notes
 - 1 cent doubled for 30 days: moved to the backlog (good "pick 1 or 2" finance video for later).
 
 ## Done
-- 26 Nov (no plan row) 11:30 Star Wars sound design (bear, elephant, old TV) · 16:00 skip one delivery a week (from backlog) · 20:00 LOW BATTERY Part 6 FINALE (made 25 Nov)
+- 26 Nov (no plan row) 06:00 why can't you remember being a baby (from backlog) · 18:30 what if it never got dark (from backlog) (made 25 Nov evening) · 11:30 Star Wars sound design (bear, elephant, old TV) · 16:00 skip one delivery a week (from backlog) · 20:00 LOW BATTERY Part 6 FINALE (made 25 Nov)
 - 24 Nov (no plan row) 11:30 trailer record: guess the views (Spider-Man: Brand New Day 718.6M, Doomsday 18 Dec) · 16:00 1 million now vs 1 cent doubled for 30 days (from backlog) · 20:00 LOW BATTERY Part 4 (made 23 Nov)
 - 21 Nov 06:00 carrots night-vision myth · 18:30 What if the Moon disappeared? (made 20 Nov)
 - 21 Nov 11:30 changed: no official GTA 6 sales yet (only Sensor Tower estimates) → "The game that took 22 years to make" · 16:00 Buy now, pay later: 300 € phone · 20:00 LOW BATTERY Part 1 (made 20 Nov)
