@@ -1,5 +1,5 @@
 {
- "uploaded_count": 60,
+ "uploaded_count": 62,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -481,6 +481,22 @@
    "mode": "scheduled 2026-11-26T10:30:00Z",
    "publish_at": "2026-11-26T11:30:00+01:00",
    "uploaded_at": "2026-11-25T14:53:41+00:00"
+  },
+  {
+   "tag": "video-20261126-slot1",
+   "video_id": "Jpg4csj-pyw",
+   "title": "Why Can't You Remember Being a Baby? \ud83d\udc76 #shorts",
+   "mode": "scheduled 2026-11-26T05:00:00Z",
+   "publish_at": "2026-11-26T06:00:00+01:00",
+   "uploaded_at": "2026-11-25T19:52:44+00:00"
+  },
+  {
+   "tag": "video-20261126-slot5",
+   "video_id": "V7axpux8hDA",
+   "title": "What If It Never Got Dark Again? \ud83c\udf1e #shorts",
+   "mode": "scheduled 2026-11-26T17:30:00Z",
+   "publish_at": "2026-11-26T18:30:00+01:00",
+   "uploaded_at": "2026-11-25T19:52:44+00:00"
   }
  ]
 }
