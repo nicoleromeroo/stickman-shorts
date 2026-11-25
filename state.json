@@ -1,5 +1,5 @@
 {
- "uploaded_count": 57,
+ "uploaded_count": 60,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -457,6 +457,30 @@
    "mode": "scheduled 2026-11-25T17:30:00Z",
    "publish_at": "2026-11-25T18:30:00+01:00",
    "uploaded_at": "2026-11-24T19:55:02+00:00"
+  },
+  {
+   "tag": "video-20261126-slot2",
+   "video_id": "9PM1gu_580I",
+   "title": "Skip One Delivery a Week. Here's What It Could Become \ud83c\udf55 #shorts",
+   "mode": "scheduled 2026-11-26T15:00:00Z",
+   "publish_at": "2026-11-26T16:00:00+01:00",
+   "uploaded_at": "2026-11-25T14:53:41+00:00"
+  },
+  {
+   "tag": "video-20261126-slot3",
+   "video_id": "vWNG7BeWRI4",
+   "title": "LOW BATTERY (Part 6, Finale) #shorts",
+   "mode": "scheduled 2026-11-26T19:00:00Z",
+   "publish_at": "2026-11-26T20:00:00+01:00",
+   "uploaded_at": "2026-11-25T14:53:41+00:00"
+  },
+  {
+   "tag": "video-20261126-slot4",
+   "video_id": "x5UTIWawomg",
+   "title": "Star Wars Sounds Came From a Bear and an Old TV \ud83c\udfac #shorts",
+   "mode": "scheduled 2026-11-26T10:30:00Z",
+   "publish_at": "2026-11-26T11:30:00+01:00",
+   "uploaded_at": "2026-11-25T14:53:41+00:00"
   }
  ]
 }
