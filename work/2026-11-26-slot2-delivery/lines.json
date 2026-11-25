@@ -1,0 +1,21 @@
+[
+"One delivery order a week. Fifteen euros. Guess what it's really costing you.",
+"That's seven hundred eighty euros a year.",
+{
+"text": "Guess before the end: what could it become by sixty-seven? Comment a number.",
+"gap": 0.5
+},
+"Now skip it, and put sixty-five euros a month into a broad index fund instead.",
+"Assume about six percent a year. Not guaranteed.",
+"By thirty, you paid in about eleven thousand. It could be seventeen thousand.",
+"Keep going until sixty-seven. You paid in about forty thousand euros.",
+{
+"text": "It could be worth about two hundred sixty thousand.",
+"gap": 0.7
+},
+"Most of that, you never paid in. Time did the work.",
+{
+"text": "Would you skip one delivery a week? Yes or no.",
+"gap": 1.4
+}
+]

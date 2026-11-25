@@ -1,0 +1,121 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const SMALL = { stroke: false, font: 'Nun', weight: '900 ' };
+const T = { comp: wt(0, 'from a computer'), bear: wt(0, 'a bear'), ele: wt(0, 'an elephant'), tv: wt(0, 'an old'), ben: at(1, 0), real: wt(1, 'recorded'), guess: at(2, 0), hammer: wt(2, 'hammer'), cm: wt(2, 'comment'),
+  ls: at(3, 0), proj: wt(3, 'projector'), buzz: wt(3, 'buzz'), chew: at(4, 0), ybear: wt(4, 'young bear'), oth: wt(4, 'mixed'), tie: at(5, 0), elec: wt(5, 'elephant'), r2: at(6, 0), syn: wt(6, 'synth'), own: wt(6, "ben's"),
+  bl: at(7, 0), hit: wt(7, 'a hammer'), wire: wt(7, 'steel'), two: wt(7, 'number'), earth: at(8, 0), q: at(9, 0) };
+function mic(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); line(0, 0, 0, 260, 12); line(-70, 260, 70, 260, 12); box(-36, -110, 72, 120, '#94a3b8', 36, 7); for (let i = 0; i < 4; i++) line(-28, -84 + i * 24, 28, -84 + i * 24, 4, '#475569'); ctx.restore(); }
+function tv(x, y, s, t) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); line(-60, -150, -110, -230, 7); line(60, -150, 110, -230, 7); box(-170, -150, 340, 260, '#92400e', 24, 8); box(-140, -125, 220, 200, '#64748b', 30, 6);
+  const f = Math.floor(t * 14); for (let i = 0; i < 60; i++) { ctx.fillStyle = `rgba(255,255,255,${.3 + .5 * rnd(i + f)})`; ctx.fillRect(-130 + rnd(i * 3 + f) * 200, -115 + rnd(i * 7 + f) * 180, 10, 5); }
+  circ(120, -70, 16, '#fbbf24', INK, 5); circ(120, -10, 16, '#fbbf24', INK, 5); ctx.restore(); }
+function projector(x, y, s, t) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-150, -80, 300, 150, '#475569', 20, 8);
+  for (const rx of [-80, 80]) { ctx.save(); ctx.translate(rx, -150); ctx.rotate(t * 3); circ(0, 0, 75, '#334155', INK, 8); for (let i = 0; i < 3; i++) { ctx.rotate(2.09); circ(0, -40, 15, '#94a3b8', INK, 4); } circ(0, 0, 12, INK); ctx.restore(); }
+  box(150, -40, 60, 70, '#1e293b', 10, 6); ctx.restore(); }
+function bear(x, y, s, open = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); const B = '#8b5a2b';
+  for (const ex of [-80, 80]) circ(ex, -110, 42, B, INK, 8); circ(0, -20, 130, B, INK, 9); ctx.fillStyle = '#d6a36b'; ctx.beginPath(); ctx.ellipse(0, 30, 62, 48 + open * 20, 0, 0, 7); ctx.fill(); ctx.stroke();
+  circ(0, 6, 18, INK); circ(-46, -50, 14, INK); circ(46, -50, 14, INK); if (open > .1) { ctx.fillStyle = '#7a1f1f'; ctx.beginPath(); ctx.ellipse(0, 50, 26, 22 * open, 0, 0, 7); ctx.fill(); ctx.stroke(); } ctx.restore(); }
+function elephant(x, y, s, up = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); const G = '#9ca3af';
+  ctx.fillStyle = '#cbd5e1'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.ellipse(-120, -10, 90, 120, -.2, 0, 7); ctx.fill(); ctx.stroke();
+  circ(0, -30, 120, G, INK, 9);
+  ctx.strokeStyle = INK; ctx.lineWidth = 60; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(60, 20); ctx.quadraticCurveTo(170, 60 - up * 120, 190 + up * 30, -40 - up * 200); ctx.stroke();
+  ctx.strokeStyle = G; ctx.lineWidth = 44; ctx.stroke(); circ(30, -70, 15, INK); ctx.restore(); }
+function waves(x, y, t, n = 3, col = '#fde047') { for (let i = 0; i < n; i++) { const r = 40 + ((t * 120 + i * 50) % 150); ctx.save(); ctx.globalAlpha = 1 - r / 190; ctx.strokeStyle = col; ctx.lineWidth = 10; ctx.beginPath(); ctx.arc(x, y, r, -.7, .7); ctx.stroke(); ctx.restore(); } }
+function tower(x, y, s, hitK) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 14;
+  line(-60, 0, 0, -1000, 14, '#dc2626'); line(60, 0, 0, -1000, 14, '#dc2626'); for (let i = 1; i < 8; i++) { const yy = -i * 120, w = 60 * (1 - i / 8.3); line(-w, yy, w, yy - 60, 8, '#f8fafc'); line(w, yy, -w, yy - 60, 8, '#f8fafc'); }
+  circ(0, -1010, 18, '#fde047', INK, 5);
+  const vib = Math.sin(hitK * 80) * 14 * (1 - hitK); ctx.strokeStyle = '#334155'; ctx.lineWidth = 12; ctx.beginPath(); ctx.moveTo(0, -800); ctx.quadraticCurveTo(-260 + vib, -400, -520, 0); ctx.stroke(); ctx.restore(); }
+function synth(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-260, -80, 520, 160, '#334155', 16, 8); for (let i = 0; i < 12; i++) box(-240 + i * 40, -10, 38, 80, '#fff', 4, 4); for (let i = 0; i < 5; i++) circ(-200 + i * 100, -45, 16, '#fde047', INK, 5); ctx.restore(); }
+function card(x, y, n, label, col, hl) { box(x - 150, y - 110, 300, 220, hl ? '#22c55e' : col, 26, 8); txt(n, x, y - 40, 90, '#fff', { lw: 12 }); txt(label, x, y + 55, 46, '#fff', { lw: 8 }); }
+const HOLDM = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.3, re: -.9 };
+function sHook(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1440);
+  txt(t > T.bear ? 'NOT A COMPUTER' : 'STAR WARS SOUNDS?', 540, 220, t > T.bear ? 116 : 108, '#fde047', { lw: 18 });
+  const p = t * 7; hero({ x: 200 + Math.min(t, 1.5) * 60, y: 1640, s: 1.3, pose: walkPose(p, .6), bob: Math.abs(Math.sin(p)) * 8, eyes: 'huge', mouth: 'o', look: 1, hold: (hx, hy) => mic(hx, hy - 60, .5) });
+  if (t > T.comp && t < T.bear) popIn(t, T.comp, 640, 760, () => { box(-200, -150, 400, 260, '#94a3b8', 20, 8); box(-170, -120, 340, 190, '#0f172a', 10, 5); box(-60, 110, 120, 60, '#64748b', 6, 6); txt('?', 0, -25, 120, '#fde047', { lw: 12 }); });
+  if (t > T.bear) popIn(t, T.bear, 800, 640, () => bear(0, 0, .9, Math.abs(Math.sin(t * 4))));
+  if (t > T.ele) popIn(t, T.ele, 380, 700, () => elephant(0, 0, .75, .5 + .5 * Math.sin(t * 3)));
+  if (t > T.tv) popIn(t, T.tv, 820, 1080, () => tv(0, 0, .75, t));
+}
+function sBen(lt, t) {
+  bgFill('#0f766e'); floor('#134e4a', 1440);
+  txt('SOUND DESIGNER', 540, 220, 110, '#fde047', { lw: 17 }); txt('BEN BURTT, 1970s', 540, 350, 70, '#fff', { lw: 11 });
+  hero({ x: 380, y: 1640, s: 1.45, pose: HOLDM, eyes: 'norm', mouth: 'grin', look: 1, hold: (hx, hy) => mic(hx + 10, hy - 70, .6) });
+  if (t > T.real) popIn(t, T.real, 800, 800, () => { box(-200, -90, 400, 180, '#ef4444', 30, 8); circ(-110, 0, 30, '#fff'); txt('REC', 40, 6, 90, '#fff', { lw: 10 }); });
+  waves(560, 1150, t);
+}
+function sGuess(lt, t) {
+  bgFill('#1e3a8a'); floor('#172554', 1500);
+  txt('WHICH ONE', 540, 200, 120, '#fde047', { lw: 18 }); txt('= A HAMMER?', 540, 340, 120, '#fde047', { lw: 18 });
+  popIn(t, T.guess + .2, 210, 700, () => card(0, 0, '1', 'LIGHTSABER', '#7c3aed'));
+  popIn(t, T.guess + .4, 540, 700, () => card(0, 0, '2', 'BLASTER', '#db2777'));
+  popIn(t, T.guess + .6, 870, 700, () => card(0, 0, '3', 'CHEWBACCA', '#ea580c'));
+  if (t > T.cm) popIn(t, T.cm, 540, 960, () => { box(-330, -60, 660, 120, '#facc15', 30, 7); txt('COMMENT 1, 2 OR 3', 0, 4, 60, INK, { stroke: false }); });
+  hero({ x: 540, y: 1700, s: 1.1, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.0, re: -.9 }, eyes: 'norm', mouth: 'smirk', tilt: .1 * Math.sin(t * 2) });
+}
+function sSaber(lt, t) {
+  bgFill('#312e81'); floor('#1e1b4b', 1440);
+  txt('LIGHTSABER HUM', 540, 220, 110, '#fde047', { lw: 17 });
+  popIn(t, T.proj - .2, 300, 800, () => projector(0, 0, 1, t)); txt('PROJECTOR', 300, 980, 60, '#fff', { lw: 9 });
+  if (t > T.buzz - .2) { txt('+', 540, 820, 140, '#fff', { lw: 16 }); popIn(t, T.buzz - .2, 790, 820, () => tv(0, 0, .85, t)); txt('TV BUZZ', 790, 980, 60, '#fff', { lw: 9 }); }
+  hero({ x: 540, y: 1660, s: 1.05, pose: HOLDM, eyes: 'norm', mouth: 'smile', look: 0, hold: (hx, hy) => mic(hx + 10, hy - 70, .5) }); waves(620, 1250, t, 3, '#c4b5fd');
+}
+function sChew(lt, t) {
+  bgFill('#78350f'); floor('#451a03', 1440);
+  txt("CHEWBACCA'S VOICE", 540, 220, 96, '#fde047', { lw: 16 });
+  bear(560, 800, 1.6, Math.abs(Math.sin(t * 5)));
+  if (t > T.ybear) popIn(t, T.ybear, 540, 1150, () => { box(-300, -60, 600, 120, '#facc15', 30, 7); txt('MOSTLY A YOUNG BEAR', 0, 4, 54, INK, { stroke: false }); });
+  if (t > T.oth) txt('+ other animal sounds', 540, 1270, 48, '#fde68a', SMALL);
+  hero({ x: 130, y: 1660, s: 1.0, pose: HOLDM, eyes: 'huge', mouth: 'o', look: 1, hold: (hx, hy) => mic(hx + 10, hy - 70, .5) }); waves(380, 800, t, 3);
+}
+function sTie(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1440);
+  txt('TIE FIGHTER SCREAM', 540, 220, 96, '#fde047', { lw: 16 });
+  const up = .5 + .5 * Math.sin(t * 3); elephant(500, 860, 1.5, up); waves(880, 600, t, 4, '#f87171');
+  if (t > T.elec) popIn(t, T.elec, 540, 1180, () => { box(-300, -60, 600, 120, '#facc15', 30, 7); txt('ELEPHANT CALL', 0, 4, 64, INK, { stroke: false }); });
+  txt('(changed a lot)', 540, 1300, 48, '#cbd5e1', SMALL);
+}
+function sR2(lt, t) {
+  bgFill('#0c4a6e'); floor('#082f49', 1440);
+  txt('R2-D2', 540, 220, 140, '#fde047', { lw: 20 });
+  if (t > T.syn - .2) popIn(t, T.syn - .2, 540, 620, () => { synth(0, 0, 1.2); txt('50 % SYNTHESIZER', 0, 170, 60, '#fff', { lw: 9 }); });
+  if (t > T.own - .2) popIn(t, T.own - .2, 540, 1000, () => { box(-330, -60, 660, 120, '#22c55e', 30, 7); txt("50 % BEN'S OWN VOICE", 0, 4, 54, '#fff', { lw: 7 }); });
+  hero({ x: 540, y: 1680, s: 1.1, pose: HOLDM, eyes: 'closed', mouth: Math.sin(t * 9) > 0 ? 'o' : 'smile', look: 0, hold: (hx, hy) => mic(hx + 10, hy - 70, .5) });
+}
+function sBlaster(lt, t) {
+  bgFill('#7dd3fc'); floor('#a16207', 1500);
+  txt(t > T.two ? 'NUMBER 2!' : 'THE BLASTER', 540, 210, 130, t > T.two ? '#22c55e' : '#fde047', { lw: 18 });
+  const hk = inv(T.hit + .3, T.hit + 1.8, t); tower(880, 1500, 1, t > T.hit + .3 ? hk : 1);
+  const sw = t > T.hit ? Math.max(0, Math.sin((t - T.hit) * 5)) : 0;
+  hero({ x: 330, y: 1700, s: 1.25, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -2.2 + sw * 1.4, re: -.3 }, eyes: 'norm', mouth: 'grin', look: 1,
+    hold: (hx, hy) => { ctx.save(); ctx.translate(hx, hy); ctx.rotate(-.6 + sw * 1.4); box(-10, -120, 20, 130, '#92400e', 6, 5); box(-45, -150, 90, 46, '#64748b', 8, 6); ctx.restore(); } });
+  if (t > T.hit + .3 && hk < 1) { impact(560, 1260, 90, 1 - hk); txt('PEW!', 600, 1050, 110, '#ef4444', { lw: 14 }); }
+  if (t > T.wire) txt('STEEL WIRE OF A RADIO TOWER', 540, 360, 50, INK, SMALL);
+}
+function sEarth(lt, t) {
+  bgFill('#0b1020'); for (let i = 0; i < 50; i++) circ(rnd(i) * 1080, rnd(i + 40) * 1900, 3 + rnd(i + 9) * 3, '#e2e8f0');
+  circ(540, 900, 300, '#2563eb', INK, 10); ctx.fillStyle = '#22c55e'; for (const [a, b, r] of [[-90, -100, 90], [110, 40, 110], [-40, 160, 70]]) { ctx.beginPath(); ctx.arc(540 + a, 900 + b, r, 0, 7); ctx.fill(); }
+  mic(540, 450, .8);
+  txt('MADE ON EARTH', 540, 230, 130, '#fde047', { lw: 19 });
+}
+function sEnd(lt, t) {
+  bgFill('#1e1b4b'); floor('#111133', 1500);
+  popIn(t, T.q + .1, 540, 470, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('GUESSED THE BEAR?', 0, -100, 72, '#fff', { stroke: false });
+    box(-420, -10, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 70, 80, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 70, 80, '#fff', { lw: 10 }); });
+  bear(760, 1150, 1.0, Math.abs(Math.sin(t * 4)));
+  hero({ x: 300, y: 1500, s: 1.1, pose: HOLDM, eyes: 'norm', mouth: 'grin', look: 1, hold: (hx, hy) => mic(hx + 10, hy - 70, .5) });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .04 }, { t0: mid(0, 1), fn: sBen, push: .04, flash: .5 }, { t0: mid(1, 2), fn: sGuess, push: .04, xfade: .2 }, { t0: mid(2, 3), fn: sSaber, push: .05, flash: .5 },
+  { t0: mid(3, 4), fn: sChew, push: .05, flash: .5 }, { t0: mid(4, 5), fn: sTie, push: .05, flash: .5 }, { t0: mid(5, 6), fn: sR2, push: .05, flash: .5 }, { t0: mid(6, 7), fn: sBlaster, push: .05, flash: .6 },
+  { t0: mid(7, 8), fn: sEarth, push: .06, xfade: .3 }, { t0: mid(8, 9), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["you think", "star wars sounds", "came from a computer.", "they came from", "a bear,", "an elephant,", "and an old tv."], ["sound designer", "ben burtt", "recorded real things."], ["guess:", "which one came", "from a hammer?", "comment", "one, two or three."],
+  ["the lightsaber hum?", "an old film", "projector motor,", "mixed with", "the buzz of a tv."], ["chewbacca's voice?", "mostly a young bear,", "mixed with", "other animals."], ["the tie fighter", "scream?", "a changed", "elephant call."],
+  ["r2-d2?", "half synthesizer,", "half ben's", "own voice."], ["and the blaster?", "a hammer", "hitting the steel wire", "of a radio tower.", "number two."], ["the most famous", "space sounds", "came from earth."], ["would you have", "guessed the bear?", "yes or no."]];
+const HOT = new Set(["a bear,", "an elephant,", "and an old tv.", "from a hammer?", "one, two or three.", "projector motor,", "the buzz of a tv.", "mostly a young bear,", "elephant call.", "own voice.", "number two.", "came from earth.", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1760) });
+</script></body></html>

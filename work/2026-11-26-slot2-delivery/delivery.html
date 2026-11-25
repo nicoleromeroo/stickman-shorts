@@ -1,0 +1,97 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const SMALL = { stroke: false, font: 'Nun', weight: '900 ' };
+const T = { fif: wt(0, 'fifteen'), guess0: wt(0, 'guess'), year: wt(1, 'seven'), g: at(2, 0), cm: wt(2, 'comment'), skip: at(3, 0), sixty: wt(3, 'sixty'), fund: wt(3, 'broad'), six: at(4, 0), nog: wt(4, 'not'),
+  thirty: at(5, 0), worth30: wt(5, 'it could'), s67: at(6, 0), paid67: wt(6, 'you paid'), big: at(7, 0), time: at(8, 0), work: wt(8, 'time did'), q: at(9, 0) };
+function coin(x, y, r) { circ(x, y, r, '#facc15', INK, 6); txt('€', x, y + 3, r * 1.1, INK, SMALL); }
+function money(n) { return Math.round(n).toLocaleString('en-US') + ' €'; }
+function pizzaBox(x, y, s, r = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(r); ctx.scale(s, s); box(-110, -30, 220, 60, '#d6a36b', 8, 7); box(-110, -46, 220, 22, '#e7c08f', 6, 6); circ(0, -36, 14, '#ef4444', INK, 4); ctx.restore(); }
+function scooter(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); circ(-90, 0, 40, '#334155', INK, 8); circ(90, 0, 40, '#334155', INK, 8); box(-110, -70, 220, 50, '#f97316', 20, 7); line(90, -60, 120, -170, 12); line(100, -170, 150, -170, 12); box(-120, -170, 110, 100, '#ef4444', 10, 7); ctx.restore(); }
+function bars(base, items, max) { items.forEach(([x, val, col, top, lab, k]) => { if (k <= 0) return; const h = Math.max(40, 760 * val / max * k); box(x - 140, base - h, 280, h, col, 16, 8); txt(top, x, base - h - 55, 70, '#fff', { lw: 11 }); txt(lab, x, base + 55, 46, '#cbd5e1', { lw: 7 }); }); }
+function sHook(lt, t) {
+  bgFill('#b91c1c'); floor('#7f1d1d', 1440);
+  txt('15 € A WEEK', 540, 220, 160, '#fde047', { lw: 24 }); if (t > T.guess0) txt('THE REAL COST?', 540, 380, 90, '#fff', { lw: 14 });
+  const x = lerp(1250, 760, eo(inv(0, 1.2, t))); scooter(x, 1380, 1.2);
+  hero({ x: 300, y: 1640, s: 1.45, pose: PHONE_POSE, eyes: 'norm', mouth: 'grin', look: 1, bob: Math.abs(Math.sin(t * 6)) * 6, hold: holdPhone('on', { c1: '#fb923c', c2: '#ef4444' }) });
+  if (t > T.fif) popIn(t, T.fif, 720, 800, () => pizzaBox(0, 0, 1.6, -.1));
+}
+function sYear(lt, t) {
+  bgFill('#1e3a8a'); floor('#172554', 1440);
+  txt('x 52 WEEKS', 540, 220, 130, '#fde047', { lw: 20 });
+  for (let i = 0; i < 10; i++) { const k = inv(T.year - 1.2 + i * .1, T.year - .9 + i * .1, t); if (k > 0) pizzaBox(250 + (i % 5) * 145, 720 + Math.floor(i / 5) * 90, .6 * eob(k)); }
+  if (t > T.year) popIn(t, T.year, 540, 1080, () => { box(-330, -110, 660, 220, '#22c55e', 30, 9); txt('780 € A YEAR', 0, 10, 100, '#fff', { lw: 14 }); });
+  hero({ x: 860, y: 1700, s: 1.0, pose: STAND, eyes: 'huge', mouth: 'o', look: -1 });
+}
+function sGuess(lt, t) {
+  bgFill('#4c1d95'); floor('#2e1065', 1440);
+  txt('INVEST IT INSTEAD?', 540, 220, 100, '#fde047', { lw: 16 });
+  popIn(t, T.g + .2, 540, 580, () => { box(-330, -150, 660, 300, '#f8fafc', 30, 9); txt('AT AGE 67', 0, -70, 70, '#475569', { stroke: false }); txt('? €', 0, 60, 160, INK, { stroke: false }); });
+  if (t > T.cm) popIn(t, T.cm, 540, 880, () => { box(-300, -60, 600, 120, '#facc15', 30, 7); txt('COMMENT A NUMBER', 0, 4, 58, INK, { stroke: false }); });
+  hero({ x: 540, y: 1660, s: 1.2, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.0, re: -.9 }, eyes: 'norm', mouth: 'smirk', tilt: .1 * Math.sin(t * 2) });
+  qmark(200, 1000, t, T.g + .2, '#ffd23f', 170); qmark(880, 1000, t, T.g + .4, '#ffd23f', 170);
+}
+function sFund(lt, t) {
+  bgFill('#14532d'); floor('#052e16', 1440);
+  txt(t > T.fund ? 'BROAD INDEX FUND' : '65 € A MONTH', 540, 220, 110, '#fde047', { lw: 17 });
+  if (t > T.fund) txt('= tiny pieces of many companies', 540, 330, 48, '#bbf7d0', SMALL);
+  box(140, 560, 800, 460, '#fef3c7', 40, 9);
+  for (let i = 0; i < 12; i++) { const x = 220 + (i % 4) * 190, y = 640 + Math.floor(i / 4) * 130; const h = 60 + rnd(i) * 40; box(x, y + 90 - h, 120, h, ['#60a5fa', '#f472b6', '#a78bfa', '#34d399'][i % 4], 6, 5); }
+  for (let i = 0; i < 4; i++) { const ph = ((t * 1.2 + i / 4) % 1); coin(lerp(200, 540, ph), lerp(1200, 900, ph), 40); }
+  hero({ x: 200, y: 1680, s: 1.0, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -1.6, re: -.3 }, eyes: 'norm', mouth: 'smile', look: 1 });
+  ctx.save(); ctx.translate(780, 1330); ctx.rotate(.2); pizzaBox(0, 0, 1); ctx.restore(); line(660, 1260, 900, 1400, 16, '#ef4444'); line(900, 1260, 660, 1400, 16, '#ef4444');
+}
+function sSix(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1440);
+  txt('~6 % A YEAR?', 540, 210, 130, '#fde047', { lw: 19 });
+  ctx.save(); ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 14; ctx.lineJoin = 'round'; ctx.beginPath(); const k = inv(T.six, L[4].end, t);
+  for (let i = 0; i <= 60 * k; i++) { const x = 100 + i * 14.5, y = 1100 - i * 8 + Math.sin(i * .7) * 70 + Math.sin(i * 1.9) * 35; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke(); ctx.restore();
+  if (t > T.nog) popIn(t, T.nog, 540, 420, () => { box(-330, -60, 660, 120, '#ef4444', 30, 7); txt('NOT GUARANTEED', 0, 4, 66, '#fff', { lw: 8 }); });
+  txt('assumed: Finanztip planning value for', 540, 1300, 34, '#94a3b8', SMALL); txt('world stock ETFs. Values go up and down.', 540, 1344, 34, '#94a3b8', SMALL);
+}
+const FOOT = (a, b) => { txt(a, 540, 1470, 32, '#94a3b8', SMALL); txt(b, 540, 1512, 32, '#94a3b8', SMALL); };
+function s30(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1300);
+  txt('BY AGE 30', 540, 220, 130, '#fde047', { lw: 19 }); txt('(started at 16)', 540, 350, 50, '#cbd5e1', SMALL);
+  const k1 = eo(inv(T.thirty, T.thirty + .8, t)), k2 = eo(inv(T.worth30, T.worth30 + 1.2, t));
+  bars(1300, [[300, 10920, '#64748b', money(10920 * k1), 'PAID IN', k1], [780, 10920 + (17050 - 10920) * k2, '#22c55e', '~' + money(Math.round((10920 + 6130 * k2) / 1000) * 1000), 'COULD BE', k2]], 17050);
+  FOOT('65 €/month, assumed ~6 % a year, monthly compounding,', 'before tax and costs. Not guaranteed.');
+}
+function s67(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1300);
+  txt('KEEP GOING TO 67', 540, 220, 116, '#fde047', { lw: 18 });
+  const k1 = eo(inv(T.paid67, T.paid67 + .8, t)), k2 = eo(inv(T.big, T.big + 1.6, t)); const v = 39780 + (262152 - 39780) * k2;
+  bars(1300, [[300, 39780, '#64748b', money(39780 * k1), 'PAID IN', k1], [780, v, '#22c55e', k2 > 0 ? '~' + money(Math.round(v / 1000) * 1000) : '', 'COULD BE', k2 > 0 ? 1 : 0]], 262152);
+  if (k2 >= 1) sparkle(990, 640 + Math.sin(t * 6) * 10, 40, 1);
+  FOOT('51 years x 65 €/month, assumed ~6 % a year, before tax.', 'In today\'s money (2 % inflation): about 95,000 €.');
+}
+function sTime(lt, t) {
+  bgFill('#1e3a8a'); floor('#172554', 1440);
+  txt('TIME DID THE WORK', 540, 220, 106, '#fde047', { lw: 17 });
+  const base = 1250, H1 = 760 * 39780 / 262152, H2 = 760 - H1;
+  box(390, base - H1, 300, H1, '#64748b', 10, 8); txt('YOU: 39,780 €', 540, base - H1 / 2, 40, '#fff', { lw: 7 });
+  const k = eo(inv(T.time, T.time + 1, t)); if (k > 0) { box(390, base - H1 - H2 * k, 300, H2 * k, '#22c55e', 10, 8); if (k > .6) txt('GROWTH:', 540, base - H1 - H2 / 2 - 30, 52, '#fff', { lw: 8 }), txt('~222,000 €', 540, base - H1 - H2 / 2 + 30, 52, '#fff', { lw: 8 }); }
+  hero({ x: 170, y: 1420, s: .85, pose: STAND, eyes: 'huge', mouth: 'grin', look: 1 });
+  FOOT('Example: assumed ~6 % a year, before tax and inflation.', 'Not guaranteed; the past is no promise.');
+}
+function sEnd(lt, t) {
+  bgFill('#b91c1c'); floor('#7f1d1d', 1500);
+  popIn(t, T.q + .1, 540, 470, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('SKIP ONE A WEEK?', 0, -100, 74, '#fff', { stroke: false });
+    box(-420, -10, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 70, 80, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 70, 80, '#fff', { lw: 10 }); });
+  pizzaBox(760, 1150, 1.6, Math.sin(t * 2) * .1);
+  hero({ x: 300, y: 1500, s: 1.1, pose: STAND, eyes: 'norm', mouth: 'smirk', look: 1 });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .04 }, { t0: mid(0, 1), fn: sYear, push: .04, flash: .5 }, { t0: mid(1, 2), fn: sGuess, push: .04, xfade: .2 }, { t0: mid(2, 3), fn: sFund, push: .05, flash: .5 },
+  { t0: mid(3, 4), fn: sSix, push: .04, xfade: .2 }, { t0: mid(4, 5), fn: s30, push: .04, flash: .5 }, { t0: mid(5, 6), fn: s67, push: .03, flash: .4 },
+  { t0: mid(7, 8), fn: sTime, push: .05, flash: .5 }, { t0: mid(8, 9), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["one delivery order", "a week.", "fifteen euros.", "guess what it's", "really costing you."], ["that's seven hundred", "eighty euros", "a year."], ["guess before the end:", "what could it become", "by sixty-seven?", "comment a number."],
+  ["now skip it,", "and put sixty-five euros", "a month", "into a broad", "index fund instead."], ["assume about", "six percent a year.", "not guaranteed."], ["by thirty,", "you paid in", "about eleven thousand.", "it could be", "seventeen thousand."],
+  ["keep going", "until sixty-seven.", "you paid in about", "forty thousand euros."], ["it could be worth", "about two hundred", "sixty thousand."], ["most of that,", "you never paid in.", "time did the work."], ["would you skip", "one delivery a week?", "yes or no."]];
+const HOT = new Set(["fifteen euros.", "really costing you.", "eighty euros", "comment a number.", "by sixty-seven?", "index fund instead.", "not guaranteed.", "seventeen thousand.", "forty thousand euros.", "sixty thousand.", "time did the work.", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1760) });
+</script></body></html>
