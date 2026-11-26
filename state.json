@@ -1,5 +1,5 @@
 {
- "uploaded_count": 65,
+ "uploaded_count": 67,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -521,6 +521,22 @@
    "mode": "scheduled 2026-11-27T10:30:00Z",
    "publish_at": "2026-11-27T11:30:00+01:00",
    "uploaded_at": "2026-11-26T14:55:24+00:00"
+  },
+  {
+   "tag": "video-20261127-slot1",
+   "video_id": "9Bitk5edijE",
+   "title": "Lightning Never Strikes Twice? It Does \u26a1 #shorts",
+   "mode": "scheduled 2026-11-27T05:00:00Z",
+   "publish_at": "2026-11-27T06:00:00+01:00",
+   "uploaded_at": "2026-11-26T19:56:20+00:00"
+  },
+  {
+   "tag": "video-20261127-slot5",
+   "video_id": "WQSMLahpHoU",
+   "title": "What If You Jumped Through the Earth? \ud83c\udf0d #shorts",
+   "mode": "scheduled 2026-11-27T17:30:00Z",
+   "publish_at": "2026-11-27T18:30:00+01:00",
+   "uploaded_at": "2026-11-26T19:56:20+00:00"
   }
  ]
 }
