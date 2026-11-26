@@ -1,5 +1,5 @@
 {
- "uploaded_count": 62,
+ "uploaded_count": 65,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -497,6 +497,30 @@
    "mode": "scheduled 2026-11-26T17:30:00Z",
    "publish_at": "2026-11-26T18:30:00+01:00",
    "uploaded_at": "2026-11-25T19:52:44+00:00"
+  },
+  {
+   "tag": "video-20261127-slot2",
+   "video_id": "tNyZTJ7YQMA",
+   "title": "Black Friday Deal = How Many Hours of Work? #shorts",
+   "mode": "scheduled 2026-11-27T15:00:00Z",
+   "publish_at": "2026-11-27T16:00:00+01:00",
+   "uploaded_at": "2026-11-26T14:55:24+00:00"
+  },
+  {
+   "tag": "video-20261127-slot3",
+   "video_id": "c4QED8505DY",
+   "title": "THE LAST BUS (Part 1) #shorts",
+   "mode": "scheduled 2026-11-27T19:00:00Z",
+   "publish_at": "2026-11-27T20:00:00+01:00",
+   "uploaded_at": "2026-11-26T14:55:24+00:00"
+  },
+  {
+   "tag": "video-20261127-slot4",
+   "video_id": "PL-CeY5ROg4",
+   "title": "Dune or Avengers? They Open the SAME Day \ud83c\udfac #shorts",
+   "mode": "scheduled 2026-11-27T10:30:00Z",
+   "publish_at": "2026-11-27T11:30:00+01:00",
+   "uploaded_at": "2026-11-26T14:55:24+00:00"
   }
  ]
 }
