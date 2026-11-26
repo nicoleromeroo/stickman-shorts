@@ -1,0 +1,110 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const T = { off: wt(0, 'forty'), now: wt(0, 'now a'), guess: at(1, 0), comment: wt(1, 'comment'), wage: at(2, 0), before: wt(2, 'before'),
+  nine: at(3, 0), day: wt(3, 'more than'), saved: at(4, 0), spent: wt(4, 'but you'), head: at(5, 0), h14: wt(5, 'over'), phone: at(6, 0), h58: wt(6, 'almost'), week: wt(6, 'more than'),
+  trick: at(7, 0), div: wt(7, 'divide'), worth: at(8, 0), notk: wt(8, 'if not'), q: at(9, 0) };
+function foot() { txt('Minimum wage 2026: 13.90 € gross per hour (Bundesregierung).', 540, 1830, 30, '#cbd5e1', { stroke: false, font: 'Nun', weight: '900 ' }); txt('Example prices. Tax and deductions not included.', 540, 1870, 30, '#cbd5e1', { stroke: false, font: 'Nun', weight: '900 ' }); }
+function tag(x, y, s, text, col = '#facc15', rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-200, -80); ctx.lineTo(140, -80); ctx.lineTo(210, 0); ctx.lineTo(140, 80); ctx.lineTo(-200, 80); ctx.closePath(); ctx.fill(); ctx.stroke(); circ(140, 0, 14, '#fff', INK, 5); txt(text, -30, 6, 80, INK, { stroke: false }); ctx.restore(); }
+function sneaker(x, y, s, col = '#f8fafc') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.lineJoin = 'round';
+  ctx.beginPath(); ctx.moveTo(-200, 40); ctx.lineTo(-190, -110); ctx.quadraticCurveTo(-120, -130, -60, -90); ctx.lineTo(60, -20); ctx.quadraticCurveTo(200, 0, 210, 40); ctx.closePath(); ctx.fill(); ctx.stroke();
+  box(-215, 30, 435, 50, '#ef4444', 20, 8); for (let i = 0; i < 3; i++) line(-110 + i * 40, -80 + i * 20, -60 + i * 40, -95 + i * 20, 7); ctx.restore(); }
+function clockIcon(x, y, r, t) { circ(x, y, r, '#fff', INK, 10); const a = t * 3; line(x, y, x + Math.sin(a) * r * .75, y - Math.cos(a) * r * .75, 10); line(x, y, x + Math.sin(a / 12) * r * .5, y - Math.cos(a / 12) * r * .5, 12); circ(x, y, 10, INK); }
+function hourBlocks(x0, y0, n, filled, cols, size, gap, col) { for (let i = 0; i < n; i++) { const c = i % cols, r = Math.floor(i / cols), x = x0 + c * (size + gap), y = y0 + r * (size + gap);
+  box(x, y, size, size, '#334155', 10, 5); const f = clamp(filled - i); if (f > 0) { ctx.fillStyle = col; rr(x + 5, y + 5, (size - 10) * f, size - 10, 7); ctx.fill(); } } }
+// ---------- scenes ----------
+function sShop(lt, t) { // lines 0-1
+  bgFill('#111827'); floor('#374151', 1440);
+  box(60, 380, 960, 820, '#1f2937', 20, 10); box(60, 380, 960, 120, '#000', 20, 10); txt('BLACK FRIDAY', 540, 444, 92, '#facc15', { lw: 14 });
+  sneaker(540, 860, 1.4 + .04 * Math.sin(t * 5));
+  if (t < T.guess - .1) {
+    tag(800, 640, .9, '-40%', '#ef4444', .12);
+    txt('120 €', 540, 200, 190, '#fde047', { lw: 28 });
+    if (t > T.now) { txt('WAS 200 €', 330, 1100, 64, '#94a3b8', { lw: 10 }); line(150, 1100, 510, 1100, 10, '#ef4444'); txt('NOW 120 €', 760, 1100, 70, '#22c55e', { lw: 10 }); }
+    hero({ x: lerp(90, 210, eo(inv(0, .8, t))), y: 1650, s: 1.15, pose: t < .8 ? runPose(t * 14) : STAND, lean: t < .8 ? .2 : 0, look: 1, eyes: 'huge', mouth: 'grin', shadow: false });
+  } else {
+    clockIcon(540, 220, 120, t);
+    popIn(t, T.guess, 540, 1100, () => { box(-400, -100, 800, 200, '#fff', 30, 10); txt('= ? HOURS', 0, 10, 120, INK, { stroke: false }); });
+    if (t > T.comment) popIn(t, T.comment, 540, 1320, () => { box(-330, -55, 660, 110, '#facc15', 24, 8); txt('COMMENT A NUMBER', 0, 6, 56, INK, { stroke: false }); });
+    hero({ x: 180, y: 1650, s: 1.0, pose: STAND, look: 1, lookY: -1, eyes: 'norm', brows: 1, mouth: 'flat', shadow: false });
+  }
+}
+function sWage(lt, t) { // lines 2-3
+  bgFill('#0f172a');
+  if (t < T.nine - .1) {
+    txt('MINIMUM WAGE', 540, 260, 110, '#fff', { lw: 18 }); txt('GERMANY 2026', 540, 390, 70, '#93c5fd', { lw: 12 });
+    popIn(t, T.wage + .3, 540, 800, () => { box(-420, -200, 840, 400, '#16a34a', 40, 10); txt('13.90 €', 0, -30, 190, '#fff', { lw: 22 }); txt('PER HOUR', 0, 120, 70, '#dcfce7', { stroke: false }); });
+    if (t > T.before) popIn(t, T.before, 540, 1170, () => { box(-330, -55, 660, 110, '#1e293b', 24, 6); txt('BEFORE DEDUCTIONS', 0, 6, 52, '#fde047', { stroke: false }); });
+    hero({ x: 880, y: 1560, s: .9, pose: STAND, flip: true, eyes: 'norm', mouth: 'smile', shadow: false });
+  } else {
+    txt('120 € / 13.90 €', 540, 240, 100, '#fff', { lw: 16 });
+    const f = 8.63 * eo(inv(T.nine, T.nine + 1.6, t));
+    hourBlocks(105, 420, 9, f, 3, 270, 30, '#f97316');
+    for (let i = 0; i < 9; i++) if (f > i + .02) txt(String(i + 1), 105 + (i % 3) * 300 + 135, 420 + Math.floor(i / 3) * 300 + 135, 90, '#fff', { lw: 12 });
+    if (t > T.nine + 1) popIn(t, T.nine + 1, 540, 1380, () => { box(-360, -70, 720, 140, '#fde047', 24, 9); txt('8.6 HOURS', 0, 8, 100, INK, { stroke: false }); });
+    if (t > T.day) popIn(t, T.day, 540, 1520, () => txt('MORE THAN A WORK DAY (8 H)', 0, 0, 52, '#fff', { lw: 10 }));
+  }
+  foot();
+}
+function sSaved(lt, t) { // line 4
+  bgFill('#fef3c7'); floor('#fde68a', 1440);
+  sneaker(560, 1250, .9);
+  popIn(t, T.saved + .1, 540, 470, () => { box(-400, -110, 800, 220, '#22c55e', 30, 10); txt('YOU SAVED 80 €', 0, 8, 96, '#fff', { lw: 12 }); });
+  if (t > T.spent) { const k = eo(inv(T.spent, T.spent + .3, t)); line(130, 470, lerp(130, 950, k), 470, 22, '#dc2626'); }
+  if (t > T.spent + .5) popIn(t, T.spent + .5, 540, 800, () => { box(-420, -110, 840, 220, '#dc2626', 30, 10); txt('YOU SPENT 120 €', 0, 8, 96, '#fff', { lw: 12 }); });
+  hero({ x: 220, y: 1650, s: 1.0, pose: STAND, look: 1, eyes: t > T.spent ? 'huge' : 'norm', mouth: t > T.spent ? 'o' : 'grin', shadow: false });
+}
+function headphones(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.strokeStyle = INK; ctx.lineWidth = 30; ctx.beginPath(); ctx.arc(0, 0, 110, Math.PI, 0); ctx.stroke(); ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 16; ctx.stroke(); box(-150, -10, 70, 110, '#a855f7', 24, 8); box(80, -10, 70, 110, '#a855f7', 24, 8); ctx.restore(); }
+function phoneIcon(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-70, -130, 140, 260, '#111827', 24, 8); ctx.fillStyle = '#60a5fa'; rr(-56, -112, 112, 220, 12); ctx.fill(); ctx.restore(); }
+function sBig(lt, t) { // lines 5-6
+  bgFill('#0f172a');
+  txt('BIGGER DEALS', 540, 200, 110, '#fde047', { lw: 18 });
+  // row 1: headphones
+  headphones(190, 470, 1); txt('200 €', 190, 640, 70, '#fff', { lw: 10 });
+  const f1 = 14.39 * eo(inv(T.h14 - .3, T.h14 + 1, t)); hourBlocks(350, 380, 15, f1, 8, 70, 12, '#a855f7');
+  if (t > T.h14) txt('14.4 H', 700, 620, 80, '#fff', { lw: 12 });
+  // row 2: phone
+  if (t > T.phone - .1) {
+    phoneIcon(190, 900, 1); txt('800 €', 190, 1080, 70, '#fff', { lw: 10 });
+    const f2 = 57.55 * eo(inv(T.h58 - .3, T.h58 + 1.5, t)); hourBlocks(350, 760, 58, f2, 8, 70, 12, '#3b82f6');
+    if (t > T.h58 + .6) txt('57.6 H', 700, 1440, 90, '#fff', { lw: 14 });
+    if (t > T.week) { // 40 h marker = after 5 rows
+      const y = 760 + 5 * 82 - 6; line(330, y, 1010, y, 10, '#ef4444'); txt('40 H =', 180, y + 70, 50, '#fca5a5', { lw: 8 }); txt('WORK WEEK', 180, y + 125, 44, '#fca5a5', { lw: 8 }); }
+  }
+  foot();
+}
+function sTrick(lt, t) { // line 7
+  bgFill('#1e1b4b');
+  txt('THE TRICK', 540, 220, 140, '#fde047', { lw: 22 });
+  popIn(t, T.div - .2, 540, 760, () => { box(-440, -300, 880, 600, '#fff', 40, 10); txt('PRICE', 0, -170, 110, '#dc2626', { stroke: false }); line(-300, -70, 300, -70, 14);
+    txt('YOUR PAY', 0, 20, 90, '#16a34a', { stroke: false }); txt('PER HOUR', 0, 110, 70, '#16a34a', { stroke: false }); txt('= HOURS OF WORK', 0, 230, 66, INK, { stroke: false }); });
+  hero({ x: 540, y: 1600, s: .95, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: 2.6, re: .2 }, eyes: 'norm', mouth: 'grin', shadow: false });
+}
+function sEnd(lt, t) { // lines 8-9
+  bgFill('#ecfccb'); floor('#bef264', 1440);
+  if (t < T.q - .1) {
+    txt('STILL WORTH IT?', 540, 230, 120, '#fff', { lw: 22 });
+    popIn(t, T.worth + .5, 330, 600, () => { box(-230, -80, 460, 160, '#22c55e', 24, 9); txt('BUY IT', 0, 8, 90, '#fff', { lw: 10 }); });
+    if (t > T.notk) popIn(t, T.notk, 750, 860, () => { box(-260, -80, 520, 160, '#f97316', 24, 9); txt('SAVE HOURS', 0, 8, 80, '#fff', { lw: 10 }); });
+    clockIcon(800, 1220, 110, t);
+    hero({ x: 330, y: 1650, s: 1.15, pose: STAND, eyes: 'closed', mouth: 'grin', shadow: false });
+  } else {
+    sneaker(540, 1050, 1.1);
+    txt('9 HOURS', 540, 1300, 120, '#ea580c', { lw: 18 });
+    popIn(t, T.q + .1, 540, 470, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('WORTH 9 HOURS?', 0, -100, 76, '#fff', { stroke: false });
+      box(-420, -10, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 70, 80, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 70, 80, '#fff', { lw: 10 }); });
+  }
+}
+const SCENES = [{ t0: 0, fn: sShop, push: .05 }, { t0: mid(1, 2), fn: sWage, push: .04, flash: .6 }, { t0: mid(3, 4), fn: sSaved, push: .05, xfade: .3 },
+  { t0: mid(4, 5), fn: sBig, push: .03, flash: .5 }, { t0: mid(6, 7), fn: sTrick, push: .05, xfade: .3 }, { t0: mid(7, 8), fn: sEnd, push: .05, flash: .5 }];
+const CAP = [["black friday.", "sneakers,", "40% off.", "now 120 €."], ["guess:", "how many hours", "of work is that?", "comment a number."], ["minimum wage", "in germany:", "13.90 € an hour,", "before deductions."],
+  ["so that's", "almost 9 hours", "of work.", "more than", "a full work day."], ["the sign says", "you saved 80 €.", "but you still spent", "120 €."], ["headphones", "for 200?", "over 14 hours."],
+  ["a phone for 800?", "almost 58 hours.", "more than", "a whole work week."], ["the trick:", "before you buy,", "divide the price", "by your pay", "per hour."], ["still worth it?", "buy it,", "guilt-free.", "if not,", "you just saved hours."],
+  ["would you work", "9 hours", "for those sneakers?", "yes or no."]];
+const HOT = new Set(["now 120 €.", "comment a number.", "13.90 € an hour,", "almost 9 hours", "120 €.", "over 14 hours.", "almost 58 hours.", "divide the price", "you just saved hours.", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1660) });
+</script></body></html>

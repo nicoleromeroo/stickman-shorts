@@ -1,0 +1,142 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const T = { empty: wt(0, 'every seat'), fog: wt(0, 'outside'), phone: at(1, 0), nosig: wt(1, 'no signal'), stopago: wt(1, 'your stop'),
+  nost: at(2, 0), drive: wt(2, 'the bus'), press: wt(3, 'you press'), ding: wt(3, 'ding'), flick: wt(3, 'the sign'), nostops: at(4, 0),
+  drv: at(5, 0), hand: wt(5, 'he just'), tix: wt(5, 'ticket, please'), look: at(6, 0), oneway: wt(6, 'one way'), nodest: wt(6, 'no destination'),
+  whisper: wt(7, 'a whisper'), dont: wt(7, "don't give"), q: at(8, 0) };
+const NAVY = '#0b1020';
+// ---------- props ----------
+function fogWindow(x, y, w, h, t, speed = 1) { // window with drifting fog
+  box(x, y, w, h, '#475569', 14, 8);
+  ctx.save(); rr(x + 6, y + 6, w - 12, h - 12, 10); ctx.clip();
+  const g = ctx.createLinearGradient(0, y, 0, y + h); g.addColorStop(0, '#94a3b8'); g.addColorStop(1, '#cbd5e1'); ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+  for (let i = 0; i < 9; i++) { const fx = x + ((rnd(i) * w * 2 - t * 260 * speed * (0.6 + rnd(i + 4))) % (w + 400) + w + 400) % (w + 400) - 200; const fy = y + rnd(i + 9) * h;
+    ctx.fillStyle = `rgba(241,245,249,${.35 + rnd(i + 2) * .35})`; ctx.beginPath(); ctx.ellipse(fx, fy, 120 + rnd(i + 5) * 80, 40 + rnd(i + 6) * 30, 0, 0, 7); ctx.fill(); }
+  ctx.restore();
+}
+function seat(x, y, s = 1, col = '#1d4ed8') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-90, -230, 180, 150, col, 22, 8); box(-100, -90, 200, 60, col, 16, 8); line(-70, -30, -70, 40, 10); line(70, -30, 70, 40, 10); ctx.restore(); }
+function pole(x, y1, y2) { line(x, y1, x, y2, 26, INK); line(x, y1, x, y2, 16, '#facc15'); }
+function ledSign(x, y, w, h, label, t, flick = 0) { box(x - w / 2, y - h / 2, w, h, '#050505', 14, 9);
+  const on = flick > 0 ? (Math.sin(t * 60) > -.2) : true; if (on) { ctx.save(); ctx.shadowColor = '#fb923c'; ctx.shadowBlur = 24; txt(label, x, y + 6, h * .5, '#fb923c', { stroke: false }); ctx.restore(); } }
+function busInterior(t, d = 0) {
+  bgFill('#1e293b');
+  ctx.fillStyle = '#334155'; ctx.fillRect(-300, 260, W + 600, 120); // ceiling strip
+  for (let i = 0; i < 3; i++) fogWindow(-60 + i * 400, 420, 360, 460, t);
+  ctx.fillStyle = '#0f172a'; ctx.fillRect(-300, 1420, W + 600, 700); line(-300, 1420, W + 300, 1420, 8);
+  for (let i = 0; i < 4; i++) { ctx.fillStyle = 'rgba(250,204,21,.25)'; ctx.fillRect(-300, 1500 + i * 120, W + 600, 10); }
+  dark(d);
+}
+function phoneBig(x, y, s, t) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  box(-260, -460, 520, 920, '#111827', 56, 10); ctx.fillStyle = '#0b1020'; rr(-232, -430, 464, 860, 36); ctx.fill();
+  txt('23:47', 0, -230, 150, '#fff', { stroke: false }); txt('THURSDAY', 0, -120, 44, '#94a3b8', { stroke: false, font: 'Nun', weight: '900 ' });
+  // signal bars crossed
+  for (let i = 0; i < 4; i++) box(-90 + i * 50, 60 - i * 30, 34, 50 + i * 30, '#334155', 6, 4);
+  if (t > T.nosig) { line(-120, -10, 120, 140, 16, '#ef4444'); txt('NO SIGNAL', 0, 230, 70, '#ef4444', { stroke: false }); }
+  if (t > T.stopago) { box(-210, 290, 420, 110, '#1e293b', 20, 5); txt('YOUR STOP: 22:47', 0, 348, 44, '#fde047', { stroke: false }); }
+  ctx.restore(); }
+function driverBack(x, y, s, armK = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  // seat back
+  box(-170, -380, 340, 420, '#111827', 30, 9);
+  // shoulders + coat
+  ctx.fillStyle = '#374151'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-150, -320); ctx.quadraticCurveTo(0, -380, 150, -320); ctx.lineTo(150, -60); ctx.lineTo(-150, -60); ctx.closePath(); ctx.fill(); ctx.stroke();
+  // head from behind + cap
+  circ(0, -460, 92, '#e5e7eb', INK, 9);
+  ctx.fillStyle = '#4b5563'; ctx.beginPath(); ctx.arc(0, -470, 96, Math.PI, 0); ctx.closePath(); ctx.fill(); ctx.stroke(); box(-110, -486, 220, 30, '#1f2937', 10, 7);
+  // arm reaching back over shoulder
+  if (armK > 0) { const ex = lerp(150, 330, armK), ey = lerp(-300, -360, armK); line(130, -300, ex, ey, 40, INK); line(130, -300, ex, ey, 28, '#374151');
+    ctx.save(); ctx.translate(ex + 30, ey); circ(0, 0, 34, '#e5e7eb', INK, 8); ctx.restore(); }
+  ctx.restore(); }
+function ticket(x, y, s, t, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s);
+  box(-380, -220, 760, 440, '#fef3c7', 16, 10);
+  for (let i = 0; i < 9; i++) circ(220, -190 + i * 48, 9, '#1e293b');
+  txt('CITY NIGHT LINE', -80, -150, 52, '#92400e', { stroke: false });
+  if (t > T.oneway - .1) txt('ONE WAY', -80, -40, 110 * eob(inv(T.oneway - .1, T.oneway + .15, t)), '#b91c1c', { lw: 12 });
+  txt('TO:', -290, 90, 56, '#475569', { stroke: false }); box(-230, 50, 400, 80, '#fff', 10, 5);
+  if (t > T.nodest) { txt('? ? ?', -30, 96, 60, '#ef4444', { stroke: false }); }
+  txt('No. 0001', 300, 0, 34, '#92400e', { stroke: false, font: 'Nun', weight: '900 ' });
+  ctx.restore(); }
+const GRIP = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: 2.85, re: 0 };
+// ---------- scenes ----------
+function sWake(lt, t) { // line 0
+  busInterior(t, .1);
+  seat(150, 1500, 1.1); seat(930, 1500, 1.1); pole(600, 260, 1430);
+  const sway = Math.sin(t * 2.2) * .04;
+  hero({ x: 450, y: 1700, s: 1.5, pose: GRIP, lean: sway, eyes: 'huge', mouth: t > T.empty ? 'o' : 'flat', look: Math.sin(t * 3) > 0 ? 1 : -1, hold: () => {} });
+  txt('LAST BUS', 540, 150, 140, '#fff', { lw: 22 });
+  if (t > T.empty) popIn(t, T.empty, 820, 1000, () => txt('EMPTY?!', 0, 0, 110, '#fde047', { lw: 18 }));
+  if (t > T.fog) popIn(t, T.fog, 540, 330, () => { box(-200, -50, 400, 100, '#0f172a', 20, 7); txt('ONLY FOG', 0, 6, 60, '#e2e8f0', { stroke: false }); });
+}
+function sPhone(lt, t) { // line 1
+  bgFill(NAVY); spot(540, 900, 650, .18, '147,197,253');
+  phoneBig(540, 930, 1.12, t);
+}
+function sDrive(lt, t) { // line 2: big window, nothing outside
+  bgFill('#1e293b');
+  fogWindow(60, 300, 960, 900, t, 2.4);
+  // empty labels popping
+  const L3 = [['NO STREETS', T.nost], ['NO HOUSES', T.nost + .8], ['NO LIGHTS', T.nost + 1.6]];
+  L3.forEach(([s, t0], i) => { if (t > t0) popIn(t, t0, 540, 520 + i * 200, () => { line(-260, 0, 260, 0, 0); txt(s, 0, 0, 90, '#1e293b', { stroke: false }); line(-250, 0, 250, 0, 10, '#ef4444'); }); });
+  ctx.fillStyle = '#0f172a'; ctx.fillRect(-300, 1260, W + 600, 900);
+  hero({ x: 540, y: 1720, s: 1.1, pose: STAND, eyes: 'huge', look: 0, lookY: -1, mouth: 'flat', flip: false });
+  if (t > T.drive) { const k = Math.sin(t * 30) * 4; ctx.save(); ctx.translate(k, 0); txt('KEEPS DRIVING...', 540, 1360, 70, '#fde047', { lw: 12 }); ctx.restore(); }
+}
+function sStop(lt, t) { // lines 3-4
+  busInterior(t, .25);
+  ledSign(540, 330, 880, 190, t > T.nostops - .05 ? 'NO STOPS LEFT' : (t > T.flick ? '- - - - -' : 'NEXT STOP: ...'), t, t > T.flick && t < T.nostops ? 1 : 0);
+  // stop button on pole
+  pole(760, 520, 1430);
+  const pressed = t > T.ding - .15 && t < T.ding + .4;
+  box(690, 780, 140, 180, '#ef4444', 24, 8); circ(760, 870, 46, pressed ? '#fecaca' : '#b91c1c', INK, 7); txt('STOP', 760, 990, 46, '#fff', { lw: 8 });
+  if (t > T.ding) { const a = 1 - inv(T.ding, T.ding + .8, t); ctx.save(); ctx.globalAlpha = a; txt('DING!', 900, 740, 80, '#fde047', { lw: 12 }); ctx.restore(); }
+  const reach = eo(inv(T.press - .3, T.press + .2, t));
+  hero({ x: 440, y: 1620, s: 1.25, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: lerp(-.3, 2.0, reach), re: lerp(-.2, .3, reach) }, flip: true, look: -1, eyes: t > T.nostops ? 'huge' : 'norm', mouth: t > T.nostops ? 'scream' : 'flat' });
+  if (t > T.nostops) sweat(330, 1000, .6 + .4 * Math.sin(t * 8));
+}
+function sDriver(lt, t) { // line 5
+  bgFill('#0f172a'); fogWindow(60, 200, 960, 560, t, 2);
+  ctx.fillStyle = '#1e293b'; ctx.fillRect(-300, 760, W + 600, 1400);
+  box(200, 820, 680, 70, '#111827', 30, 8); // dashboard
+  const arm = eo(inv(T.hand, T.hand + .6, t));
+  driverBack(500, 1450, 1.3, arm);
+  txt("HE DOESN'T TURN AROUND", 540, 140, 62, '#fff', { lw: 12 });
+  if (t > T.tix) popIn(t, T.tix, 540, 560, () => bubble(0, 0, '"TICKET, PLEASE."', 78));
+}
+function sTicket(lt, t) { // line 6
+  bgFill('#1e293b'); spot(540, 900, 650, .25);
+  ticket(540, 900, 1.08, t, -.05 + Math.sin(t * 9) * .01);
+  if (t > T.nodest + .4) txt('NO DESTINATION', 540, 1330, 96, '#fde047', { lw: 16 });
+}
+function sWhisper(lt, t) { // line 7
+  bgFill('#0b1020');
+  // rows of seats receding to the back
+  for (let r = 3; r >= 0; r--) { const s = .5 + r * .2, y = 1020 + r * 190; seat(540 - (230 + r * 110), y, s); seat(540 + (230 + r * 110), y, s); }
+  // dark last row
+  ctx.save(); ctx.globalAlpha = .95; ctx.fillStyle = '#020617'; ctx.fillRect(140, 520, 800, 330); ctx.restore(); box(140, 520, 800, 330, 'rgba(0,0,0,0)', 10, 8);
+  if (t > T.whisper) { const b = Math.sin(t * 2) > .95 ? 0 : 1; if (b) { circ(500, 680, 13, '#f8fafc'); circ(560, 680, 13, '#f8fafc'); }
+    ctx.fillStyle = '#7c3aed'; ctx.strokeStyle = INK; ctx.lineWidth = 6; rr(600, 760, 120, 60, 20); ctx.fill(); ctx.stroke(); } // purple sleeve
+  hero({ x: 540, y: 1960, s: 1.45, pose: STAND, flip: true, look: 1, lookY: -1, eyes: 'huge', mouth: 'o', shadow: false });
+  if (t > T.whisper) { const k = .5 + .5 * Math.sin(t * 5); ctx.save(); ctx.globalAlpha = .7; for (let i = 0; i < 3; i++) { ctx.strokeStyle = '#c4b5fd'; ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(530, 690, 120 + i * 50 + k * 10, Math.PI * .25, Math.PI * .75); ctx.stroke(); } ctx.restore(); }
+  if (t > T.dont - .1) popIn(t, T.dont - .1, 540, 330, () => bubble(0, 0, '"DON\'T GIVE HIM YOUR TICKET."', 56));
+}
+function sEnd(lt, t) {
+  bgFill('#0b1020'); spot(540, 900, 700, .15, '251,146,60');
+  ticket(540, 1080, .75, t + 99, -.06);
+  popIn(t, T.q + .1, 540, 380, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('GIVE HIM THE TICKET?', 0, -100, 64, '#fff', { stroke: false });
+    box(-420, -10, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 70, 80, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 70, 80, '#fff', { lw: 10 }); });
+  if (t > L[8].end + .2) { const k = eob(inv(L[8].end + .2, L[8].end + .45, t)); ctx.save(); ctx.translate(540, 1450); ctx.scale(k, k); box(-430, -80, 860, 160, '#facc15', 30, 9); txt('PART 2 TOMORROW', 0, 10, 86, INK, { stroke: false }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sWake, push: .05 }, { t0: mid(0, 1), fn: sPhone, push: .06, flash: .5 }, { t0: mid(1, 2), fn: sDrive, push: .05, xfade: .3 },
+  { t0: mid(2, 3), fn: sStop, push: .06, flash: .4 }, { t0: mid(4, 5), fn: sDriver, push: .08, xfade: .3 }, { t0: mid(5, 6), fn: sTicket, push: .06, flash: .5 },
+  { t0: mid(6, 7), fn: sWhisper, push: .08, flash: .3 }, { t0: mid(7, 8), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["you wake up", "on the last bus.", "every seat", "is empty.", "and outside,", "there's only fog."], ["your phone says", "11:47.", "no signal.", "your stop was", "an hour ago."],
+  ["no streets.", "no houses.", "no lights.", "the bus just", "keeps driving."], ["you press", "the stop button.", "ding.", "the sign", "above the driver", "flickers."], ["no stops left."],
+  ["the driver", "doesn't turn around.", "he just holds out", "his hand.", "ticket, please."], ["you look", "at your ticket.", "one way.", "no destination."],
+  ["then,", "from the very last row,", "a whisper.", "don't give him", "your ticket."], ["would you give him", "the ticket?", "comment yes or no."]];
+const HOT = new Set(["is empty.", "there's only fog.", "no signal.", "keeps driving.", "ding.", "no stops left.", "ticket, please.", "one way.", "no destination.", "your ticket.", "comment yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => { if (t < mid(3, 4) || t > mid(4, 5)) captions(t, CAP, HOT, 1640); } });
+</script></body></html>

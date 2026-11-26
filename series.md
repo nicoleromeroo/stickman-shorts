@@ -69,3 +69,32 @@ top right. Night palette: navy `#0b1020` / `#1e1b4b`, digital clock in red 7-seg
 - Part 4 · 2026-11-24 · Cold open: the only light left in town is a 24-hour corner shop, and something is standing in its door. Mia grabs your hand and you run past frozen people to the "OPEN 24 H" sign; through the glass there is one phone charger glowing by the till, while your battery is at 2 % and Mia's at 1 %. The Static slides in front of the door and just waits, and a text from your own number says "Don't let her phone die." Cliffhanger: Mia's screen goes black at 0 % and she freezes mid-step like everyone else (comment prompt: would you walk past it to reach the charger?).
 - Part 5 · 2026-11-25 · Cold open: Mia is gone, not frozen but gone, her spot on the street empty. You blink and she vanishes; a text from your own number says "She's back at 11:58." Scrolling up, every text was sent from your phone at times that haven't happened yet, The Static steps closer and your battery hits 1 %, and one more text says "When a phone dies, you start again. I know. I'm you." Cliffhanger: the texts were never from a stranger, they were from you, and if you don't send them, nobody will (comment prompt: would you trust a text from yourself?).
 - Part 6 (FINALE) · 2026-11-26 · Cold open: 1 %, one text left, and sending it ends the night. You type "Don't open the door at midnight" and send it to 11:58 PM, then every other warning ("They'll knock 3 times", "Find Mia", "Don't let her phone die"); The Static flickers like an old TV and fades away, your screen goes black at 0 %, and with a click every clock moves to 00:01. Ending: behind you a flashlight clicks on, Mia is awake and asks "Did you just text yourself?" (comment prompt: would you have sent the texts?). THE END — series finished; next run starts a new series.
+
+
+## Current series: THE LAST BUS (6 parts, from 2026-11-27) — music preset: `spooky` (all episodes)
+**Premise:** You fall asleep on the last bus home and wake up alone. Outside there is only fog, your phone has no
+signal, and the sign above the driver says "NO STOPS LEFT". The driver never turns around and only asks for your
+ticket. A PG mystery: no gore, no violence; the creepiness comes from fog, silence and rules nobody explains.
+Each episode ends with a choice question for the comments ("Would you give him the ticket?").
+
+**Characters (keep these looks in every episode):**
+- **You** — `hero()` default: blue hoodie `#3b82f6`, dark pants `#334155`. Holds a cream ticket (`#fef3c7`) stamped
+  "ONE WAY", destination "? ? ?", "No. 0001" (`ticket()` in the Part 1 html).
+- **The Driver** — only ever seen from behind: grey cap `#4b5563` with dark band, grey coat `#374151`, pale head
+  `#e5e7eb`; reaches back over his shoulder with an open hand. Says only "Ticket, please." (`driverBack()` in Part 1).
+- **Zoe** (from Part 2) — the whisper from the last row. `stick()` purple jacket `#7c3aed`, green beanie `#16a34a`,
+  pants `#1f2937`, black hair `#111827`. Sarcastic but kind; she thinks she has been riding "for three days".
+
+**Bus style:** dark slate interior `#1e293b`, blue seats `#1d4ed8`, yellow poles `#facc15`, foggy windows with
+drifting white fog, orange LED sign `#fb923c` on black ("NEXT STOP: ..." / "NO STOPS LEFT"), red STOP button.
+
+**Arc:**
+1. You wake up alone on the last bus, fog outside, 23:47, no signal. You press STOP: the sign says "NO STOPS LEFT". The driver, never turning around, holds out his hand: "Ticket, please." Your ticket: ONE WAY, no destination. Cliff: a whisper from the last row: "Don't give him your ticket."
+2. Zoe (purple jacket, green beanie) in the last row. She gave the driver her ticket and now the bus never lets her off. The bus starts stopping at places from your memories (your old primary school, the playground). Rule: get off at a memory and you stay there. Cliff: the sign changes to "NEXT STOP: YOUR HOUSE".
+3. Through the window your house has its lights on, and someone who looks exactly like you is eating dinner with your family. Zoe pulls you back from the doors. Cliff: in the driver's mirror, there is no face.
+4. Zoe explains: the bus takes people who fall asleep "between stops"; the only way out is the final stop, "WAKE UP", but the driver only stops for a passenger with a ticket. Zoe has none. Cliff: the sign reads "FINAL STOP: 2 MIN", and you have exactly one ticket.
+5. The bus speeds through flickering stops; the driver says "One ticket. One passenger." Cliff: Zoe looks at your ticket and asks you to choose.
+6. Finale: you tear the ticket in half ("two halves, two passengers"); the driver finally turns around, nods, the doors open on "WAKE UP". You wake up on the real bus at your stop; the normal driver says "End of the line." On the seat: half a ticket with "THANKS - Z". THE END.
+
+## Episodes (THE LAST BUS)
+- Part 1 · 2026-11-27 · You wake up alone on the last bus: every seat is empty, outside there is only fog, your phone says 23:47 with no signal, and your stop was an hour ago. You press STOP, it dings, and the sign above the driver flickers to "NO STOPS LEFT"; the driver never turns around, just holds out his hand: "Ticket, please." Your ticket says ONE WAY with no destination. Cliffhanger: from the very last row, a whisper: "Don't give him your ticket." (comment prompt: would you give him the ticket?)

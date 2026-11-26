@@ -1,0 +1,9 @@
+["You wake up on the last bus. Every seat is empty. And outside, there's only fog.",
+ "Your phone says eleven forty seven. No signal. Your stop was an hour ago.",
+ "No streets. No houses. No lights. The bus just keeps driving.",
+ "You press the stop button. Ding. The sign above the driver flickers.",
+ {"text":"No stops left.","gap":0.7},
+ "The driver doesn't turn around. He just holds out his hand. Ticket, please.",
+ "You look at your ticket. One way. No destination.",
+ {"text":"Then, from the very last row, a whisper. Don't give him your ticket.","gap":0.8},
+ {"text":"Would you give him the ticket? Comment yes or no.","gap":1.6}]

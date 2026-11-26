@@ -1,0 +1,92 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const T = { dune: wt(0, 'dune or'), av: wt(0, 'avengers'), pick: wt(0, 'pick now'), same: wt(1, 'exact same'), rdj: at(2, 0), ds: wt(2, 'dunesday'),
+  bh: wt(3, 'barbenheimer'), barbie: at(4, 0), opp: wt(4, 'oppenheimer'), sw: wt(4, 'same weekend'), track: at(5, 0), n270: wt(5, 'two hundred'),
+  beat: at(6, 0), nwh: wt(6, 'no way'), secret: wt(7, 'secret'), imax: wt(7, 'eye-max'), q: at(8, 0) };
+const ORANGE = '#f59e0b', PURPLE = '#7c3aed';
+function ticketCard(x, y, s, l1, l2, col, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s);
+  box(-200, -300, 400, 600, col, 24, 10); for (let i = 0; i < 8; i++) circ(-170 + i * 48, 150, 8, 'rgba(0,0,0,.35)');
+  txt('ADMIT ONE', 0, -230, 40, '#fff', { stroke: false }); txt(l1, 0, -90, 92, '#fff', { lw: 14 }); txt(l2, 0, 10, l2.length > 8 ? 50 : 60, '#fff', { lw: 10 }); txt('18 DEC', 0, 230, 66, INK, { stroke: false });
+  ctx.restore(); }
+function calendar(x, y, s, t) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-220, -240, 440, 480, '#fff', 24, 10); box(-220, -240, 440, 120, '#ef4444', 24, 10); txt('DECEMBER', 0, -178, 56, '#fff', { stroke: false }); txt('18', 0, 50, 230, INK, { stroke: false }); ctx.restore(); }
+function stamp(x, y, s, label, col, k, rot = -.15) { if (k <= 0) return; ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s * (2 - eo(k)), s * (2 - eo(k))); ctx.globalAlpha = clamp(k * 3);
+  ctx.strokeStyle = col; ctx.lineWidth = 14; rr(-330, -90, 660, 180, 20); ctx.stroke(); txt(label, 0, 6, 110, col, { stroke: false }); ctx.restore(); }
+function foot(a, b) { txt(a, 540, 1830, 32, '#cbd5e1', { stroke: false, font: 'Nun', weight: '900 ' }); if (b) txt(b, 540, 1872, 32, '#cbd5e1', { stroke: false, font: 'Nun', weight: '900 ' }); }
+function bar(x, base, w, h, col, label, val, k, dashed) { const hh = h * eo(k); if (dashed) { ctx.save(); ctx.setLineDash([22, 14]); ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.fillStyle = col; rr(x - w / 2, base - hh, w, hh, 14); ctx.globalAlpha = .55; ctx.fill(); ctx.globalAlpha = 1; ctx.stroke(); ctx.restore(); } else box(x - w / 2, base - hh, w, hh, col, 14, 9);
+  if (k > .6) txt(val, x, base - hh - 70, 92, '#fff', { lw: 16 }); txt(label, x, base + 60, 50, '#fff', { lw: 10 }); }
+function cinemaBg() { bgFill('#111827'); const g = ctx.createRadialGradient(540, 700, 50, 540, 700, 900); g.addColorStop(0, 'rgba(250,204,21,.18)'); g.addColorStop(1, 'rgba(250,204,21,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+// ---------- scenes ----------
+function sPick(lt, t) { // line 0
+  cinemaBg(); floor('#7f1d1d', 1480);
+  const look = t < T.dune ? Math.sin(t * 4) : (t < T.av ? -1 : 1);
+  const kD = t > T.dune ? 1 + .08 * Math.sin((t - T.dune) * 10) * Math.exp(-(t - T.dune) * 3) : 1, kA = t > T.av ? 1 + .08 * Math.sin((t - T.av) * 10) * Math.exp(-(t - T.av) * 3) : 1;
+  ticketCard(240, 800, .78 * kD, 'DUNE', 'PART THREE', ORANGE, -.12); ticketCard(840, 800, .78 * kA, 'AVENGERS', 'DOOMSDAY', PURPLE, .12);
+  hero({ x: 540, y: 1600, s: 1.25, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: 1.9, le: .2, ra: -1.9, re: -.2 }, look: look > 0 ? 1 : -1, eyes: 'huge', mouth: t > T.pick ? 'scream' : 'o', bob: Math.abs(Math.sin(t * 6)) * 8 });
+  txt('PICK ONE', 540, 200, 150, '#fde047', { lw: 24 });
+  if (t > T.pick) { const k = eob(inv(T.pick, T.pick + .2, t)); txt('NOW!', 540, 360, 110 * k, '#ef4444', { lw: 18 }); }
+}
+function sSame(lt, t) { // lines 1-2
+  bgFill('#1e1b4b');
+  if (t < T.rdj - .1) {
+    calendar(540, 820, 1.4, t);
+    ticketCard(230, 1240, .5, 'DUNE', 'PART THREE', ORANGE, -.2); ticketCard(850, 1240, .5, 'AVENGERS', 'DOOMSDAY', PURPLE, .2);
+    txt('IN THE US', 540, 240, 110, '#fff', { lw: 18 });
+    stamp(540, 820, 1, 'SAME DAY', '#ef4444', inv(T.same, T.same + .3, t));
+  } else {
+    // stage + microphone, no person drawn
+    ctx.fillStyle = '#312e81'; ctx.fillRect(-300, 1300, W + 600, 900); line(-300, 1300, W + 300, 1300, 8);
+    spot(540, 1000, 600, .35); line(540, 1300, 540, 980, 14); line(480, 1300, 600, 1300, 14); ctx.save(); ctx.translate(540, 940); ctx.rotate(-.2); box(-40, -80, 80, 130, '#9ca3af', 40, 8); ctx.restore();
+    popIn(t, T.rdj + .2, 540, 560, () => { bubble(0, 0, '"WE\'RE THINKING..."', 76); });
+    if (t > T.ds - .05) { const k = eob(inv(T.ds - .05, T.ds + .25, t)); ctx.save(); ctx.translate(540, 760); ctx.scale(k, k); txt('DUNESDAY', 0, 0, 170, '#fde047', { lw: 26 }); ctx.restore(); }
+    txt('ROBERT DOWNEY JR., JAN 2026', 540, 260, 54, '#fff', { lw: 10 });
+  }
+}
+function sBarb(lt, t) { // lines 3-4
+  bgFill('#0f172a');
+  txt('BARBENHEIMER', 540, 200, 130, '#f472b6', { lw: 22 }); txt('JULY 2023', 540, 330, 70, '#fff', { lw: 12 });
+  const base = 1400;
+  bar(330, base, 280, 760, '#ec4899', 'BARBIE', '$162M', inv(T.barbie, T.barbie + .8, t));
+  bar(750, base, 280, 760 * 82.4 / 162, '#64748b', 'OPPENHEIMER', '$82M', inv(T.opp, T.opp + .8, t));
+  if (t > T.sw) popIn(t, T.sw, 540, 470, () => { box(-330, -60, 660, 120, '#facc15', 24, 8); txt('SAME WEEKEND', 0, 6, 70, INK, { stroke: false }); });
+  foot('Opening weekends, North America (US + Canada)', 'Source: TheWrap, final figures, 24 Jul 2023');
+}
+function sRecord(lt, t) { // lines 5-6
+  bgFill('#1e1b4b');
+  txt('BIGGEST DECEMBER', 540, 200, 100, '#fff', { lw: 18 }); txt('OPENING EVER?', 540, 320, 100, '#fde047', { lw: 18 });
+  const base = 1400, sc = 760 / 270;
+  bar(330, base, 280, 260 * sc, '#ef4444', 'NO WAY HOME', '$260M', t > T.nwh ? inv(T.nwh, T.nwh + .8, t) : 0);
+  bar(750, base, 280, 270 * sc, PURPLE, 'DOOMSDAY', '$270M', inv(T.n270, T.n270 + .9, t), true);
+  if (t > T.n270 + .5) txt('FORECAST', 750, base - 270 * sc / 2, 60, '#fff', { lw: 10 });
+  if (t > T.nwh + 1) { txt('RECORD (2021)', 330, base - 260 * sc / 2, 50, '#fff', { lw: 10 }); }
+  foot('North America. Doomsday = early NRG tracking, not a result', '(ABC News, 25 Nov 2026). Record: Spider-Man: No Way Home');
+}
+function sImax(lt, t) { // line 7
+  bgFill('#030712');
+  const k = eo(inv(T.imax - .4, T.imax + .4, t));
+  box(60, 300, 960, lerp(420, 640, k), '#e5e7eb', 10, 10);
+  ctx.save(); rr(70, 310, 940, lerp(400, 620, k), 8); ctx.clip(); const g = ctx.createLinearGradient(0, 300, 0, 940); g.addColorStop(0, '#fcd34d'); g.addColorStop(1, '#b45309'); ctx.fillStyle = g; ctx.fillRect(60, 300, 960, 700);
+  ctx.fillStyle = '#92400e'; ctx.beginPath(); ctx.moveTo(60, 900); for (let x = 60; x <= 1020; x += 40) ctx.lineTo(x, 760 + Math.sin(x / 120 + t) * 60); ctx.lineTo(1020, 1000); ctx.lineTo(60, 1000); ctx.fill(); ctx.restore();
+  txt(t > T.imax ? 'IMAX SCREENS' : 'SECRET WEAPON', 540, 200, 110, '#fde047', { lw: 18 });
+  if (t > T.imax) popIn(t, T.imax, 540, 610, () => { box(-280, -80, 560, 160, ORANGE, 20, 9); txt('DUNE ONLY', 0, 6, 90, '#fff', { lw: 12 }); });
+  for (let r = 0; r < 3; r++) for (let i = 0; i < 6; i++) { const x = 110 + i * 172 + (r % 2) * 50, y = 1240 + r * 150; circ(x, y - 60, 48, '#1f2937', INK, 6); box(x - 60, y - 15, 120, 120, '#374151', 30, 6); }
+  foot('IMAX in the US goes to Dune: Part Three on 18 Dec', '(IMAX investor presentation via GamesRadar+)');
+}
+function sEnd(lt, t) {
+  cinemaBg(); floor('#7f1d1d', 1480);
+  ticketCard(270, 830, .9, 'DUNE', 'PART THREE', ORANGE, -.08); ticketCard(810, 830, .9, 'AVENGERS', 'DOOMSDAY', PURPLE, .08);
+  txt('WHICH ONE WINS?', 540, 220, 110, '#fde047', { lw: 20 });
+  popIn(t, T.q + .4, 540, 1300, () => { box(-460, -80, 920, 160, '#fff', 30, 9); txt('COMMENT: DUNE OR AVENGERS', 0, 8, 58, INK, { stroke: false }); });
+}
+const SCENES = [{ t0: 0, fn: sPick, push: .05 }, { t0: mid(0, 1), fn: sSame, push: .06, flash: .6 }, { t0: mid(2, 3), fn: sBarb, push: .04, xfade: .3 },
+  { t0: mid(4, 5), fn: sRecord, push: .04, flash: .5 }, { t0: mid(6, 7), fn: sImax, push: .06, xfade: .3 }, { t0: mid(7, 8), fn: sEnd, push: .04, flash: .5 }];
+const CAP = [["you get one", "movie ticket", "for december 18th.", "dune", "or avengers?", "pick now."], ["in the US,", "both come out", "on the exact", "same day."], ["robert downey jr.", "joked:", "we're thinking,", "dunesday."],
+  ["last time", "this happened?", "barbenheimer,", "2023."], ["barbie opened", "with $162 million.", "oppenheimer,", "$82 million.", "same weekend."], ["now, tracking says", "doomsday alone", "could open", "with $270 million."],
+  ["that would beat", "the biggest", "december opening", "ever.", "no way home,", "$260 million."], ["but dune has", "a secret weapon.", "in the US,", "it gets", "the IMAX screens."], ["so which one wins?", "comment dune", "or avengers."]];
+const HOT = new Set(["pick now.", "same day.", "dunesday.", "barbenheimer,", "with $162 million.", "with $270 million.", "december opening", "the IMAX screens.", "or avengers."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1660) });
+</script></body></html>

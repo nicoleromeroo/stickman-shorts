@@ -1,0 +1,13 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 2712)
+m.music("hype")
+m.add("whoosh", .05, .3); m.add("pop", m.wt(0, "dune or"), .35); m.add("pop", m.wt(0, "avengers"), .35); m.add("sting", m.wt(0, "pick now"), .3)
+m.add("whoosh", m.mid(0, 1) - .12, .25); m.add("thump", m.wt(1, "exact same"), .45)
+m.add("whoosh", m.mid(1, 2) - .12, .25); m.ambience("crowd", m.wt(2, "dunesday"), m.wt(2, "dunesday") + 1.5, .12); m.add("shing", m.wt(2, "dunesday"), .3)
+m.add("whoosh", m.mid(2, 3) - .12, .25); m.add("ding", m.wt(3, "barbenheimer"), .3)
+m.add("slide", m.at(4, 0), .3); m.add("cash", m.at(4, .3), .3); m.add("slide", m.wt(4, "oppenheimer"), .3); m.add("pop", m.wt(4, "same weekend"), .35)
+m.add("whoosh", m.mid(4, 5) - .12, .25); m.add("slide", m.wt(5, "two hundred"), .3); m.add("cash", m.wt(5, "seventy"), .3)
+m.add("slide", m.wt(6, "no way"), .3); m.add("sting", m.at(6, .2), .25)
+m.add("whoosh", m.mid(6, 7) - .12, .25); m.add("shing", m.wt(7, "eye-max"), .35)
+m.add("whoosh", m.mid(7, 8) - .12, .3); m.add("pop", m.at(8, .3), .35); m.add("chime", m.L[8]["end"] + .2, .45)
+m.write(mvol=.08, svol=.30)
