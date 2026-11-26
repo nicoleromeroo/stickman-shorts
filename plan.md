@@ -81,6 +81,7 @@ Notes
 
 ## Done
 - 27 Nov (no plan row) 11:30 Dunesday: Dune 3 vs Avengers: Doomsday same day · 16:00 Black Friday deal in hours of work · 20:00 THE LAST BUS Part 1 (made 26 Nov)
+- 27 Nov (no plan row) 06:00 myth: lightning never strikes twice · 18:30 what if you jumped through the Earth? (paradox format) (made 26 Nov evening)
 - 26 Nov (no plan row) 06:00 why can't you remember being a baby (from backlog) · 18:30 what if it never got dark (from backlog) (made 25 Nov evening) · 11:30 Star Wars sound design (bear, elephant, old TV) · 16:00 skip one delivery a week (from backlog) · 20:00 LOW BATTERY Part 6 FINALE (made 25 Nov)
 - 24 Nov (no plan row) 11:30 trailer record: guess the views (Spider-Man: Brand New Day 718.6M, Doomsday 18 Dec) · 16:00 1 million now vs 1 cent doubled for 30 days (from backlog) · 20:00 LOW BATTERY Part 4 (made 23 Nov)
 - 21 Nov 06:00 carrots night-vision myth · 18:30 What if the Moon disappeared? (made 20 Nov)

@@ -1,0 +1,117 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { exc: wt(0, 'except'), guess: at(1, 0), cm: wt(1, 'comment'), rev: at(2, 0), n23: wt(2, 'twenty'),
+  tall: at(3, 0), pointy: wt(3, 'pointy'), lonely: wt(3, 'lonely'), again: wt(3, 'same spot'), blue: at(4, 0), bolt: wt(5, 'strike'), miles: wt(5, 'ten'),
+  thun: at(6, 0), reach: wt(6, 'close'), safe: at(7, 0), bld: wt(7, 'real building'), car: wt(7, 'a car'), tree: wt(7, 'not a tree'), q: at(8, 0), yn: wt(8, 'comment') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#94a3b8') { txt(s, 540, y, 26, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+function top2(a, b, cb = '#facc15', k = 1, s1 = 140, s2 = 150) { txt(a, 540, 180, s1 * k, '#fff', { lw: 24 }); if (b) txt(b, 540, 330, s2 * k, cb, { lw: 26 }); }
+// zig-zag bolt from (x1,y1) to (x2,y2)
+function bolt(x1, y1, x2, y2, seed, a = 1, w = 14) { if (a <= 0) return; const n = 9, pts = [[x1, y1]]; for (let i = 1; i < n; i++) { const f = i / n; pts.push([lerp(x1, x2, f) + (rnd(seed + i) - .5) * 120, lerp(y1, y2, f) + (rnd(seed + i + 50) - .5) * 30]); } pts.push([x2, y2]);
+  ctx.save(); ctx.globalAlpha = a; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; for (const [lw, col] of [[w * 3.2, 'rgba(250,204,21,.35)'], [w * 1.6, '#fde047'], [w * .6, '#fff']]) { ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); } ctx.restore(); }
+// strike envelope: returns brightness for repeating strikes every `per` seconds starting t0
+function flash(t, t0, per = 1.1, len = .4) { if (t < t0) return 0; const p = (t - t0) % per; return p < len ? 1 - p / len : 0; }
+function cloud(x, y, s, col = '#475569') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(-110, 20, 80, Math.PI * .5, Math.PI * 1.5); ctx.arc(-30, -50, 100, Math.PI, Math.PI * 1.9); ctx.arc(90, -10, 90, Math.PI * 1.3, Math.PI * .5); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+function tower(x, y0, h, col = '#64748b') { // generic tall skyscraper with antenna
+  const w = 200; ctx.fillStyle = col; ctx.strokeStyle = INK; ctx.lineWidth = 9;
+  box(x - w / 2, y0 - h * .55, w, h * .55 + 30, col, 6, 9); box(x - w * .36, y0 - h * .75, w * .72, h * .2 + 10, col, 6, 9); box(x - w * .22, y0 - h * .88, w * .44, h * .13 + 10, col, 6, 9);
+  line(x, y0 - h * .88, x, y0 - h, 12); circ(x, y0 - h, 10, '#ef4444', INK, 4);
+  for (let r = 0; r < Math.floor(h * .55 / 52) - 1; r++) for (let c = 0; c < 4; c++) if (rnd(r * 9 + c + x) < .55) { ctx.fillStyle = '#fde68a'; ctx.fillRect(x - 80 + c * 44, y0 - h * .55 + 30 + r * 52, 22, 28); }
+  return [x, y0 - h]; }
+function rainSky(t, a = .4) { ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 4; for (let i = 0; i < 60; i++) { const x = rnd(i) * W, y = ((rnd(i + 7) * H + t * 1400) % H); ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - 12, y + 40); ctx.stroke(); } ctx.restore(); }
+function whiteFlash(a) { if (a <= 0) return; ctx.save(); ctx.globalAlpha = a * .35; ctx.fillStyle = '#fff'; ctx.fillRect(-300, -300, W + 600, H + 600); ctx.restore(); }
+
+function sHook(lt, t) {
+  bgFill('#1e1b4b'); rainSky(t, .35);
+  const f = Math.max(flash(t, 0, 1.15, .55), flash(t, T.exc + .1, .45, .25));
+  floor('#1f2937', 1450); const [tx, ty] = tower(780, 1450, 620);
+  cloud(720, 520, 1.25, '#334155');
+  bolt(740, 560, tx, ty, Math.floor(t / 1.15) * 13 + (t > T.exc ? Math.floor(t * 2.2) * 7 : 0), f);
+  whiteFlash(f);
+  const wx = lerp(120, 290, eo(inv(0, 1.3, t)));
+  hero({ x: wx, y: 1450, s: 1.05, pose: t < 1.3 ? walkPose(t * 8) : { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.2, re: -.4 }, eyes: t > T.exc ? 'huge' : 'norm', mouth: t > T.exc ? 'o' : 'smile', look: 1 });
+  if (t < T.exc) top2('NEVER', 'TWICE?', '#facc15', 1, 160, 180);
+  else top2('IT DOES.', 'AGAIN & AGAIN', '#fde047', pop(T.exc, t), 150, 110);
+}
+function sGuess(lt, t) {
+  bgFill('#0f172a'); rainSky(t, .3); floor('#1f2937', 1450);
+  const [tx, ty] = tower(540, 1450, 540, '#475569');
+  const rv = t >= T.rev; cloud(560, 730, 1.1, '#334155');
+  const f = rv ? flash(t, T.rev, .32, .2) : 0; bolt(530, 770, tx, ty, Math.floor(t * 3.1) * 11, f); whiteFlash(f * .6);
+  if (!rv) { top2('HOW MANY HITS', 'A YEAR?', '#38bdf8', 1, 110, 160); qmark(250, 950, t, T.guess + .3, '#facc15', 200); qmark(840, 1000, t, T.guess + .6, '#facc15', 150); badge(540, 500, 720, 120, '#facc15', ['COMMENT A NUMBER'], [62], T.cm, t, -.03, INK); }
+  else { const n = Math.round(lerp(1, 23, eo(inv(T.rev, T.n23 + .5, t)))); top2('ABOUT', String(n), '#fde047', 1, 120, 250); badge(540, 520, 620, 110, '#1d4ed8', ['TIMES A YEAR'], [64], T.n23, t, -.03); }
+  hero({ x: 200, y: 1450, s: 1.0, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.4, re: -.3 }, eyes: rv ? 'huge' : 'norm', mouth: rv ? 'o' : 'flat', lookY: -1, look: 1, shirt: '#ef4444' });
+  foot('Empire State Building: about 23 hits a year on average (US NWS)');
+}
+function sTall(lt, t) {
+  bgFill('#1e293b'); cloud(540, 450, 1.3, '#334155');
+  // hill with lone tall pole, short bushes, small house
+  ctx.fillStyle = '#166534'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-50, 1460); ctx.quadraticCurveTo(540, 1000, 1130, 1460); ctx.closePath(); ctx.fill(); ctx.stroke(); floor('#14532d', 1450);
+  line(540, 1190, 540, 640, 22, '#78350f'); line(540, 640, 540, 600, 10); circ(540, 600, 12, '#ef4444', INK, 4);
+  circ(960, 1390, 60, '#22c55e', INK, 8);
+  box(700, 1330, 140, 120, '#e5e7eb', 6, 8);
+  const f = flash(t, T.tall + .2, .7, .2); bolt(560, 500, 540, 600, Math.floor((t - T.tall) / .7) * 17, f); whiteFlash(f * .5);
+  if (f > .2) for (let i = 0; i < 6; i++) { const a = i * 1.05; line(540 + Math.cos(a) * 30, 600 + Math.sin(a) * 30, 540 + Math.cos(a) * 80, 600 + Math.sin(a) * 80, 8, '#fde047'); }
+  hero({ x: 190, y: 1460, s: .95, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.3, re: -.3 }, eyes: 'huge', mouth: f > .2 ? 'o' : 'flat', look: 1, lookY: -1, shirt: '#a855f7' });
+  const hits = t < T.again ? 0 : Math.min(9, Math.floor((t - T.again) / .45) + 1);
+  for (let i = 0; i < hits; i++) txt('X', 650 + (i % 5) * 80, 800 + Math.floor(i / 5) * 100, 95, '#fde047', { lw: 12 });
+  if (t < T.again) { const w = t < T.pointy ? 'TALL.' : t < T.lonely ? 'TALL. POINTY.' : 'TALL. POINTY. ALONE.'; txt(w, 540, 220, 100 * pop(T.tall, t), '#fff', { lw: 22 }); }
+  else top2('SAME SPOT', 'AGAIN!', '#fde047', pop(T.again, t), 140, 170);
+}
+function sBlue(lt, t) {
+  const sky = ctx.createLinearGradient(0, 0, W, 0); sky.addColorStop(0, '#7dd3fc'); sky.addColorStop(.62, '#7dd3fc'); sky.addColorStop(.8, '#334155'); sky.addColorStop(1, '#1e293b');
+  ctx.fillStyle = sky; ctx.fillRect(-300, -300, W + 600, H + 600);
+  circ(170, 520, 70, '#fde047', INK, 7);
+  cloud(1010, 560, 1.4, '#334155'); ctx.save(); ctx.beginPath(); ctx.rect(860, 620, 400, 900); ctx.clip(); rainSky(t, .6); ctx.restore();
+  floor('#86efac', 1450);
+  const f = flash(t, T.bolt + .1, 1.3, .3);
+  if (f > 0) { const pts = [[900, 520], [720, 400], [560, 560], [640, 1000], [640, 1450]]; ctx.save(); ctx.globalAlpha = f; for (const [lw, col] of [[42, 'rgba(250,204,21,.35)'], [20, '#fde047'], [8, '#fff']]) { ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x + (i % 2 ? 30 : -30), y) : ctx.moveTo(x, y)); ctx.stroke(); } ctx.restore(); whiteFlash(f * .4); }
+  const scared = t > T.bolt + .1;
+  hero({ x: 330, y: 1450, s: 1.0, pose: scared ? { lt: .3, ls: .2, rt: -.3, rs: .2, la: -2.6, le: -.3, ra: 2.6, re: .3 } : { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -.3, re: -.2 }, eyes: scared ? 'huge' : 'norm', mouth: scared ? 'scream' : 'smile', shirt: '#f97316' });
+  if (t < at(5, 0)) top2('BLUE SKY', '= SAFE?', '#0284c7', pop(T.blue, t), 150, 160);
+  else { top2('BOLT FROM', 'THE BLUE', '#facc15', pop(at(5, 0), t), 140, 150); if (t > T.miles) { const k = pop(T.miles, t); line(360, 1490, 940, 1490, 10, '#fff'); line(360, 1490, 400, 1468, 10, '#fff'); line(360, 1490, 400, 1512, 10, '#fff'); line(940, 1490, 900, 1468, 10, '#fff'); line(940, 1490, 900, 1512, 10, '#fff'); badge(650, 1300, 560, 170, '#1d4ed8', ['10-15 MILES', '(16-24 KM)'], [70, 50], T.miles, t, -.03); } }
+  foot('"Bolts from the blue": 10-15 miles from the storm (US NWS)', 1840, '#1e293b');
+}
+function sThunder(lt, t) {
+  bgFill('#334155'); cloud(840, 420, 1.3, '#1e293b'); rainSky(t, .25); floor('#475569', 1450);
+  const f = flash(t, T.thun + .3, 1.2, .25); bolt(820, 470, 900, 1450, Math.floor(t) * 5, f); whiteFlash(f * .4);
+  // sound waves to the hero
+  for (let i = 0; i < 4; i++) { const p = ((t - T.thun) * .9 + i / 4) % 1; if (t < T.thun) break; ctx.save(); ctx.globalAlpha = 1 - p; ctx.strokeStyle = '#fde047'; ctx.lineWidth = 12; ctx.beginPath(); ctx.arc(820, 520, 120 + p * 520, Math.PI * .55, Math.PI * .95); ctx.stroke(); ctx.restore(); }
+  txt('BOOM', 720, 760 + Math.sin(t * 30) * 4, 120, '#fde047', { lw: 20 });
+  hero({ x: 280, y: 1450, s: 1.05, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: -2.1, le: -1.4, ra: 2.1, re: 1.4 }, eyes: 'huge', mouth: 'o', look: 1, shirt: '#22c55e' });
+  if (t < T.reach) top2('HEAR', 'THUNDER?', '#facc15', pop(T.thun, t), 150, 160);
+  else top2('IT CAN', 'REACH YOU', '#f87171', pop(T.reach, t), 150, 140);
+  foot('Hear thunder = lightning close enough to be a threat (NOAA)', 1840, '#cbd5e1');
+}
+function check(x, y, ok, k) { if (k <= 0) return; ctx.save(); ctx.translate(x, y); ctx.scale(k, k); circ(0, 0, 70, ok ? '#22c55e' : '#ef4444', INK, 8); if (ok) { line(-32, 2, -8, 28, 16, '#fff'); line(-8, 28, 34, -24, 16, '#fff'); } else { line(-28, -28, 28, 28, 16, '#fff'); line(28, -28, -28, 28, 16, '#fff'); } ctx.restore(); }
+function sSafe(lt, t) {
+  bgFill('#1e293b'); rainSky(t, .3); floor('#334155', 1450);
+  // house
+  box(60, 1000, 330, 450, '#e5e7eb', 8, 9); ctx.fillStyle = '#b91c1c'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(30, 1010); ctx.lineTo(225, 830); ctx.lineTo(420, 1010); ctx.closePath(); ctx.fill(); ctx.stroke(); box(185, 1250, 90, 200, '#92400e', 8, 8); box(100, 1080, 80, 80, '#fde68a', 6, 7); box(270, 1080, 80, 80, '#fde68a', 6, 7);
+  // car with hard roof
+  box(450, 1290, 300, 110, '#3b82f6', 30, 9); ctx.fillStyle = '#3b82f6'; ctx.beginPath(); ctx.moveTo(500, 1292); ctx.lineTo(545, 1200); ctx.lineTo(660, 1200); ctx.lineTo(705, 1292); ctx.closePath(); ctx.fill(); ctx.stroke(); box(560, 1215, 90, 60, '#bae6fd', 6, 6); circ(520, 1405, 40, '#111', INK, 6); circ(680, 1405, 40, '#111', INK, 6);
+  // tree
+  line(900, 1450, 900, 1080, 34, '#78350f'); circ(900, 1000, 140, '#16a34a', INK, 9); circ(830, 1060, 80, '#16a34a', INK, 9); circ(970, 1060, 80, '#16a34a', INK, 9);
+  check(225, 760, true, pop(T.bld, t)); check(600, 1090, true, pop(T.car, t)); check(900, 790, false, pop(T.tree, t));
+  if (t > T.tree) { const f = flash(t, T.tree + .1, 1, .25); bolt(890, 420, 900, 870, 77 + Math.floor(t), f); }
+  top2('SAFE', 'SPOTS', '#4ade80', pop(T.safe, t), 160, 170);
+  foot('Safe: solid building or hard-topped car (NWS). Trees: no (NOAA)', 1840, '#cbd5e1');
+}
+function sEnd(lt, t) {
+  bgFill('#1e1b4b'); cloud(820, 560, 1.0, '#334155'); const f = flash(t, T.q + .2, 1.4, .3); bolt(820, 600, 960, 1450, 3 + Math.floor(t), f); whiteFlash(f * .3);
+  hero({ x: 540, y: 1110, s: 1.0, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: -1.2, le: -1.6, ra: 1.2, re: 1.6 }, eyes: 'norm', mouth: 'smirk', shirt: '#3b82f6' });
+  top2('DID YOU', 'BELIEVE IT?', '#facc15', pop(T.q, t), 150, 130);
+  const p1 = t > T.yn && t < T.yn + .4, p2 = t > T.yn + .5 && t < T.yn + .9;
+  box(90, 1140 + (p1 ? 12 : 0), 380, 170, '#16a34a', 46, 9); txt('YES', 280, 1230 + (p1 ? 12 : 0), 100, '#fff', { lw: 16 });
+  box(610, 1140 + (p2 ? 12 : 0), 380, 170, '#dc2626', 46, 9); txt('NO', 800, 1230 + (p2 ? 12 : 0), 100, '#fff', { lw: 16 });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(0, 1), fn: sGuess, push: .04, flash: 1 }, { t0: mid(2, 3), fn: sTall, push: .04, flash: .8 }, { t0: mid(3, 4), fn: sBlue, push: .04, flash: .8 }, { t0: mid(5, 6), fn: sThunder, push: .04, flash: .8 }, { t0: mid(6, 7), fn: sSafe, push: .04, flash: .8 }, { t0: mid(7, 8), fn: sEnd, push: .04, flash: .8 }];
+const CAP = [["lightning never", "strikes the", "same place twice.", "except,", "it does."], ["guess", "how many times", "a year", "one building", "in new york", "gets hit.", "comment a number."], ["the empire", "state building:", "about", "twenty three", "times a year."], ["lightning loves", "tall,", "pointy,", "lonely things.", "same spot,", "again and again."], ["and a blue sky", "doesn't mean", "you're safe."], ["a bolt", "from the blue", "can strike", "ten to fifteen miles", "from the storm."], ["if you can", "hear thunder,", "it's close enough", "to reach you."], ["safe spots?", "a real building,", "or a car", "with a hard roof.", "not a tree."], ["did you believe", "the old saying?", "comment", "yes or no."]];
+const HOT = new Set(["it does.", "comment a number.", "twenty three", "again and again.", "you're safe.", "ten to fifteen miles", "to reach you.", "not a tree.", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

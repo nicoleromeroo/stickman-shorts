@@ -1,0 +1,117 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { jump: wt(0, 'jump!'), guess: at(1, 0), cm: wt(1, 'comment'), fall: at(2, 0), ctr: at(3, 0), fast: wt(3, 'over eight'), slow: at(4, 0), other: wt(4, 'until'),
+  trip: at(5, 0), n38: wt(5, 'thirty'), sch: wt(5, 'shorter'), old: at(6, 0), core: wt(6, 'core'), let: at(7, 0), back: wt(7, 'fall all'), swing: wt(7, 'like a swing'),
+  dig: at(8, 0), d12: wt(8, 'just twelve'), pct: wt(8, 'about zero'), q: at(9, 0), yn: wt(9, 'comment') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#94a3b8') { txt(s, 540, y, 26, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+function top2(a, b, cb = '#facc15', k = 1, s1 = 140, s2 = 150) { txt(a, 540, 180, s1 * k, '#fff', { lw: 24 }); if (b) txt(b, 540, 330, s2 * k, cb, { lw: 26 }); }
+function stars(n, a, t) { ctx.save(); for (let i = 0; i < n; i++) { ctx.globalAlpha = a * (.5 + .5 * Math.sin(t * 2 + i)); circ(rnd(i) * W, rnd(i + 40) * H, 2 + rnd(i + 9) * 4, '#fff'); } ctx.restore(); }
+// Earth cross-section centred at (cx,cy), radius R, with a vertical tunnel
+function earthCut(cx, cy, R, t, glow = 0) {
+  circ(cx, cy, R, '#a16207', INK, 10); // crust/mantle outer
+  circ(cx, cy, R * .97, '#ea580c'); circ(cx, cy, R * .55, '#f97316', INK, 6); circ(cx, cy, R * .19, '#fde047', INK, 6);
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, Math.PI, 0); ctx.lineTo(cx + R, cy); ctx.closePath(); ctx.restore();
+  // green/blue surface cap ring
+  ctx.save(); ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 16; ctx.beginPath(); ctx.arc(cx, cy, R - 8, 0, 7); ctx.stroke(); ctx.restore(); circ(cx, cy, R, null, INK, 10);
+  // tunnel
+  ctx.fillStyle = '#111827'; ctx.fillRect(cx - 50, cy - R - 4, 100, 2 * R + 8); ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.strokeRect(cx - 50, cy - R - 4, 100, 2 * R + 8);
+}
+function faller(x, y, s, t, upside) { hero({ x, y: y + 150 * s * (upside ? -1 : 1) * 0, s, pose: { lt: .3, ls: .3, rt: -.3, rs: .3, la: -2.5 + Math.sin(t * 14) * .3, le: -.3, ra: 2.5 - Math.sin(t * 14) * .3, re: .3 }, eyes: 'huge', mouth: 'o', lean: upside ? Math.PI : 0, shadow: false }); }
+function sHook(lt, t) {
+  bgFill('#0b1020'); stars(50, .9, t);
+  // big planet top arc
+  circ(540, 2350, 1250, '#3b82f6', INK, 10); ctx.save(); ctx.beginPath(); ctx.arc(540, 2350, 1250, 0, 7); ctx.clip();
+  for (const [x, y, r] of [[600, 1330, 380], [80, 1400, 200]]) circ(x, y, r, '#22c55e', INK, 8); ctx.restore();
+  // hole
+  ctx.fillStyle = '#020617'; ctx.beginPath(); ctx.ellipse(700, 1110, 140, 40, 0, 0, 7); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.stroke();
+  const j = inv(T.jump, T.jump + .9, t);
+  if (j <= 0) { const wx = lerp(250, 450, eo(inv(0, 1.4, t))); hero({ x: wx, y: 1120, s: 1.1, pose: t < 1.4 ? walkPose(t * 8) : { lt: .3, ls: .5, rt: -.2, rs: .5, la: .9, le: .3, ra: -.9, re: -.3 }, eyes: 'huge', mouth: 'grin', look: 1 }); }
+  else { const x = lerp(450, 700, j), y = 1120 - Math.sin(j * Math.PI) * 260 + (j > .6 ? (j - .6) * 900 : 0); ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, 1110); if (j > .7) { ctx.ellipse(700, 1110, 140, 40, 0, 0, Math.PI); } ctx.clip(); hero({ x, y, s: 1.1, pose: { lt: .2, ls: .9, rt: -.2, rs: .9, la: -2.6, le: -.2, ra: 2.6, re: .2 }, eyes: 'huge', mouth: 'grin', shadow: false }); ctx.restore(); }
+  txt('YOUR HOLE', 700, 1240, 52, '#fff', { lw: 10 });
+  top2('THROUGH', 'THE EARTH?', '#38bdf8', 1, 150, 150);
+}
+function sFall(lt, t) {
+  bgFill('#0b1020'); stars(40, .6, t);
+  const cx = 540, cy = 1080, R = 500; earthCut(cx, cy, R, t);
+  // progress: top -> center during lines 2-3, center -> bottom during line 4
+  let p; if (t < T.fall) p = .03 + .02 * Math.sin(t * 4); else if (t < T.ctr) p = lerp(.05, .5, eio(inv(T.fall, T.ctr, t))); else if (t < T.slow) p = .5 + .03 * (t - T.ctr) / 3; else p = lerp(.53, .96, eo(inv(T.slow, T.other + .8, t)));
+  const y = cy - R + p * 2 * R;
+  // speed streaks
+  const sp = Math.sin(p * Math.PI); for (let i = 0; i < 5; i++) { const yy = y - 80 - ((t * 900 + i * 60) % 260); ctx.save(); ctx.globalAlpha = sp * .8; line(cx - 20 + i * 10, yy, cx - 20 + i * 10, yy - 80 * sp, 5, '#e0f2fe'); ctx.restore(); }
+  ctx.save(); ctx.translate(cx, y); ctx.scale(.6, .6); ctx.translate(-cx, -y); faller(cx, y + 230, 1, t, false); ctx.restore();
+  // labels
+  if (t > T.fall) { txt('CRUST', 190, 640, 44, '#fde68a', { lw: 9 }); txt('CORE', 880, 1080, 54, '#fde047', { lw: 10 }); }
+  if (t < T.fall) { top2('HOW MANY', 'MINUTES?', '#facc15', 1, 140, 170); qmark(870, 700, t, T.guess + .3, '#facc15', 180); badge(540, 490, 700, 110, '#facc15', ['COMMENT A NUMBER'], [62], T.cm, t, -.03, INK); }
+  else if (t < T.ctr) { top2('12,742 KM', 'FASTER...', '#38bdf8', pop(T.fall, t), 130, 140); }
+  else if (t < T.slow) { top2('OVER', '8 KM/S', '#f87171', pop(T.fast, t) || .001, 130, 200); }
+  else top2('SLOWING', 'DOWN...', '#a78bfa', pop(T.slow, t), 140, 150);
+  if (t > T.fall) foot('Earth ~12,742 km wide; speed: physicist A. Klotz (Live Science)');
+}
+function clock(x, y, r, minutes, col = '#fff') { circ(x, y, r, col, INK, 12); for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; line(x + Math.sin(a) * r * .82, y - Math.cos(a) * r * .82, x + Math.sin(a) * r * .92, y - Math.cos(a) * r * .92, 8); }
+  const a = minutes / 60 * Math.PI * 2; ctx.save(); ctx.globalAlpha = .35; ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.moveTo(x, y); ctx.arc(x, y, r * .78, -Math.PI / 2, -Math.PI / 2 + a); ctx.closePath(); ctx.fill(); ctx.restore();
+  line(x, y, x + Math.sin(a) * r * .7, y - Math.cos(a) * r * .7, 14); circ(x, y, 16, INK); }
+function sTime(lt, t) {
+  bgFill('#1e1b4b'); stars(30, .4, t);
+  if (t < T.old) {
+    const m = lerp(0, 38, eo(inv(T.trip, T.n38 + .6, t)));
+    clock(540, 860, 300, m); top2('ABOUT', Math.round(m) + ' MIN', '#4ade80', 1, 120, 200);
+    if (t > T.sch) { hero({ x: 870, y: 1450, s: .85, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.4, re: -.3 }, eyes: 'huge', mouth: 'grin', look: -1, shirt: '#f97316' }); badge(380, 1330, 540, 130, '#0ea5e9', ['UNDER 1 SCHOOL LESSON'], [52], T.sch, t, -.03); }
+  } else {
+    // 42 crossed out, core heavier
+    txt('42 MIN', 300, 560, 120, '#94a3b8', { lw: 18 }); if (t > T.old + .9) { line(110, 600, 490, 510, 18, '#ef4444'); }
+    txt('38 MIN', 780, 560, 130, '#4ade80', { lw: 20 });
+    top2('OLD BOOKS', 'WERE WRONG', '#f87171', pop(T.old, t), 130, 140);
+    if (t > T.old) { const k = pop(T.old + .2, t); ctx.save(); ctx.translate(540, 1080); ctx.scale(k, k); circ(0, 0, 330, '#f97316', INK, 10); circ(0, 0, 150, '#fde047', INK, 8); if (t > T.core) txt('HEAVY', 0, 12, 70 * pop(T.core, t), '#7c2d12', { stroke: false }); ctx.restore();
+      for (let i = 0; i < 3; i++) { const yy = 650 + ((t * 300 + i * 100) % 300); line(540, yy, 540, yy + 40, 10, '#fff'); } }
+    badge(540, 1480, 760, 120, '#7c3aed', ['CORE: 4X DENSER THAN CRUST'], [50], T.core + .4, t, -.02);
+    foot('Old 42 min assumed even density. Center ~13 g/cm3, crust ~3 (Live Science)');
+  }
+  if (t < T.old) foot('Assumes no air and no heat in the tunnel (Klotz, Am. J. Phys. 2015)');
+}
+function sSwing(lt, t) {
+  bgFill('#0b1020'); stars(40, .6, t);
+  const cx = 540, cy = 1030, R = 500; earthCut(cx, cy, R, t);
+  // hero pops up at the bottom side (other side), reaches edge, then falls back if not grabbed
+  const ph = (t - T.let) * 1.4;
+  let p = t < T.back ? .97 - .03 * Math.abs(Math.sin(ph * 2)) : .5 + .47 * Math.cos((t - T.back) * 2.2);
+  const y = cy - R + (1 - p) * 2 * R; // other side drawn at top: flip view
+  ctx.save(); ctx.translate(cx, y); ctx.scale(.6, .6); ctx.translate(-cx, -y); hero({ x: cx, y: y + 200, s: 1, pose: { lt: .2, ls: .3, rt: -.2, rs: .3, la: -2.8, le: -.1, ra: 2.8, re: .1 }, eyes: 'huge', mouth: t < T.back ? 'grin' : 'scream', shadow: false }); ctx.restore();
+  if (t > T.swing) { ctx.save(); ctx.strokeStyle = '#facc15'; ctx.lineWidth = 12; for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(cx + s * 140, cy - 300); ctx.lineTo(cx + s * 140, cy + 300); ctx.stroke(); line(cx + s * 140, cy - 300, cx + s * 140 - 25, cy - 260, 12, '#facc15'); line(cx + s * 140, cy - 300, cx + s * 140 + 25, cy - 260, 12, '#facc15'); line(cx + s * 140, cy + 300, cx + s * 140 - 25, cy + 260, 12, '#facc15'); line(cx + s * 140, cy + 300, cx + s * 140 + 25, cy + 260, 12, '#facc15'); } ctx.restore(); }
+  if (t < T.back) top2('GRAB', 'THE EDGE!', '#4ade80', pop(T.let, t), 150, 150);
+  else if (t < T.swing) top2('TOO LATE...', 'BACK DOWN', '#f87171', pop(T.back, t), 120, 150);
+  else top2('BACK AND', 'FORTH', '#facc15', pop(T.swing, t), 140, 170);
+  foot('No air: you swing back and forth like a pendulum (Live Science)');
+}
+function sDig(lt, t) {
+  bgFill('#7dd3fc'); floor('#16a34a', 560);
+  ctx.fillStyle = '#92400e'; ctx.fillRect(-300, 600, W + 600, H); ctx.strokeStyle = INK; ctx.lineWidth = 8; line(-300, 600, W + 300, 600, 8);
+  ctx.fillStyle = '#78350f'; for (let i = 0; i < 30; i++) circ(rnd(i) * W, 700 + rnd(i + 5) * 1000, 8 + rnd(i + 9) * 18, '#78350f');
+  // drill hole: tiny compared to the scale bar
+  const k = eo(inv(T.d12, T.d12 + 1, t)); ctx.fillStyle = '#111827'; ctx.fillRect(250, 600, 30, 20 + 30 * k); ctx.strokeRect(250, 600, 30, 20 + 30 * k);
+  hero({ x: 140, y: 560, s: .8, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -1.6, re: -.4 }, eyes: 'norm', mouth: t > T.d12 ? 'o' : 'smile', look: 1, shirt: '#ef4444' });
+  // scale bar
+  const bx = 820, by0 = 640, by1 = 1500; box(bx - 40, by0, 80, by1 - by0, '#1e293b', 14, 8); ctx.fillStyle = '#ef4444'; ctx.fillRect(bx - 32, by0 + 4, 64, 6 + 4 * k); txt('12 KM', bx - 200, by0 + 40, 54, '#fde047', { lw: 10 }); txt('12,742 KM', bx - 10, by1 + 60, 54, '#fff', { lw: 10 });
+  if (t < T.d12) top2('DEEPEST', 'HOLE EVER?', '#fde047', pop(T.dig, t), 140, 140);
+  else top2('JUST', '12 KM', '#fde047', pop(T.d12, t), 120, 200);
+  badge(420, 1150, 520, 160, '#dc2626', ['ONLY 0.1 %', 'OF THE WAY'], [70, 48], T.pct, t, -.03);
+  foot('Soviet drilling 1970-89: 12 km, about 0.1 % of the way (Live Science)', 1840, '#fde68a');
+}
+function sEnd(lt, t) {
+  bgFill('#0b1020'); stars(50, .8, t);
+  circ(540, 820, 300, '#3b82f6', INK, 10); for (const [x, y, r] of [[460, 740, 110], [640, 900, 90]]) circ(x, y, r, '#22c55e', INK, 7); ctx.fillStyle = '#020617'; ctx.beginPath(); ctx.ellipse(540, 540, 70, 22, 0, 0, 7); ctx.fill();
+  top2('WOULD YOU', 'JUMP?', '#38bdf8', pop(T.q, t), 150, 170);
+  const p1 = t > T.yn && t < T.yn + .4, p2 = t > T.yn + .5 && t < T.yn + .9;
+  box(90, 1240 + (p1 ? 12 : 0), 380, 170, '#16a34a', 46, 9); txt('YES', 280, 1330 + (p1 ? 12 : 0), 100, '#fff', { lw: 16 });
+  box(610, 1240 + (p2 ? 12 : 0), 380, 170, '#dc2626', 46, 9); txt('NO', 800, 1330 + (p2 ? 12 : 0), 100, '#fff', { lw: 16 });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(0, 1), fn: sFall, push: .03, flash: 1 }, { t0: mid(4, 5), fn: sTime, push: .04, flash: .8 }, { t0: mid(6, 7), fn: sSwing, push: .03, flash: .8 }, { t0: mid(7, 8), fn: sDig, push: .04, flash: .8 }, { t0: mid(8, 9), fn: sEnd, push: .04, flash: .8 }];
+const CAP = [["jump into a hole", "that goes", "straight through", "the earth.", "ready?", "jump!"], ["guess", "how many minutes", "until you pop out", "the other side.", "comment a number."], ["you fall", "almost thirteen", "thousand kilometres,", "faster", "and faster."], ["at the center,", "you're going", "over eight", "kilometres", "per second."], ["then gravity", "pulls back,", "and you slow down", "until", "the other side."], ["the whole trip:", "about", "thirty eight minutes.", "shorter than", "most school lessons."], ["old textbooks", "said forty two.", "but earth's core", "is heavier,", "so you fall faster."], ["don't let go", "at the top,", "or you fall", "all the way back.", "like a swing."], ["the deepest hole", "humans ever dug?", "just", "twelve kilometres.", "about zero point", "one percent", "of the way."], ["would you jump?", "comment", "yes or no."]];
+const HOT = new Set(["jump!", "comment a number.", "and faster.", "over eight", "per second.", "thirty eight minutes.", "is heavier,", "like a swing.", "twelve kilometres.", "one percent", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>
