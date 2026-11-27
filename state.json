@@ -1,5 +1,5 @@
 {
- "uploaded_count": 67,
+ "uploaded_count": 70,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -537,6 +537,30 @@
    "mode": "scheduled 2026-11-27T17:30:00Z",
    "publish_at": "2026-11-27T18:30:00+01:00",
    "uploaded_at": "2026-11-26T19:56:20+00:00"
+  },
+  {
+   "tag": "video-20261128-slot2",
+   "video_id": "6FxoUd5MJYw",
+   "title": "25 \u20ac a Month at 16 vs 100 \u20ac at 40: Who Wins? \ud83d\udcb6 #shorts",
+   "mode": "scheduled 2026-11-28T15:00:00Z",
+   "publish_at": "2026-11-28T16:00:00+01:00",
+   "uploaded_at": "2026-11-27T15:01:16+00:00"
+  },
+  {
+   "tag": "video-20261128-slot3",
+   "video_id": "x8Ul4vxAeIw",
+   "title": "THE LAST BUS (Part 2) #shorts",
+   "mode": "scheduled 2026-11-28T19:00:00Z",
+   "publish_at": "2026-11-28T20:00:00+01:00",
+   "uploaded_at": "2026-11-27T15:01:16+00:00"
+  },
+  {
+   "tag": "video-20261128-slot4",
+   "video_id": "MkDIwQAS5D4",
+   "title": "Guess What GTA 6 Made in ONE Day \ud83d\udcb0 #shorts",
+   "mode": "scheduled 2026-11-28T10:30:00Z",
+   "publish_at": "2026-11-28T11:30:00+01:00",
+   "uploaded_at": "2026-11-27T15:01:16+00:00"
   }
  ]
 }
