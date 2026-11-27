@@ -1,0 +1,12 @@
+[
+ "Your phone just buzzed. Check it. Nothing? Your brain made that up.",
+ "It's called a phantom vibration. Guess first: how many students in one study felt it? Comment a percent.",
+ {"text": "Nearly ninety percent!", "gap": 0.5},
+ "So why does your brain fake a buzz?",
+ "When you're waiting for a message, your brain stays on alert, like a guard dog barking at every leaf.",
+ "Then a tiny muscle twitch, or your jeans pressing on your leg...",
+ {"text": "And your brain yells: notification!", "gap": 0.5},
+ "Scientists think your brain is so tuned in to that buzz, it mistakes other feelings for it.",
+ "For some people, just carrying the phone in a different pocket helps.",
+ {"text": "Did your phone fake buzz this week? Yes or no?", "gap": 0.6}
+]

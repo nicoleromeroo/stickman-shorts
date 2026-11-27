@@ -1,0 +1,11 @@
+[
+ "Four hours of sleep. Every night. And you'd barely feel tired.",
+ "That's twenty eight extra hours a week. Sounds amazing, right?",
+ "Scientists tested it. Adults slept four, six or eight hours a night, for two weeks.",
+ "Guess first: the four hour group got as slow as someone awake for how many days? Comment a number.",
+ {"text": "Two days straight! And it got worse almost every day.", "gap": 0.5},
+ "The eight hour group? Totally fine.",
+ {"text": "The scary part: the short sleepers barely felt sleepy.", "gap": 0.6},
+ "Teens need eight to ten hours. In the US, only about one in four high schoolers even gets eight.",
+ {"text": "So would you trade sleep for those extra hours? Yes or no?", "gap": 0.6}
+]

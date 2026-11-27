@@ -1,0 +1,116 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { barely: wt(0, 'barely'), xtra: at(1, 0), amaze: wt(1, 'sounds'), lab: at(2, 0), g4: wt(2, 'four,'), g6: wt(2, 'six'), g8: wt(2, 'eight hours'), wk: wt(2, 'two weeks'),
+  guess: at(3, 0), cm: wt(3, 'comment'), rev: at(4, 0), worse: wt(4, 'got worse'), fine: at(5, 0), scary: at(6, 0), barely2: wt(6, 'barely'),
+  teen: at(7, 0), us: wt(7, 'in the us'), one4: wt(7, 'one in four'), q: at(8, 0), yn: wt(8, 'yes') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#94a3b8') { txt(s, 540, y, 28, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+function top2(a, b, cb = '#facc15', k = 1, s1 = 140, s2 = 150) { txt(a, 540, 180, s1 * k, '#fff', { lw: 24 }); if (b) txt(b, 540, 330, s2 * k, cb, { lw: 26 }); }
+function stars(n, a, y1 = 1100, t = 0) { ctx.save(); for (let i = 0; i < n; i++) { ctx.globalAlpha = a * (.5 + .5 * Math.sin(t * 2 + i)); circ(rnd(i) * W, rnd(i + 40) * y1, 3 + rnd(i + 9) * 4, '#fff'); } ctx.restore(); }
+function moon(x, y, r, bg) { circ(x, y, r, '#fef3c7', INK, 6); circ(x + r * .45, y - r * .25, r * .9, bg); }
+function clock(x, y, s, label, col = '#ef4444') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-170, -90, 340, 180, '#111827', 30, 9); line(-120, 90, -140, 130, 12); line(120, 90, 140, 130, 12); txt(label, 0, 22, 110, col, { stroke: false }); ctx.restore(); }
+function bed(x, y, w, col = '#6366f1') { box(x, y - 90, w, 90, col, 14, 8); box(x - 10, y - 200, 40, 230, '#92400e', 10, 8); box(x + w - 30, y - 140, 40, 170, '#92400e', 10, 8); box(x + 30, y - 130, 150, 60, '#fff', 24, 7); }
+function zzz(x, y, t, a = 1) { ctx.save(); ctx.globalAlpha = a; for (let i = 0; i < 3; i++) { const p = (t * .5 + i / 3) % 1; ctx.globalAlpha = a * Math.sin(p * Math.PI); txt('Z', x + p * 90, y - p * 160, 50 + i * 14, '#c4b5fd', { lw: 8 }); } ctx.restore(); }
+function bags(x, y, s) { ctx.save(); ctx.strokeStyle = '#7c3aed'; ctx.lineWidth = 6 * s; for (const sx of [-1, 1]) { ctx.beginPath(); ctx.arc(x + sx * 22 * s, y + 10 * s, 15 * s, .15 * Math.PI, .85 * Math.PI); ctx.stroke(); } ctx.restore(); }
+function controller(hx, hy) { box(hx - 60, hy - 45, 120, 70, '#1f2937', 30, 6); circ(hx - 28, hy - 10, 9, '#ef4444'); circ(hx + 28, hy - 10, 9, '#22c55e'); }
+const SLEEPY = { lt: .1, ls: 0, rt: -.1, rs: 0, la: .15, le: .1, ra: -.15, re: -.1 };
+
+function sHook(lt, t) {
+  bgFill('#1e1b4b'); floor('#312e81', 1450);
+  box(620, 470, 360, 380, '#0b1020', 14, 10); ctx.save(); rr(620, 470, 360, 380, 14); ctx.clip(); stars(14, 1, 900, t); ctx.restore(); moon(860, 590, 55, '#0b1020'); line(800, 470, 800, 850, 9);
+  bed(80, 1450, 520);
+  if (t < T.xtra) {
+    clock(800, 1060, 1, '4:00');
+    const up = eo(inv(0, .8, t));
+    hero({ x: lerp(330, 480, up), y: 1450, s: 1.15, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: 2.6 - .2 * Math.sin(t * 5), le: .2, ra: -2.6 + .2 * Math.sin(t * 5), re: -.2 }, eyes: 'huge', mouth: 'o', shirt: '#22c55e' });
+    top2('4 HOURS', 'EVERY NIGHT', '#c4b5fd', 1, 160, 130);
+    badge(540, 490, 620, 120, '#7c3aed', ['BARELY TIRED?'], [70], T.barely, t, -.04);
+  } else {
+    clock(800, 1060, 1, '+28 H', '#22c55e');
+    const j = Math.abs(Math.sin(t * 6)) * 30;
+    hero({ x: 420, y: 1450 - j, s: 1.15, pose: { lt: .3, ls: -.4, rt: -.3, rs: .4, la: .6, le: -1.4, ra: -.6, re: 1.4 }, eyes: 'huge', mouth: 'grin', shirt: '#22c55e', hold: controller });
+    top2('+28 HOURS', 'EVERY WEEK', '#4ade80', pop(T.xtra, t), 150, 130);
+    if (t > T.amaze) sparkle(420, 900, 80, (t * 3) % 1);
+    foot('Compared to sleeping 8 hours a night: 4 h x 7 nights = 28 h');
+  }
+}
+function sLab(lt, t) {
+  bgFill('#e0f2fe'); floorTiles(1450, '#cbd5e1', '#e2e8f0');
+  const grp = [['4 H', '#ef4444', T.g4], ['6 H', '#f97316', T.g6], ['8 H', '#22c55e', T.g8]];
+  grp.forEach(([lab, col, t0], i) => { const x = 200 + i * 340; if (t < t0) return; const k = pop(t0, t);
+    ctx.save(); ctx.translate(x, 1450); ctx.scale(k, k); ctx.translate(-x, -1450);
+    hero({ x, y: 1450, s: 1.1, pose: STAND, eyes: i === 0 ? 'norm' : 'norm', mouth: i === 2 ? 'smile' : 'flat', shirt: col });
+    box(x - 120, 720, 240, 130, col, 24, 8); txt(lab, x, 808, 90, '#fff', { stroke: false }); ctx.restore(); });
+  if (t < T.guess) {
+    top2('SCIENTISTS', 'TESTED IT', '#0284c7', pop(T.lab, t), 140, 150);
+    if (t > T.wk) badge(540, 560, 520, 120, '#1e293b', ['14 NIGHTS'], [80], T.wk, t, -.03);
+  } else {
+    top2('AWAKE FOR', 'HOW MANY DAYS?', '#ef4444', pop(T.guess, t), 140, 110);
+    qmark(220, 560, t, T.guess + .2, '#facc15', 130);
+    badge(620, 560, 680, 120, '#facc15', ['COMMENT A NUMBER'], [64], T.cm, t, -.03, INK);
+  }
+  foot('Van Dongen et al., Sleep 2003: 48 adults, 2 weeks (via Science News)', 1840, '#475569');
+}
+function sReveal(lt, t) {
+  if (t < T.fine) {
+    bgFill('#1f2937'); floor('#111827', 1450);
+    top2('2 DAYS', 'STRAIGHT!', '#ef4444', pop(T.rev, t), 200, 150);
+    // chart going down
+    const cx = 70, cy = 1000, cw = 560, ch = 440; box(cx - 20, cy - ch - 20, cw + 40, ch + 60, '#0f172a', 20, 8);
+    txt('ATTENTION & REACTION', cx + cw / 2, cy - ch + 30, 36, '#94a3b8', { stroke: false });
+    const k = eio(inv(T.rev + .2, T.worse + 1.2, t)); ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 14; ctx.lineCap = 'round'; ctx.beginPath();
+    for (let d = 0; d <= 14 * k; d += .25) { const x = cx + 30 + d / 14 * (cw - 60), y = cy - ch + 110 + (d / 14) * (ch - 150) + Math.sin(d * 2) * 8; d === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke();
+    txt('DAY 1', cx + 60, cy + 20, 36, '#fff', { stroke: false }); txt('DAY 14', cx + cw - 70, cy + 20, 36, '#fff', { stroke: false });
+    hero({ x: 860, y: 1450, s: 1.05, lean: .1 + Math.sin(t * 2) * .04, pose: SLEEPY, eyes: 'closed', mouth: 'wavy', shirt: '#ef4444' });
+    box(760, 650, 200, 100, '#ef4444', 20, 7); txt('4 H', 860, 722, 70, '#fff', { stroke: false });
+    zzz(930, 950, t);
+  } else {
+    bgFill('#dcfce7'); floor('#86efac', 1450);
+    const j = Math.abs(Math.sin(t * 6)) * 26;
+    hero({ x: 540, y: 1450 - j, s: 1.25, pose: { lt: .3, ls: -.4, rt: -.3, rs: .4, la: 2.5, le: .2, ra: -2.5, re: -.2 }, eyes: 'huge', mouth: 'grin', shirt: '#22c55e' });
+    top2('8 HOURS:', 'TOTALLY FINE', '#16a34a', pop(T.fine, t), 150, 130);
+    sparkle(320, 800, 70, (t * 2) % 1); sparkle(760, 760, 60, (t * 2 + .5) % 1);
+  }
+  foot('4 h and 6 h groups after 14 days ~ total sleep loss group after 2 days', 1840, t < T.fine ? '#94a3b8' : '#166534');
+}
+function sScary(lt, t) {
+  bgFill('#111827'); floor('#1f2937', 1450);
+  hero({ x: 330, y: 1450, s: 1.15, pose: { lt: .1, ls: 0, rt: -.1, rs: 0, la: .3, le: .2, ra: -2.4, re: -.6 }, eyes: 'norm', mouth: 'smile', shirt: '#ef4444' });
+  bags(330, 1450 - 1.15 * (150 + 140 + 78) - 16, 1.15);
+  if (t > T.scary + .4) { const k = pop(T.scary + .4, t); ctx.save(); ctx.translate(380, 760); ctx.scale(k, k); bubble(0, 0, "I FEEL FINE!", 66); ctx.restore(); }
+  brainChar(700, 1200, .85 + .03 * Math.sin(t * 3), { eyes: 'bored', mouth: 'flat', col: '#c4b5fd', tilt: Math.sin(t * 1.5) * .08 });
+  ctx.save(); ctx.translate(980, 1440); meter(0, 0, '', .2 + .05 * Math.sin(t * 4), '#ef4444'); ctx.restore();
+  zzz(880, 1000, t);
+  top2('THEY DIDN\'T', 'NOTICE', '#f87171', pop(T.scary, t), 140, 170);
+  foot('After 14 days, 4 h and 6 h sleepers "cited little sleepiness" (Science News)');
+}
+function sTeens(lt, t) {
+  bgFill('#0b1530'); stars(30, .6, 900, t); floor('#1e293b', 1450);
+  const us = t >= T.us;
+  const cols = ['#facc15', '#64748b', '#64748b', '#64748b'];
+  for (let i = 0; i < 4; i++) { const x = 150 + i * 260, ok = !us || i === 0 || t < T.one4;
+    hero({ x, y: 1450, s: .98, pose: STAND, eyes: ok ? 'norm' : 'closed', mouth: ok ? 'smile' : 'wavy', shirt: ok ? ['#22c55e', '#3b82f6', '#ef4444', '#a855f7'][i] : '#475569', pants: ok ? '#334155' : '#1e293b' });
+        if (us && t > T.one4 && i === 0) sparkle(x, 900, 60, (t * 2) % 1); }
+  if (!us) { top2('TEENS NEED', '8-10 HOURS', '#a78bfa', pop(T.teen, t), 140, 150); clock(540, 680, 1.1, '8-10 H', '#a78bfa'); }
+  else { top2('ONLY 1 IN 4', 'GETS 8 HOURS', '#facc15', pop(T.us, t), 150, 120); badge(540, 600, 700, 120, '#1d4ed8', ['US HIGH SCHOOLERS, 2025'], [56], T.us + .3, t, -.03); }
+  foot(us ? 'CDC YRBS 2025: 24% got 8+ hours on an average school night' : 'Recommended for ages 13-18 (American Academy of Sleep Medicine, via CDC)');
+}
+function sEnd(lt, t) {
+  bgFill('#1e1b4b'); stars(30, .8, 1000, t); floor('#312e81', 1450);
+  top2('TRADE SLEEP FOR', '+28 HOURS?', '#4ade80', pop(T.q, t), 110, 150);
+  clock(540, 700, .9, '4:00');
+  const p1 = t > T.yn && t < T.yn + .4, p2 = t > T.yn + .5 && t < T.yn + .9;
+  box(90, 1140 + (p1 ? 12 : 0), 380, 170, '#16a34a', 46, 9); txt('YES', 280, 1230 + (p1 ? 12 : 0), 110, '#fff', { lw: 16 });
+  box(610, 1140 + (p2 ? 12 : 0), 380, 170, '#dc2626', 46, 9); txt('NO', 800, 1230 + (p2 ? 12 : 0), 110, '#fff', { lw: 16 });
+  qmark(540, 980, t, T.q + .2, '#fff', 120);
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(1, 2), fn: sLab, push: .04, flash: 1 }, { t0: mid(3, 4), fn: sReveal, push: .04, flash: 1 }, { t0: mid(5, 6), fn: sScary, push: .04, flash: .8 }, { t0: mid(6, 7), fn: sTeens, push: .04, flash: .8 }, { t0: mid(7, 8), fn: sEnd, push: .04, flash: .8 }];
+const CAP = [["four hours", "of sleep.", "every night.", "and you'd", "barely feel tired."], ["that's", "twenty eight", "extra hours", "a week.", "sounds amazing,", "right?"], ["scientists", "tested it.", "adults slept", "four, six", "or eight hours", "a night,", "for two weeks."], ["guess first:", "the four hour group", "got as slow", "as someone awake", "for how many days?", "comment a number."], ["two days", "straight!", "and it got worse", "almost every day."], ["the eight", "hour group?", "totally fine."], ["the scary part:", "the short sleepers", "barely", "felt sleepy."], ["teens need", "eight to ten hours.", "in the us,", "only about", "one in four", "high schoolers", "even gets eight."], ["so would you", "trade sleep", "for those", "extra hours?", "yes or no?"]];
+const HOT = new Set(["four hours", "barely feel tired.", "twenty eight", "for two weeks.", "comment a number.", "two days", "straight!", "totally fine.", "felt sleepy.", "eight to ten hours.", "one in four", "yes or no?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

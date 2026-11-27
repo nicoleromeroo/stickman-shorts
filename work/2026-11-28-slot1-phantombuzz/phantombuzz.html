@@ -1,0 +1,100 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+const T = { check: wt(0, 'check'), noth: wt(0, 'nothing'), brain: wt(0, 'your brain'), ph: at(1, 0), guess: wt(1, 'guess'), cm: wt(1, 'comment'), rev: at(2, 0),
+  why: at(3, 0), alert: at(4, 0), dog: wt(4, 'guard dog'), leaf: wt(4, 'leaf'), tw: wt(5, 'twitch'), jeans: wt(5, 'jeans'), noti: at(6, 0), notw: wt(6, 'notification'),
+  sci: at(7, 0), mist: wt(7, 'mistakes'), fix: at(8, 0), diff: wt(8, 'different'), q: at(9, 0), yn: wt(9, 'yes') };
+const pop = (t0, t) => eob(inv(t0, t0 + .28, t));
+function badge(x, y, w, h, fill, lines, sizes, t0, t, rot = 0, col = '#fff') { if (t < t0) return; const k = pop(t0, t); ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); box(-w / 2, -h / 2, w, h, fill, 28, 9); const n = lines.length; lines.forEach((s, i) => txt(s, 0, (i - (n - 1) / 2) * sizes[i] * 1.05 + 6, sizes[i], col, { stroke: false })); ctx.restore(); }
+function foot(s, y = 1840, col = '#94a3b8') { txt(s, 540, y, 28, col, { stroke: false, font: 'Nun', weight: '900 ' }); }
+function top2(a, b, cb = '#facc15', k = 1, s1 = 140, s2 = 150) { txt(a, 540, 180, s1 * k, '#fff', { lw: 24 }); if (b) txt(b, 540, 330, s2 * k, cb, { lw: 26 }); }
+function buzzLines(x, y, r, t, col = '#facc15', a = 1) { ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = col; ctx.lineWidth = 10; ctx.lineCap = 'round'; const w = (t * 6) % 1; for (const sx of [-1, 1]) for (let i = 0; i < 2; i++) { ctx.beginPath(); ctx.arc(x, y, r + i * 34 + w * 10, sx > 0 ? -.5 : Math.PI - .5, sx > 0 ? .5 : Math.PI + .5); ctx.stroke(); } ctx.restore(); }
+function screen(label, col = '#fff', size = 34) { return (sx, sy, sw, sh) => { txt(label, sx + sw / 2, sy + sh / 2 + 12, size, col, { stroke: false }); }; }
+function jeans(x, y, s, t) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#2563eb'; ctx.strokeStyle = INK; ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(-260, -300); ctx.lineTo(260, -300); ctx.lineTo(280, 500); ctx.lineTo(40, 500); ctx.lineTo(0, -40); ctx.lineTo(-40, 500); ctx.lineTo(-280, 500); ctx.closePath(); ctx.fill(); ctx.stroke(); box(-260, -330, 520, 60, '#1d4ed8', 10, 9); circ(0, -300, 16, '#facc15', INK, 5);
+  ctx.strokeStyle = '#93c5fd'; ctx.lineWidth = 6; ctx.setLineDash([14, 12]); ctx.beginPath(); ctx.moveTo(-230, -240); ctx.quadraticCurveTo(-120, -140, -110, -270); ctx.stroke(); ctx.beginPath(); ctx.moveTo(230, -240); ctx.quadraticCurveTo(120, -140, 110, -270); ctx.stroke(); ctx.setLineDash([]); ctx.restore(); }
+function leafAt(x, y, rot) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.fillStyle = '#f97316'; ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(0, 0, 50, 26, 0, 0, 7); ctx.fill(); ctx.stroke(); line(-50, 0, 40, 0, 5); ctx.restore(); }
+
+function sHook(lt, t) {
+  bgFill('#fde68a'); floor('#d6b98c', 1450);
+  const buzzing = t < T.check; const up = eo(inv(T.check, T.check + .4, t));
+  const shake = buzzing ? Math.sin(t * 60) * 8 : 0;
+  hero({ x: 420 + shake, y: 1450, s: 1.35, pose: up > 0 ? { lt: .1, ls: 0, rt: -.1, rs: 0, la: lerp(.3, 2.2, up), le: lerp(.2, .3, up), ra: -.3, re: -.2 } : { lt: .15, ls: 0, rt: -.15, rs: 0, la: .3, le: .2, ra: -.2, re: -.6 },
+    eyes: 'huge', mouth: t > T.noth ? 'frown' : 'o', shirt: '#ef4444', pants: '#2563eb', look: 1,
+    });
+  if (up > 0) { ctx.save(); ctx.translate(800, 1000); ctx.scale(up, up); phoneDev(0, 0, 1.1, 'on', { draw: screen(t > T.noth ? '0 NEW' : '...', '#fff', 46), c1: '#475569', c2: '#1e293b' }); ctx.restore(); }
+  if (buzzing) { const px = 420 + 1.35 * 30 + shake, py = 1450 - 1.35 * 160; box(px - 22, py - 40, 44, 80, '#111827', 10, 5); buzzLines(px, py, 60, t); }
+  if (t < T.noth) top2('BZZZ!', 'CHECK IT', '#ef4444', 1, 180, 130);
+  else if (t < T.brain) top2('NOTHING?', '', '#ef4444', pop(T.noth, t), 160);
+  else top2('YOUR BRAIN', 'MADE IT UP', '#7c3aed', pop(T.brain, t), 140, 150);
+  if (t > T.brain) brainChar(800, 620, .55, { eyes: 'norm', mouth: 'smirk', col: '#f9a8d4', tilt: Math.sin(t * 3) * .1 });
+}
+function sGuess(lt, t) {
+  bgFill('#1e293b'); floor('#0f172a', 1500); const rv = t >= T.rev;
+  for (let i = 0; i < 10; i++) { const r = Math.floor(i / 5), c = i % 5, x = 140 + c * 200, y = 1010 + r * 470, felt = rv && i < 9, k = felt ? pop(T.rev + i * .04, t) : 0;
+    hero({ x, y, s: .8, pose: STAND, eyes: felt ? 'huge' : 'norm', mouth: felt ? 'o' : 'flat', shirt: felt ? '#facc15' : '#64748b', pants: '#334155' });
+    if (felt) buzzLines(x + 24, y - 130, 40 * k, t + i * .1, '#fde047', .9); }
+  if (!rv) { top2('HOW MANY', 'FELT IT?', '#38bdf8', pop(T.ph, t)); badge(540, 480, 700, 110, '#facc15', ['COMMENT A PERCENT'], [60], T.cm, t, -.03, INK); }
+  else { top2('NEARLY', '90%!', '#facc15', pop(T.rev, t), 140, 220); }
+  foot('Drouin study of college students (NPR). Other studies: 29.6% to 89%');
+}
+function sWhy(lt, t) {
+  bgFill(t < T.alert ? '#ede9fe' : '#fee2e2'); floor(t < T.alert ? '#c4b5fd' : '#fca5a5', 1500);
+  const al = t >= T.alert;
+  brainChar(540, 1150 - (al ? Math.abs(Math.sin(t * 9)) * 30 : 0), 1.5, { eyes: al ? 'huge' : 'norm', mouth: al ? 'o' : 'flat', col: '#f9a8d4', look: Math.sin(t * 4) });
+  if (!al) { top2('WHY FAKE', 'A BUZZ?', '#7c3aed', pop(T.why, t)); qmark(860, 760, t, T.why + .2, '#7c3aed', 150); }
+  else {
+    top2('ALWAYS', 'ON ALERT', '#dc2626', pop(T.alert, t), 150, 160);
+    const blink = Math.floor(t * 4) % 2; circ(540, 820, 50, blink ? '#ef4444' : '#7f1d1d', INK, 8); box(490, 840, 100, 40, '#374151', 8, 6);
+    if (t > T.dog) { const p = clamp((t - T.dog) / Math.max(.4, T.leaf - T.dog + .2)); leafAt(220 + Math.sin(p * 8) * 50, lerp(560, 1450, p), Math.sin(p * 10) * .6); }
+    if (t > T.leaf) { const k = pop(T.leaf, t); ctx.save(); ctx.translate(700, 640); ctx.scale(k, k); bubble(0, 0, 'WOOF! WOOF!', 66); ctx.restore(); }
+  }
+}
+function sTwitch(lt, t) {
+  bgFill('#e0f2fe');
+  jeans(540, 1060, 1.0, t);
+  // phone outline in left pocket
+  box(540 - 225, 1060 - 250, 110, 180, 'rgba(17,24,39,.35)', 16, 6);
+  if (t > T.tw && t < T.jeans + .2) { const k = (t * 8) % 1; ctx.save(); ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(660, 1150); ctx.lineTo(700, 1110); ctx.lineTo(730, 1170); ctx.lineTo(770, 1120); ctx.stroke(); ctx.restore(); sparkle(720, 1140, 60 + 20 * k, k, '#fecaca'); }
+  if (t > T.jeans && t < T.noti) { for (let i = 0; i < 3; i++) { const y = 900 + i * 80, o = Math.sin(t * 8 + i) * 10; line(110 + o, y, 170 + o, y, 12, '#0f172a'); line(170 + o, y, 150 + o, y - 18, 12, '#0f172a'); line(170 + o, y, 150 + o, y + 18, 12, '#0f172a'); } }
+  if (t < T.noti) { if (t < T.jeans) top2('TINY', 'TWITCH', '#ef4444', pop(at(5, 0), t), 140, 160); else top2('JEANS', 'PRESSING', '#2563eb', pop(T.jeans, t), 140, 150); }
+  else {
+    buzzLines(540 - 170, 1060 - 160, 90, t, '#facc15');
+    brainChar(820, 640, .6, { eyes: 'huge', mouth: 'o', col: '#f9a8d4', tilt: Math.sin(t * 20) * .08 });
+    top2('BRAIN:', 'NOTIFICATION!', '#facc15', pop(T.noti, t), 140, 120);
+  }
+}
+function sSci(lt, t) {
+  bgFill('#f1f5f9'); floor('#cbd5e1', 1500);
+  brainChar(330, 1180, 1.05, { eyes: t > T.mist ? 'huge' : 'norm', mouth: t > T.mist ? 'o' : 'smile', col: '#f9a8d4' });
+  const labs = [['TWITCH', '#ef4444'], ['CLOTHES', '#2563eb'], ['SOUNDS', '#16a34a']];
+  labs.forEach(([s, c], i) => { const t0 = T.sci + .5 + i * .45; if (t < t0) return; const k = pop(t0, t), y = 620 + i * 170; ctx.save(); ctx.translate(820, y); ctx.scale(k, k); box(-180, -55, 360, 110, c, 24, 8); txt(s, 0, 20, 64, '#fff', { stroke: false }); ctx.restore(); line(630, y, 520, 1000, 10, '#64748b'); });
+  if (t > T.mist) { const k = pop(T.mist, t); ctx.save(); ctx.translate(800, 1240); ctx.scale(k, k); phoneDev(0, 0, .7, 'on', { draw: screen('BZZ?', '#fff', 50) }); ctx.restore(); buzzLines(800, 1240, 150, t); line(500, 1180, 680, 1220, 12, '#7c3aed'); }
+  top2('TUNED IN', 'TO THE BUZZ', '#7c3aed', pop(T.sci, t), 140, 130);
+  foot('Brain may misread twitches, clothing pressure or sounds (via Wikipedia)', 1840, '#475569');
+}
+function sFix(lt, t) {
+  bgFill('#dcfce7');
+  jeans(540, 1100, .95, t);
+  const k = eio(inv(T.diff, T.diff + .9, t)); const px = lerp(540 - 215, 540 + 105, k), py = 1100 - 250;
+  box(px, py, 110, 180, '#111827', 16, 7); ctx.fillStyle = '#60a5fa'; ctx.fillRect(px + 12, py + 14, 86, 152);
+  if (k > 0 && k < 1) { ctx.save(); ctx.globalAlpha = .7; line(320, 780, 760, 780, 12, '#16a34a'); line(760, 780, 720, 750, 12, '#16a34a'); line(760, 780, 720, 810, 12, '#16a34a'); ctx.restore(); }
+  top2('TRY ANOTHER', 'POCKET', '#16a34a', pop(T.fix, t), 130, 160);
+  if (k >= 1) sparkle(px + 60, py - 30, 60, (t * 2) % 1);
+  foot('Carrying the phone elsewhere reduces phantom buzzes for some people', 1840, '#166534');
+}
+function sEnd(lt, t) {
+  bgFill('#1e1b4b'); floor('#312e81', 1450);
+  phoneDev(540, 760, 1, 'on', { draw: screen('0 NEW', '#fff', 46), c1: '#475569', c2: '#1e293b' }); buzzLines(540, 760, 210, t, '#facc15', .8);
+  top2('FAKE BUZZ', 'THIS WEEK?', '#facc15', pop(T.q, t), 150, 140);
+  const p1 = t > T.yn && t < T.yn + .4, p2 = t > T.yn + .5 && t < T.yn + .9;
+  box(90, 1140 + (p1 ? 12 : 0), 380, 170, '#16a34a', 46, 9); txt('YES', 280, 1230 + (p1 ? 12 : 0), 110, '#fff', { lw: 16 });
+  box(610, 1140 + (p2 ? 12 : 0), 380, 170, '#dc2626', 46, 9); txt('NO', 800, 1230 + (p2 ? 12 : 0), 110, '#fff', { lw: 16 });
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .05 }, { t0: mid(0, 1), fn: sGuess, push: .04, flash: 1 }, { t0: mid(2, 3), fn: sWhy, push: .04, flash: .8 }, { t0: mid(4, 5), fn: sTwitch, push: .04, flash: .8 }, { t0: mid(6, 7), fn: sSci, push: .04, flash: .8 }, { t0: mid(7, 8), fn: sFix, push: .04, flash: .8 }, { t0: mid(8, 9), fn: sEnd, push: .04, flash: .8 }];
+const CAP = [["your phone", "just buzzed.", "check it.", "nothing?", "your brain", "made that up."], ["it's called", "a phantom vibration.", "guess first:", "how many students", "in one study", "felt it?", "comment a percent."], ["nearly", "ninety percent!"], ["so why does", "your brain", "fake a buzz?"], ["when you're waiting", "for a message,", "your brain", "stays on alert,", "like a guard dog", "barking", "at every leaf."], ["then a tiny", "muscle twitch,", "or your jeans", "pressing", "on your leg..."], ["and your brain", "yells:", "notification!"], ["scientists think", "your brain", "is so tuned in", "to that buzz,", "it mistakes", "other feelings", "for it."], ["for some people,", "just carrying", "the phone", "in a different pocket", "helps."], ["did your phone", "fake buzz", "this week?", "yes or no?"]];
+const HOT = new Set(["just buzzed.", "made that up.", "a phantom vibration.", "comment a percent.", "ninety percent!", "fake a buzz?", "stays on alert,", "muscle twitch,", "notification!", "it mistakes", "in a different pocket", "yes or no?"]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>
