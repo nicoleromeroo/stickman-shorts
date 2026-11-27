@@ -1,0 +1,97 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const SMALL = { stroke: false, font: 'Nun', weight: '900 ' };
+function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
+function trophy(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#facc15'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-90, -120); ctx.lineTo(90, -120); ctx.quadraticCurveTo(90, 20, 0, 40); ctx.quadraticCurveTo(-90, 20, -90, -120); ctx.fill(); ctx.stroke(); box(-20, 40, 40, 50, '#facc15', 4, 7); box(-70, 90, 140, 40, '#a16207', 8, 7); txt('#1', 0, -40, 80, INK, { stroke: false }); ctx.restore(); }
+function pad(hx, hy) { box(hx - 70, hy - 30, 140, 60, '#1f2937', 26, 6); circ(hx - 34, hy, 9, '#94a3b8'); circ(hx + 34, hy - 8, 7, '#22c55e'); circ(hx + 48, hy + 8, 7, '#ef4444'); }
+const PADP = { lt: .1, ls: 0, rt: -.1, rs: 0, la: .9, le: -1.9, ra: -.9, re: 1.9 };
+function bill(x, y, s, r = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(r); ctx.scale(s, s); box(-90, -45, 180, 90, '#86efac', 8, 6); circ(0, 0, 26, '#22c55e', INK, 5); txt('$', 0, 4, 40, INK, SMALL); ctx.restore(); }
+function stack(x, y, n, s = 1) { for (let i = 0; i < n; i++) bill(x, y - i * 22 * s, s); }
+function gamebox(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-60, -80, 120, 160, '#1e3a8a', 10, 6); box(-60, -80, 120, 30, '#2563eb', 6, 6); box(-40, -30, 80, 80, '#334155', 6, 4); ctx.restore(); }
+function calendar(x, y, s, top, big) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-190, -200, 380, 400, '#f8fafc', 22, 9); box(-190, -200, 380, 100, '#ef4444', 22, 9); txt(top, 0, -140, 60, '#fff', { lw: 8 }); txt(big, 0, 60, 170, INK, { stroke: false }); ctx.restore(); }
+function clapper(x, y, s, r = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(r); ctx.scale(s, s); box(-120, -60, 240, 160, '#1f2937', 10, 7); ctx.save(); ctx.translate(-120, -60); ctx.rotate(-.35); box(0, -40, 240, 40, '#f8fafc', 6, 7); for (let i = 0; i < 4; i++) { ctx.fillStyle = INK; ctx.fillRect(20 + i * 56, -40, 26, 40); } ctx.restore(); ctx.restore(); }
+const T = { cm: wt(0, 'comment'), hint: at(1, 0), m800: wt(1, 'eight hundred'), y13: wt(1, 'twenty thirteen'), nov: wt(2, 'november'), m32: wt(2, 'thirty two'), before: wt(2, 'before it'),
+  rs: wt(3, 'rockstar says'), b379: wt(3, 'three point'), x4: at(4, 0), big: at(5, 0), movie: wt(5, 'not even'), paid: at(6, 0), pre: wt(6, 'pre-orders'), cut: wt(6, 'shops'), q: at(7, 0) };
+function sGuess(lt, t) {
+  bgFill('#14532d'); floor('#052e16', 1460);
+  txt('ONE GAME. DAY ONE.', 540, 200, 100, '#fde047', { lw: 16 });
+  box(140, 340, 800, 300, '#0f172a', 30, 9); const sp = Math.floor(t * 14); txt('$ ' + ['???', '?!?', '???', '!??'][sp % 4], 540, 520, 160, '#4ade80', { lw: 16 });
+  stick({ x: 330, y: 1700, s: 1.45, shirt: '#f97316', pants: '#1f2937', hair: '#111827', pose: PADP, eyes: 'huge', mouth: 'o', look: 1, bob: Math.abs(Math.sin(t * 6)) * 6, hold: (hx, hy) => pad(hx, hy) });
+  for (let i = 0; i < 6; i++) { const ph = (t * .6 + i / 6) % 1; bill(650 + rnd(i) * 340, lerp(700, 1450, ph), .8, ph * 4 + i); }
+  if (t > T.cm) popIn(t, T.cm, 540, 790, () => { box(-300, -60, 600, 120, '#facc15', 30, 7); txt('COMMENT A NUMBER', 0, 4, 58, INK, { stroke: false }); });
+}
+function sHint(lt, t) {
+  bgFill('#1e3a8a'); floor('#172554', 1460);
+  txt('HINT: GTA 5', 540, 200, 130, '#fde047', { lw: 19 });
+  calendar(780, 700, 1, 'SEPT', '2013');
+  const k = eo(inv(T.m800 - .3, T.m800 + .8, t)); stack(300, 1380, Math.round(14 * k), 1.3);
+  if (t > T.m800) popIn(t, T.m800, 300, 600, () => { box(-230, -80, 460, 160, '#22c55e', 26, 8); txt('~$800M', 0, 10, 100, '#fff', { lw: 12 }); });
+  txt('DAY ONE', 300, 760, 56, '#fff', { lw: 8 });
+}
+function sLaunch(lt, t) {
+  bgFill('#4c1d95'); floor('#2e1065', 1460);
+  txt('GTA 6', 540, 190, 150, '#fde047', { lw: 21 });
+  if (t < T.m32 - .3) { calendar(540, 720, 1.2, 'NOV', '19'); }
+  else { txt('SOLD BEFORE LAUNCH:', 540, 380, 70, '#fff', { lw: 10 }); const k = eo(inv(T.m32 - .3, T.m32 + 1.4, t));
+    box(90, 450, 900, 200, '#0f172a', 26, 9); txt(fmt(32500000 * k), 540, 580, 130, '#fde047', { lw: 14 }); txt('COPIES', 540, 730, 70, '#c4b5fd', { lw: 9 });
+    for (let i = 0; i < 18 * k; i++) gamebox(170 + (i % 9) * 92, 900 + Math.floor(i / 9) * 180, .65); }
+  if (t > T.before) popIn(t, T.before, 540, 1320, () => { box(-330, -60, 660, 120, '#ef4444', 26, 7); txt('BEFORE DAY ONE!', 0, 6, 70, '#fff', { lw: 8 }); });
+  hero({ x: 940, y: 1500, s: .8, pose: STAND, eyes: 'huge', mouth: 'o', look: -1, flip: true });
+}
+function sReveal(lt, t) {
+  bgFill('#052e16'); spot(540, 800, 800, .25, '74,222,128');
+  txt('END OF DAY ONE:', 540, 200, 100, '#fff', { lw: 15 });
+  const k = eo(inv(T.b379 - .2, T.b379 + 1.4, t));
+  box(40, 330, 1000, 260, '#0f172a', 30, 9); txt('$' + fmt(3790000000 * k), 540, 490, 108, '#4ade80', { lw: 13 });
+  if (k >= 1) { sparkle(120, 360, 50, 1); sparkle(960, 600, 40, 1); popIn(t, T.b379 + 1.4, 540, 690, () => txt('$3.79 BILLION', 0, 0, 120, '#fde047', { lw: 18 })); }
+  const n = Math.round(30 * k); for (let i = 0; i < n; i++) bill(160 + (i % 6) * 150, 1340 - Math.floor(i / 6) * 70, .9, (rnd(i) - .5) * .3);
+  txt('Rockstar/Take-Two company estimate: worldwide retail sales', 540, 1450, 32, '#bbf7d0', SMALL); txt('incl. pre-orders, through 19 Nov 2026', 540, 1490, 30, '#bbf7d0', SMALL);
+}
+function sCompare(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1400);
+  txt('DAY ONE SALES', 540, 200, 116, '#fde047', { lw: 18 });
+  const k1 = 1, k2 = eo(inv(T.x4, T.x4 + 1, t)), base = 1400, max = 900;
+  box(170, base - max * .8 / 3.79, 300, max * .8 / 3.79, '#64748b', 14, 8); txt('~$0.8B', 320, base - max * .8 / 3.79 - 55, 76, '#fff', { lw: 10 }); txt('GTA 5 (2013)', 320, base + 60, 50, '#cbd5e1', { lw: 7 });
+  if (k2 > 0) { const h = max * k2; box(610, base - h, 300, h, '#22c55e', 14, 8); txt('$3.79B', 760, base - h - 55, 76, '#fff', { lw: 10 }); txt('GTA 6 (2026)', 760, base + 60, 50, '#cbd5e1', { lw: 7 }); }
+  if (k2 >= 1) popIn(t, T.x4 + 1, 330, 720, () => { box(-170, -80, 340, 160, '#ef4444', 30, 8); txt('4x+', 0, 12, 120, '#fff', { lw: 12 }); });
+}
+function sBiggest(lt, t) {
+  bgFill('#78350f'); floor('#451a03', 1460);
+  txt('NOTHING OPENED', 540, 200, 110, '#fde047', { lw: 17 }); txt('BIGGER?', 540, 330, 110, '#fde047', { lw: 17 });
+  trophy(540, 850, 2.3 + .05 * Math.sin(t * 5));
+  if (t > T.movie) { popIn(t, T.movie, 830, 1280, () => clapper(0, 0, 1, -.1)); popIn(t, T.movie, 800, 1450, () => txt('NOT EVEN A MOVIE', 0, 0, 52, '#fff', { lw: 8 })); }
+  stick({ x: 250, y: 1700, s: 1.2, shirt: '#f97316', pants: '#1f2937', hair: '#111827', pose: { lt: .15, ls: 0, rt: -.15, rs: 0, la: 2.5, le: .3, ra: -2.5, re: -.3 }, eyes: 'norm', mouth: 'grin', look: 1, bob: Math.abs(Math.sin(t * 7)) * 14 });
+  txt("(Rockstar's own claim)", 540, 430, 40, '#fed7aa', SMALL);
+}
+function sCut(lt, t) {
+  bgFill('#1e293b'); floor('#0f172a', 1460);
+  txt('BUT CAREFUL', 540, 200, 130, '#f87171', { lw: 19 });
+  txt('$3.79B = WHAT PLAYERS PAID', 540, 330, 64, '#fff', { lw: 10 });
+  if (t > T.pre) popIn(t, T.pre, 540, 440, () => { box(-280, -45, 560, 90, '#7c3aed', 22, 6); txt('+ PRE-ORDERS', 0, 6, 56, '#fff', { lw: 7 }); });
+  stack(540, 1100, 12, 1.4);
+  const k = eo(inv(T.cut, T.cut + 1, t));
+  if (k > 0) { for (let i = 0; i < 3; i++) { bill(lerp(540, 200, k), lerp(900, 1150 - i * 30, k), 1.1, -.2); bill(lerp(540, 880, k), lerp(900, 1150 - i * 30, k), 1.1, .2); }
+    box(70, 1200, 260, 90, '#0ea5e9', 18, 6); txt('SHOPS', 200, 1250, 52, '#fff', { lw: 7 }); box(720, 1200, 320, 90, '#0ea5e9', 18, 6); txt('PLATFORMS', 880, 1250, 48, '#fff', { lw: 7 });
+    txt('COMPANY KEEPS LESS', 540, 1360, 66, '#fde047', { lw: 10 }); }
+}
+function sEnd(lt, t) {
+  bgFill('#14532d'); floor('#052e16', 1500);
+  popIn(t, T.q + .1, 540, 470, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('HOW CLOSE WAS', 0, -90, 76, '#fff', { stroke: false }); txt('YOUR GUESS?', 0, 0, 76, '#fff', { stroke: false });
+    box(-320, 60, 640, 100, '#facc15', 24, 7); txt('COMMENT YOUR NUMBER', 0, 114, 50, INK, { stroke: false }); });
+  stack(780, 1450, 10, 1.3);
+  stick({ x: 300, y: 1500, s: 1.1, shirt: '#f97316', pants: '#1f2937', hair: '#111827', pose: PADP, eyes: 'norm', mouth: 'smirk', look: 1, hold: (hx, hy) => pad(hx, hy) });
+}
+const SCENES = [{ t0: 0, fn: sGuess, push: .04 }, { t0: mid(0, 1), fn: sHint, push: .04, flash: .5 }, { t0: mid(1, 2), fn: sLaunch, push: .05, xfade: .2 }, { t0: mid(2, 3), fn: sReveal, push: .05, flash: .6 },
+  { t0: mid(3, 4), fn: sCompare, push: .04, xfade: .2 }, { t0: mid(4, 5), fn: sBiggest, push: .05, flash: .4 }, { t0: mid(5, 6), fn: sCut, push: .04, xfade: .2 }, { t0: mid(6, 7), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["guess how much money", "one video game made", "on its first day.", "comment a number."], ["hint.", "GTA 5 made about", "eight hundred million dollars", "on day one,", "in 2013."],
+  ["GTA 6 came out", "on November 19.", "thirty-two and a half", "million copies were sold", "before it even launched."], ["and by the end", "of day one,", "rockstar says:", "3.79 billion dollars."],
+  ["that's more than", "four times GTA 5."], ["rockstar says", "nothing ever", "opened bigger.", "not even a movie."], ["but that's what", "players paid,", "pre-orders included.", "shops and platforms", "take their cut first."],
+  ["how close", "was your guess?", "comment your number."]];
+const HOT = new Set(["on its first day.", "comment a number.", "eight hundred million dollars", "before it even launched.", "3.79 billion dollars.", "four times GTA 5.", "not even a movie.", "pre-orders included.", "take their cut first.", "comment your number."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

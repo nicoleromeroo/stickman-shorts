@@ -1,0 +1,92 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const SMALL = { stroke: false, font: 'Nun', weight: '900 ' };
+function coin(x, y, r) { circ(x, y, r, '#facc15', INK, 6); txt('€', x, y + 3, r * 1.1, INK, SMALL); }
+function money(n) { return Math.round(n).toLocaleString('en-US') + ' €'; }
+const P1 = { shirt: '#22c55e', pants: '#1f2937', hair: '#111827' }, P2 = { shirt: '#f97316', pants: '#334155', hair: '#9ca3af' };
+function tag(x, y, n, col) { circ(x, y, 46, col, INK, 7); txt(String(n), x, y + 6, 60, '#fff', { lw: 7 }); }
+const FOOT = () => { const F = (a, y) => txt(a, 540, y, 30, '#94a3b8', SMALL);
+  F('Monthly payments to 67, assumed ~6 % a year,', 1460); F('below the MSCI World avg. of 7.7 % over 15-year', 1498); F('periods 1975-2017 (Finanztip). Before tax & costs.', 1536); F('Not guaranteed; values go up and down.', 1574); };
+function bars(base, items, max) { items.forEach(([x, val, col, top, lab, k]) => { if (k <= 0) return; const h = Math.max(40, 760 * val / max * k); box(x - 120, base - h, 240, h, col, 16, 8); txt(top, x, base - h - 50, 60, '#fff', { lw: 10 }); txt(lab, x, base + 45, 40, '#cbd5e1', { lw: 6 }); }); }
+const T = { hundred: wt(0, 'or a hundred'), who: wt(0, "who's"), g: at(1, 0), four: wt(2, 'four times'), fund: wt(3, 'both'), six: wt(3, 'assume'), nog: wt(3, 'not guaranteed'),
+  p2paid: at(4, 0), p2could: wt(4, 'it could'), p1paid: at(5, 0), p1could: at(6, 0), half: at(7, 0), more: wt(7, 'more money'), years: wt(7, 'twenty four'), q: at(8, 0) };
+const MAXV = 101332;
+function sHook(lt, t) {
+  bgFill('#0e7490'); floor('#164e63', 1440); line(540, 300, 540, 1440, 8, 'rgba(255,255,255,.4)');
+  txt('25 € vs 100 €', 540, 190, 140, '#fde047', { lw: 21 });
+  stick(Object.assign({ x: 270, y: 1420, s: 1.25, pose: walkPose(t * 7, .5), eyes: 'norm', mouth: 'grin', look: 1, bob: Math.abs(Math.sin(t * 7)) * 8 }, P1)); tag(130, 560, 1, '#22c55e');
+  popIn(t, .1, 270, 420, () => { box(-210, -60, 420, 120, '#f8fafc', 24, 7); txt('25 €/MONTH', 0, 6, 62, INK, { stroke: false }); });
+  txt('FROM 16', 270, 1500, 64, '#fff', { lw: 9 });
+  if (t > T.hundred) { stick(Object.assign({ x: 810, y: 1420, s: 1.25, pose: STAND, eyes: 'norm', mouth: 'smirk', look: -1 }, P2)); tag(950, 560, 2, '#f97316');
+    popIn(t, T.hundred, 810, 420, () => { box(-220, -60, 440, 120, '#f8fafc', 24, 7); txt('100 €/MONTH', 0, 6, 62, INK, { stroke: false }); }); txt('FROM 40', 810, 1500, 64, '#fff', { lw: 9 }); }
+  if (t > T.who) popIn(t, T.who, 540, 1100 - 400, () => { box(-260, -60, 520, 120, '#ef4444', 28, 7); txt('RICHER AT 67?', 0, 6, 64, '#fff', { lw: 8 }); });
+}
+function sGuess(lt, t) {
+  bgFill('#4c1d95'); floor('#2e1065', 1440);
+  txt('GUESS NOW', 540, 200, 140, '#fde047', { lw: 21 });
+  popIn(t, T.g + .1, 300, 760, () => { box(-200, -200, 400, 400, '#22c55e', 30, 9); txt('1', 0, 30, 260, '#fff', { lw: 20 }); });
+  popIn(t, T.g + .3, 780, 760, () => { box(-200, -200, 400, 400, '#f97316', 30, 9); txt('2', 0, 30, 260, '#fff', { lw: 20 }); });
+  popIn(t, T.g + .6, 540, 1110, () => { box(-300, -60, 600, 120, '#facc15', 30, 7); txt('COMMENT 1 OR 2', 0, 4, 62, INK, { stroke: false }); });
+  qmark(540, 760, t, T.g + .8, '#fde047', 150);
+}
+function sFour(lt, t) {
+  bgFill('#1e3a8a'); floor('#172554', 1440);
+  txt('EVERY MONTH', 540, 200, 130, '#fde047', { lw: 19 });
+  stick(Object.assign({ x: 270, y: 1420, s: 1.1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.6, re: -.4 }, eyes: 'norm', mouth: 'smile', look: 1 }, P1)); tag(130, 500, 1, '#22c55e');
+  stick(Object.assign({ x: 810, y: 1420, s: 1.1, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.6, re: -.4 }, eyes: 'norm', mouth: 'smirk', look: -1 }, P2)); tag(950, 420, 2, '#f97316');
+  const b = (Math.sin(t * 6) + 1) * 6; coin(270, 620 - b, 70); txt('25 €', 270, 760, 70, '#fff', { lw: 10 });
+  for (let i = 0; i < 4; i++) coin(720 + (i % 2) * 180, 560 + Math.floor(i / 2) * 150 - b, 65); txt('100 €', 810, 860, 70, '#fff', { lw: 10 });
+  if (t > T.four) popIn(t, T.four, 540, 1000, () => { box(-120, -70, 240, 140, '#ef4444', 26, 8); txt('4x', 0, 12, 110, '#fff', { lw: 12 }); });
+}
+function sFund(lt, t) {
+  bgFill('#14532d'); floor('#052e16', 1440);
+  txt(t > T.six ? '~6 % A YEAR?' : 'BROAD INDEX FUND', 540, 200, t > T.six ? 130 : 108, '#fde047', { lw: 18 });
+  if (t < T.six) txt('= tiny pieces of many companies', 540, 320, 48, '#bbf7d0', SMALL);
+  box(140, 420, 800, 420, '#fef3c7', 40, 9);
+  for (let i = 0; i < 12; i++) { const x = 220 + (i % 4) * 190, y = 480 + Math.floor(i / 4) * 120; const h = 60 + rnd(i) * 40; box(x, y + 90 - h, 120, h, ['#60a5fa', '#f472b6', '#a78bfa', '#34d399'][i % 4], 6, 5); }
+  if (t > T.six) { ctx.save(); ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 14; ctx.lineJoin = 'round'; ctx.beginPath(); const k = inv(T.six, L[3].end, t);
+    for (let i = 0; i <= 60 * k; i++) { const x = 100 + i * 14.5, y = 1300 - i * 5 + Math.sin(i * .7) * 50 + Math.sin(i * 1.9) * 25; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke(); ctx.restore(); }
+  if (t > T.nog) popIn(t, T.nog, 540, 960, () => { box(-330, -60, 660, 120, '#ef4444', 30, 7); txt('NOT GUARANTEED', 0, 4, 66, '#fff', { lw: 8 }); });
+}
+function sP2(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1300);
+  txt('PERSON 2', 540, 190, 120, '#fb923c', { lw: 18 }); txt('100 €/month, age 40 to 67', 540, 300, 48, '#cbd5e1', SMALL);
+  const k1 = eo(inv(T.p2paid, T.p2paid + .8, t)), k2 = eo(inv(T.p2could, T.p2could + 1.2, t));
+  bars(1300, [[330, 32400, '#64748b', money(32400 * k1), 'PAID IN', k1], [750, 32400 + (81058 - 32400) * k2, '#f97316', '~' + money(Math.round((32400 + 48658 * k2) / 1000) * 1000), 'COULD BE', k2]], MAXV);
+  FOOT();
+}
+function sP1(lt, t) {
+  bgFill('#0f172a'); floor('#020617', 1300);
+  txt('PERSON 1', 540, 190, 120, '#4ade80', { lw: 18 }); txt('25 €/month, age 16 to 67', 540, 300, 48, '#cbd5e1', SMALL);
+  const k1 = eo(inv(T.p1paid, T.p1paid + .8, t)), k2 = eo(inv(T.p1could, T.p1could + 1.4, t));
+  bars(1300, [[330, 15300, '#64748b', money(15300 * k1), 'PAID IN', k1], [750, 15300 + (101332 - 15300) * k2, '#22c55e', '~' + money(Math.round((15300 + 86032 * k2) / 1000) * 1000), 'COULD BE', k2]], MAXV);
+  if (k2 >= 1) sparkle(930, 480 + Math.sin(t * 6) * 10, 40, 1);
+  FOOT();
+}
+function sCompare(lt, t) {
+  bgFill('#1e3a8a'); floor('#172554', 1300);
+  txt('TIME BEATS AMOUNT', 540, 190, 104, '#fde047', { lw: 17 });
+  bars(1300, [[160, 15300, '#64748b', '15k', 'IN', 1], [400, 101332, '#22c55e', '~101k', 'OUT', 1], [680, 32400, '#64748b', '32k', 'IN', 1], [920, 81058, '#f97316', '~81k', 'OUT', 1]], MAXV * 1.05);
+  tag(280, 1390 + 60, 1, '#22c55e'); tag(800, 1390 + 60, 2, '#f97316');
+  if (t > T.years) popIn(t, T.years, 540, 340 + 30, () => { box(-280, -60, 560, 120, '#facc15', 28, 7); txt('+24 YEARS', 0, 6, 76, INK, { stroke: false }); });
+}
+function sEnd(lt, t) {
+  bgFill('#0e7490'); floor('#164e63', 1500);
+  popIn(t, T.q + .1, 540, 470, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('START WITH 25 €?', 0, -100, 74, '#fff', { stroke: false });
+    box(-420, -10, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 70, 80, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 70, 80, '#fff', { lw: 10 }); });
+  coin(780, 1150, 120 + Math.sin(t * 4) * 6);
+  stick(Object.assign({ x: 320, y: 1500, s: 1.1, pose: STAND, eyes: 'norm', mouth: 'grin', look: 1 }, P1));
+}
+const SCENES = [{ t0: 0, fn: sHook, push: .04 }, { t0: mid(0, 1), fn: sGuess, push: .04, flash: .5 }, { t0: mid(1, 2), fn: sFour, push: .04, xfade: .2 }, { t0: mid(2, 3), fn: sFund, push: .05, flash: .4 },
+  { t0: mid(3, 4), fn: sP2, push: .04, xfade: .2 }, { t0: mid(4, 5), fn: sP1, push: .04, flash: .5 }, { t0: mid(6, 7), fn: sCompare, push: .05, flash: .5 }, { t0: mid(7, 8), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["25 euros a month", "from sixteen.", "or a hundred a month", "from forty.", "who's richer", "at sixty-seven?"], ["guess before the end.", "comment 1 or 2."], ["person two", "pays four times as much,", "every month."],
+  ["both use a broad", "index fund.", "assume about", "six percent a year.", "not guaranteed."], ["person two paid in", "32,400 euros.", "it could be", "about 81,000."], ["person one", "paid in only", "15,300."],
+  ["and it could be about", "101,000."], ["less than half", "the money in.", "more money out.", "24 extra years", "to grow."], ["time beats amount.", "would you start", "with 25 euros?", "yes or no."]];
+const HOT = new Set(["at sixty-seven?", "comment 1 or 2.", "pays four times as much,", "not guaranteed.", "about 81,000.", "15,300.", "101,000.", "more money out.", "24 extra years", "time beats amount.", "yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1760) });
+</script></body></html>

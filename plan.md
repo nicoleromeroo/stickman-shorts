@@ -80,6 +80,7 @@ Notes
 - 1 cent doubled for 30 days: moved to the backlog (good "pick 1 or 2" finance video for later).
 
 ## Done
+- 28 Nov (no plan row) 11:30 GTA 6 day one: $3.79B · 16:00 25 €/month at 16 vs 100 €/month at 40 · 20:00 THE LAST BUS Part 2 (made 27 Nov)
 - 27 Nov (no plan row) 11:30 Dunesday: Dune 3 vs Avengers: Doomsday same day · 16:00 Black Friday deal in hours of work · 20:00 THE LAST BUS Part 1 (made 26 Nov)
 - 27 Nov (no plan row) 06:00 myth: lightning never strikes twice · 18:30 what if you jumped through the Earth? (paradox format) (made 26 Nov evening)
 - 26 Nov (no plan row) 06:00 why can't you remember being a baby (from backlog) · 18:30 what if it never got dark (from backlog) (made 25 Nov evening) · 11:30 Star Wars sound design (bear, elephant, old TV) · 16:00 skip one delivery a week (from backlog) · 20:00 LOW BATTERY Part 6 FINALE (made 25 Nov)

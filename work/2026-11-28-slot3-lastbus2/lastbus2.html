@@ -1,0 +1,150 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Lucky;src:url(../../engine/node_modules/@fontsource/luckiest-guy/files/luckiest-guy-latin-400-normal.woff2)}
+@font-face{font-family:Nun;font-weight:900;src:url(../../engine/node_modules/@fontsource/nunito/files/nunito-latin-900-normal.woff2)}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../engine/engine.js"></script><script>
+const mid = (a, b) => (L[a].end + L[b].start) / 2;
+function popIn(t, t0, x, y, fn) { if (t < t0) return; const k = eob(inv(t0, t0 + .25, t)); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); fn(); ctx.restore(); }
+const SMALL = { stroke: false, font: 'Nun', weight: '900 ' };
+const T = { doors: wt(0, 'the doors'), hand: wt(0, 'a hand'), dont: wt(0, "don't get"), recap: at(1, 0), girl: wt(2, 'a girl'), jacket: wt(2, 'purple'), zoe: wt(2, 'zoe'),
+  gave: at(3, 0), three: wt(3, 'three days'), never: wt(3, 'he never'), fog: at(4, 0), school: wt(4, 'your old'), red: wt(4, 'same red'),
+  step: at(5, 0), pull: wt(5, 'zoe pulls'), rule: at(6, 0), forever: wt(6, 'forever'), close: at(7, 0), flick: wt(7, 'then the sign'), house: at(8, 0), q: at(9, 0) };
+const NAVY = '#0b1020';
+function fogWindow(x, y, w, h, t, speed = 1) { // window with drifting fog
+  box(x, y, w, h, '#475569', 14, 8);
+  ctx.save(); rr(x + 6, y + 6, w - 12, h - 12, 10); ctx.clip();
+  const g = ctx.createLinearGradient(0, y, 0, y + h); g.addColorStop(0, '#94a3b8'); g.addColorStop(1, '#cbd5e1'); ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+  for (let i = 0; i < 9; i++) { const fx = x + ((rnd(i) * w * 2 - t * 260 * speed * (0.6 + rnd(i + 4))) % (w + 400) + w + 400) % (w + 400) - 200; const fy = y + rnd(i + 9) * h;
+    ctx.fillStyle = `rgba(241,245,249,${.35 + rnd(i + 2) * .35})`; ctx.beginPath(); ctx.ellipse(fx, fy, 120 + rnd(i + 5) * 80, 40 + rnd(i + 6) * 30, 0, 0, 7); ctx.fill(); }
+  ctx.restore();
+}
+function seat(x, y, s = 1, col = '#1d4ed8') { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); box(-90, -230, 180, 150, col, 22, 8); box(-100, -90, 200, 60, col, 16, 8); line(-70, -30, -70, 40, 10); line(70, -30, 70, 40, 10); ctx.restore(); }
+function pole(x, y1, y2) { line(x, y1, x, y2, 26, INK); line(x, y1, x, y2, 16, '#facc15'); }
+function ledSign(x, y, w, h, label, t, flick = 0) { box(x - w / 2, y - h / 2, w, h, '#050505', 14, 9);
+  const on = flick > 0 ? (Math.sin(t * 60) > -.2) : true; if (on) { ctx.save(); ctx.shadowColor = '#fb923c'; ctx.shadowBlur = 24; txt(label, x, y + 6, h * .5, '#fb923c', { stroke: false }); ctx.restore(); } }
+function busInterior(t, d = 0) {
+  bgFill('#1e293b');
+  ctx.fillStyle = '#334155'; ctx.fillRect(-300, 260, W + 600, 120); // ceiling strip
+  for (let i = 0; i < 3; i++) fogWindow(-60 + i * 400, 420, 360, 460, t);
+  ctx.fillStyle = '#0f172a'; ctx.fillRect(-300, 1420, W + 600, 700); line(-300, 1420, W + 300, 1420, 8);
+  for (let i = 0; i < 4; i++) { ctx.fillStyle = 'rgba(250,204,21,.25)'; ctx.fillRect(-300, 1500 + i * 120, W + 600, 10); }
+  dark(d);
+}
+function driverBack(x, y, s, armK = 0) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  // seat back
+  box(-170, -380, 340, 420, '#111827', 30, 9);
+  // shoulders + coat
+  ctx.fillStyle = '#374151'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-150, -320); ctx.quadraticCurveTo(0, -380, 150, -320); ctx.lineTo(150, -60); ctx.lineTo(-150, -60); ctx.closePath(); ctx.fill(); ctx.stroke();
+  // head from behind + cap
+  circ(0, -460, 92, '#e5e7eb', INK, 9);
+  ctx.fillStyle = '#4b5563'; ctx.beginPath(); ctx.arc(0, -470, 96, Math.PI, 0); ctx.closePath(); ctx.fill(); ctx.stroke(); box(-110, -486, 220, 30, '#1f2937', 10, 7);
+  // arm reaching back over shoulder
+  if (armK > 0) { const ex = lerp(150, 330, armK), ey = lerp(-300, -360, armK); line(130, -300, ex, ey, 40, INK); line(130, -300, ex, ey, 28, '#374151');
+    ctx.save(); ctx.translate(ex + 30, ey); circ(0, 0, 34, '#e5e7eb', INK, 8); ctx.restore(); }
+  ctx.restore(); }// Zoe: purple jacket, green beanie, black hair
+function zoe(o) { const s = o.s || 1; stick(Object.assign({ shirt: '#7c3aed', pants: '#1f2937', hair: '#111827' }, o));
+  const hx = o.x, hy = o.y + s * (-368 - (o.bob || 0)); ctx.save(); ctx.translate(hx, hy); ctx.scale(s * (o.flip ? -1 : 1), s); ctx.rotate(o.tilt || 0);
+  ctx.fillStyle = '#16a34a'; ctx.strokeStyle = INK; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(0, -8, 66, Math.PI * 1.05, Math.PI * 1.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+  box(-70, -28, 140, 28, '#15803d', 10, 7); circ(0, -80, 16, '#22c55e', INK, 6); ctx.restore(); }
+function ticketMini(x, y, s, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s); box(-190, -110, 380, 220, '#fef3c7', 12, 8);
+  txt('ONE WAY', 0, -20, 70, '#b91c1c', { lw: 9 }); txt('TO: ? ? ?', 0, 60, 44, '#475569', { stroke: false }); ctx.restore(); }
+function school(x, y, s, t) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); // generic school building
+  box(-330, -420, 660, 420, '#fca5a5', 10, 9); ctx.fillStyle = '#b91c1c'; ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-370, -420); ctx.lineTo(0, -600); ctx.lineTo(370, -420); ctx.closePath(); ctx.fill(); ctx.stroke();
+  circ(0, -490, 46, '#fff', INK, 7); line(0, -490, 0, -520, 6); line(0, -490, 22, -490, 6);
+  for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) windowFrame(-290 + i * 440, -380 + j * 170, 150, 120, '#fde68a');
+  box(-75, -230, 150, 230, '#dc2626', 8, 9); circ(45, -110, 10, '#fbbf24', INK, 4);
+  // hopscotch on the ground
+  for (let i = 0; i < 3; i++) box(-430 + i * 0, 40 - i * 0, 0, 0, '#fff', 0, 0);
+  ctx.restore(); }
+function hopscotch(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.strokeStyle = '#f8fafc'; ctx.lineWidth = 7;
+  [[0, 0], [0, -70], [-35, -140], [35, -140], [0, -210]].forEach(([a, b], i) => { ctx.strokeRect(a - 35, b - 35, 70, 70); txt(String(i + 1), a, b + 4, 36, '#f8fafc', SMALL); }); ctx.restore(); }
+function busDoors(x, y, w, h, openK, inside) { // folding bus doors, inside() draws what's outside
+  ctx.save(); rr(x, y, w, h, 12); ctx.clip(); inside(); ctx.restore(); box(x, y, w, h, 'rgba(0,0,0,0)', 12, 10);
+  const pw = (w / 2) * (1 - openK * .85); box(x, y, pw, h, '#475569', 8, 8); box(x + w - pw, y, pw, h, '#475569', 8, 8);
+  if (pw > 40) { box(x + 16, y + 40, pw - 32, h * .45, 'rgba(148,163,184,.6)', 8, 5); box(x + w - pw + 16, y + 40, pw - 32, h * .45, 'rgba(148,163,184,.6)', 8, 5); } }
+function outsideSchool(t, x, y, w, h, fogK = 1) { const g = ctx.createLinearGradient(0, y, 0, y + h); g.addColorStop(0, '#94a3b8'); g.addColorStop(1, '#475569'); ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+  school(x + w / 2, y + h * .8, w / 900, t); ctx.fillStyle = '#334155'; ctx.fillRect(x, y + h * .8, w, h); hopscotch(x + w * .25, y + h * .95, w / 1100);
+  for (let i = 0; i < 6; i++) { const fx = x + ((rnd(i) * w - t * 60) % w + w) % w; ctx.fillStyle = `rgba(241,245,249,${.45 * fogK})`; ctx.beginPath(); ctx.ellipse(fx, y + rnd(i + 3) * h, 160, 50, 0, 0, 7); ctx.fill(); } }
+const GRIP = { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: 2.85, re: 0 };
+// ---------- scenes ----------
+function sCold(lt, t) { // line 0
+  busInterior(t, .2);
+  const ok = eo(inv(T.doors - .2, T.doors + .5, t));
+  busDoors(260, 360, 560, 1080, ok, () => outsideSchool(t, 260, 360, 560, 1080));
+  const stepK = eo(inv(0, 1.4, t)), grab = t > T.hand;
+  const hx = lerp(240, grab ? 420 : 470, stepK);
+  hero({ x: hx, y: 1760, s: 1.35, pose: walkPose(t * (grab ? 0 : 7), grab ? .2 : .8), flip: false, look: grab ? -1 : 1, eyes: grab ? 'huge' : 'norm', mouth: grab ? 'o' : 'flat' });
+  if (grab) { line(-40, 1330, hx - 30, 1340, 46, INK); line(-40, 1330, hx - 30, 1340, 32, '#7c3aed'); circ(hx - 30, 1340, 22, '#fff', INK, 6); }
+  txt('YOUR OLD SCHOOL?!', 540, 200, 108, '#fde047', { lw: 17 });
+  if (t > T.dont - .1) popIn(t, T.dont - .1, 600, 360 + 1000, () => bubble(0, 0, '"DON\'T GET OFF."', 70));
+}
+function sRecap(lt, t) { // line 1
+  bgFill('#1e293b'); spot(540, 900, 650, .2, '251,146,60');
+  txt('LAST TIME...', 540, 220, 110, '#fff', { lw: 17 });
+  driverBack(330, 1350, .9, 1); ticketMini(760, 820, 1.2, -.08 + Math.sin(t * 8) * .01);
+  if (t > wt(1, "don't give") - .1) popIn(t, wt(1, "don't give") - .1, 540, 470, () => bubble(0, 0, '"DON\'T GIVE HIM YOUR TICKET."', 54));
+}
+function sZoe(lt, t) { // line 2
+  bgFill('#0b1020'); spot(540, 1100, 700, .22, '196,181,253');
+  box(60, 760, 960, 320, '#1d4ed8', 30, 9); box(60, 1060, 960, 120, '#1e40af', 20, 9); // back bench
+  fogWindow(100, 300, 880, 400, t);
+  const k = eo(inv(T.girl - .2, T.girl + .5, t));
+  zoe({ x: 540, y: 1560 + (1 - k) * 80, s: 1.5, pose: { lt: 1.2, ls: -1.2, rt: -1.2, rs: 1.2, la: .2, le: .4, ra: -.2, re: -.4 }, look: -1, eyes: 'norm', mouth: 'smirk', bob: Math.abs(Math.sin(t * 2)) * 4 });
+  if (t > T.jacket) popIn(t, T.jacket, 230, 1250, () => { box(-150, -45, 300, 90, '#7c3aed', 20, 6); txt('PURPLE', 0, 6, 50, '#fff', { lw: 7 }); });
+  if (t > T.jacket + .5) popIn(t, T.jacket + .5, 850, 900, () => { box(-150, -45, 300, 90, '#16a34a', 20, 6); txt('BEANIE', 0, 6, 50, '#fff', { lw: 7 }); });
+  txt(t > T.zoe ? 'ZOE' : 'WHO ARE YOU?', 540, 200, t > T.zoe ? 170 : 110, t > T.zoe ? '#c4b5fd' : '#fff', { lw: 20 });
+}
+function sThree(lt, t) { // line 3
+  bgFill('#1e1b4b'); floor('#0f172a', 1440);
+  zoe({ x: 330, y: 1700, s: 1.3, pose: { lt: .05, ls: 0, rt: -.05, rs: 0, la: .3, le: .2, ra: -1.3, re: -.6 }, look: 1, eyes: 'norm', mouth: t > T.never ? 'frown' : 'flat', tilt: -.05 });
+  popIn(t, T.gave + .1, 540, 300, () => bubble(0, 0, '"I GAVE HIM MY TICKET."', 64));
+  if (t > T.three) { box(620, 560, 380, 420, '#f8fafc', 20, 9); box(620, 560, 380, 90, '#ef4444', 20, 9); txt('DAY', 810, 620, 54, '#fff', { lw: 7 });
+    const n = Math.min(3, 1 + Math.floor((t - T.three) / .35)); txt(String(n), 810, 860, 220, INK, { stroke: false }); }
+  if (t > T.never) popIn(t, T.never, 760, 1120, () => { box(-260, -60, 520, 120, '#ef4444', 24, 7); txt('NEVER OFF', 0, 6, 70, '#fff', { lw: 8 }); });
+}
+function sSchool(lt, t) { // line 4
+  bgFill('#1e293b');
+  const fk = 1 - eo(inv(T.fog, T.school, t));
+  ctx.save(); rr(60, 320, 960, 1000, 20); ctx.clip(); outsideSchool(t, 60, 320, 960, 1000, .3);
+  ctx.fillStyle = `rgba(226,232,240,${fk})`; ctx.fillRect(60, 320, 960, 1000); ctx.restore(); box(60, 320, 960, 1000, 'rgba(0,0,0,0)', 20, 12);
+  txt(t > T.school ? 'YOUR OLD SCHOOL' : 'THE FOG OPENS...', 540, 200, 96, '#fde047', { lw: 16 });
+  if (t > T.red) { const p = .5 + .5 * Math.sin(t * 8); ctx.strokeStyle = `rgba(250,204,21,${.6 + .4 * p})`; ctx.lineWidth = 12; ctx.beginPath(); ctx.ellipse(540, 1020 - 120, 130, 180, 0, 0, 7); ctx.stroke(); txt('SAME RED DOOR', 540, 1420, 80, '#fff', { lw: 12 }); }
+  hero({ x: 170, y: 1820, s: 1.0, pose: STAND, eyes: 'huge', mouth: 'o', look: 1, lookY: -1 });
+}
+function sPull(lt, t) { // lines 5-6
+  busInterior(t, .3);
+  busDoors(500, 360, 500, 1080, 1, () => outsideSchool(t, 500, 360, 500, 1080, .6));
+  const pulled = eo(inv(T.pull, T.pull + .5, t));
+  const hx = lerp(lerp(300, 600, eo(inv(T.step, T.pull, t))), 430, pulled);
+  zoe({ x: hx - 260, y: 1760, s: 1.25, pose: { lt: .25, ls: 0, rt: -.35, rs: .2, la: .3, le: .2, ra: -1.5, re: -.1 }, look: 1, eyes: 'huge', mouth: t > T.rule ? 'flat' : 'o' });
+  hero({ x: hx, y: 1760, s: 1.3, pose: walkPose(t * (pulled > 0 ? 0 : 6), pulled > 0 ? .2 : .7), look: pulled > 0 ? -1 : 1, eyes: t > T.forever ? 'huge' : 'norm', mouth: t > T.forever ? 'scream' : 'flat', lean: pulled * -.12 });
+  if (t > T.rule) popIn(t, T.rule, 540, 300, () => { box(-470, -120, 940, 240, '#fef3c7', 24, 9); txt('RULE:', 0, -50, 54, '#92400e', { stroke: false }); txt('GET OFF = YOU STAY', 0, 40, 76, '#b91c1c', { lw: 10 }); });
+  if (t > T.forever) { const k = Math.sin(t * 30) * 4; txt('FOREVER', 540 + k, 560, 120, '#f87171', { lw: 18 }); }
+}
+function sSign(lt, t) { // lines 7-8
+  busInterior(t, .35);
+  const houseOn = t > T.house - .05;
+  ledSign(540, 500, 980, 190, houseOn ? 'NEXT: YOUR HOUSE' : (t > T.flick ? '- - - - -' : 'NEXT STOP: ...'), t, t > T.flick && !houseOn ? 1 : 0);
+  if (t < T.flick) txt('DOORS CLOSE', 540, 220, 100, '#fff', { lw: 16 });
+  hero({ x: 360, y: 1700, s: 1.35, pose: GRIP, flip: false, look: 1, lookY: -1, eyes: houseOn ? 'huge' : 'norm', mouth: houseOn ? 'o' : 'flat' });
+  zoe({ x: 780, y: 1700, s: 1.2, pose: STAND, look: -1, lookY: -1, eyes: houseOn ? 'huge' : 'norm', mouth: houseOn ? 'o' : 'flat', flip: true });
+  pole(570, 620, 1430);
+  if (houseOn) { sweat(250, 1100, .6 + .4 * Math.sin(t * 8)); txt('YOUR HOUSE?!', 540, 220, 116, '#fde047', { lw: 18 }); }
+}
+function sEnd(lt, t) {
+  bgFill('#0b1020'); spot(540, 900, 700, .15, '251,146,60');
+  ledSign(540, 1080, 860, 180, 'NEXT: YOUR HOUSE', t);
+  popIn(t, T.q + .1, 540, 470, () => { box(-470, -190, 940, 380, 'rgba(15,23,42,.95)', 30, 9); txt('GET OFF AT YOUR HOUSE?', 0, -100, 60, '#fff', { stroke: false });
+    box(-420, -10, 380, 130, '#22c55e', 22, 7); txt('YES', -230, 70, 80, '#fff', { lw: 10 }); box(40, -10, 380, 130, '#ef4444', 22, 7); txt('NO', 230, 70, 80, '#fff', { lw: 10 }); });
+  if (t > L[9].end + .2) { const k = eob(inv(L[9].end + .2, L[9].end + .45, t)); ctx.save(); ctx.translate(540, 1420); ctx.scale(k, k); box(-430, -80, 860, 160, '#facc15', 30, 9); txt('PART 3 TOMORROW', 0, 10, 86, INK, { stroke: false }); ctx.restore(); }
+}
+const SCENES = [{ t0: 0, fn: sCold, push: .05 }, { t0: mid(0, 1), fn: sRecap, push: .04, xfade: .3 }, { t0: mid(1, 2), fn: sZoe, push: .06, flash: .4 },
+  { t0: mid(2, 3), fn: sThree, push: .05, xfade: .3 }, { t0: mid(3, 4), fn: sSchool, push: .06, xfade: .3 }, { t0: mid(4, 5), fn: sPull, push: .05, flash: .4 },
+  { t0: mid(6, 7), fn: sSign, push: .07, xfade: .3 }, { t0: mid(8, 9), fn: sEnd, push: .03, xfade: .3 }];
+const CAP = [["the bus stops", "at your old school.", "the doors open.", "a hand", "grabs your arm.", "don't get off."], ["last time,", "a whisper said", "don't give him", "your ticket."],
+  ["in the last row,", "a girl.", "purple jacket,", "green beanie.", "zoe."], ["i gave him my ticket,", "she says.", "three days ago.", "he never", "lets me off."],
+  ["the fog opens.", "your old school.", "same red door."], ["you step", "toward the doors.", "zoe pulls you back."], ["get off at a memory,", "she says,", "and you stay there.", "forever."],
+  ["the doors close.", "then the sign", "flickers again."], ["next stop.", "your house."], ["would you get off", "at your house?", "comment yes or no."]];
+const HOT = new Set(["at your old school.", "don't get off.", "your ticket.", "zoe.", "three days ago.", "lets me off.", "same red door.", "zoe pulls you back.", "forever.", "and you stay there.", "your house.", "comment yes or no."]);
+window.render = (t) => runScenes(t, SCENES, { after: (t) => captions(t, CAP, HOT, 1640) });
+</script></body></html>

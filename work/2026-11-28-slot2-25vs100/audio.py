@@ -1,0 +1,13 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 5137)
+m.music("cozy")
+m.add("cash", .05, .35); m.add("pop", .15, .25); m.add("pop", m.wt(0, "or a hundred"), .3); m.add("ding", m.wt(0, "who's"), .3)
+m.add("whoosh", m.mid(0, 1) - .12, .25); m.add("pop", m.at(1, .05), .3); m.add("pop", m.at(1, .15), .3); m.add("ding", m.at(1, .4), .3)
+m.add("whoosh", m.mid(1, 2) - .12, .25); [m.add("clink", m.at(2, 0) + i * .15, .2) for i in range(5)]; m.add("thump", m.wt(2, "four times"), .35)
+m.add("whoosh", m.mid(2, 3) - .12, .25); m.add("slide", m.wt(3, "assume"), .3); m.add("pop", m.wt(3, "not guaranteed"), .3)
+m.add("whoosh", m.mid(3, 4) - .12, .25); m.add("ding", m.at(4, 0) + .3, .25); m.add("slide", m.wt(4, "it could"), .3)
+m.add("whoosh", m.mid(4, 5) - .12, .25); m.add("ding", m.at(5, 0) + .3, .25)
+m.add("slide", m.at(6, 0), .35); m.add("cash", m.at(6, 0) + 1.4, .4); m.add("chime", m.at(6, 0) + 1.5, .35)
+m.add("whoosh", m.mid(6, 7) - .12, .3); m.add("pop", m.wt(7, "twenty four"), .35)
+m.add("whoosh", m.mid(7, 8) - .12, .25); m.add("pop", m.at(8, .1), .35)
+m.write(mvol=.08, svol=.30)

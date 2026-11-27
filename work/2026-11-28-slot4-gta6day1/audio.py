@@ -1,0 +1,12 @@
+import sys; from shortaudio import Mix
+m = Mix(sys.argv[1], 4419)
+m.music("chiptune")
+m.add("cash", .05, .35); m.add("whoosh", .3, .2); m.add("ding", m.wt(0, "comment"), .3)
+m.add("whoosh", m.mid(0, 1) - .12, .25); m.add("pop", m.at(1, 0), .3); m.add("cash", m.wt(1, "eight hundred"), .35)
+m.add("whoosh", m.mid(1, 2) - .12, .25); m.add("thump", m.wt(2, "november"), .3); m.add("slide", m.wt(2, "thirty two") - .3, .3); m.add("ding", m.wt(2, "before it"), .3)
+m.add("whoosh", m.mid(2, 3) - .12, .3); m.add("slide", m.wt(3, "three point") - .2, .35); m.add("cash", m.wt(3, "three point") + 1.2, .45); m.add("chime", m.wt(3, "three point") + 1.4, .35)
+m.add("whoosh", m.mid(3, 4) - .12, .25); m.add("slide", m.at(4, 0), .3); m.add("pop", m.at(4, 0) + 1, .35)
+m.add("whoosh", m.mid(4, 5) - .12, .25); m.add("chime", m.at(5, .1), .3); m.add("pop", m.wt(5, "not even"), .3)
+m.add("whoosh", m.mid(5, 6) - .12, .25); m.add("pop", m.wt(6, "pre-orders"), .3); m.add("slide", m.wt(6, "shops"), .3)
+m.add("whoosh", m.mid(6, 7) - .12, .25); m.add("pop", m.at(7, .1), .35)
+m.write(mvol=.08, svol=.30)
