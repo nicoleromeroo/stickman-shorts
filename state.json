@@ -1,5 +1,5 @@
 {
- "uploaded_count": 70,
+ "uploaded_count": 72,
  "uploads": [
   {
    "tag": "video-20261116-test",
@@ -561,6 +561,22 @@
    "mode": "scheduled 2026-11-28T10:30:00Z",
    "publish_at": "2026-11-28T11:30:00+01:00",
    "uploaded_at": "2026-11-27T15:01:16+00:00"
+  },
+  {
+   "tag": "video-20261128-slot1",
+   "video_id": "FVcg_TTcnKs",
+   "title": "Why Your Phone Buzzes When It Didn't \ud83d\udcf3 #shorts",
+   "mode": "scheduled 2026-11-28T05:00:00Z",
+   "publish_at": "2026-11-28T06:00:00+01:00",
+   "uploaded_at": "2026-11-27T19:54:00+00:00"
+  },
+  {
+   "tag": "video-20261128-slot5",
+   "video_id": "SdFITu0cc10",
+   "title": "What If You Only Slept 4 Hours a Night? \ud83d\ude34 #shorts",
+   "mode": "scheduled 2026-11-28T17:30:00Z",
+   "publish_at": "2026-11-28T18:30:00+01:00",
+   "uploaded_at": "2026-11-27T19:54:00+00:00"
   }
  ]
 }
