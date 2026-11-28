@@ -1,0 +1,5 @@
+# Sources — The Bath That Caught a Thief (Legend)
+- https://math.nyu.edu/Archimedes/Crown/Vitruvius.html — Vitruvius, Book IX: Hiero weighed out gold to a contractor for a crown; the crown matched the weight; charge that gold was taken and silver added; Archimedes saw that "the more his body sank into it the more water ran out over the tub"; he "rushed home naked" crying "Eureka"; test with equal weights of gold and silver in a full vessel: the crown displaced more water than the gold, which "made the theft of the contractor perfectly clear".
+- https://www.scientificamerican.com/article/fact-or-fiction-archimede — Vitruvius wrote in the 1st century BC, nearly 200 years after the event; "Archimedes probably never uttered the phrase in that way"; Archimedes never wrote about it.
+- https://exhibits.museogalileo.it/archimedes/section/VitruviusArchimedes.html — King Hiero II of Syracuse; the method "has been the focus of lively scholarly debate".
+- Classification: LEGEND — framed with "Legend says" at the start and for the naked run. The run is never shown nude: towel + things blocking the view.

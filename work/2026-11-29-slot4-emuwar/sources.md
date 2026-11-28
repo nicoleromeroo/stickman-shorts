@@ -1,0 +1,5 @@
+# Sources — The War Australia Lost to Birds (True)
+- https://www.britannica.com/topic/Emu-War — Nov–Dec 1932, Campion district, Western Australia; roughly 20,000 emus; Maj. G.P.W. Meredith with Sgt McMurray and Gunner O'Halloran; two Lewis guns, 10,000 rounds; emus scattered in all directions; "one emu in each group served as a lookout"; emus faster than trucks on rough terrain; Meredith: emus "could face machine guns with the invulnerability of tanks"; House of Representatives members joked that if anyone deserved medals it was the emus, who had "won every round so far".
+- https://en.wikipedia.org/wiki/Emu_War — 2 Nov–10 Dec 1932; ~20,000 emus; gun mounted on a truck, truck "unable to gain on the birds", too rough to fire; birds "split into small groups"; Meredith recalled 10 Dec.
+- https://www.nationalgeographic.com/history/article/australian-emu-war-history — three soldiers, two Lewis guns; birds formed 'units' with lookouts; "invulnerability of tanks" quote.
+- Facts used: all True (documented). "Three soldiers" = Meredith + two men (NatGeo: three soldiers). No kill counts used (disputed, and never shown: the birds always escape).

@@ -1,0 +1,5 @@
+# Sources — The Warship That Sank in Minutes (True)
+- https://www.vasamuseet.se/en/vasa-history/disaster — 10 Aug 1628, foundered in Stockholm harbour within minutes; "four of the ten sails were set, and a salute was fired"; a stronger gust pushed her over so "water poured in through the open gunports"; upperworks "too tall and heavily built for the relatively small amount of hull below the waterline".
+- https://www.britannica.com/topic/Vasa-warship — 64 bronze cannons, two gun decks, top-heavy; sank in full view of a crowd of thousands; "There was nobody to blame ... the king himself had personally overseen every measurement."
+- https://www.irishtimes.com/world/europe/2023/05/16/the-vasa-was-one-of-the-most-powerful-ships-in-the-world-for-about-20-minutes — Admiral Klas Fleming's stability test: thirty men ran back and forth, the ship rolled so alarmingly he stopped it for fear she would capsize; "The Royal Council held no one responsible."
+- Facts used: all True. The ~30 deaths are not mentioned (rule: never dwell on casualties). Distance (1,130 m vs 1,300 m) disputed between sources, so not used.

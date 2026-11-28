@@ -1,0 +1,5 @@
+# Sources — The War That Saved the Leaning Tower (True)
+- https://www.newworldencyclopedia.org/entry/Leaning_Tower_of_Pisa — begun 9 Aug 1173; lean after the third floor in 1178; "a mere three-meter foundation set in weak, unstable subsoil"; battles with Genoa, Lucca and Florence; halted almost a century; "This allowed time for the underlying soil to settle. Otherwise, the tower would almost certainly have toppled."; floors built at an angle to compensate; 38 m³ of soil removed from under the raised end, reopened 2001.
+- https://discovermagazine.com/planet-earth/the-leaning-tower-of-pisa-wasnt-supposed-to-lean — clay, fine sand and shells; wars against Genoa, Lucca and Florence halted construction "for almost 100 years"; the delay let the foundation settle "and prevent any likely collapse"; soil removed from beneath the north side, 2001.
+- https://www.mentalfloss.com/article/70395/13-straight-facts-about-leaning-tower-pisa — broke ground Aug 1173; third story by 1178; work resumed 1272; max tilt 5.5° by 1990.
+- Facts used: all True (documented).
