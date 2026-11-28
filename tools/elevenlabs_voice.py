@@ -66,6 +66,12 @@ def main():
         if any(os.path.exists(out[:-4] + ext) for ext in (".mp3", ".wav", ".m4a")): continue
         todo.append((sc, out))
     test = os.environ.get("VOICE_TEST") == "1" and not os.path.exists("voice_inbox/_test.mp3")
+    if os.environ.get("VOICE_TEST") == "1":
+        try:
+            ms = call("/models")
+            info = [{k: m.get(k) for k in ("model_id", "name", "can_do_text_to_speech", "token_cost_factor", "description")} for m in ms]
+            os.makedirs("voice_inbox", exist_ok=True); json.dump(info, open("voice_inbox/_models.json", "w"), indent=1)
+        except Exception as e: print("could not list models:", e)
     left, tier = credits()
     print(f"plan: {tier}, credits left: {left}, model: {MODEL}, scripts to voice: {len(todo)}")
     if not todo and not test: return
