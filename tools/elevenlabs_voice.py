@@ -1,14 +1,14 @@
 """Make the voiceover mp3s with ElevenLabs (runs inside the GitHub Action "Make voiceovers"; needs secret ELEVENLABS_API_KEY).
 For every work/<YYYY-MM-DD>-slot<N>-<slug>/script.txt without a recording, writes voice_inbox/<YYYYMMDD>-slot<N>.mp3.
 A recording Nicole uploads herself always wins (existing files are never overwritten). Only today and later are voiced.
-Voice: "Adam - Radio Announcer" (looked up by name, or repo variable ELEVENLABS_VOICE_ID). Model: eleven_flash_v2_5
+Voice: "Jarnathan - Confident and Versatile" (Nicole, 28 Nov) (looked up by name, or repo variable ELEVENLABS_VOICE_ID). Model: eleven_flash_v2_5
 (0.5 credits per character on the Starter plan; set repo variable ELEVENLABS_MODEL=eleven_multilingual_v2 for best quality)."""
 import os, re, sys, json, glob, datetime, urllib.request, urllib.parse
 
 KEY = os.environ.get("ELEVENLABS_API_KEY", "").strip()
 MODEL = os.environ.get("ELEVENLABS_MODEL", "").strip() or "eleven_flash_v2_5"
 VOICE_ID = os.environ.get("ELEVENLABS_VOICE_ID", "").strip()
-VOICE_NAME = os.environ.get("ELEVENLABS_VOICE_NAME", "").strip() or "Adam - Radio Announcer"
+VOICE_NAME = os.environ.get("ELEVENLABS_VOICE_NAME", "").strip() or "Jarnathan - Confident and Versatile"
 API = "https://api.elevenlabs.io/v1"
 if not KEY: sys.exit("ELEVENLABS_API_KEY secret is missing")
 
@@ -24,13 +24,13 @@ def find_voice():
     try:
         mine = call("/voices").get("voices", [])
         for v in mine:
-            if norm(v.get("name", "")) == want or want in norm(v.get("name", "")): return v["voice_id"], v["name"] + " (my voices)"
+            if norm(v.get("name", "")) == want or want in norm(v.get("name", "")) or norm(VOICE_NAME.split()[0]) in norm(v.get("name", "")): return v["voice_id"], v["name"] + " (my voices)"
     except Exception as e: print("could not list my voices:", e)
     # not in "My Voices" yet: search the shared Voice Library and add it
-    q = urllib.parse.quote("Radio Announcer")
-    shared = call(f"/shared-voices?page_size=50&search={q}").get("voices", [])
-    hits = [v for v in shared if "adam" in v.get("name", "").lower() and "radio" in v.get("name", "").lower()] or \
-           [v for v in shared if "radio" in v.get("name", "").lower() and "announcer" in v.get("name", "").lower()]
+    first = VOICE_NAME.split()[0]
+    shared = call(f"/shared-voices?page_size=50&search={urllib.parse.quote(first)}").get("voices", [])
+    hits = [v for v in shared if norm(v.get("name", "")) == want] or [v for v in shared if norm(first) in norm(v.get("name", ""))]
+    hits.sort(key=lambda v: -int(v.get("cloned_by_count", 0) or 0))
     if not hits: sys.exit(f"voice '{VOICE_NAME}' not found: add it to My Voices in ElevenLabs or set repo variable ELEVENLABS_VOICE_ID")
     v = hits[0]
     try:

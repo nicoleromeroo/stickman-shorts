@@ -2,7 +2,7 @@
 
 Since 28 Nov 2026 the channel makes **3 animated 3D-cartoon Shorts per day**: flat 2D bean-head characters on camera-facing
 cards in a colourful 3D world with ink outlines, depth of field and gliding cameras (engine: `engine3d/`, worked example:
-`examples3d/eiffel/`). **The voice is ElevenLabs "Adam – Radio Announcer"**, made automatically: when a run pushes a `script.txt`, the GitHub
+`examples3d/eiffel/`). **The voice is ElevenLabs "Jarnathan – Confident and Versatile"**, made automatically: when a run pushes a `script.txt`, the GitHub
 Action "Make voiceovers (ElevenLabs)" (`.github/workflows/voice.yml`, `tools/elevenlabs_voice.py`) turns it into
 `voice_inbox/<YYYYMMDD>-slot<N>.mp3` within a few minutes and commits it. Nicole may upload her own recording with the same
 name instead; an existing file is never overwritten. The old 2D stickman engine (`engine/`, `examples/`) and the Kokoro
