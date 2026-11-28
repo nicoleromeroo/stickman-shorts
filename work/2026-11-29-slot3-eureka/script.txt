@@ -1,11 +1,9 @@
-Legend says a king's crown was solved by a man getting into his bath.
-Syracuse, more than two thousand years ago. King Hiero gives a goldsmith gold to make a crown.
-The crown weighs exactly as much as the gold.
-But a rumour spreads: the goldsmith kept some gold and mixed in cheaper silver.
+Legend says a king's crown was solved in a bathtub.
+Syracuse, long ago. King Hiero gives a goldsmith gold for a crown.
+But a rumour spreads: the goldsmith swapped some gold for cheaper silver.
 The king asks Archimedes to find out.
-Guess before the end: was the crown pure gold?
-One day Archimedes climbs into a full bath, and the water spills over.
-You see, silver is lighter than gold, so the same weight of silver takes up more space.
-A crown with silver inside would push out more water than pure gold.
-He tests it. It does. The goldsmith is caught.
-And Archimedes? Legend says he was so excited, he ran home shouting Eureka, and forgot to put his clothes on.
+Guess: was the crown pure gold?
+Archimedes climbs into a full bath, and the water spills over.
+You see, silver takes up more space than the same weight of gold.
+A crown with silver would spill more water. It did.
+And Archimedes? Legend says he ran home shouting Eureka, and forgot his clothes.

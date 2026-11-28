@@ -183,7 +183,7 @@ bash engine3d/setup.sh    # three.js + Playwright for the 3D engine
   AI, money for things *they* buy (phones, sneakers, games, food), "what if" scenarios, gross/awe facts.
   Adult topics (heating bills, pensions, taxes) only with a teen angle.
 - **Length 30–45 s** (up to 50 s). 9–14 short sentences. Open a loop early, pay it off at the end.
-- The ElevenLabs voice speaks ~2.9 words/s with natural pauses: 30 s ≈ 85 words, 45 s ≈ 125, 50 s ≈ 140.
+- The ElevenLabs voice (eleven_v3) speaks only ~2.0 words/s incl. the pauses between lines (measured 28 Nov: 124 words = 62 s): 45 s ≈ 90 words, 50 s ≈ 100 words max.
   Plain text, one sentence per line, no stage directions, no emoji, no brackets.
 - **Story structure (every video):** 1) Hook: the absurd fact, sentence 1, no setup. 2) Setting in 1–2 lines: when, where,
   who, one concrete detail. 3) Escalation, 2–4 beats, each bigger; others doubt or mock; one exaggeration joke.
