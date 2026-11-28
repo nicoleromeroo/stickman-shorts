@@ -7,7 +7,7 @@ import os, re, sys, json, glob, datetime, urllib.request, urllib.parse
 
 KEY = os.environ.get("ELEVENLABS_API_KEY", "").strip()
 MODEL = os.environ.get("ELEVENLABS_MODEL", "").strip() or "eleven_flash_v2_5"
-VOICE_ID = os.environ.get("ELEVENLABS_VOICE_ID", "").strip()
+VOICE_ID = os.environ.get("ELEVENLABS_VOICE_ID", "").strip() or "c6SfcYrb2t09NHXiT80T"  # Jarnathan - Confident and Versatile (Nicole, 28 Nov)
 VOICE_NAME = os.environ.get("ELEVENLABS_VOICE_NAME", "").strip() or "Jarnathan - Confident and Versatile"
 API = "https://api.elevenlabs.io/v1"
 if not KEY: sys.exit("ELEVENLABS_API_KEY secret is missing")
@@ -19,7 +19,17 @@ def call(path, data=None, method=None, raw=False):
 
 norm = lambda s: re.sub(r"[^a-z0-9]", "", s.lower())
 def find_voice():
-    if VOICE_ID: return VOICE_ID, "(from ELEVENLABS_VOICE_ID)"
+    if VOICE_ID:
+        try:
+            v = call(f"/voices/{VOICE_ID}"); return VOICE_ID, v.get("name", "?") + " (pinned id)"
+        except Exception as e: print("pinned voice not in My Voices yet, adding it from the library:", e)
+        for term in (VOICE_NAME.split()[0], ""):
+            shared = call(f"/shared-voices?page_size=100&search={urllib.parse.quote(term)}").get("voices", [])
+            for v in shared:
+                if v.get("voice_id") == VOICE_ID:
+                    call(f"/voices/add/{v['public_owner_id']}/{VOICE_ID}", {"new_name": v.get("name", VOICE_NAME)})
+                    return VOICE_ID, v.get("name", "?") + " (added from library)"
+        return VOICE_ID, "(pinned id, could not verify)"
     want = norm(VOICE_NAME)
     try:
         mine = call("/voices").get("voices", [])
