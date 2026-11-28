@@ -65,7 +65,16 @@ def main():
         out = f"voice_inbox/{m[1]}{m[2]}{m[3]}-slot{m[4]}.mp3"
         if any(os.path.exists(out[:-4] + ext) for ext in (".mp3", ".wav", ".m4a")): continue
         todo.append((sc, out))
-    test = os.environ.get("VOICE_TEST") == "1" and not os.path.exists("voice_inbox/_test.mp3")
+    test = False
+    if os.environ.get("VOICE_TEST") == "1" and not os.path.exists("voice_inbox/_test_done"):
+        vid, vname = find_voice(); print("voice:", vname, vid)
+        for mdl in ("eleven_v4", "eleven_v3", "eleven_multilingual_v2", "eleven_flash_v2_5"):
+            txt = "A man sold the Eiffel Tower. Then he came back and sold it again."
+            try:
+                a = call(f"/text-to-speech/{vid}?output_format=mp3_44100_128", {"text": txt, "model_id": mdl, "voice_settings": {"stability": 0.5, "similarity_boost": 0.75, "style": 0.0, "use_speaker_boost": True}}, raw=True)
+                os.makedirs("voice_inbox", exist_ok=True); open(f"voice_inbox/_test_{mdl}.mp3", "wb").write(a); print("test clip", mdl, len(a))
+            except Exception as e: print("model not available:", mdl, e)
+        open("voice_inbox/_test_done", "w").write("model test clips made\n")
     if os.environ.get("VOICE_TEST") == "1":
         try:
             ms = call("/models")
@@ -82,7 +91,7 @@ def main():
         lines = ["A man sold the Eiffel Tower.", "Then he came back and sold it again."] if sc == "_test" else \
                 [l.strip() for l in open(sc, encoding="utf-8").read().splitlines() if l.strip()]
         # a short pause between sentences keeps them separate for engine3d/timing.py
-        text = ' <break time="0.45s" /> '.join(lines)
+        text = ' <break time="0.45s" /> '.join(lines) if ("v2" in MODEL) else "\n".join(lines)
         cost = len(" ".join(lines)) * (0.5 if "flash" in MODEL or "turbo" in MODEL else 1.0)
         if left is not None and cost > left: print(f"NOT ENOUGH CREDITS for {out} (needs ~{cost:.0f}, left {left})"); continue
         audio = call(f"/text-to-speech/{vid}?output_format=mp3_44100_128", {"text": text, "model_id": MODEL, "voice_settings": settings}, raw=True)
