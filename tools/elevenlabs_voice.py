@@ -6,7 +6,7 @@ Voice: "Jarnathan - Confident and Versatile" (Nicole, 28 Nov) (looked up by name
 import os, re, sys, json, glob, datetime, urllib.request, urllib.parse
 
 KEY = os.environ.get("ELEVENLABS_API_KEY", "").strip()
-MODEL = os.environ.get("ELEVENLABS_MODEL", "").strip() or "eleven_v4"  # matches Nicole's ElevenLabs app setting (v4)
+MODEL = os.environ.get("ELEVENLABS_MODEL", "").strip() or "eleven_v3"  # Nicole picked v3 (28 Nov)
 VOICE_ID = os.environ.get("ELEVENLABS_VOICE_ID", "").strip() or "c6SfcYrb2t09NHXiT80T"  # Jarnathan - Confident and Versatile (Nicole, 28 Nov)
 VOICE_NAME = os.environ.get("ELEVENLABS_VOICE_NAME", "").strip() or "Jarnathan - Confident and Versatile"
 API = "https://api.elevenlabs.io/v1"
