@@ -37,8 +37,8 @@ speed: queue fewer videos rather than a bad one.
    after the run has been going ~2.5 hours. Copy the mp3 to `work/<dir>/voice.mp3`. Never edit or re-time the voice.
 4. **Missing videos:** if a slot of tomorrow still has no video at the end of the 20:40 run, say so clearly in the summary
    ("29 Nov slot3 not made: …") with the reason.
-- Credits: Nicole is on the ElevenLabs Starter plan (30k credits/month, Flash model = 0.5 credits per character, ~300 per
-  video). The Action prints the remaining credits in its log; warn Nicole in the summary when fewer than ~3,000 are left.
+- Credits: model `eleven_v4` (same as Nicole's ElevenLabs app; ~1 credit per character, ~600 per video). Nicole is on the
+  Starter plan (30k credits/month ≈ 50 videos). The Action prints the remaining credits in its log; warn Nicole in the summary when fewer than ~3,000 are left.
 
 ## Step 0 — setup
 ```

@@ -6,7 +6,7 @@ Voice: "Jarnathan - Confident and Versatile" (Nicole, 28 Nov) (looked up by name
 import os, re, sys, json, glob, datetime, urllib.request, urllib.parse
 
 KEY = os.environ.get("ELEVENLABS_API_KEY", "").strip()
-MODEL = os.environ.get("ELEVENLABS_MODEL", "").strip() or "eleven_flash_v2_5"
+MODEL = os.environ.get("ELEVENLABS_MODEL", "").strip() or "eleven_v4"  # matches Nicole's ElevenLabs app setting (v4)
 VOICE_ID = os.environ.get("ELEVENLABS_VOICE_ID", "").strip() or "c6SfcYrb2t09NHXiT80T"  # Jarnathan - Confident and Versatile (Nicole, 28 Nov)
 VOICE_NAME = os.environ.get("ELEVENLABS_VOICE_NAME", "").strip() or "Jarnathan - Confident and Versatile"
 API = "https://api.elevenlabs.io/v1"
@@ -92,7 +92,7 @@ def main():
                 [l.strip() for l in open(sc, encoding="utf-8").read().splitlines() if l.strip()]
         # a short pause between sentences keeps them separate for engine3d/timing.py
         text = ' <break time="0.45s" /> '.join(lines) if ("v2" in MODEL) else "\n".join(lines)
-        cost = len(" ".join(lines)) * (0.5 if "flash" in MODEL or "turbo" in MODEL else 1.0)
+        cost = len(" ".join(lines)) * (0.5 if "flash" in MODEL or "turbo" in MODEL else 1.0)  # v4 assumed 1 credit per character
         if left is not None and cost > left: print(f"NOT ENOUGH CREDITS for {out} (needs ~{cost:.0f}, left {left})"); continue
         audio = call(f"/text-to-speech/{vid}?output_format=mp3_44100_128", {"text": text, "model_id": MODEL, "voice_settings": settings}, raw=True)
         os.makedirs("voice_inbox", exist_ok=True); open(out, "wb").write(audio)
