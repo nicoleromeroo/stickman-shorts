@@ -7,15 +7,16 @@ scripts a day ahead, Nicole records and uploads them, then the runs build the vi
 `examples/`) is retired: never make stickman videos any more. Work autonomously; nobody is watching. Quality and truth beat
 speed: queue fewer videos rather than a bad one.
 
-## Schedule (Europe/Berlin) — 3 slots per day
+## Schedule (Europe/Berlin) — 3 STORY slots per day
 | slot tag | time  | format | priority |
 |---|---|---|---|
-| slot4 | 11:30 | POP CULTURE: CELEBRITY / SINGER / MOVIE / GAMING facts (rules in Step 1, point 4) | 2 |
-| slot2 | 16:00 | FINANCE — money with real numbers, teen angle. Description ends with "Not financial advice." | 3 |
-| slot3 | 20:00 | SERIES — next episode of the running series (`series.md`) | 1 |
-- slot1 (facts) and slot5 (what-if) are paused since 29 Nov (each 3D video takes ~45–60 min). Their topic rules below stay
-  as a reference; plan.md rows for them can be used for slot2/slot4 if they fit.
-- Series descriptions say "Part N tomorrow at 20:00". `publish_at` is ISO 8601 with the Berlin offset (`+01:00`, summer `+02:00`).
+| slot4 | 11:30 | STORY — one surprising true story (history / science / animals / inventions), twist ending | 1 |
+| slot2 | 16:00 | STORY — same format, different era and theme than slot4 | 2 |
+| slot3 | 20:00 | STORY — same format, different era and theme than both | 3 |
+- **Nicole, 28 Nov:** every video is a "story short" like `ideas.md` and `examples3d/eiffel/` ("The Man Who Sold the Eiffel
+  Tower"). The old formats (pop culture, finance, what-if, series, facts) are paused; their rules further down stay only
+  as a reference for drawing/sourcing limits. The running series THE LAST BUS is on hold.
+- `publish_at` is ISO 8601 with the Berlin offset (`+01:00`, summer `+02:00`).
 - Before pushing anything, `git pull --rebase` (the other run may have pushed in between).
 
 ## The two stages (do both in every run, in this order: B first if anything is buildable, then A)
@@ -46,17 +47,30 @@ bash engine/setup.sh      # fonts (Luckiest Guy for on-screen text); skip the vo
 bash engine3d/setup.sh    # three.js + Playwright for the 3D engine
 ```
 
-## Step 1 — pick the topics
-0. **Check `plan.md` first** (Nicole's topic plan): use the planned topic for that day and slot unless it can't be
-   verified, became a near-duplicate, or the news changed; then pick one the normal way. Move made topics to "Done".
-1. Read `topics_log.md` (every topic ever made). Never repeat a topic or a near-duplicate.
-2. Research what is trending **right now** with WebSearch (TikTok / YouTube Shorts / Instagram
-   trend roundups of this week, Google-trending news that is safe and family-friendly).
-3. **Season rule — match the calendar.** A seasonal topic must fit what people are living through
-   *now*: something happening today or within the next ~10 days. Christmas topics (trees, gifts,
-   Santa, Glühwein…) only from **1 December**; in November think autumn, darker days, cold/heating,
-   Black Friday (only in the week before it), St. Martin, first snow. Evergreen topics are always fine.
-   Never more than one seasonal video per day.
+## Step 1 — pick the stories (`ideas.md`)
+0. **Take ideas from `ideas.md` first** (the backlog, top = next). Re-verify every fact before using one. Move used ideas to
+   "## Done" with the date and slot. Keep at least 10 unused ideas in the backlog: when it gets shorter, add new idea cards
+   in exactly the same format (title, hook, twist, why it animates well, true/legend + source).
+1. **What makes a perfect story idea** (Nicole loves this list style):
+   - One surprising story with a **physical cause and effect you can show** (a collapse, a fall, a chase, a reveal, a sinking,
+     a flood, an explosion of popcorn…), a clear everyman character, stakes that escalate, and an **ironic twist in the last line**.
+   - A setting buildable from simple 3D shapes plus cartoon cards: towns, bridges, ships, castles, deserts, labs, palaces,
+     farms, trains, factories, ancient cities.
+   - Mix across the 3 daily videos: eras (ancient, medieval, 1600–1800s, 1900s, modern) and themes (con artists, disasters,
+     animals, inventions/lucky accidents, weird laws, science, engineering fails, sport oddities, exploration).
+   - **Title** 5–8 words, curiosity-driven ("The Soldier Who Never Left", "The War Australia Lost to Birds").
+   - **Hook** = the first spoken sentence, a paradox stated as fact, no setup ("A man sold the Eiffel Tower. Twice.").
+2. **Truth:** documented history is told as fact; a disputed account says so ("the best explanation is…"); folklore is
+   framed as "Legend says…". Never present a viral legend as fact. Verify the key facts on pages you opened (Step 2).
+   Record which it is in `sources.md` (True / Disputed / Legend).
+3. Never repeat a story or near-duplicate from `topics_log.md` or `ideas.md` "Done".
+4. Season rule: a seasonal story only if it fits the next ~10 days (Christmas stories only from 1 December; the 1914
+   Christmas truce is a December story). Never more than one seasonal video a day.
+5. **Off-limits:** real living people as characters, brand mascots/logos, anything graphic or gory (wars and disasters only
+   from the absurd/human side, never casualties as a punchline), politics, mocking any group, sexual content. Historical
+   people (long dead) may appear as generic cartoon characters with their name spoken.
+
+### Reference only (paused formats)
 4. FACTS slot (slot1) alternates "why" science and myth-busters day by day. CELEBRITY (slot4) and
    WHAT IF (slot5) have their own daily slots:
    - **Celebrity / singer / movie facts** (Nicole wants these): only globally famous people (A-list actors,
@@ -131,7 +145,7 @@ bash engine3d/setup.sh    # three.js + Playwright for the 3D engine
    medical or legal advice, gambling, crypto shilling, anything sexual or gory, content aimed
    at under-13s specifically.
 
-## Step 1b — the SERIES slot (`series.md`)
+## Step 1b — the SERIES slot (`series.md`) — paused, reference only
 - One story series runs at a time, **5–7 episodes**, one episode per day, ~45–60 s each.
 - Read `series.md`. If no series is running (or the last one finished), invent a new one and write its
   bible there first: title, premise (second-person "you" mystery/survival/adventure, PG, no gore),
@@ -169,11 +183,13 @@ bash engine3d/setup.sh    # three.js + Playwright for the 3D engine
 - **Gen Z / Gen Alpha interests first:** phones, social media, gaming, school, sleep, creators/YouTube,
   AI, money for things *they* buy (phones, sneakers, games, food), "what if" scenarios, gross/awe facts.
   Adult topics (heating bills, pensions, taxes) only with a teen angle.
-- **Length 30–45 s** (stories up to 50 s). 8–10 short lines. Open a loop early, pay it off at the end.
+- **Length 30–45 s** (up to 50 s). 9–14 short sentences. Open a loop early, pay it off at the end.
 - Nicole's ElevenLabs voice speaks ~2.9 words/s with natural pauses: 30 s ≈ 85 words, 45 s ≈ 125, 50 s ≈ 140.
   Plain text, one sentence per line, no stage directions, no emoji, no brackets.
-- Structure for facts/finance: situation hook → "why?" → explanation with one strong visual metaphor
-  (slot machine, giant pot, ice cube) → twist line.
+- **Story structure (every video):** 1) Hook: the absurd fact, sentence 1, no setup. 2) Setting in 1–2 lines: when, where,
+  who, one concrete detail. 3) Escalation, 2–4 beats, each bigger; others doubt or mock; one exaggeration joke.
+  4) Pivot: "But…" / "You see," reveals the real mechanism, often with an everyday analogy. 5) Twist/payoff: short, ironic,
+  the last words of the video. Never describe what the viewer already sees.
 - Numbers written as words in script.txt so the voice says them right; spell acronyms "P O V".
 - Good references: `examples3d/eiffel/script.txt` (hook → setting → escalation → pivot → ironic twist as the last words).
 - **Comment prompt (Nicole, 16 Nov), every video:** one honest question answerable in one word: A or B, a number
