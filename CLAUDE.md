@@ -1,32 +1,49 @@
-# Stickman Shorts — daily production playbook
+# Cartoon Shorts — daily production playbook (3D cartoon style, Nicole's voice)
 
-You are producing **5 animated stickman YouTube Shorts per day** for Nicole's channel.
-There are two runs per day (15:40 and 20:40 Berlin); each run fills **up to 3** still-missing slots
-of **the next day** (priority order below) and queues them for upload. Work fully
-autonomously; nobody is watching. Quality and truth beat speed: if a video is not good
-enough, queue fewer videos rather than a bad one.
+Since 28 Nov 2026 the channel makes **3 animated 3D-cartoon Shorts per day**: flat 2D bean-head characters on camera-facing
+cards in a colourful 3D world with ink outlines, depth of field and gliding cameras (engine: `engine3d/`, worked example:
+`examples3d/eiffel/`). **The voice is Nicole's ElevenLabs recording**, so production runs in two stages: the runs write
+scripts a day ahead, Nicole records and uploads them, then the runs build the videos. The old 2D stickman engine (`engine/`,
+`examples/`) is retired: never make stickman videos any more. Work autonomously; nobody is watching. Quality and truth beat
+speed: queue fewer videos rather than a bad one.
 
-## Schedule (Europe/Berlin) — one fixed format per slot
+## Schedule (Europe/Berlin) — 3 slots per day
 | slot tag | time  | format | priority |
 |---|---|---|---|
-| slot1 | 06:00 | FACTS — "why does this happen?" science, alternating with myth-busters | 5 |
 | slot4 | 11:30 | POP CULTURE: CELEBRITY / SINGER / MOVIE / GAMING facts (rules in Step 1, point 4) | 2 |
 | slot2 | 16:00 | FINANCE — money with real numbers, teen angle. Description ends with "Not financial advice." | 3 |
-| slot5 | 18:30 | WHAT IF…? scenario (rules in Step 1, point 4) | 4 |
 | slot3 | 20:00 | SERIES — next episode of the running series (`series.md`) | 1 |
-- Slot tags keep their numbers (slot4/slot5 were added later); the tag decides the time, not the order.
-- Publish times changed on 16 Nov (Nicole): 06:00 / 11:30 / 16:00 / 18:30 / 20:00, valid from 17 Nov. Series
-  descriptions say "Part N tomorrow at 20:00".
-- **Which slots to make:** a slot of tomorrow is filled if `video-<YYYYMMDD>-slot<N>` is on the `queue`
-  branch or in `state.json` (unless topics_log.md says it is held). Make the missing ones in priority order
-  (1 = first), **at most 3 per run**. If all 5 are filled, finish with a short "nothing to do" summary.
-- Always for the **next calendar day**. `publish_at` in meta.json is ISO 8601 with the Berlin offset,
-  e.g. `2026-11-17T06:00:00+01:00` (use +02:00 during summer time).
+- slot1 (facts) and slot5 (what-if) are paused since 29 Nov (each 3D video takes ~45–60 min). Their topic rules below stay
+  as a reference; plan.md rows for them can be used for slot2/slot4 if they fit.
+- Series descriptions say "Part N tomorrow at 20:00". `publish_at` is ISO 8601 with the Berlin offset (`+01:00`, summer `+02:00`).
 - Before pushing anything, `git pull --rebase` (the other run may have pushed in between).
+
+## The two stages (do both in every run, in this order: B first if anything is buildable, then A)
+**Stage A — scripts (one day ahead).** Make sure scripts exist for **tomorrow and the day after** (Berlin dates). For each
+missing slot of those days: pick the topic (Step 1), research + fact-check (Step 2), write the script (Step 3), create
+`work/<YYYY-MM-DD>-<slot>-<slug>/` with `script.txt` (the exact words to record, one sentence per line, nothing else),
+`sources.md` (URLs + the numbers used) and a short `PLAN.md` (visual idea per sentence). Also append all of that day's
+scripts to `scripts/<YYYY-MM-DD>.md` (heading per slot: tag, title idea, the script in a code block, the file name to upload).
+Commit and push. Then tell Nicole with SendUserMessage: the scripts in copyable blocks, and per script the file name.
+**Stage B — build.** A slot is buildable when its `script.txt` exists, its voice file is in `voice_inbox/`
+(`<YYYYMMDD>-slot<N>.mp3`, also accept .wav/.m4a and names like `29-11-slot3` or `20261129_slot3` that clearly
+match), and `video-<YYYYMMDD>-slot<N>` is neither on the `queue` branch nor in `state.json`. Build buildable slots for
+**tomorrow first, then the day after**, in priority order, **up to 3 per run**; do not start a new video after the run has
+been going ~2.5 hours. Copy the voice to `work/<dir>/voice.mp3`. If Nicole changed wording while recording, the script still
+times fine as long as the sentences are the same; if a sentence differs a lot, ask nothing, re-time with the closest text.
+**Missing voice:** if a slot of tomorrow has a script but no voice at the 20:40 run, skip it and say so clearly in the summary
+("29 Nov slot3 not made: no recording in voice_inbox"). Never use the Kokoro voice or any other TTS instead.
+
+### How Nicole records (repeat this in every scripts message, short)
+ElevenLabs, the voice "Adam – Radio Announcer" (her settings: stability ~50 %, similarity ~75 %), read the script exactly,
+natural pauses at sentence ends, export mp3 **without music**. Upload on GitHub: repo `nicoleromeroo/stickman-shorts` →
+folder `voice_inbox` → Add file → Upload files, named `<YYYYMMDD>-slot<N>.mp3` (e.g. `20261129-slot3.mp3`). Tomorrow's
+recordings are needed before the 20:40 run; the day-after ones can come any time before the next day's 20:40 run.
 
 ## Step 0 — setup
 ```
-bash engine/setup.sh
+bash engine/setup.sh      # fonts (Luckiest Guy for on-screen text); skip the voice model if it is slow
+bash engine3d/setup.sh    # three.js + Playwright for the 3D engine
 ```
 
 ## Step 1 — pick the topics
@@ -131,9 +148,9 @@ bash engine/setup.sh
   (official stats, consumer orgs, universities, reputable press). Record URLs.
 - Prefer current-year data. When unsure, hedge in the script ("scientists think", "about").
 - Do the maths in Python and keep the numbers you speak consistent with on-screen numbers.
-- Put assumptions in an on-screen footnote (see `examples/x_lights`, `examples/x_santa`).
+- Put assumptions in an on-screen footnote (HUD text via `hudAt`, Step 4).
 
-## Step 3 — script (`work/<YYYY-MM-DD>-<slot>-<slug>/lines.json`)
+## Step 3 — script (`work/<YYYY-MM-DD>-<slot>-<slug>/script.txt`)
 **Retention rules (Nicole's feedback 15 Nov: earlier videos felt slow and "adult"):**
 - **Hook in the first second, mid-action.** Line 1 drops the viewer into a situation they recognise
   ("It's 2 AM. You said one more video... 47 videos ago." / "Your Short just hit one million views.")
@@ -153,43 +170,68 @@ bash engine/setup.sh
   AI, money for things *they* buy (phones, sneakers, games, food), "what if" scenarios, gross/awe facts.
   Adult topics (heating bills, pensions, taxes) only with a teen angle.
 - **Length 30–45 s** (stories up to 50 s). 8–10 short lines. Open a loop early, pay it off at the end.
-- Pacing: `MIN_GAP=0.5` (build.sh default) and voice speed 1.08; give `{"gap": 0.5–0.9}` only after
-  punchlines and cliffhangers.
+- Nicole's ElevenLabs voice speaks ~2.9 words/s with natural pauses: 30 s ≈ 85 words, 45 s ≈ 125, 50 s ≈ 140.
+  Plain text, one sentence per line, no stage directions, no emoji, no brackets.
 - Structure for facts/finance: situation hook → "why?" → explanation with one strong visual metaphor
   (slot machine, giant pot, ice cube) → twist line.
-- Numbers written as words in lines.json so the voice says them right; spell acronyms "P O V".
-- Good references: `work/2026-11-15-slotA-scroll`, `work/2026-11-15-slotB-views`, `work/2026-11-15-slotC-respawn1`.
+- Numbers written as words in script.txt so the voice says them right; spell acronyms "P O V".
+- Good references: `examples3d/eiffel/script.txt` (hook → setting → escalation → pivot → ironic twist as the last words).
 - **Comment prompt (Nicole, 16 Nov), every video:** one honest question answerable in one word: A or B, a number
   guess, yes/no, "comment 1, 2 or 3". Guess-type questions go early, before the reveal ("Guess before the end"); opinion
-  questions ("Agree or disagree?", "Would you?") go in the last line. Show it as on-screen text too, and make it the
+  questions ("Agree or disagree?", "Would you?") go in the last line. Show it as HUD text too (`hudAt`, Step 4), and make it the
   first line of the description. Mild controversy only if it is true ("most people get this wrong" must be a fact);
   never about politics, people or groups. Comments can't be pinned via the API, so the question lives in the video.
 
-## Step 4 — animation (`<slug>.html`)
-- Copy the closest example from `examples/` and adapt. Shared helpers live in `engine/engine.js`
-  (stick, hero, brainChar, phoneDev, captions, runScenes, sparkle, bubble, meter, snow, tbc, sepia …).
-- Head of the page must load fonts from `../../engine/node_modules/@fontsource/...` and
-  `<script src="../../engine/engine.js">` — same as the examples.
-- 3–6 scenes, each line illustrated literally, captions via `captions(t, CAP, HOT, 1640)`.
-- Keep characters big in frame (no tiny figures in empty rooms); main text at the top, captions at 1640.
-- Never use glyphs the fonts lack (▲ ≈ ÷ ▶ emoji): draw shapes instead. `€` is handled by txt().
-- **Render check is mandatory**: `node engine/render.js work/<dir>/<page>.html work/<dir>/voice.json stills <t1,t2,…> work/<dir>/st`
-  then build a contact sheet with ffmpeg and look at it with Read. Fix: overlapping text,
-  captions covering faces, cut-off labels, wrong timing, unreadable small text, `<` instead of `€`.
-  Repeat until clean.
+## Step 4 — the 3D cartoon video (`work/<dir>/web/`)
+Read `examples3d/eiffel/web/` (world.js, story.js, props.js, index.html) and `engine3d/core.js` before the first video
+of a run. Copy the example's `index.html` unchanged; write `world.js`, `story.js` (and `props.js` if you need new props).
+1. **Timing:** `python3 engine3d/timing.py work/<dir>/voice.mp3 work/<dir>/script.txt --out work/<dir>` aligns the
+   sentences to the pauses in the recording → `phrases.json` (frames per phrase), `words.json`, `timing.json`. Check that
+   phrase boundaries fall on pauses; hand-fix a boundary if two sentences share one pause. FRAMES = round(duration × 30);
+   the video is exactly as long as the voice. Every visual reaction lands 0–3 frames before its word.
+2. **Shot plan in PLAN.md first:** one row per shot (frames, words, set, light, camera move, characters/poses/expressions,
+   effect + SFX cue). Usually one shot per phrase. Frame 0 is already the hook image. Vary shot sizes (hook MCU → wide reveal
+   → two-shot → insert close-up on the key object → reaction close-up → environment move for the payoff). Light presets
+   `day`, `autumn`, `golden`, `interior` (add more in core.js LIGHTS if needed). Time jumps get a white flash (`flashAt`).
+   The twist line gets a sting: music stops (Step 5), push-in with a little roll; the last physical payoff lands on the last word.
+3. **World (`world.js`):** `export default function buildWorld(api)` builds the set from primitives with painted textures
+   (`api.tbox` constant texel density, `frustum`, `cyl`, `sph`, `tree`, `building` (Haussmann block), `hills`, `P.*` painters:
+   lattice, facade, shopfront, slate, grass, gravel, cobble, water, panel, carpet, parquet, cloth, wood, carriage, rails,
+   signTex). Write new painters in the same flat-with-dark-seams style. Separate sets live far apart in one world
+   (e.g. a room at x=1000, a countryside at z=2500). Return `{ update(state, f, shot) }` for animated parts (pivoted groups
+   driven by 0..1 progress from `worldAt(f)`). Signs/text on planes must read correctly (not mirrored).
+4. **Cast (`story.js` actorsAt):** characters are `K.person(outfit, opts)` cards (2.25 m, soles at the position).
+   Outfits via `K.outfit(coat, {hat, cap/hair/bowler colour, moustache, skin, build})`; hats tophat/cap/hair/bonnet/bowler.
+   Arms: `armL/armR` = up, raise, out, hold, hip, face, whisper; props via `heldL/heldR(p,hx,hy,u)` painters (envelope,
+   suitcase, signs). Expressions: neutral stern grin laugh whistle nervous shock relief relief_open dazed pained smile
+   smile_closed lick; `blush` 0..1. Every card gets idle tilt + `blinkAt` blinks; walks use `mode:"stroll"` + `walk()` phase.
+   Card `key` must change only when the drawing changes (quantise with `q()`). Effects (puff, burst, steam, leaf,
+   banknote, flakes) are small cards; `flat:true` cards lie on the ground (put them ≥0.08 m above any floor/path box).
+   Generic characters only: the celebrity/game drawing rules in Step 1 still apply in full.
+5. **Cameras/lens (`story.js`):** `camFromKeys` smootherstep glides (18–45 f), `easeOut` whips/reveals, `via` points for
+   curved moves, 3–5° rolls on drama, `KICKS` on impacts; every hold creeps. `dofAt`: close-ups/mediums cInf 8–14 px with
+   focus on the eyes, wides 0. **Vertical frame is narrow:** half-width at distance d with vfov v is
+   d·tan(v/2)·0.5625 (4 m at fov 40 → ±0.8 m), so stage characters in depth, not side by side.
+6. **HUD text (`hudAt(f)`):** `[{text, y, size, color, alpha, box}]` drawn in Luckiest Guy with a dark outline. Use it for
+   the ≤5 big hook words on frame 0 (they stay ~2 s), the comment question, finance footnotes/assumptions and the series
+   end card ("PART <N+1> TOMORROW" / "THE END"). No running captions. Keep text in the top third, never over faces.
+7. **Look check (mandatory):** render stills at each shot's middle plus key beats:
+   `node engine3d/render.mjs work/<dir>/web work/<dir>/stills "5,60,..." 1` then
+   `python3 engine3d/sheet.py work/<dir>/stills work/<dir>/stills/sheet.jpg 6` and look at it with Read. Fix: characters cut by
+   the frame edge or too small, camera inside walls/props, props within ~2 m of the lens, raised arms hidden behind heads,
+   flat cards under the floor, mirrored or unreadable text, HUD over faces. Repeat until clean. (~1.5–2 s per frame.)
 
-## Step 5 — audio + build
-- `audio.py` uses `from shortaudio import Mix` (see examples). Music stays quiet (mvol ≤ 0.09). Only synthesized
-  audio — never download music (all presets are generated in code, so there can be no copyright claims).
-- **Music presets (Nicole, 21 Nov: wants more variety):** `upbeat`, `lofi`, `mystery`, `tense` (originals) plus
-  `chiptune` (8-bit, gaming), `funky` (bass + claps, finance/what-if), `dreamy` (soft pads + bells, facts/science),
-  `hype` (fast beat, records/big numbers), `cozy` (light piano groove, everyday/finance), `spooky` (dark pads, mystery
-  stories). Each new preset picks a random key and chord progression from the Mix seed, so give every video its own
-  seed. **Rotate:** never use the same preset twice in one day's 5 videos (the series keeps its fixed preset), and use
-  `upbeat` at most once a day. Suggested fits: gaming → chiptune/hype, finance → funky/cozy, facts → dreamy/lofi,
-  what-if → funky/dreamy/tense.
-- `bash engine/build.sh work/<dir> <page>.html` → `work/<dir>/final.mp4`.
-- Check: duration 28–50 s, 1080×1920, audio present, a final contact sheet looks right.
+## Step 5 — sound + build
+- `work/<dir>/audio.py` (copy `examples3d/eiffel/audio.py`): `score(D, preset, seed, stop=F(twist_frame))` + SFX cues
+  (whoosh, ting, thunk, creak, rustle, pop, shh, step, chuff, whistle, slide_down, scrape, ding_cash …) on the visual beats.
+  Only synthesized audio. **Presets:** sly, mystery, upbeat, chip, cozy, tense, hype, dreamy — never the same preset twice in
+  one day (the series keeps its fixed preset); give every video its own seed.
+- Levels are fixed by `engine3d/mix.py` (music exactly 50 % of the voice level, −6 dB gated RMS; SFX at or below that with
+  peaks capped). Never edit or re-time Nicole's voice.
+- `bash engine3d/build.sh work/<dir>` renders all frames (resumable), mixes, masters to ~−14 LUFS and writes
+  `work/<dir>/final.mp4` + `qa_sheet.jpg`. Look at the QA sheet; frozen spans ≥0.4 s or black frames need a fix.
+  Run the render with Bash `run_in_background` and poll it (it takes ~30–45 min for 40 s); don't run other heavy jobs meanwhile.
+- Check: duration 28–55 s, 1080×1920, audio present.
 
 ## Step 6 — metadata (`work/<dir>/meta.json`)
 ```json
@@ -226,10 +268,14 @@ GitHub MCP `actions_run_trigger` → `run_workflow`). GitHub's scheduled :23 run
 so don't rely on them. A minute later, check `state.json` on main to confirm each tag shows up with mode "scheduled".
 Push all videos of this run in one commit. Never put mp4/wav files on `main`.
 
-## Step 8 — log
+## Step 8 — log + summary
 Append one line per video to `topics_log.md`:
 `- 2026-11-17 slot1 | A numbers | Black Friday deals | sources: which.co.uk …`
-Commit `topics_log.md` and the `work/<dir>/` sources (html, lines.json, audio.py, meta.json only) and push.
+Commit `topics_log.md` and the `work/<dir>/` sources (script.txt, sources.md, PLAN.md, phrases.json, web/*.js, web/index.html,
+audio.py, meta.json only — never frames, wav or mp4) and push. Leave the voice files in `voice_inbox/`.
+
+Finish every run with one SendUserMessage: videos queued (title + publish time), scripts waiting for a recording (with the
+file names), slots skipped and why, problems.
 
 ## If something fails
 Skip that video, log the reason in `topics_log.md` under `## Problems`, and continue with the others.

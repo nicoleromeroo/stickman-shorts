@@ -15,3 +15,11 @@ work/**/voice.json
 work/**/st/
 work/*.jpg
 work/**/st*/
+work/*/frames/
+work/*/stills/
+work/*/*.wav
+work/*/*.mp4
+work/*/voice.mp3
+engine3d/node_modules/
+examples3d/*/frames/
+examples3d/*/stills/

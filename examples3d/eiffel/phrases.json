@@ -1,0 +1,149 @@
+[
+ {
+  "text": "A man sold the Eiffel Tower.",
+  "t0": 0.0,
+  "t1": 1.903,
+  "f0": 0,
+  "f1": 57
+ },
+ {
+  "text": "Then he came back and sold it again.",
+  "t0": 2.391,
+  "t1": 4.722,
+  "f0": 72,
+  "f1": 142
+ },
+ {
+  "text": "Paris,",
+  "t0": 5.273,
+  "t1": 5.756,
+  "f0": 158,
+  "f1": 173
+ },
+ {
+  "text": "nineteen twenty-five.",
+  "t0": 5.756,
+  "t1": 7.204,
+  "f0": 173,
+  "f1": 216
+ },
+ {
+  "text": "The tower is rusting,",
+  "t0": 7.66,
+  "t1": 9.146,
+  "f0": 230,
+  "f1": 274
+ },
+ {
+  "text": "and repairs cost a fortune.",
+  "t0": 9.146,
+  "t1": 10.879,
+  "f0": 274,
+  "f1": 326
+ },
+ {
+  "text": "A con man named Victor Lustig poses as a government official.",
+  "t0": 11.297,
+  "t1": 15.007,
+  "f0": 339,
+  "f1": 450
+ },
+ {
+  "text": "He invites six scrap dealers to a luxury hotel and whispers:",
+  "t0": 15.334,
+  "t1": 19.047,
+  "f0": 460,
+  "f1": 571
+ },
+ {
+  "text": "the tower is coming down,",
+  "t0": 19.433,
+  "t1": 20.89,
+  "f0": 583,
+  "f1": 627
+ },
+ {
+  "text": "and the metal goes to the highest bidder.",
+  "t0": 21.24,
+  "t1": 23.119,
+  "f0": 637,
+  "f1": 694
+ },
+ {
+  "text": "One dealer pays.",
+  "t0": 23.549,
+  "t1": 24.687,
+  "f0": 706,
+  "f1": 741
+ },
+ {
+  "text": "Lustig is on a train to Austria with the money.",
+  "t0": 25.017,
+  "t1": 27.448,
+  "f0": 751,
+  "f1": 823
+ },
+ {
+  "text": "But the buyer never calls the police.",
+  "t0": 27.863,
+  "t1": 29.847,
+  "f0": 836,
+  "f1": 895
+ },
+ {
+  "text": "He's too embarrassed.",
+  "t0": 30.201,
+  "t1": 31.194,
+  "f0": 906,
+  "f1": 936
+ },
+ {
+  "text": "So six months later,",
+  "t0": 31.511,
+  "t1": 32.896,
+  "f0": 945,
+  "f1": 987
+ },
+ {
+  "text": "Lustig comes back.",
+  "t0": 33.133,
+  "t1": 34.238,
+  "f0": 994,
+  "f1": 1027
+ },
+ {
+  "text": "Same speech.",
+  "t0": 34.546,
+  "t1": 35.374,
+  "f0": 1036,
+  "f1": 1061
+ },
+ {
+  "text": "New buyer.",
+  "t0": 35.614,
+  "t1": 36.286,
+  "f0": 1068,
+  "f1": 1089
+ },
+ {
+  "text": "And the tower?",
+  "t0": 36.632,
+  "t1": 37.239,
+  "f0": 1099,
+  "f1": 1117
+ },
+ {
+  "text": "Still standing.",
+  "t0": 37.567,
+  "t1": 38.401,
+  "f0": 1127,
+  "f1": 1152
+ },
+ {
+  "text": "Still not for sale.",
+  "t0": 38.725,
+  "t1": 40.048,
+  "f0": 1162,
+  "f1": 1201
+ }
+]
