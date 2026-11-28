@@ -1,0 +1,45 @@
+name: Make voiceovers (ElevenLabs)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "work/**/script.txt"
+      - ".github/workflows/voice.yml"
+      - "tools/elevenlabs_voice.py"
+  workflow_dispatch: {}
+  schedule:
+    - cron: "10 */2 * * *"   # safety net every 2 hours
+
+concurrency:
+  group: voiceovers
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  voice:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Make missing voiceovers
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
+          ELEVENLABS_MODEL: ${{ vars.ELEVENLABS_MODEL }}
+          VOICE_TEST: ${{ github.event_name == 'push' && '1' || '0' }}
+        run: python tools/elevenlabs_voice.py
+      - name: Commit new recordings
+        run: |
+          git config user.name "voice-bot"; git config user.email "voice-bot@users.noreply.github.com"
+          git add voice_inbox/ || true
+          if git diff --cached --quiet; then echo "nothing new"; exit 0; fi
+          git commit -m "voiceovers: $(git diff --cached --name-only | tr '\n' ' ')"
+          for i in 1 2 3; do git pull --rebase -q origin main && git push origin HEAD:main && exit 0; sleep 5; done
+          exit 1

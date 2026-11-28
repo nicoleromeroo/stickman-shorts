@@ -2,9 +2,11 @@
 
 Since 28 Nov 2026 the channel makes **3 animated 3D-cartoon Shorts per day**: flat 2D bean-head characters on camera-facing
 cards in a colourful 3D world with ink outlines, depth of field and gliding cameras (engine: `engine3d/`, worked example:
-`examples3d/eiffel/`). **The voice is Nicole's ElevenLabs recording**, so production runs in two stages: the runs write
-scripts a day ahead, Nicole records and uploads them, then the runs build the videos. The old 2D stickman engine (`engine/`,
-`examples/`) is retired: never make stickman videos any more. Work autonomously; nobody is watching. Quality and truth beat
+`examples3d/eiffel/`). **The voice is ElevenLabs "Adam – Radio Announcer"**, made automatically: when a run pushes a `script.txt`, the GitHub
+Action "Make voiceovers (ElevenLabs)" (`.github/workflows/voice.yml`, `tools/elevenlabs_voice.py`) turns it into
+`voice_inbox/<YYYYMMDD>-slot<N>.mp3` within a few minutes and commits it. Nicole may upload her own recording with the same
+name instead; an existing file is never overwritten. The old 2D stickman engine (`engine/`, `examples/`) and the Kokoro
+voice are retired: never make stickman videos or use any other voice. Work autonomously; nobody is watching. Quality and truth beat
 speed: queue fewer videos rather than a bad one.
 
 ## Schedule (Europe/Berlin) — 3 STORY slots per day
@@ -19,31 +21,28 @@ speed: queue fewer videos rather than a bad one.
 - `publish_at` is ISO 8601 with the Berlin offset (`+01:00`, summer `+02:00`).
 - Before pushing anything, `git pull --rebase` (the other run may have pushed in between).
 
-## The two stages (do both in every run, in this order: B first if anything is buildable, then A)
-**Stage A — scripts (one day ahead).** Make sure scripts exist for **tomorrow and the day after** (Berlin dates). For each
-missing slot of those days: pick the topic (Step 1), research + fact-check (Step 2), write the script (Step 3), create
-`work/<YYYY-MM-DD>-<slot>-<slug>/` with `script.txt` (the exact words to record, one sentence per line, nothing else),
-`sources.md` (URLs + the numbers used) and a short `PLAN.md` (visual idea per sentence). Also append all of that day's
-scripts to `scripts/<YYYY-MM-DD>.md` (heading per slot: tag, title idea, the script in a code block, the file name to upload).
-Commit and push. Then tell Nicole with SendUserMessage: the scripts in copyable blocks, and per script the file name.
-**Stage B — build.** A slot is buildable when its `script.txt` exists, its voice file is in `voice_inbox/`
-(`<YYYYMMDD>-slot<N>.mp3`, also accept .wav/.m4a and names like `29-11-slot3` or `20261129_slot3` that clearly
-match), and `video-<YYYYMMDD>-slot<N>` is neither on the `queue` branch nor in `state.json`. Build buildable slots for
-**tomorrow first, then the day after**, in priority order, **up to 3 per run**; do not start a new video after the run has
-been going ~2.5 hours. Copy the voice to `work/<dir>/voice.mp3`. If Nicole changed wording while recording, the script still
-times fine as long as the sentences are the same; if a sentence differs a lot, ask nothing, re-time with the closest text.
-**Missing voice:** if a slot of tomorrow has a script but no voice at the 20:40 run, skip it and say so clearly in the summary
-("29 Nov slot3 not made: no recording in voice_inbox"). Never use the Kokoro voice or any other TTS instead.
-
-### How Nicole records (repeat this in every scripts message, short)
-ElevenLabs, the voice "Adam – Radio Announcer" (her settings: stability ~50 %, similarity ~75 %), read the script exactly,
-natural pauses at sentence ends, export mp3 **without music**. Upload on GitHub: repo `nicoleromeroo/stickman-shorts` →
-folder `voice_inbox` → Add file → Upload files, named `<YYYYMMDD>-slot<N>.mp3` (e.g. `20261129-slot3.mp3`). Tomorrow's
-recordings are needed before the 20:40 run; the day-after ones can come any time before the next day's 20:40 run.
+## How a run works (in this order)
+1. **Scripts (Stage A):** make sure scripts exist for **tomorrow and the day after** (Berlin dates). For each missing slot of
+   those days: pick the story (Step 1), research + fact-check (Step 2), write the script (Step 3), and create
+   `work/<YYYY-MM-DD>-<slot>-<slug>/` with `script.txt` (exactly the words to speak, one sentence per line, nothing else),
+   `sources.md` (URLs, the facts used, True / Disputed / Legend) and a short `PLAN.md` (visual idea per sentence).
+   Append the day's scripts to `scripts/<YYYY-MM-DD>.md`. Commit and push all new scripts in one push, tomorrow's first.
+2. **Voiceovers:** the push starts the "Make voiceovers" Action. Poll with `git pull` every ~60 s (up to ~15 min) until
+   `voice_inbox/<YYYYMMDD>-slot<N>.mp3` exists for the scripts you need now. If you have GitHub API access you may also
+   trigger `voice.yml` (workflow_dispatch) and read its log. If an mp3 never arrives, check the Action log
+   ("NOT ENOUGH CREDITS", "voice not found", 401) and report it to Nicole; never fall back to another voice.
+3. **Build (Stage B):** a slot is buildable when its `script.txt` and its mp3 in `voice_inbox/` exist (also accept .wav/.m4a
+   and names like `20261129_slot3`) and `video-<YYYYMMDD>-slot<N>` is neither on the `queue` branch nor in `state.json`.
+   Build **tomorrow's slots first, then the day after's**, in priority order, **up to 3 per run**; don't start a new video
+   after the run has been going ~2.5 hours. Copy the mp3 to `work/<dir>/voice.mp3`. Never edit or re-time the voice.
+4. **Missing videos:** if a slot of tomorrow still has no video at the end of the 20:40 run, say so clearly in the summary
+   ("29 Nov slot3 not made: …") with the reason.
+- Credits: Nicole is on the ElevenLabs Starter plan (30k credits/month, Flash model = 0.5 credits per character, ~300 per
+  video). The Action prints the remaining credits in its log; warn Nicole in the summary when fewer than ~3,000 are left.
 
 ## Step 0 — setup
 ```
-bash engine/setup.sh      # fonts (Luckiest Guy for on-screen text); skip the voice model if it is slow
+(cd engine && npm i -s --no-audit --no-fund @fontsource/luckiest-guy)   # font for on-screen text (no Kokoro model needed)
 bash engine3d/setup.sh    # three.js + Playwright for the 3D engine
 ```
 
@@ -184,7 +183,7 @@ bash engine3d/setup.sh    # three.js + Playwright for the 3D engine
   AI, money for things *they* buy (phones, sneakers, games, food), "what if" scenarios, gross/awe facts.
   Adult topics (heating bills, pensions, taxes) only with a teen angle.
 - **Length 30–45 s** (up to 50 s). 9–14 short sentences. Open a loop early, pay it off at the end.
-- Nicole's ElevenLabs voice speaks ~2.9 words/s with natural pauses: 30 s ≈ 85 words, 45 s ≈ 125, 50 s ≈ 140.
+- The ElevenLabs voice speaks ~2.9 words/s with natural pauses: 30 s ≈ 85 words, 45 s ≈ 125, 50 s ≈ 140.
   Plain text, one sentence per line, no stage directions, no emoji, no brackets.
 - **Story structure (every video):** 1) Hook: the absurd fact, sentence 1, no setup. 2) Setting in 1–2 lines: when, where,
   who, one concrete detail. 3) Escalation, 2–4 beats, each bigger; others doubt or mock; one exaggeration joke.
@@ -290,8 +289,8 @@ Append one line per video to `topics_log.md`:
 Commit `topics_log.md` and the `work/<dir>/` sources (script.txt, sources.md, PLAN.md, phrases.json, web/*.js, web/index.html,
 audio.py, meta.json only — never frames, wav or mp4) and push. Leave the voice files in `voice_inbox/`.
 
-Finish every run with one SendUserMessage: videos queued (title + publish time), scripts waiting for a recording (with the
-file names), slots skipped and why, problems.
+Finish every run with one SendUserMessage: videos queued (title, publish time, the idea card: hook / twist / true or legend),
+scripts written for the day after, slots skipped and why, ElevenLabs credits left, problems.
 
 ## If something fails
 Skip that video, log the reason in `topics_log.md` under `## Problems`, and continue with the others.
